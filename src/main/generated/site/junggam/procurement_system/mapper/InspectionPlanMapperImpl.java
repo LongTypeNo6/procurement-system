@@ -11,7 +11,7 @@ import site.junggam.procurement_system.entity.PurchaseOrder;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-12T17:05:48+0900",
+    date = "2024-08-12T17:38:04+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component

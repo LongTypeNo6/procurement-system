@@ -21,7 +21,7 @@ import site.junggam.procurement_system.service.ProductService;
 public class ProductRestController {
     private final ProductService productService;
 
-    @PostMapping("/registerapi")
+    @PostMapping("/productRegisterProApi")
     public ResponseEntity<String> registerProduct(@RequestBody @Validated ProductDTO productDTO) { //@Valid
         System.out.println("콘솔 로그 기록..");
         log.info("product insert test..");
