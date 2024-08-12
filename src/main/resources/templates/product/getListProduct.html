@@ -152,7 +152,8 @@
 
                         </div><!-- End Default Accordion Example -->
                         <p></p>
-                        <a href="/product/productregister"><button type="button" class="btn btn-primary btn-sm">제품등록</button></a>
+                        <a href="/product/productRegister"><button type="button" class="btn btn-primary btn-sm">제품등록</button></a>
+                        <a href="/product/unitRegister"><button type="button" class="btn btn-primary btn-sm">유닛등록</button></a>
                         <a href="자재등록처리.html"><button type="button" class="btn btn-primary btn-sm">자재등록</button></a>
                         <p></p>
                         <!-- Table with hoverable rows -->
@@ -171,10 +172,10 @@
                             </thead>
                             <tbody>
                             <!-- Thymeleaf 반복 구문 -->
-                            <tr th:each="product : ${products}">
-                                <th scope="row">-</th>
+                            <tr th:each="product, productState : ${products}">
+                                <th scope="row" th:text="${productState.count }"></th>
                                 <td>제품</td>
-                                <td th:text="${product.productName}"><a href="제품상세보기.html"></a></td>
+                                <td><a href="제품상세보기.html" th:text="${product.productName}"></a></td>
                                 <td th:text="${product.productCode}"></td>
                                 <td th:text="${product.productStand}"></td>
                                 <td th:text="${product.productTexture}"></td>

@@ -35,20 +35,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product findProductByCode(String productCode) {
+    public boolean deleteProduct(String productCode) {
+        return false;
+    }
+
+
+    @Override
+    public Product getProduct(String productCode) {
         return null;
     }
 
     @Override
-    public List<Product> findAllProducts() {
-        //return List.of();
+    public List<Product> getListProduct() {
         return productRepository.findAll(); // 실제 데이터 반환
     }
 
-    @Override
-    public boolean deleteProduct(String productCode) {
-        return false;
-    }
 
     //Next 제품코드 자동증가값 생성 메서드
     private String generateNextProductCode() {
@@ -67,4 +68,5 @@ public class ProductServiceImpl implements ProductService {
 
         return nextCode;
     }
+
 }

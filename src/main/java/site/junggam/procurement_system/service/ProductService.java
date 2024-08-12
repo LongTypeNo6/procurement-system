@@ -12,14 +12,20 @@ public interface ProductService {
     // 제품 수정
     void updateProduct(ProductDTO productDTO);
 
-    // 제품 조회
-    Product findProductByCode(String productCode);
-
-    // 모든 제품 조회
-    List<Product> findAllProducts();
-
     // 제품 삭제
     boolean deleteProduct(String productCode);
+
+    // 제품 조회
+    //Product findProductByCode(String productCode);
+
+    // 모든 제품 조회
+    //List<Product> findAllProducts();
+
+    // 제품 조회
+    Product getProduct(String productCode);
+
+    // 제품 목록 조회
+    List<Product> getListProduct();
 
 
     //엔티티->디티오, 디티오->엔티티 변환 default 메서드 작성..
@@ -53,4 +59,5 @@ public interface ProductService {
                 .build();
         return productDTO;
     }
+
 }
