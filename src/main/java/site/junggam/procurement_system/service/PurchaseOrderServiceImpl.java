@@ -42,16 +42,14 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
     @Transactional
     public PageResultDTO<PurchaseOrderDTO, PurchaseOrder> getPurchaseOrderList(PageRequestDTO pageRequestDTO) {
         try {
-            Pageable pageable = pageRequestDTO.getPageable(Sort.by("purchaseOrderDate").descending());
+            Pageable pageable = pageRequestDTO.getPageable(Sort.by("purchaseOrderDate").descending()); //나주에 바꿀것
             Page<PurchaseOrder> result = purchaseOrderRepository.findAll(pageable);
-
             Function<PurchaseOrder, PurchaseOrderDTO> fn = (purchaseOrder -> {
                 PurchaseOrderDTO dto = purchaseOrderMapper.toDTO(purchaseOrder);
                 int inspectionPlanCount = getInspectionPlanCount(purchaseOrder);
                 dto.setInspectionPlanCount(inspectionPlanCount);
                 return dto;
             });
-
             return new PageResultDTO<>(result, fn);
         } catch (Exception e) {
             log.error("에러메세지", e);

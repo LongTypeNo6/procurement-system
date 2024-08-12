@@ -7,7 +7,7 @@ import site.junggam.procurement_system.entity.PurchaseOrder;
 
 import java.util.List;
 
-public interface InspectionPlanRepository extends JpaRepository<InspectionPlan, Long> {
+public interface InspectionPlanRepository extends JpaRepository<InspectionPlan, String> {
 
     @EntityGraph(attributePaths = {"purchaseOrder"}, type = EntityGraph.EntityGraphType.FETCH)
     List<InspectionPlan> findByPurchaseOrder(PurchaseOrder purchaseOrder);

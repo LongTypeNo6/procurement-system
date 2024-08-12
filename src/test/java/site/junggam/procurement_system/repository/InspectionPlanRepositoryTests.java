@@ -7,6 +7,7 @@ import site.junggam.procurement_system.entity.InspectionPlan;
 import site.junggam.procurement_system.entity.PurchaseOrder;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 @SpringBootTest
@@ -25,6 +26,16 @@ public class InspectionPlanRepositoryTests {
                     .build();
             inspectionPlanRepository.save(inspectionPlan);
         });
+    }
+
+    @Test
+    public void getInspectionPlan() {
+        String inspectionPlanCode = "IPC-1";
+        System.out.println("아래에 표시됨");
+        Optional<InspectionPlan> inspectionPlan = inspectionPlanRepository.findById(inspectionPlanCode);
+        if (inspectionPlan.isPresent()) {
+            System.out.println(inspectionPlan.get());
+        }
     }
 
 }

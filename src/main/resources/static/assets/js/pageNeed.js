@@ -17,6 +17,14 @@ function formatDate(dateString) {
     return year + '-' + month + '-' + day;
 }
 
+// 시간을 "HH:mm" 형식의 문자열로 변환
+function formatTime(dateString) {
+    var date = new Date(dateString); // 'Date'로 수정
+    var hours = ('0' + date.getHours()).slice(-2); // 시간을 2자리로 보장
+    var minutes = ('0' + date.getMinutes()).slice(-2); // 분을 2자리로 보장
+    return hours + ':' + minutes;
+}
+
 // "yyyy-MM-dd" 형식의 문자열을 Date 객체로 변환
 function parseDate(dateString) {
     var parts = dateString.split('-');

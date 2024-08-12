@@ -22,7 +22,7 @@
                     <li class="breadcrumb-item"><a href="index.html">메인</a></li>
                     <li class="breadcrumb-item">구매발주</li>
                     <li class="breadcrumb-item">발주서</li>
-                    <li class="breadcrumb-item active">발주리스트</li>
+                    <li class="breadcrumb-item active">발주상세보기</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -118,7 +118,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <form>
-                                    <h5 class="card-title">거래내용 나중에 수정 <span id="procurementPlanCode"></span></h5>
+                                    <h5 class="card-title">거래내용</span></h5>
                                     <div class="row mb-3">
                                         <label for="inputText" class="col-sm-2 col-form-label">발주일자</label>
                                         <div class="col-sm-10">
@@ -134,7 +134,7 @@
                                     <div class="row mb-3">
                                         <label for="inputText" class="col-sm-2 col-form-label">납품장소</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="ourCompanyrAddress">
+                                            <input type="text" class="form-control" id="ourCompanyrAddress" disabled>
                                         </div>
                                     </div>
 
@@ -235,13 +235,22 @@
                             <hr>
                             <h5 class="card-title">
                               검수계획 : 미등록
-                              <button type="button" class="btn btn-primary btn-sm" id="addHtmlBtn">검수계획추가</button>
+                              <a href="inspectionPlanGet?purchaseOrderCode=`+purchaseOrderCode+`"><button type="button" class="btn btn-primary btn-sm" id="addHtmlBtn">검수계획추가</button></a>
                             </h5>
-                            <button type="button" class="btn btn-primary">발주수정</button>
+                            <button type="button" class="btn btn-primary" id="orderModify">발주수정</button>
                             <button type="button" class="btn btn-primary">발주서보기</button>
                             `);
                         }else{
                             console.log("검수계획 있을떄! 이건 나중에 작업")
+                            $('#content').html(`
+                            <hr>
+                            <h5 class="card-title">
+                              검수계획 : `+data.inspectionPlanCount+`개
+                              <a href="inspectionPlanGet?purchaseOrderCode=`+purchaseOrderCode+`"><button type="button" class="btn btn-primary btn-sm" id="addHtmlBtn">검수계획보기</button></a>
+                            </h5>
+                            <button type="button" class="btn btn-primary" id="orderModify">발주수정</button>
+                            <button type="button" class="btn btn-primary">발주서보기</button>
+                            `);
                         }
                     }
                 }).fail(function(jqxhr, textStatus, error) {
@@ -263,15 +272,15 @@
               <hr>
                         <h5 class="card-title">검수계획</h5>
                         <div class="row mb-3">
-                          <label for="inputText" class="col-sm-2 col-form-label">날짜</label>
+                          <label for="inputText" class="col-sm-2 col-form-label" >날짜</label>
                           <div class="col-sm-10">
-                            <input type="date" class="form-control">
+                            <input type="date" class="form-control" id="inspectionPlanDate">
                           </div>
                         </div>
                         <div class="row mb-3">
-                          <label for="inputTime" class="col-sm-2 col-form-label">시간</label>
+                          <label for="inputTime" class="col-sm-2 col-form-label" >시간</label>
                           <div class="col-sm-10">
-                            <input type="time" class="form-control">
+                            <input type="time" class="form-control" id="inspectionPlanTime">
                           </div>
                         </div>
                         <div class="row mb-3">
@@ -287,12 +296,12 @@
                           </div>
                         </div>
                         <div class="row mb-3">
-                          <label for="inputPassword" class="col-sm-2 col-form-label">비고</label>
+                          <label for="inputText" class="col-sm-2 col-form-label">비고</label>
                           <div class="col-sm-10">
-                            <textarea class="form-control" style="height: 100px"></textarea>
+                            <textarea class="form-control" style="height: 100px" id="inspectionPlanMemo"></textarea>
                           </div>
                         </div>
-                        <button type="button" class="btn btn-primary">발주/검수계획저장처리 및 다운로드</button>
+                        <button type="button" class="btn btn-primary" id="orderInspectionPlanSaveAndDownload">발주/검수계획저장처리 및 다운로드</button>
               `;
             contentDiv.innerHTML = newHtml;
         });
@@ -300,24 +309,66 @@
     <!--이상 검수처리 계획 등록 화면에 뜨게 하는 JS-->
     <!--이하 발주처리 및 다운로드 JS-->
     <script th:inline="javascript">
-        $('#orderAndDownload').click(function (){
-            var purchaseOrderCode = [[${purchaseOrderCode}]];
-            var purchaserDTO={ purchaseOrderCode: purchaseOrderCode, purchaseOrderDate: $('#purchaseOrderDate').val()+'T00:00:00' , purchaseOrderMemo: $('#purchaseOrderMemo').val() , purchaseOrderStatus: "COMPLETED"};
-            console.log("수집한데이터",purchaserDTO);
+        var purchaseOrderCode = [[${purchaseOrderCode}]];
+        $('#orderAndDownload').click(orderSave);
+
+        $(document).on('click', '#orderInspectionPlanSaveAndDownload', function () {
+            console.log("발주검수저장"); // 함수가 호출되는지 확인
+            var InspectionPlanDTO = {
+                purchaseOrderDTO : {purchaseOrderCode: purchaseOrderCode},
+                inspectionPlanCode : 'I'+purchaseOrderCode,
+                inspectionPlanDateTime: $('#inspectionPlanDate').val() + 'T'+$('#inspectionPlanTime').val(),
+                inspectionPlanMemo: $('#inspectionPlanMemo').val()
+            };
+            console.log("수집한데이터", InspectionPlanDTO);
             $.ajax({
-                url:'/purchaseordercontent/'+purchaseOrderCode,
-                type:"POST",
-                data:JSON.stringify(purchaserDTO),
-                contentType:"application/json; charset=utf-8",
-                dataType:"text",
-                success: function(result){
+                url: '/purchaseordercontent/inspectionPlan/' + purchaseOrderCode,
+                type: "POST",
+                data: JSON.stringify(InspectionPlanDTO),
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function(result) {
                     console.log("결과값result: " + result);
                     self.location.reload();
                 }
-            })
-        })
+            });
+            orderSave();
+        });
+
+        // 동적으로 생성된 #orderModify 버튼에 클릭 이벤트 바인딩
+        $(document).on('click', '#orderModify', function () {
+            console.log("수정 버튼 클릭됨"); // 함수가 호출되는지 확인
+            $('#purchaseOrderMemo').prop("disabled", false);
+            $('#purchaseOrderDate').prop("disabled", false); // 메모 입력란을 활성화
+            $("#orderModify").text('발주수정완료'); // 버튼의 텍스트를 변경
+            // ID를 #orderModify에서 #orderAndDownload로 변경
+            $("#orderModify").attr('id', 'orderSave');
+            // ID 변경 후, 새로운 ID에 대한 이벤트 리스너를 다시 바인딩
+            $('#orderSave').click(orderSave);
+        });
+        function orderSave() {
+            var purchaserDTO = {
+                purchaseOrderCode: purchaseOrderCode,
+                purchaseOrderDate: $('#purchaseOrderDate').val() + 'T00:00:00',
+                purchaseOrderMemo: $('#purchaseOrderMemo').val(),
+                purchaseOrderStatus: "COMPLETED"
+            };
+            console.log("수집한데이터", purchaserDTO);
+            $.ajax({
+                url: '/purchaseordercontent/' + purchaseOrderCode,
+                type: "POST",
+                data: JSON.stringify(purchaserDTO),
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function(result) {
+                    console.log("결과값result: " + result);
+                    self.location.reload();
+                }
+            });
+        };
     </script>
     <!--이상 발주처리 및 다운로드 JS-->
+
     <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
     <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
 </body>

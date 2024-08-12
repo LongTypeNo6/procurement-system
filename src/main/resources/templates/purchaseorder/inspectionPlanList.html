@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Title</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <th:block th:replace="~{/fragments/headFragment}"></th:block>
+</head>
+<body>
+    <th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
+    <!-- ======= main ======= -->
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>검수리스트</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">메인</a></li>
+                    <li class="breadcrumb-item">구매발주</li>
+                    <li class="breadcrumb-item active">검수관리</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section dashboard">
+            <div class="row">
+                <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
+                <div class="col-lg-12">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">검수리스트</h5>
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <b>보기 | 발주일자 : 전체 | 납기일자 : 전체 | 검수일자 : 전체 | 검수상태 : 전체 | 납기진도 : 전체 | 진척율 : 전체</b>
+                                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                            <b>검색 | 전체 : -</b>
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                                         data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <div class="row mb-3">
+
+                                                <label for="inputPassword" class="col-sm-1 col-form-label">발주일자</label>
+                                                <div class="col-sm-2">
+                                                    <input type="date" class="form-control" value="0">
+                                                </div>
+                                                ~
+                                                <div class="col-sm-2">
+                                                    <input type="date" class="form-control" value="0">
+                                                </div>
+
+                                                <label for="inputPassword" class="col-sm-1 col-form-label">납기일자</label>
+                                                <div class="col-sm-2">
+                                                    <input type="date" class="form-control" value="0">
+                                                </div>
+                                                ~
+                                                <div class="col-sm-2">
+                                                    <input type="date" class="form-control" value="0">
+                                                </div>
+
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <p>
+
+                                                </p>
+                                                <label for="inputPassword" class="col-sm-1 col-form-label">검수일자</label>
+                                                <div class="col-sm-2">
+                                                    <input type="date" class="form-control" value="0">
+                                                </div>
+                                                ~
+                                                <div class="col-sm-2">
+                                                    <input type="date" class="form-control" value="0">
+                                                </div>
+
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <p></p>
+                                                <label for="inputPassword" class="col-sm-1 col-form-label">검수상태</label>
+                                                <div class="col-sm-2">
+                                                    <select class="form-select" aria-label="Default select example">
+                                                        <option selected>전체</option>
+                                                        <option value="1">재검필요</option>
+                                                        <option value="2">검수완료</option>
+                                                    </select>
+                                                </div>
+
+                                                <label for="inputPassword" class="col-sm-1 col-form-label">납기진도</label>
+                                                <div class="col-sm-2">
+                                                    <select class="form-select" aria-label="Default select example">
+                                                        <option selected>전체</option>
+                                                        <option value="1">미완</option>
+                                                        <option value="2">완료</option>
+                                                    </select>
+                                                </div>
+                                                <label for="inputPassword" class="col-sm-1 col-form-label">진척율</label>
+                                                <div class="col-sm-1">
+                                                    <input type="number" class="form-control" value="">
+                                                </div>
+                                                ~
+                                                <div class="col-sm-1">
+                                                    <input type="number" class="form-control" value="">
+                                                </div>
+                                                %
+                                            </div>
+                                            <div class="row mb-3">
+
+                                            </div>
+                                            <hr>
+                                            <div class="row mb-3">
+                                                <label for="inputPassword" class="col-sm-1 col-form-label">검색</label>
+                                                <div class="col-sm-2">
+                                                    <select class="form-select" aria-label="Default select example">
+                                                        <option selected>전체</option>
+                                                        <option value="1">품목명</option>
+                                                        <option value="2">품목코드</option>
+                                                        <option value="3">공급처</option>
+                                                        <option value="4">검수자</option>
+
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <div class="input-group mb-3">
+
+                                                        <input type="text" class="form-control" id="itemCodeInput">
+                                                        <button class="input-group-text" id="confirmSelectionBtn">검색</button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+
+
+                            </div><!-- End Default Accordion Example -->
+                            <p></p>
+                            <a href="발주서리스트.html"><button type="button" class="btn btn-primary btn-sm">검수일정보기</button></a>
+                            <p></p>
+                            <!-- Table with hoverable rows -->
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th>품목명</th>
+                                    <th>공급처</th>
+                                    <th>발주수량</th>
+                                    <th>발주일자</th>
+                                    <th>납기일자</th>
+                                    <th>검수상태</th>
+                                    <th>검수일자</th>
+                                    <th>시간</th>
+                                    <th>검수자</th>
+                                    <th>진척율</th>
+                                    <th>납기진도</th>
+                                    <th>보완사항</th>
+                                </tr>
+                                </thead>
+                                <tbody id="inspectionPlanList">
+                                </tbody>
+                            </table>
+                            <!-- End Table with hoverable rows -->
+                        </div>
+                    </div>
+                </div>
+                <!--여기에 카드랑 내용 넣어주시면 됩니다-->
+            </div> <!--End row-->
+        </section>
+    </main>
+    <!-- End #main -->
+    <script th:inline="javascript">
+        var totalPage = 0;
+        var currentPage = 1;
+        const statusMapping = {
+            "COMPLETED": "발주 완료",
+            "PENDING": "미발주",
+            "CLOSED": "발주 마감"
+        };
+        $(document).ready(function (e) {
+            // 전역 변수 선언
+            console.log("자바스크립트작동")
+            function getPurchaseOrderContent(page) {
+                return $.getJSON(`/purchaseordercontent/inspectionPlanList?page=${page}&size=10`, function(data) {
+                    console.log("요청", data);
+                    // 첫 번째 요청에서 totalPage 값 설정
+                    if (totalPage === 0) {
+                        totalPage = data.totalPage;
+                    }
+                    var str = "";
+                    $.each(data.dtoList, function(idx,dto) {
+
+                        str += '<tr>'
+                        str += '<th scope="col" rowSpan="1">'+idx+'</th>'
+                        str += '<td rowSpan="1">'+ dto.inspectionPlanCode +'</td>'
+                        str += '<td rowSpan="1">A상사</td>'
+                        str += '<td rowSpan="1">100</td>'
+                        str += '<td rowSpan="1">2024/07/19</td>'
+                        str += '<td rowSpan="1">2024/08/10</td>'
+                        str += '<td>재검필요</td>'
+                        str += '<td>2024/07/25</td>'
+                        str += '<td>AM 10시</td>'
+                        str += '<td>홍길동</td>'
+                        str += '<td>30%</td>'
+                        str += '<td>미완</td>'
+                        str += '<td>납기준수 필요함</td>'
+                        str += '</tr>'
+                    });
+                    $("#inspectionPlanList").append(str); // 데이터를 덮어쓰지 않고 추가
+                });
+            }
+            getPurchaseOrderContent(1);
+            setupInfiniteScroll(getPurchaseOrderContent);
+        })
+    </script>
+    <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
+</body>
+</html>

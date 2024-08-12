@@ -33,7 +33,9 @@ public class InspectionPlanDTO {
     @Builder.Default
     private InspectionPlanStatus inspectionPlanStatus = InspectionPlanStatus.NOT_INSPECTED;
 
-    private PurchaseOrder purchaseOrder;
+    private PurchaseOrderDTO purchaseOrderDTO;
+
+    private int inspectionPlanCount; //검수계획 개수
 
 
 }
