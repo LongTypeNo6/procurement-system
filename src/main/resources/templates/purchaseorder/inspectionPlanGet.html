@@ -65,9 +65,12 @@
                                         <textarea class="form-control" style="height: 100px" th:id="'inspectionPlanMemo' + ${numStat.index}" disabled></textarea>
                                     </div>
                                 </div>
+
+                                <span class="addBtn">
+
+                                </span>
                                 <!--                <button type="button" class="btn btn-primary">계획저장</button>-->
                                 <!--                <button type="button" class="btn btn-primary">검수결과등록</button>-->
-                                <!--                <button type="button" class="btn btn-primary">리스트</button>-->
                             </div>
                         </div>
                     </th:block>
@@ -87,9 +90,39 @@
                     $("#inspectionPlanMemo"+idx).val(dto.inspectionPlanMemo);
                     $("#inspectionPlanDate"+idx).val(formatDate(dto.inspectionPlanDateTime));
                     $("#inspectionPlanTime"+idx).val(formatTime(dto.inspectionPlanDateTime));
+
+                    if(dto.inspectionPlanStatus==="NOT_INSPECTED"){
+                        console.log("이프절까지는 들어오나")
+                        $(".addBtn").html(`
+                            <button type="button" class="btn btn-primary" id="inspectionPlanModify">검수계획수정</button>
+                            <a href="inspectionPlanList"><button type="button" class="btn btn-primary">검수결과등록</button></a>
+                            <a href="inspectionPlanList"><button type="button" class="btn btn-primary">리스트</button></a>
+                        `)
+                    }
                 })
             })
         })
+        $(document).on('click', '#inspectionPlanModify', function () {
+            console.log("발주검수수정"); // 함수가 호출되는지 확인
+            var InspectionPlanDTO = {
+                purchaseOrderDTO : {purchaseOrderCode: purchaseOrderCode},
+                inspectionPlanCode : 'I'+purchaseOrderCode,
+                inspectionPlanDateTime: $('#inspectionPlanDate').val() + 'T'+$('#inspectionPlanTime').val(),
+                inspectionPlanMemo: $('#inspectionPlanMemo').val()
+            };
+            console.log("수집한데이터", InspectionPlanDTO);
+            $.ajax({
+                url: '/purchaseordercontent/inspectionPlan/' + purchaseOrderCode,
+                type: "POST",
+                data: JSON.stringify(InspectionPlanDTO),
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function(result) {
+                    console.log("결과값result: " + result);
+                    self.location.reload();
+                }
+            });
+        });
     </script>
     <!-- End #main -->
     <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>

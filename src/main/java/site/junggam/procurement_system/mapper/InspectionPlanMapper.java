@@ -13,7 +13,17 @@ public interface InspectionPlanMapper {
     InspectionPlanMapper INSTANCE = Mappers.getMapper(InspectionPlanMapper.class);
 
     @Mapping(target = "inspectionPlanCount", ignore = true)
-    @Mapping(source = "purchaseOrder", target = "purchaseOrderDTO")
+    @Mapping(source = "purchaseOrder.procurementPlan.procurementPlanDeadLine", target = "purchaseOrderDTO.procurementPlanDeadLine")
+    @Mapping(source = "purchaseOrder.procurementPlan.procurementPlanQuantity", target = "purchaseOrderDTO.procurementPlanQuantity")
+    @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.materialName", target = "purchaseOrderDTO.materialName")
+    @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.materialStand", target = "purchaseOrderDTO.materialStand")
+    @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.materialTexture", target = "purchaseOrderDTO.materialTexture")
+    @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.contract.contractPrice", target = "purchaseOrderDTO.contractPrice")
+    @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.contract.purchaser.purchaserName", target = "purchaseOrderDTO.purchaserName")
+    @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.contract.purchaser.purchaserManager", target = "purchaseOrderDTO.purchaserManager")
+    @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.contract.purchaser.purchaserManagerTel", target = "purchaseOrderDTO.purchaserManagerTel")
+    @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.contract.purchaser.purchaserManagerEmail", target = "purchaseOrderDTO.purchaserManagerEmail")
+    @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.contract.purchaser.purchaserManagerFax", target = "purchaseOrderDTO.purchaserManagerFax")
     InspectionPlanDTO toDTO(InspectionPlan inspectionPlan);
 
     @Mapping(target = "inspectionPlanCount", ignore = true)

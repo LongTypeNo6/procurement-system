@@ -28,7 +28,7 @@ public class InspectionPlanDTO {
     private String inspectionPlanComplementary=null;
 
     @Builder.Default
-    private InspectionPlanDeliveryProgress inspectionPlanDeliveryProgress=null;
+    private InspectionPlanDeliveryProgress inspectionPlanDeliveryProgress=InspectionPlanDeliveryProgress.NOT_INSPECTED;
 
     @Builder.Default
     private InspectionPlanStatus inspectionPlanStatus = InspectionPlanStatus.NOT_INSPECTED;

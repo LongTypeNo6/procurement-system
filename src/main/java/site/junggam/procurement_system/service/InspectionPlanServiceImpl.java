@@ -50,7 +50,7 @@ public class InspectionPlanServiceImpl implements InspectionPlanService {
     @Override
     public PageResultDTO<InspectionPlanDTO, InspectionPlan> getInspectionPlanList(PageRequestDTO pageRequestDTO) {
         try {
-            Pageable pageable = pageRequestDTO.getPageable(Sort.by("PurchaseOrder.purchaseOrderCode").descending());
+            Pageable pageable = pageRequestDTO.getPageable(Sort.by("PurchaseOrder.purchaseOrderCode").ascending());
             Page<InspectionPlan> result = inspectionPlanRepository.findAll(pageable);
 
             Function<InspectionPlan, InspectionPlanDTO> fn = (inspectionPlan -> {

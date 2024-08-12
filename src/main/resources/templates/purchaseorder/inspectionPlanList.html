@@ -48,7 +48,6 @@
                                          data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
                                             <div class="row mb-3">
-
                                                 <label for="inputPassword" class="col-sm-1 col-form-label">발주일자</label>
                                                 <div class="col-sm-2">
                                                     <input type="date" class="form-control" value="0">
@@ -57,7 +56,6 @@
                                                 <div class="col-sm-2">
                                                     <input type="date" class="form-control" value="0">
                                                 </div>
-
                                                 <label for="inputPassword" class="col-sm-1 col-form-label">납기일자</label>
                                                 <div class="col-sm-2">
                                                     <input type="date" class="form-control" value="0">
@@ -66,10 +64,8 @@
                                                 <div class="col-sm-2">
                                                     <input type="date" class="form-control" value="0">
                                                 </div>
-
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <p>
-
                                                 </p>
                                                 <label for="inputPassword" class="col-sm-1 col-form-label">검수일자</label>
                                                 <div class="col-sm-2">
@@ -79,7 +75,6 @@
                                                 <div class="col-sm-2">
                                                     <input type="date" class="form-control" value="0">
                                                 </div>
-
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <p></p>
                                                 <label for="inputPassword" class="col-sm-1 col-form-label">검수상태</label>
@@ -90,7 +85,6 @@
                                                         <option value="2">검수완료</option>
                                                     </select>
                                                 </div>
-
                                                 <label for="inputPassword" class="col-sm-1 col-form-label">납기진도</label>
                                                 <div class="col-sm-2">
                                                     <select class="form-select" aria-label="Default select example">
@@ -110,7 +104,6 @@
                                                 %
                                             </div>
                                             <div class="row mb-3">
-
                                             </div>
                                             <hr>
                                             <div class="row mb-3">
@@ -122,29 +115,18 @@
                                                         <option value="2">품목코드</option>
                                                         <option value="3">공급처</option>
                                                         <option value="4">검수자</option>
-
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-9">
                                                     <div class="input-group mb-3">
-
                                                         <input type="text" class="form-control" id="itemCodeInput">
                                                         <button class="input-group-text" id="confirmSelectionBtn">검색</button>
                                                     </div>
                                                 </div>
-
                                             </div>
-
-
                                         </div>
-
-
                                     </div>
-
                                 </div>
-
-
-
                             </div><!-- End Default Accordion Example -->
                             <p></p>
                             <a href="발주서리스트.html"><button type="button" class="btn btn-primary btn-sm">검수일정보기</button></a>
@@ -183,13 +165,17 @@
     <script th:inline="javascript">
         var totalPage = 0;
         var currentPage = 1;
+        var counting =0;
         const statusMapping = {
-            "COMPLETED": "발주 완료",
-            "PENDING": "미발주",
-            "CLOSED": "발주 마감"
+            "NOT_INSPECTED": "검수전",
+            "INSPECTED": "검수완료"
+        };
+        const deliveryProgressMapping = {
+            "NOT_STARTED": "미완",
+            "COMPLETED": "완료",
+            "NOT_INSPECTED" : "-"
         };
         $(document).ready(function (e) {
-            // 전역 변수 선언
             console.log("자바스크립트작동")
             function getPurchaseOrderContent(page) {
                 return $.getJSON(`/purchaseordercontent/inspectionPlanList?page=${page}&size=10`, function(data) {
@@ -199,23 +185,28 @@
                         totalPage = data.totalPage;
                     }
                     var str = "";
+                    var purchaseOrderCode="";
                     $.each(data.dtoList, function(idx,dto) {
-
-                        str += '<tr>'
-                        str += '<th scope="col" rowSpan="1">'+idx+'</th>'
-                        str += '<td rowSpan="1">'+ dto.inspectionPlanCode +'</td>'
-                        str += '<td rowSpan="1">A상사</td>'
-                        str += '<td rowSpan="1">100</td>'
-                        str += '<td rowSpan="1">2024/07/19</td>'
-                        str += '<td rowSpan="1">2024/08/10</td>'
-                        str += '<td>재검필요</td>'
-                        str += '<td>2024/07/25</td>'
-                        str += '<td>AM 10시</td>'
-                        str += '<td>홍길동</td>'
-                        str += '<td>30%</td>'
-                        str += '<td>미완</td>'
-                        str += '<td>납기준수 필요함</td>'
-                        str += '</tr>'
+                        var inspectionPlanCount=dto.inspectionPlanCount;
+                        if(purchaseOrderCode!=dto.purchaseOrderDTO.purchaseOrderCode){
+                            purchaseOrderCode= dto.purchaseOrderDTO.purchaseOrderCode;
+                            counting+=1;
+                            str += '<tr>'
+                            str += '<th scope="col" rowSpan="'+inspectionPlanCount+'">'+ counting +'</th>'
+                            str += '<td rowSpan="'+inspectionPlanCount+'"><a href="inspectionPlanGet?purchaseOrderCode='+purchaseOrderCode+'">'+dto.purchaseOrderDTO.materialName+'</a></td>'
+                            str += '<td rowSpan="'+inspectionPlanCount+'">'+dto.purchaseOrderDTO.purchaserName+'</td>'
+                            str += '<td rowSpan="'+inspectionPlanCount+'">'+dto.purchaseOrderDTO.procurementPlanQuantity+'</td>'
+                            str += '<td rowSpan="'+inspectionPlanCount+'">'+formatDate(dto.purchaseOrderDTO.purchaseOrderDate)+'</td>'
+                            str += '<td rowSpan="'+inspectionPlanCount+'">'+formatDate(dto.purchaseOrderDTO.procurementPlanDeadLine)+'</td>'
+                        }
+                            str += '<td>'+statusMapping[dto.inspectionPlanStatus]+'</td>'
+                            str += '<td>'+formatDate(dto.inspectionPlanDateTime)+'</td>'
+                            str += '<td>'+formatTime(dto.inspectionPlanDateTime)+'</td>'
+                            str += '<td>'+'</td>'
+                            str += '<td>'+dto.inspectionPlanProgress+'%</td>'
+                            str += '<td>'+deliveryProgressMapping[dto.inspectionPlanDeliveryProgress]+'</td>'
+                            str += '<td>'+(dto.inspectionPlanComplementary ? dto.inspectionPlanComplementary : '-')+'</td>'
+                            str += '</tr>'
                     });
                     $("#inspectionPlanList").append(str); // 데이터를 덮어쓰지 않고 추가
                 });
