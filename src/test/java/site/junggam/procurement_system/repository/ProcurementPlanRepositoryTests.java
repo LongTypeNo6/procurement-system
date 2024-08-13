@@ -18,13 +18,23 @@ public class ProcurementPlanRepositoryTests {
 
     @Test
     public void insertProcurementPlan(){
-        IntStream.rangeClosed(21,40).forEach(i->{
+        IntStream.rangeClosed(1,9).forEach(i->{
             ProcurementPlan procurementPlan = ProcurementPlan.builder()
-                    .procurementPlanCode("PPC-"+i)
+                    .procurementPlanCode("PROC-240813-001-00"+i)
                     .procurementPlanDeadLine(LocalDateTime.now())
                     .procurementPlantRegDate(LocalDateTime.now())
                     .procurementPlanQuantity(i)
-                    .temMaterial(TemMaterial.builder().materialCode("MATE-"+20).build())
+                    .temMaterial(TemMaterial.builder().materialCode("BM-0000"+i).build())
+                    .build();
+            procurementPlanRepository.save(procurementPlan);
+        });
+        IntStream.rangeClosed(10,20).forEach(i->{
+            ProcurementPlan procurementPlan = ProcurementPlan.builder()
+                    .procurementPlanCode("PROC-240813-001-0"+i)
+                    .procurementPlanDeadLine(LocalDateTime.now())
+                    .procurementPlantRegDate(LocalDateTime.now())
+                    .procurementPlanQuantity(i)
+                    .temMaterial(TemMaterial.builder().materialCode("BM-000"+i).build())
                     .build();
             procurementPlanRepository.save(procurementPlan);
         });

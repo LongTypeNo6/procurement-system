@@ -20,12 +20,22 @@ public class PurchaseOrderRepositoryTests {
 
     @Test
     public void insertPurchaseOrder(){
-        IntStream.rangeClosed(21,40).forEach(i->{
+        IntStream.rangeClosed(1,9).forEach(i->{
             PurchaseOrder purchaseOrder = PurchaseOrder.builder()
-                    .purchaseOrderCode("PO"+i)
+                    .purchaseOrderCode("PURC-240813-001-00"+i)
                     .purchaseOrderDate(LocalDateTime.now())
                     .purchaseOrderMemo("발주비고 입니다"+i)
-                    .procurementPlan(ProcurementPlan.builder().procurementPlanCode("PPC-"+i).build())
+                    .procurementPlan(ProcurementPlan.builder().procurementPlanCode("PROC-240813-001-00"+i).build())
+                    .purchaseOrderStatus(PurchaseOrderStatus.PENDING)
+                    .build();
+            purchaseOrderRepository.save(purchaseOrder);
+        });
+        IntStream.rangeClosed(10,20).forEach(i->{
+            PurchaseOrder purchaseOrder = PurchaseOrder.builder()
+                    .purchaseOrderCode("PURC-240813-001-0"+i)
+                    .purchaseOrderDate(LocalDateTime.now())
+                    .purchaseOrderMemo("발주비고 입니다"+i)
+                    .procurementPlan(ProcurementPlan.builder().procurementPlanCode("PROC-240813-001-0"+i).build())
                     .purchaseOrderStatus(PurchaseOrderStatus.PENDING)
                     .build();
             purchaseOrderRepository.save(purchaseOrder);

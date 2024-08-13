@@ -18,14 +18,25 @@ public class ContractRepositoryTest {
 
     @Test
     public void insertContract() {
-        IntStream.rangeClosed(1,20).forEach(i -> {
+        IntStream.rangeClosed(1,9).forEach(i -> {
             Contract contract = Contract.builder()
-                    .contractCode("CC-"+i)
+                    .contractCode("CONT-0"+i+"-00"+i)
                     .contractFile("계약서경로"+i)
                     .contractLeadTime(i)
                     .contractPrice((double)i)
-                    .temMaterial(TemMaterial.builder().materialCode("MATE-"+i).build())
-                    .purchaser(Purchaser.builder().purchaserCode("PCC-"+i).build())
+                    .temMaterial(TemMaterial.builder().materialCode("BM-0000"+i).build())
+                    .purchaser(Purchaser.builder().purchaserCode("0"+i).build())
+                    .build();
+            contractRepository.save(contract);
+        });
+        IntStream.rangeClosed(10,20).forEach(i -> {
+            Contract contract = Contract.builder()
+                    .contractCode("CONT-"+i+"-0"+i)
+                    .contractFile("계약서경로"+i)
+                    .contractLeadTime(i)
+                    .contractPrice((double)i)
+                    .temMaterial(TemMaterial.builder().materialCode("BM-000"+i).build())
+                    .purchaser(Purchaser.builder().purchaserCode(i+"").build())
                     .build();
             contractRepository.save(contract);
         });

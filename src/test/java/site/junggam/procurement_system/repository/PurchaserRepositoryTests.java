@@ -17,7 +17,7 @@ public class PurchaserRepositoryTests {
     @Test
     public void insertOurCompany(){
         Purchaser purchaser = Purchaser.builder()
-                .purchaserCode("PCC-"+1)
+                .purchaserCode("01")
                 .purchaserName("정감주식회사")
                 .purchaserPresident("양현일")
                 .purchaserAddress("경기도 수원시 mit 301호")
@@ -36,9 +36,27 @@ public class PurchaserRepositoryTests {
 
     @Test
     public void insertPurchaser(){
-        IntStream.rangeClosed(2,20).forEach(i->{
+        IntStream.rangeClosed(2,9).forEach(i->{
             Purchaser purchaser = Purchaser.builder()
-                    .purchaserCode("PCC-"+i)
+                    .purchaserCode("0"+i)
+                    .purchaserName("회사명"+i)
+                    .purchaserPresident("이름은사장님"+i)
+                    .purchaserAddress("경기도 수원시 "+i+"번지")
+                    .purchaserCategory("기계부품 외 "+i+"개")
+                    .purchaserType("제조업 외 "+i+"개")
+                    .purchaserTel("010-1111-"+i)
+                    .purchaserFax("031-111-"+i)
+                    .purchaserEmail("회사명"+i+"@aaa.com")
+                    .purchaserManager("이름은담당자"+i)
+                    .purchaserManagerTel("010-2222-"+i)
+                    .purchaserManagerFax("031-222-"+i)
+                    .purchaserManagerEmail("담당자"+i+"@aaa.com")
+                    .build();
+            purchaserRepository.save(purchaser);
+        });
+        IntStream.rangeClosed(10,20).forEach(i->{
+            Purchaser purchaser = Purchaser.builder()
+                    .purchaserCode(i+"")
                     .purchaserName("회사명"+i)
                     .purchaserPresident("이름은사장님"+i)
                     .purchaserAddress("경기도 수원시 "+i+"번지")

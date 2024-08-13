@@ -16,9 +16,23 @@ public class TemMaterialRepositoryTests {
 
     @Test
     public void insertTemMaterialTest() {
-        IntStream.rangeClosed(1,20).forEach(i->{
+        IntStream.rangeClosed(1,9).forEach(i->{
             TemMaterial temMaterial = TemMaterial.builder()
-                    .materialCode("MATE-"+i)
+                    .materialCode("BM-0000"+i)
+                    .materialName("자재이름"+i)
+                    .materialStand(i+"cm")
+                    .materialTexture("플라스틱"+i)
+                    .materialDrawFile("도면파일경로"+i)
+                    .materialEtcFile("다른파일경로"+i)
+                    .materialRegDate(LocalDateTime.now())
+                    .materialModDate(LocalDateTime.now())
+                    .materialSafeQuantity(i)
+                    .build();
+            temMaterialRepository.save(temMaterial);
+        });
+        IntStream.rangeClosed(10,20).forEach(i->{
+            TemMaterial temMaterial = TemMaterial.builder()
+                    .materialCode("BM-000"+i)
                     .materialName("자재이름"+i)
                     .materialStand(i+"cm")
                     .materialTexture("플라스틱"+i)

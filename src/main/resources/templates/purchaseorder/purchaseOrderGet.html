@@ -316,7 +316,7 @@
             console.log("발주검수저장"); // 함수가 호출되는지 확인
             var InspectionPlanDTO = {
                 purchaseOrderDTO : {purchaseOrderCode: purchaseOrderCode},
-                inspectionPlanCode : 'I'+purchaseOrderCode,
+                inspectionPlanCode : 'INSP'+purchaseOrderCode.substring(4)+'-1',
                 inspectionPlanDateTime: $('#inspectionPlanDate').val() + 'T'+$('#inspectionPlanTime').val(),
                 inspectionPlanMemo: $('#inspectionPlanMemo').val()
             };

@@ -72,17 +72,17 @@
                             </div>
                         </th:block>
                     </span>
-                    <span></span>
-                    <button type="button" class="btn btn-primary" id="addInspectionPlanResisterBtn" >검수계획추가</button>
+                    <span id="addInspectionPlan"></span>
+
                 </div>
                 <!--여기에 카드랑 내용 넣어주시면 됩니다-->
             </div> <!--End row-->
         </section>
     </main>
     <script th:inline="javascript">
-        // 데이터불러오기
+        // 검수계획 데이터 불러오기
+        var purchaseOrderCode = [[${purchaseOrderCode}]];
         $(document).ready(function (e){
-            var purchaseOrderCode = [[${purchaseOrderCode}]];
             $.getJSON("/purchaseordercontent/inspectionPlan/"+purchaseOrderCode,function (data){
                 console.log("우선작동됨")
                 console.log("응답데이터",data)
@@ -110,9 +110,16 @@
                         $("#inspectionPlanProgress"+inspectionPlanCode).val(dto.inspectionPlanProgress);
                         $("#inspectionPlanDeliveryProgress"+inspectionPlanCode).val(dto.inspectionPlanDeliveryProgress);
                         $("#inspectionPlanComplementary"+inspectionPlanCode).val(dto.inspectionPlanComplementary);
-                        $("#addBtn"+inspectionPlanCode).html(`
-                            <button type="button" class="btn btn-primary" id="inspectionPlanResultSave" data-inspection-code="`+inspectionPlanCode+`">검수결과수정</button>
-                        `)
+                        if(idx>3) {
+                            $("#addBtn" + inspectionPlanCode).html(`
+                            <button type="button" class="btn btn-primary" id="inspectionPlanResultSave" data-inspection-code="` + inspectionPlanCode + `">검수결과수정</button>
+                            `)
+                        }else{
+                            $("#addBtn" + inspectionPlanCode).html(`
+                            <button type="button" class="btn btn-primary" id="inspectionPlanResultSave" data-inspection-code="` + inspectionPlanCode + `">검수결과수정</button>
+                            <button type="button" class="btn btn-primary" id="addInspectionPlanResisterBtn" >검수계획추가</button>
+                            `)
+                        }
                     }
                 })
             })
@@ -122,20 +129,69 @@
             var inspectionPlanCode = $(this).data('inspection-code');
             var $btn = $(this);
             if ($btn.text() === '검수계획수정') {
-                $('#inspectionPlanDate'+inspectionPlanCode).prop("disabled", false);
-                $('#inspectionPlanTime'+inspectionPlanCode).prop("disabled", false);
-                $('#inspectionPlanMemo'+inspectionPlanCode).prop("disabled", false);
-                $btn.text('검수계획수정완료');
+                undisabledPlan(inspectionPlanCode);
+                $("#addBtn"+inspectionPlanCode).html(`
+                            <button type="button" class="btn btn-primary" id="inspectionPlanModify" data-inspection-code="`+inspectionPlanCode+`">검수계획수정완료</button>
+                        `)
             } else {
+                saveInspectionPlan(inspectionPlanCode);
+            }
+        });
+        function undisabledPlan(inspectionPlanCode){
+            $('#inspectionPlanDate'+inspectionPlanCode).prop("disabled", false);
+            $('#inspectionPlanTime'+inspectionPlanCode).prop("disabled", false);
+            $('#inspectionPlanMemo'+inspectionPlanCode).prop("disabled", false);
+        }
+        function saveInspectionPlan(inspectionPlanCode) {
+            var InspectionPlanDTO = {
+                inspectionPlanCode: inspectionPlanCode,
+                inspectionPlanDateTime: $('#inspectionPlanDate'+inspectionPlanCode).val() + 'T' + $('#inspectionPlanTime'+inspectionPlanCode).val(),
+                inspectionPlanMemo: $('#inspectionPlanMemo'+inspectionPlanCode).val()
+            };
+            console.log("수집한데이터", InspectionPlanDTO);
+            $.ajax({
+                url: '/purchaseordercontent/inspectionPlan/' + inspectionPlanCode,
+                type: "PATCH",
+                data: JSON.stringify(InspectionPlanDTO),
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function(result) {
+                    console.log("결과값result: " + result);
+                    self.location.reload();
+                }
+            });
+        }
+        //검수결과 등록창 활성화
+        $(document).on('click', '#inspectionPlanResultAdd', function () {
+            var inspectionPlanCode = $(this).data('inspection-code');
+            addInspectionResult(inspectionPlanCode);
+            $('#inspectionResultDate'+inspectionPlanCode).val($('#inspectionPlanDate'+inspectionPlanCode).val())
+            $('#inspectionResultTime'+inspectionPlanCode).val($('#inspectionPlanTime'+inspectionPlanCode).val())
+            undisabledResult(inspectionPlanCode);
+            $('#addBtn'+inspectionPlanCode).html(`
+                            <button type="button" class="btn btn-primary" id="inspectionPlanResultSave" data-inspection-code="`+inspectionPlanCode+`">검수결과저장</button>
+                        `)
+        });
+        //검수결과수정 및 저장
+        $(document).on('click', '#inspectionPlanResultSave', function () {
+            var inspectionPlanCode = $(this).data('inspection-code');
+            var $btn = $(this);
+            if ($btn.text() === '검수결과수정') {
+                undisabledResult(inspectionPlanCode)
+                $btn.text('검수결과저장');
+            } else if($btn.text() === '검수결과저장') {
                 var InspectionPlanDTO = {
                     inspectionPlanCode : inspectionPlanCode,
-                    inspectionPlanDateTime: $('#inspectionPlanDate'+inspectionPlanCode).val() + 'T' +$('#inspectionPlanTime'+inspectionPlanCode).val(),
-                    inspectionPlanMemo: $('#inspectionPlanMemo'+inspectionPlanCode).val()
+                    inspectionResultDateTime: $('#inspectionResultDate'+inspectionPlanCode).val() + 'T' +$('#inspectionResultTime'+inspectionPlanCode).val(),
+                    inspectionPlanDeliveryProgress: $('#inspectionPlanDeliveryProgress'+inspectionPlanCode).val(),
+                    inspectionPlanProgress: $('#inspectionPlanProgress'+inspectionPlanCode).val(),
+                    inspectionPlanComplementary: $('#inspectionPlanComplementary'+inspectionPlanCode).val(),
+                    inspectionPlanStatus: "INSPECTED"
                 };
                 console.log("수집한데이터", InspectionPlanDTO);
                 $.ajax({
-                    url: '/purchaseordercontent/inspectionPlan/' + inspectionPlanCode,
-                    type: "PATCH",
+                    url: '/purchaseordercontent/inspectionPlan/result/' + inspectionPlanCode,
+                    type: "POST",
                     data: JSON.stringify(InspectionPlanDTO),
                     contentType: "application/json; charset=utf-8",
                     dataType: "text",
@@ -146,7 +202,78 @@
                 });
             }
         });
-        // 검수계획 등록처리
+        $(document).on('click', '#inspectionPlanSave', function () {
+            console.log("발주검수저장"); // 함수가 호출되는지 확인
+            var inspectionPlanCount = [[${inspectionPlanCount}]];
+            var InspectionPlanDTO = {
+                purchaseOrderDTO : {purchaseOrderCode: purchaseOrderCode},
+                inspectionPlanCode : 'INSP'+purchaseOrderCode.substring(4)+'-'+(inspectionPlanCount+1),
+                inspectionPlanDateTime: $('#inspectionPlanDate').val() + 'T'+$('#inspectionPlanTime').val(),
+                inspectionPlanMemo: $('#inspectionPlanMemo').val()
+            };
+            console.log("수집한데이터", InspectionPlanDTO);
+            $.ajax({
+                url: '/purchaseordercontent/inspectionPlan/' + purchaseOrderCode,
+                type: "POST",
+                data: JSON.stringify(InspectionPlanDTO),
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function(result) {
+                    console.log("결과값result: " + result);
+                    self.location.reload();
+                }
+            });
+        });
+        $(document).on('click', '#addInspectionPlanResisterBtn', function () {
+            $('#addInspectionPlan').html(`
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">검수계획</h5>
+                    <div class="row mb-3">
+                        <label for="inputText" class="col-sm-2 col-form-label">날짜</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" id="inspectionPlanDate">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputTime" class="col-sm-2 col-form-label">시간</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="inspectionPlanTime">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputText" class="col-sm-2 col-form-label">담당자</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputText" class="col-sm-2 col-form-label">연락처</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputText" class="col-sm-2 col-form-label">비고</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" style="height: 100px" id="inspectionPlanMemo"></textarea>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="inspectionPlanSave">검수계획등록</button>
+                </div>
+            </div>
+            `)
+        });
+        //검수결과 활성화
+        function undisabledResult(inspectionPlanCode){
+            $("#inspectionResultDate"+inspectionPlanCode).prop("disabled", false);
+            $("#inspectionResultTime"+inspectionPlanCode).prop("disabled", false);
+            $("#inspectionPlanProgress"+inspectionPlanCode).prop("disabled", false);
+            $("#inspectionPlanDeliveryProgress"+inspectionPlanCode).prop("disabled", false);
+            $("#inspectionPlanComplementary"+inspectionPlanCode).prop("disabled", false);
+        }
+
+        // 검수결과 표시 함수
         function addInspectionResult(inspectionPlanCode){
             $('#addResult'+inspectionPlanCode).html(`
                 <hr>
@@ -173,7 +300,7 @@
                             <label for="inputText" class="col-sm-2 col-form-label">진척률</label>
                             <span class="col-sm-10">
                                 <div class="input-group">
-                                  <input type="number" class="form-control" id="inspectionPlanProgress`+inspectionPlanCode+`" disabled>
+                                  <input type="number" class="form-control" value="0" id="inspectionPlanProgress`+inspectionPlanCode+`" disabled>
                                   <span class="input-group-text">%</span>
                                 </div>
                             </span>
@@ -196,53 +323,6 @@
             `)
         }
 
-        $(document).on('click', '#inspectionPlanResultAdd', function () {
-            var inspectionPlanCode = $(this).data('inspection-code');
-            addInspectionResult(inspectionPlanCode);
-            $('#inspectionResultDate'+inspectionPlanCode).val($('#inspectionPlanDate'+inspectionPlanCode).val())
-            $('#inspectionResultTime'+inspectionPlanCode).val($('#inspectionPlanTime'+inspectionPlanCode).val())
-            $("#inspectionResultDate"+inspectionPlanCode).prop("disabled", false);
-            $("#inspectionResultTime"+inspectionPlanCode).prop("disabled", false);
-            $("#inspectionPlanProgress"+inspectionPlanCode).prop("disabled", false);
-            $("#inspectionPlanDeliveryProgress"+inspectionPlanCode).prop("disabled", false);
-            $("#inspectionPlanComplementary"+inspectionPlanCode).prop("disabled", false);
-            $('#addBtn'+inspectionPlanCode).html(`
-                            <button type="button" class="btn btn-primary" id="inspectionPlanResultSave" data-inspection-code="`+inspectionPlanCode+`">검수결과저장</button>
-                        `)
-        });
-        $(document).on('click', '#inspectionPlanResultSave', function () {
-            var inspectionPlanCode = $(this).data('inspection-code');
-            var $btn = $(this);
-            if ($btn.text() === '검수결과수정') {
-                $("#inspectionResultDate"+inspectionPlanCode).prop("disabled", false);
-                $("#inspectionResultTime"+inspectionPlanCode).prop("disabled", false);
-                $("#inspectionPlanProgress"+inspectionPlanCode).prop("disabled", false);
-                $("#inspectionPlanDeliveryProgress"+inspectionPlanCode).prop("disabled", false);
-                $("#inspectionPlanComplementary"+inspectionPlanCode).prop("disabled", false);
-                $btn.text('검수결과저장');
-            } else if($btn.text() === '검수결과저장') {
-                var InspectionPlanDTO = {
-                    inspectionPlanCode : inspectionPlanCode,
-                    inspectionResultDateTime: $('#inspectionResultDate'+inspectionPlanCode).val() + 'T' +$('#inspectionResultTime'+inspectionPlanCode).val(),
-                    inspectionPlanDeliveryProgress: $('#inspectionPlanDeliveryProgress'+inspectionPlanCode).val(),
-                    inspectionPlanProgress: $('#inspectionPlanProgress'+inspectionPlanCode).val(),
-                    inspectionPlanComplementary: $('#inspectionPlanComplementary'+inspectionPlanCode).val(),
-                    inspectionPlanStatus: "INSPECTED"
-                };
-                console.log("수집한데이터", InspectionPlanDTO);
-                $.ajax({
-                    url: '/purchaseordercontent/inspectionPlan/result/' + inspectionPlanCode,
-                    type: "POST",
-                    data: JSON.stringify(InspectionPlanDTO),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "text",
-                    success: function(result) {
-                        console.log("결과값result: " + result);
-                        self.location.reload();
-                    }
-                });
-            }
-        });
     </script>
     <!-- End #main -->
     <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
