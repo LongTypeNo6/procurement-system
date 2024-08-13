@@ -37,5 +37,7 @@ public class InspectionPlanDTO {
 
     private int inspectionPlanCount; //검수계획 개수
 
+    @Builder.Default
+    private LocalDateTime inspectionResultDateTime=null;
 
 }

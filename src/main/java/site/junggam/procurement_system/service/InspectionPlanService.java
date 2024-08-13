@@ -14,6 +14,11 @@ public interface InspectionPlanService {
     //검수계획등록
     void saveInspectionPlan(InspectionPlanDTO inspectionPlanDTO);
 
+    //검수계획 수정
+    void modifyInspectionPlan(InspectionPlanDTO inspectionPlanDTO);
+
+    //검수결과 등록
+    void saveInspectionResult(InspectionPlanDTO inspectionPlanDTO);
 
     //모든 검수계획리스트 보기
     PageResultDTO<InspectionPlanDTO, InspectionPlan> getInspectionPlanList(PageRequestDTO pageRequestDTO);

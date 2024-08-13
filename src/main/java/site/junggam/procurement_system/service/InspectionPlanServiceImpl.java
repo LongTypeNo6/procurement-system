@@ -48,6 +48,33 @@ public class InspectionPlanServiceImpl implements InspectionPlanService {
     }
 
     @Override
+    public void modifyInspectionPlan(InspectionPlanDTO inspectionPlanDTO) {
+        Optional<InspectionPlan> result
+                = inspectionPlanRepository.findById(inspectionPlanDTO.getInspectionPlanCode());
+        if (result.isPresent()) {
+            InspectionPlan inspectionPlan = result.get();
+            inspectionPlan.changeInspectionPlanDateTime(inspectionPlanDTO.getInspectionPlanDateTime());
+            inspectionPlan.changeInspectionPlanMemo(inspectionPlanDTO.getInspectionPlanMemo());
+            inspectionPlanRepository.save(inspectionPlan);
+        }
+    }
+
+    @Override
+    public void saveInspectionResult(InspectionPlanDTO inspectionPlanDTO) {
+        Optional<InspectionPlan> result
+                = inspectionPlanRepository.findById(inspectionPlanDTO.getInspectionPlanCode());
+        if (result.isPresent()) {
+            InspectionPlan inspectionPlan = result.get();
+            inspectionPlan.changeInspectionResultDateTime(inspectionPlanDTO.getInspectionResultDateTime());
+            inspectionPlan.changeInspectionPlanProgress(inspectionPlanDTO.getInspectionPlanProgress());
+            inspectionPlan.changeInspectionPlanStatus(inspectionPlanDTO.getInspectionPlanStatus());
+            inspectionPlan.changeInspectionPlanComplementary(inspectionPlanDTO.getInspectionPlanComplementary());
+            inspectionPlan.changeInspectionPlanDeliveryProgress(inspectionPlanDTO.getInspectionPlanDeliveryProgress());
+            inspectionPlanRepository.save(inspectionPlan);
+        }
+    }
+
+    @Override
     public PageResultDTO<InspectionPlanDTO, InspectionPlan> getInspectionPlanList(PageRequestDTO pageRequestDTO) {
         try {
             Pageable pageable = pageRequestDTO.getPageable(Sort.by("PurchaseOrder.purchaseOrderCode").ascending());

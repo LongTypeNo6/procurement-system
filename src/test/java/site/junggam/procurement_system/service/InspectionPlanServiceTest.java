@@ -36,4 +36,10 @@ public class InspectionPlanServiceTest {
 
     }
 
+    @Test
+    @Transactional
+    public void testModifyInspectionPlan() {
+
+
+    }
 }

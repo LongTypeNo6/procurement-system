@@ -16,7 +16,7 @@ import site.junggam.procurement_system.entity.TemMaterial;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-12T18:16:48+0900",
+    date = "2024-08-13T11:10:14+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -38,6 +38,7 @@ public class InspectionPlanMapperImpl implements InspectionPlanMapper {
         inspectionPlanDTO.inspectionPlanComplementary( inspectionPlan.getInspectionPlanComplementary() );
         inspectionPlanDTO.inspectionPlanDeliveryProgress( inspectionPlan.getInspectionPlanDeliveryProgress() );
         inspectionPlanDTO.inspectionPlanStatus( inspectionPlan.getInspectionPlanStatus() );
+        inspectionPlanDTO.inspectionResultDateTime( inspectionPlan.getInspectionResultDateTime() );
 
         return inspectionPlanDTO.build();
     }
@@ -68,10 +69,11 @@ public class InspectionPlanMapperImpl implements InspectionPlanMapper {
         inspectionPlan.inspectionPlanCode( inspectionPlanDTO.getInspectionPlanCode() );
         inspectionPlan.inspectionPlanDateTime( inspectionPlanDTO.getInspectionPlanDateTime() );
         inspectionPlan.inspectionPlanMemo( inspectionPlanDTO.getInspectionPlanMemo() );
-        inspectionPlan.inspectionPlanProgress( inspectionPlanDTO.getInspectionPlanProgress() );
-        inspectionPlan.inspectionPlanComplementary( inspectionPlanDTO.getInspectionPlanComplementary() );
-        inspectionPlan.inspectionPlanDeliveryProgress( inspectionPlanDTO.getInspectionPlanDeliveryProgress() );
         inspectionPlan.inspectionPlanStatus( inspectionPlanDTO.getInspectionPlanStatus() );
+        inspectionPlan.inspectionResultDateTime( inspectionPlanDTO.getInspectionResultDateTime() );
+        inspectionPlan.inspectionPlanProgress( inspectionPlanDTO.getInspectionPlanProgress() );
+        inspectionPlan.inspectionPlanDeliveryProgress( inspectionPlanDTO.getInspectionPlanDeliveryProgress() );
+        inspectionPlan.inspectionPlanComplementary( inspectionPlanDTO.getInspectionPlanComplementary() );
 
         return inspectionPlan.build();
     }
