@@ -16,12 +16,6 @@ public interface ProductService {
     boolean deleteProduct(String productCode);
 
     // 제품 조회
-    //Product findProductByCode(String productCode);
-
-    // 모든 제품 조회
-    //List<Product> findAllProducts();
-
-    // 제품 조회
     Product getProduct(String productCode);
 
     // 제품 목록 조회

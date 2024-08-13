@@ -21,6 +21,8 @@ public class UnitDTO {
     private LocalDateTime unitRegDate;
     private LocalDateTime unitModDate;
 
-    //private String productCode;
-    //private String meterialCode;
+    //제품코드
+    private String productCode;  // for mapping with Product
+    //자재코드
+    private String materialCode;  // for mapping with Material
 }

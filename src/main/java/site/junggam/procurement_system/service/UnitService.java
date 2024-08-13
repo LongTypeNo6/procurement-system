@@ -2,6 +2,7 @@ package site.junggam.procurement_system.service;
 
 import site.junggam.procurement_system.dto.ProductDTO;
 import site.junggam.procurement_system.dto.UnitDTO;
+import site.junggam.procurement_system.entity.Material;
 import site.junggam.procurement_system.entity.Product;
 import site.junggam.procurement_system.entity.Unit;
 
@@ -36,10 +37,8 @@ public interface UnitService {
                 .unitEtcFile(unitDTO.getUnitEtcFile())
                 .unitRegDate(unitDTO.getUnitRegDate())
                 .unitModDate(unitDTO.getUnitModDate())
-                //.product(Product.builder().productCode("BP-00001").build())
-                //.product(Product.builder().productCode("BM-00001").build())
                 .build();
-        return null;
+        return unit;
     }
     //Entity->DTO
     default UnitDTO entityToDTO(Unit unit) {
@@ -47,14 +46,15 @@ public interface UnitService {
                 .unitCode(unit.getUnitCode())
                 .unitName(unit.getUnitName())
                 .unitStand(unit.getUnitStand())
+                .unitTexture(unit.getUnitTexture())
                 .unitDrawFile(unit.getUnitDrawFile())
                 .unitEtcFile(unit.getUnitEtcFile())
                 .unitRegDate(unit.getUnitRegDate())
                 .unitModDate(unit.getUnitModDate())
-                //.productCode(productDTO.getProductCode())
-                //.meterialCode("BM-00001")
+                .productCode(unit.getProduct() != null ? unit.getProduct().getProductCode() : null)
+                .materialCode(unit.getMaterial() != null ? unit.getMaterial().getMaterialCode() : null)
                 .build();
-        return null;
+        return unitDTO;
     }
 
 }

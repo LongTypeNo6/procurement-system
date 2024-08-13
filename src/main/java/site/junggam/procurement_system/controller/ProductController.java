@@ -7,9 +7,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import site.junggam.procurement_system.dto.MaterialDTO;
 import site.junggam.procurement_system.dto.ProductDTO;
 import site.junggam.procurement_system.dto.UnitDTO;
+import site.junggam.procurement_system.entity.Material;
 import site.junggam.procurement_system.entity.Product;
+import site.junggam.procurement_system.entity.Unit;
+import site.junggam.procurement_system.service.MaterialService;
 import site.junggam.procurement_system.service.ProductService;
 import site.junggam.procurement_system.service.UnitService;
 
@@ -26,6 +30,7 @@ import java.util.stream.Collectors;
 public class ProductController {
     private final ProductService productService;
     private final UnitService unitService;
+    private final MaterialService materialService;
 
 
     @RequestMapping("/addproducttest")
@@ -37,13 +42,6 @@ public class ProductController {
     public void testList() {
 
     }
-
-    // 제품 목록 메소드
-    //@RequestMapping("/productList")
-    //public void productList() {
-    //    log.info("제품 목록 조회..");
-
-    //}
 
 
     // 제품 조회 메소드
@@ -83,6 +81,40 @@ public class ProductController {
     }
 
 
+    // 유닛 목록 메소드
+    @RequestMapping("getListUnit")
+    public void getListUnit(Model model) {
+        log.info("유닛 목록 조회..");
+
+        List<Unit> units = unitService.getListUnit();
+        List<UnitDTO> unitDTOS = units.stream()
+                .map(unitService::entityToDTO)
+                .collect(Collectors.toList());
+        log.info("unitDTOs : ", unitDTOS);
+
+        model.addAttribute("units", unitDTOS);
+
+        //return "product/getListUnit"; //유닛 목록 페이지 (ulist.html)
+    }
+
+
+    // 자재 목록 메소드
+    @RequestMapping("getListMaterial")
+    public void getListMaterial(Model model) {
+        log.info("자재 목록 조회..");
+
+        List<Material> materials = materialService.getListMaterial();
+        List<MaterialDTO> materialDTOS = materials.stream()
+                .map(materialService::entityToDTO)
+                .collect(Collectors.toList());
+        log.info("materialDTOS : ", materialDTOS);
+
+        model.addAttribute("materials", materialDTOS);
+
+        //return "product/getListMaterial"; // 자재 목록 페이지 (mlist.html)
+    }
+
+
     // 유닛 등록 페이지 폼
     @GetMapping("/unitRegister")
     public void unitRegister() {
@@ -97,6 +129,8 @@ public class ProductController {
             @RequestParam("unit_texture") String unitTexture,
             @RequestParam("unit_draw_file") MultipartFile unitDrawFile,
             @RequestParam("unit_etc_file") MultipartFile unitEtcFile,
+            @RequestParam(value = "product_code", required = false) String productCode,
+            @RequestParam(value = "material_code", required = false) String materialCode,
             RedirectAttributes redirectAttributes) {
 
         log.info("유닛등록 테스트..");
@@ -117,6 +151,8 @@ public class ProductController {
                 .unitEtcFile(etcFilePath)
                 .unitRegDate(now)
                 .unitModDate(now)
+                .productCode(productCode)  // Set Product Code
+                .materialCode(materialCode)  // Set Material Code
                 .build();
 
         // 유닛 등록 처리
@@ -125,8 +161,56 @@ public class ProductController {
         // 등록 성공 메시지 설정
         redirectAttributes.addFlashAttribute("message", "유닛이 등록되었습니다. 코드: " + unitCode);
 
-        // 목록 페이지로 리다이렉트
-        return "redirect:/product/getListProduct";
+        // 유닛 목록 페이지로 리다이렉트
+        return "redirect:/product/getListUnit";
+    }
+
+    // 자재 등록 페이지 폼
+    @GetMapping("/materialRegister")
+    public void materialRegister() {
+
+    }
+
+    // 자재 등록 처리 메소드
+    @PostMapping("/materialRegisterPro")
+    public String materialRegisterPro(
+            @RequestParam("material_name") String materialName,
+            @RequestParam("material_stand") String materialStand,
+            @RequestParam("material_texture") String materialTexture,
+            @RequestParam("material_draw_file") MultipartFile materialDrawFile,
+            @RequestParam("material_etc_file") MultipartFile materialEtcFile,
+            @RequestParam("material_safe_quantity") Integer materialSafeQuantity,
+            RedirectAttributes redirectAttributes) {
+
+        log.info("자재 등록 ..");
+
+        // 현재 날짜와 시간을 등록일 및 수정일로 설정
+        LocalDateTime now = LocalDateTime.now();
+
+        // 파일 저장 처리
+        String drawFilePath = saveFile(materialDrawFile);
+        String etcFilePath = saveFile(materialEtcFile);
+
+        // DTO 객체 생성 및 값 설정
+        MaterialDTO materialDTO = MaterialDTO.builder()
+                .materialName(materialName)
+                .materialStand(materialStand)
+                .materialTexture(materialTexture)
+                .materialDrawFile(drawFilePath)
+                .materialEtcFile(etcFilePath)
+                .materialRegDate(now)
+                .materialModDate(now)
+                .materialSafeQuantity(materialSafeQuantity)
+                .build();
+
+        // 자재 등록 처리
+        String materialCode = materialService.insertMaterial(materialDTO);
+
+        // 등록 성공 메시지 설정
+        redirectAttributes.addFlashAttribute("message", "자재가 등록되었습니다. 코드: " + materialCode);
+
+        // 자재 목록 페이지로 리다이렉트
+        return "redirect:/product/getListMaterial";
     }
 
 
@@ -177,6 +261,7 @@ public class ProductController {
         // 제품 목록 페이지로 리다이렉트
         return "redirect:/product/getListProduct";
     }
+
 
 
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>제품 목록</title>
+    <title>자재 목록</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -19,13 +19,13 @@
 <!-- ======= main ======= -->
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>제품 목록</h1>
+        <h1>자재 목록</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">메인</a></li>
                 <li class="breadcrumb-item">발주계획</li>
                 <li class="breadcrumb-item">제품</li>
-                <li class="breadcrumb-item active">제품목록</li>
+                <li class="breadcrumb-item active">자재목록</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -36,40 +36,10 @@
             <!--여기에 카드랑 내용 넣어주시면 됩니다..-->
 
             <div class="col-lg-12">
-                <table border="1" hidden="hidden">
-                    <thead>
-                    <tr>
-                        <th>제품 코드</th>
-                        <th>제품명</th>
-                        <th>가격</th>
-                        <th>규격</th>
-                        <th>재질</th>
-                        <th>도면</th>
-                        <th>기타문서</th>
-                        <th>등록일</th>
-                        <th>수정일</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <!-- Thymeleaf 반복 구문 -->
-                    <tr th:each="product : ${products}">
-                        <td th:text="${product.productCode}"></td>
-                        <td th:text="${product.productName}"></td>
-                        <td th:text="${product.productPrice}"></td>
-                        <td th:text="${product.productStand}"></td>
-                        <td th:text="${product.productTexture}"></td>
-                        <td th:text="${product.productDrawFile}"></td>
-                        <td th:text="${product.productEtcFile}"></td>
-                        <td th:text="${product.productRegDate}"></td>
-                        <td th:text="${product.productModDate}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">제품리스트</h5>
+                        <h5 class="card-title">자재리스트</h5>
                         <div class="accordion" id="accordionExample">
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="headingOne">
@@ -162,8 +132,8 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">구분</th>
-                                <th scope="col">제품명</th>
-                                <th scope="col">제품코드</th>
+                                <th scope="col">자재명</th>
+                                <th scope="col">자재코드</th>
                                 <th scope="col">규격</th>
                                 <th scope="col">재질</th>
                                 <th scope="col">bom등록여부</th>
@@ -172,15 +142,15 @@
                             </thead>
                             <tbody>
                             <!-- Thymeleaf 반복 구문 -->
-                            <tr th:each="product, productState : ${products}">
-                                <th scope="row" th:text="${productState.count }"></th>
-                                <td>제품</td>
-                                <td><a href="제품상세보기.html" th:text="${product.productName}"></a></td>
-                                <td th:text="${product.productCode}"></td>
-                                <td th:text="${product.productStand}"></td>
-                                <td th:text="${product.productTexture}"></td>
+                            <tr th:each="material, materialState : ${materials}">
+                                <th scope="row" th:text="${materialState.count }"></th>
+                                <td>자재</td>
+                                <td><a href="자재상세보기.html" th:text="${material.materialName}"></a></td>
+                                <td th:text="${material.materialCode}"></td>
+                                <td th:text="${material.materialStand}"></td>
+                                <td th:text="${material.materialTexture}"></td>
                                 <td>O</td>
-                                <td>[[${#temporals.format(product.productRegDate, 'yyyy/MM/dd')}]]</td>
+                                <td>[[${#temporals.format(material.materialRegDate, 'yyyy/MM/dd')}]]</td>
                             </tr>
                             <tr hidden="hidden">
                                 <th scope="row">1</th>
