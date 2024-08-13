@@ -22,7 +22,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public String insertProduct(ProductDTO productDTO) {
         String newProductCode = generateNextProductCode();
-        productDTO.setProductName(productDTO.getProductName());
+        //productDTO.setProductName(productDTO.getProductName());
         productDTO.setProductCode(newProductCode);
         Product product = dtoToEntity(productDTO);
         Product saveProduct = productRepository.save(product);

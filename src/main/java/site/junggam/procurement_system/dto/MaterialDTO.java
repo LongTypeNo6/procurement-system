@@ -1,21 +1,17 @@
-package site.junggam.procurement_system.entity;
+package site.junggam.procurement_system.dto;
 
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
-@Entity
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
-@Table(name = "tbl_material")
-public class Material {
-    @Id
+public class MaterialDTO {
     private String materialCode;
     private String materialName;
     private String materialStand;
@@ -25,7 +21,4 @@ public class Material {
     private LocalDateTime materialRegDate;
     private LocalDateTime materialModDate;
     private Integer materialSafeQuantity;
-
-    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Unit> units;
 }
