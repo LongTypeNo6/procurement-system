@@ -1,9 +1,6 @@
 package site.junggam.procurement_system.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,21 +9,23 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"purchaseOrder"})
 @Getter
 @Table(name="tbl_warehousing")
 public class Warehousing {
-
     @Id
+    private String warehousingCode;
     private LocalDateTime warehousingDate;
-    private LocalDateTime warehousingShipmentSpec ;
+    private String warehousingShipmentSpec ;
     private String warehousingSpec;
     private String warehousingResultMemo;
 
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private WarehousingStatus warehousingStatus=WarehousingStatus.PENDING;
 
-
-
-
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "purchaseOrderCode")
+    private PurchaseOrder purchaseOrder;
 
 }
