@@ -28,5 +28,6 @@ public class Product {
     private LocalDateTime productModDate;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Unit> units;
+    private Set<ProductUnit> productUnits;
+
 }

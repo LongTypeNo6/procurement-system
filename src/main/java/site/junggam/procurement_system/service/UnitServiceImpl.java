@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import site.junggam.procurement_system.dto.UnitDTO;
+import site.junggam.procurement_system.dto.UnitMaterialDTO;
 import site.junggam.procurement_system.entity.Material;
 import site.junggam.procurement_system.entity.Product;
 import site.junggam.procurement_system.entity.Unit;
@@ -14,6 +15,7 @@ import site.junggam.procurement_system.repository.UnitRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -27,23 +29,8 @@ public class UnitServiceImpl implements UnitService {
     @Override
     public String insertUnit(UnitDTO unitDTO) {
         String newUnitCode = generateNextUnitCode();
-        //unitDTO.setUnitName(unitDTO.getUnitName());
         unitDTO.setUnitCode(newUnitCode);
-        Unit unit = dtoToEntity(unitDTO);
-
-        // Set Product entity
-        if (unitDTO.getProductCode() != null) {
-            Product product = productRepository.findById(unitDTO.getProductCode())
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
-            unit.setProduct(product);
-        }
-
-        // Set Material entity
-        if (unitDTO.getMaterialCode() != null) {
-            Material material = materialRepository.findById(unitDTO.getMaterialCode())
-                    .orElseThrow(() -> new RuntimeException("Material not found"));
-            unit.setMaterial(material);
-        }
+        Unit unit = convertToEntity(unitDTO);
 
         Unit saveUnit = unitRepository.save(unit);
         return saveUnit.getUnitCode();
@@ -51,24 +38,71 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public void updateUnit(UnitDTO unitDTO) {
-
+        if (unitRepository.existsById(unitDTO.getUnitCode())) {
+            Unit unit = convertToEntity(unitDTO);
+            unitRepository.save(unit);
+        }
     }
 
     @Override
-    public boolean deleteUnit(String unitCode) {
-        return false;
+    public void deleteUnit(String unitCode) {
+        unitRepository.deleteById(unitCode);
     }
 
     @Override
-    public Unit getUnit(String unitCode) {
-        return null;
+    public Optional<UnitDTO> getUnit(String unitCode) {
+        return unitRepository.findById(unitCode)
+                .map(this::convertToDTO);
     }
 
     @Override
-    public List<Unit> getListUnit() {
-        return unitRepository.findAll(); // 실제 데이터 반환
+    public List<UnitDTO> getListUnit() {
+        //return unitRepository.findAll(); // 실제 데이터 반환
+        return unitRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
+    @Override
+    public List<UnitDTO> searchUnit(String keyword) {
+        //return List.of();
+        return getListUnit();
+    }
+
+
+    private UnitDTO convertToDTO(Unit unit) {
+        // Convert Unit entity to UnitDTO
+        return UnitDTO.builder()
+                .unitCode(unit.getUnitCode())
+                .unitName(unit.getUnitName())
+                .unitStand(unit.getUnitStand())
+                .unitTexture(unit.getUnitTexture())
+                .unitDrawFile(unit.getUnitDrawFile())
+                .unitEtcFile(unit.getUnitEtcFile())
+                .unitRegDate(unit.getUnitRegDate())
+                .unitModDate(unit.getUnitModDate())
+                .unitMaterials(unit.getUnitMaterials().stream()
+                        .map(um -> UnitMaterialDTO.builder()
+                                .unitCode(um.getUnitMaterialId().getUnitCode())
+                                .materialCode(um.getUnitMaterialId().getMaterialCode())
+                                .build())
+                        .collect(Collectors.toSet()))
+                .build();
+    }
+
+    private Unit convertToEntity(UnitDTO unitDTO) {
+        // Convert UnitDTO to Unit entity
+        return Unit.builder()
+                .unitCode(unitDTO.getUnitCode())
+                .unitName(unitDTO.getUnitName())
+                .unitStand(unitDTO.getUnitStand())
+                .unitTexture(unitDTO.getUnitTexture())
+                .unitDrawFile(unitDTO.getUnitDrawFile())
+                .unitEtcFile(unitDTO.getUnitEtcFile())
+                .unitRegDate(unitDTO.getUnitRegDate())
+                .unitModDate(unitDTO.getUnitModDate())
+                .build();
+    }
 
     //Next 유닛 코드 자동증가값 생성 메서드
     private String generateNextUnitCode() {

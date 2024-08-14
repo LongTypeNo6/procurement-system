@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @Builder
@@ -21,4 +22,6 @@ public class ProductDTO {
     private String productEtcFile ;
     private LocalDateTime productRegDate;
     private LocalDateTime productModDate;
+    private Set<ProductUnitDTO> productUnits;
+
 }

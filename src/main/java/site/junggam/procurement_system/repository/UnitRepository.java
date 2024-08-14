@@ -6,7 +6,6 @@ import site.junggam.procurement_system.entity.Unit;
 
 import java.util.List;
 
-@Repository
 public interface UnitRepository extends JpaRepository<Unit, String> {
     List<Unit> findByUnitNameContaining(String name);
 }

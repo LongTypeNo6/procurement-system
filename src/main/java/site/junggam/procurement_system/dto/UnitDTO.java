@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @Builder
@@ -21,8 +22,6 @@ public class UnitDTO {
     private LocalDateTime unitRegDate;
     private LocalDateTime unitModDate;
 
-    //제품코드
-    private String productCode;  // for mapping with Product
-    //자재코드
-    private String materialCode;  // for mapping with Material
+    private Set<UnitMaterialDTO> unitMaterials;
+
 }

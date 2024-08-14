@@ -26,6 +26,4 @@ public class Material {
     private LocalDateTime materialModDate;
     private Integer materialSafeQuantity;
 
-    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Unit> units;
 }

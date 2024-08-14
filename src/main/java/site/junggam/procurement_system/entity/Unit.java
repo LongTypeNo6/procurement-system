@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -24,12 +25,11 @@ public class Unit {
     private LocalDateTime unitRegDate;
     private LocalDateTime unitModDate;
 
+    @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UnitMaterial> unitMaterials;
+
     @ManyToOne
     @JoinColumn(name = "product_code")
     private Product product;
-
-    @ManyToOne
-    @JoinColumn(name = "material_code")
-    private Material material;
 
 }

@@ -12,6 +12,7 @@ import site.junggam.procurement_system.repository.MaterialRepository;
 import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -22,38 +23,75 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public String insertMaterial(MaterialDTO materialDTO) {
         String newMaterialCode = generateNextMaterialCode();
-        //materialDTO.setMaterialName(materialDTO.getMaterialName());
         materialDTO.setMaterialCode(newMaterialCode);
-        Material material = dtoToEntity(materialDTO);
+        //Material material = dtoToEntity(materialDTO);
+        Material material = convertToEntity(materialDTO);
         Material saveMaterial = materialRepository.save(material);
         return saveMaterial.getMaterialCode();
     }
 
     @Override
-    public MaterialDTO updateMaterial(MaterialDTO materialDTO) {
-        return null;
+    public void updateMaterial(MaterialDTO materialDTO) {
+        if (materialRepository.existsById(materialDTO.getMaterialCode())) {
+            Material material = convertToEntity(materialDTO);
+            materialRepository.save(material);
+        }
     }
 
     @Override
     public void deleteMaterial(String materialCode) {
-
+        materialRepository.deleteById(materialCode);
     }
 
     @Override
-    public MaterialDTO getMaterial(String materialCode) {
-        return null;
+    public Optional<MaterialDTO> getMaterial(String materialCode) {
+        return materialRepository.findById(materialCode)
+                .map(this::convertToDTO);
     }
 
     @Override
-    public List<Material> getListMaterial() { //Page<MaterialDTO> getListMaterial(Pageable pageable)
-        return materialRepository.findAll(); // 실제 데이터 반환
+    public List<MaterialDTO> getListMaterial() { //Page<MaterialDTO> getListMaterial(Pageable pageable)
+        //return materialRepository.findAll(); // 실제 데이터 반환
+        return materialRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Page<MaterialDTO> searchMaterial(String type, Pageable pageable) {
-        return null;
+    public List<MaterialDTO> searchMaterial(String keyword) {
+        return getListMaterial();
     }
 
+
+    private MaterialDTO convertToDTO(Material material) {
+        // Convert Material entity to MaterialDTO
+        return MaterialDTO.builder()
+                .materialCode(material.getMaterialCode())
+                .materialName(material.getMaterialName())
+                .materialStand(material.getMaterialStand())
+                .materialTexture(material.getMaterialTexture())
+                .materialDrawFile(material.getMaterialDrawFile())
+                .materialEtcFile(material.getMaterialEtcFile())
+                .materialRegDate(material.getMaterialRegDate())
+                .materialModDate(material.getMaterialModDate())
+                .materialSafeQuantity(material.getMaterialSafeQuantity())
+                .build();
+    }
+
+    private Material convertToEntity(MaterialDTO materialDTO) {
+        // Convert MaterialDTO to Material entity
+        return Material.builder()
+                .materialCode(materialDTO.getMaterialCode())
+                .materialName(materialDTO.getMaterialName())
+                .materialStand(materialDTO.getMaterialStand())
+                .materialTexture(materialDTO.getMaterialTexture())
+                .materialDrawFile(materialDTO.getMaterialDrawFile())
+                .materialEtcFile(materialDTO.getMaterialEtcFile())
+                .materialRegDate(materialDTO.getMaterialRegDate())
+                .materialModDate(materialDTO.getMaterialModDate())
+                .materialSafeQuantity(materialDTO.getMaterialSafeQuantity())
+                .build();
+    }
 
     //Next 자재코드 자동증가값 생성 메서드
     private String generateNextMaterialCode() {
