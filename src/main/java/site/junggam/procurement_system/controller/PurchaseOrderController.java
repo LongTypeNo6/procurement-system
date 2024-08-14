@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import site.junggam.procurement_system.entity.PurchaseOrder;
 import site.junggam.procurement_system.service.InspectionPlanService;
 import site.junggam.procurement_system.service.PurchaseOrderService;
 
@@ -40,7 +41,7 @@ public class PurchaseOrderController {
     public void inspectionPlanGet(@RequestParam("purchaseOrderCode") String purchaseOrderCode, Model model){
         log.info("검수관리 상세보기 컨트롤러");
         model.addAttribute("purchaseOrderCode",purchaseOrderCode);
-        model.addAttribute("inspectionPlanCount",inspectionPlanService.getInspectionPlan(purchaseOrderCode).size());
+        model.addAttribute("inspectionPlanCount",inspectionPlanService.getInspectionPlanCount(PurchaseOrder.builder().purchaseOrderCode(purchaseOrderCode).build()));
     }
 
 }

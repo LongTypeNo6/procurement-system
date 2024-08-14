@@ -310,15 +310,36 @@
     <!--이하 발주처리 및 다운로드 JS-->
     <script th:inline="javascript">
         var purchaseOrderCode = [[${purchaseOrderCode}]];
-        $('#orderAndDownload').click(orderSave);
+        $(document).on('click', '#orderAndDownload', function () {
+            console.log("발주검수저장"); // 함수가 호출되는지 확인
+            var InspectionPlanDTO = {
+                purchaseOrderDTO : {purchaseOrderCode: purchaseOrderCode},
+                inspectionPlanCode : 'INSP'+purchaseOrderCode.substring(4)+'-1',
+            };
+            console.log("수집한데이터", InspectionPlanDTO);
+            $.ajax({
+                url: '/purchaseordercontent/inspectionPlan/' + purchaseOrderCode,
+                type: "POST",
+                data: JSON.stringify(InspectionPlanDTO),
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function(result) {
+                    console.log("결과값result: " + result);
+                    self.location.reload();
+                }
+            });
+            orderSave();
+
+        })
 
         $(document).on('click', '#orderInspectionPlanSaveAndDownload', function () {
             console.log("발주검수저장"); // 함수가 호출되는지 확인
             var InspectionPlanDTO = {
                 purchaseOrderDTO : {purchaseOrderCode: purchaseOrderCode},
-                inspectionPlanCode : 'INSP'+purchaseOrderCode.substring(4)+'-1',
+                inspectionPlanCode : 'INSP'+purchaseOrderCode.substring(4)+'1',
                 inspectionPlanDateTime: $('#inspectionPlanDate').val() + 'T'+$('#inspectionPlanTime').val(),
-                inspectionPlanMemo: $('#inspectionPlanMemo').val()
+                inspectionPlanMemo: $('#inspectionPlanMemo').val(),
+                inspectionPlanDeliveryProgress: "NOT_STARTED"
             };
             console.log("수집한데이터", InspectionPlanDTO);
             $.ajax({
@@ -346,6 +367,7 @@
             // ID 변경 후, 새로운 ID에 대한 이벤트 리스너를 다시 바인딩
             $('#orderSave').click(orderSave);
         });
+
         function orderSave() {
             var purchaserDTO = {
                 purchaseOrderCode: purchaseOrderCode,

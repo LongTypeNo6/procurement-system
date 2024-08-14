@@ -12,6 +12,7 @@ import site.junggam.procurement_system.dto.PageRequestDTO;
 import site.junggam.procurement_system.dto.PageResultDTO;
 import site.junggam.procurement_system.dto.PurchaseOrderDTO;
 import site.junggam.procurement_system.entity.InspectionPlan;
+import site.junggam.procurement_system.entity.InspectionPlanDeliveryProgress;
 import site.junggam.procurement_system.entity.PurchaseOrder;
 import site.junggam.procurement_system.mapper.InspectionPlanMapper;
 import site.junggam.procurement_system.repository.InspectionPlanRepository;
@@ -29,10 +30,13 @@ public class InspectionPlanServiceImpl implements InspectionPlanService {
     private final InspectionPlanRepository inspectionPlanRepository;
     private final InspectionPlanMapper inspectionPlanMapper;
 
-    private int getInspectionPlanCount(PurchaseOrder purchaseOrder) {
+    @Override
+    public int getInspectionPlanCount(PurchaseOrder purchaseOrder) {
         List<InspectionPlan> inspectionPlans = inspectionPlanRepository.findByPurchaseOrder(purchaseOrder);
-        int size = inspectionPlans.size();
-        return size;
+        long count = inspectionPlans.stream()
+                .filter(plan -> !plan.getInspectionPlanDeliveryProgress().equals(InspectionPlanDeliveryProgress.NOT_INSPECTED))
+                .count();
+        return (int) count;
     }
 
     @Override

@@ -4,10 +4,14 @@ import site.junggam.procurement_system.dto.InspectionPlanDTO;
 import site.junggam.procurement_system.dto.PageRequestDTO;
 import site.junggam.procurement_system.dto.PageResultDTO;
 import site.junggam.procurement_system.entity.InspectionPlan;
+import site.junggam.procurement_system.entity.PurchaseOrder;
 
 import java.util.List;
 public interface InspectionPlanService {
-
+    
+    //하나의 발주에 대한 검수계획 개수보기
+    public int getInspectionPlanCount(PurchaseOrder purchaseOrder);
+    
     //하나의 발주에 대한 검수계획 리스트 보기
     List<InspectionPlanDTO> getInspectionPlan(String purchaseOrderCode);
 

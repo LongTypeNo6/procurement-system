@@ -50,30 +50,30 @@
                                             <div class="row mb-3">
                                                 <label for="inputPassword" class="col-sm-1 col-form-label">발주일자</label>
                                                 <div class="col-sm-2">
-                                                    <input type="date" class="form-control" value="0">
+                                                    <input type="date" class="form-control" >
                                                 </div>
                                                 ~
                                                 <div class="col-sm-2">
-                                                    <input type="date" class="form-control" value="0">
+                                                    <input type="date" class="form-control" >
                                                 </div>
                                                 <label for="inputPassword" class="col-sm-1 col-form-label">납기일자</label>
                                                 <div class="col-sm-2">
-                                                    <input type="date" class="form-control" value="0">
+                                                    <input type="date" class="form-control">
                                                 </div>
                                                 ~
                                                 <div class="col-sm-2">
-                                                    <input type="date" class="form-control" value="0">
+                                                    <input type="date" class="form-control">
                                                 </div>
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <p>
                                                 </p>
                                                 <label for="inputPassword" class="col-sm-1 col-form-label">검수일자</label>
                                                 <div class="col-sm-2">
-                                                    <input type="date" class="form-control" value="0">
+                                                    <input type="date" class="form-control" >
                                                 </div>
                                                 ~
                                                 <div class="col-sm-2">
-                                                    <input type="date" class="form-control" value="0">
+                                                    <input type="date" class="form-control" >
                                                 </div>
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <p></p>
@@ -128,9 +128,7 @@
                                     </div>
                                 </div>
                             </div><!-- End Default Accordion Example -->
-                            <p></p>
-                            <a href="발주서리스트.html"><button type="button" class="btn btn-primary btn-sm">검수일정보기</button></a>
-                            <p></p>
+                            <br>
                             <!-- Table with hoverable rows -->
                             <table class="table table-hover">
                                 <thead>
@@ -143,7 +141,6 @@
                                     <th>납기일자</th>
                                     <th>검수상태</th>
                                     <th>검수일자</th>
-                                    <th>시간</th>
                                     <th>검수자</th>
                                     <th>진척율</th>
                                     <th>납기진도</th>
@@ -176,9 +173,11 @@
             "NOT_INSPECTED" : "-"
         };
         $(document).ready(function (e) {
+
+
             console.log("자바스크립트작동")
             function getPurchaseOrderContent(page) {
-                return $.getJSON(`/purchaseordercontent/inspectionPlanList?page=${page}&size=10`, function(data) {
+                return $.getJSON(`/purchaseordercontent/inspectionPlanList?page=${page}&size=100`, function(data) {
                     console.log("요청", data);
                     // 첫 번째 요청에서 totalPage 값 설정
                     if (totalPage === 0) {
@@ -189,24 +188,32 @@
                     $.each(data.dtoList, function(idx,dto) {
                         var inspectionPlanCount=dto.inspectionPlanCount;
                         if(purchaseOrderCode!=dto.purchaseOrderDTO.purchaseOrderCode){
+                            console.log("발주코드전",purchaseOrderCode);
                             purchaseOrderCode= dto.purchaseOrderDTO.purchaseOrderCode;
+                            console.log("발주코드후",purchaseOrderCode);
                             counting+=1;
+                            var row=inspectionPlanCount===0?1:inspectionPlanCount;
                             str += '<tr>'
-                            str += '<th scope="col" rowSpan="'+inspectionPlanCount+'">'+ counting +'</th>'
-                            str += '<td rowSpan="'+inspectionPlanCount+'"><a href="inspectionPlanGet?purchaseOrderCode='+purchaseOrderCode+'">'+dto.purchaseOrderDTO.materialName+'</a></td>'
-                            str += '<td rowSpan="'+inspectionPlanCount+'">'+dto.purchaseOrderDTO.purchaserName+'</td>'
-                            str += '<td rowSpan="'+inspectionPlanCount+'">'+dto.purchaseOrderDTO.procurementPlanQuantity+'</td>'
-                            str += '<td rowSpan="'+inspectionPlanCount+'">'+formatDate(dto.purchaseOrderDTO.purchaseOrderDate)+'</td>'
-                            str += '<td rowSpan="'+inspectionPlanCount+'">'+formatDate(dto.purchaseOrderDTO.procurementPlanDeadLine)+'</td>'
+                            str += '<th scope="col" rowSpan="'+row+'">'+ counting +'</th>'
+                            str += '<td rowSpan="'+row+'"><a href="inspectionPlanGet?purchaseOrderCode='+purchaseOrderCode+'">'+dto.purchaseOrderDTO.materialName+'</a></td>'
+                            str += '<td rowSpan="'+row+'">'+dto.purchaseOrderDTO.purchaserName+'</td>'
+                            str += '<td rowSpan="'+row+'">'+dto.purchaseOrderDTO.procurementPlanQuantity+'</td>'
+                            str += '<td rowSpan="'+row+'">'+formatDate(dto.purchaseOrderDTO.purchaseOrderDate)+'</td>'
+                            str += '<td rowSpan="'+row+'">'+formatDate(dto.purchaseOrderDTO.procurementPlanDeadLine)+'</td>'
                         }
+                        if(inspectionPlanCount){
                             str += '<td>'+statusMapping[dto.inspectionPlanStatus]+'</td>'
                             str += '<td>'+formatDate(dto.inspectionPlanDateTime)+'</td>'
-                            str += '<td>'+formatTime(dto.inspectionPlanDateTime)+'</td>'
-                            str += '<td>'+'</td>'
+                            str += '<td>'+'검수자이름'+'</td>'
                             str += '<td>'+dto.inspectionPlanProgress+'%</td>'
                             str += '<td>'+deliveryProgressMapping[dto.inspectionPlanDeliveryProgress]+'</td>'
                             str += '<td>'+(dto.inspectionPlanComplementary ? dto.inspectionPlanComplementary : '-')+'</td>'
                             str += '</tr>'
+                        }else {
+                            str += '<td>검수계획필요</td>'
+                            str += '<td></td><td></td><td></td><td></td><td></td></tr>'
+                        }
+
                     });
                     $("#inspectionPlanList").append(str); // 데이터를 덮어쓰지 않고 추가
                 });
