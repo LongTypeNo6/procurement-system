@@ -26,4 +26,7 @@ public interface InspectionPlanService {
 
     //모든 검수계획리스트 보기
     PageResultDTO<InspectionPlanDTO, InspectionPlan> getInspectionPlanList(PageRequestDTO pageRequestDTO);
+
+    //모둔검수일정리스트 보기
+    PageResultDTO<InspectionPlanDTO, InspectionPlan> getInspectionPlaScheduleList(PageRequestDTO pageRequestDTO);
 }

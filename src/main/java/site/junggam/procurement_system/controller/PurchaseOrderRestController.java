@@ -90,5 +90,13 @@ public class PurchaseOrderRestController {
         return new ResponseEntity<>("검수계획등록되었습니다", HttpStatus.OK);
     }
 
+    @GetMapping(value = "/inspectionPlanScheduleList", produces = "application/json")
+    public ResponseEntity<PageResultDTO<InspectionPlanDTO, InspectionPlan>> getAllInspectionPlanSchedules(PageRequestDTO pageRequestDTO) {
+        log.info("검수일정리스트 가져오기 레스트 컨트롤러 진입");
+        PageResultDTO<InspectionPlanDTO,InspectionPlan> inspectionPlanDTOList = inspectionPlanService.getInspectionPlaScheduleList(pageRequestDTO);
+        log.info("검수일정리스트 가져오기 완료");
+        return new ResponseEntity<>(inspectionPlanDTOList, HttpStatus.OK);
+    }
+
 }
 

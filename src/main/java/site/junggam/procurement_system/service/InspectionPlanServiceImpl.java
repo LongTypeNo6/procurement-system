@@ -81,13 +81,45 @@ public class InspectionPlanServiceImpl implements InspectionPlanService {
     @Override
     public PageResultDTO<InspectionPlanDTO, InspectionPlan> getInspectionPlanList(PageRequestDTO pageRequestDTO) {
         try {
-            Pageable pageable = pageRequestDTO.getPageable(Sort.by("PurchaseOrder.purchaseOrderCode").ascending());
+            Pageable pageable = pageRequestDTO.getPageable(Sort.by("PurchaseOrder.purchaseOrderCode").ascending()); //여기는 꼭 발주코드로 정렬해야함! 다른조건 추가시에도 발주코드정렬로 마무리되게
             Page<InspectionPlan> result = inspectionPlanRepository.findAll(pageable);
 
             Function<InspectionPlan, InspectionPlanDTO> fn = (inspectionPlan -> {
                 InspectionPlanDTO dto =inspectionPlanMapper.toDTO(inspectionPlan);
                 int inspectionPlanCount = getInspectionPlanCount(inspectionPlan.getPurchaseOrder());
                 dto.setInspectionPlanCount(inspectionPlanCount);
+                return dto;
+            });
+            return new PageResultDTO<>(result, fn);
+        }catch (Exception e) {
+            log.error(e);
+            throw e;
+        }
+    }
+
+    private int preInspectionPlanProgress(String inspectionPlanCode){
+        String codeExcludingNum=inspectionPlanCode.substring(0,inspectionPlanCode.length()-1);
+        int preNum=Integer.parseInt(inspectionPlanCode.substring(inspectionPlanCode.length()-1))-1;
+        if(preNum==0){
+            return 0;
+        }else {
+            String preInspectionPlanCode=codeExcludingNum+preNum;
+            return inspectionPlanRepository.findById(preInspectionPlanCode).get().getInspectionPlanProgress();
+        }
+    }
+
+
+    @Override
+    public PageResultDTO<InspectionPlanDTO, InspectionPlan> getInspectionPlaScheduleList(PageRequestDTO pageRequestDTO) {
+        try {
+            Pageable pageable = pageRequestDTO.getPageable(Sort.by("inspectionPlanDateTime").ascending()); //여기는 꼭 발주코드로 정렬해야함! 다른조건 추가시에도 발주코드정렬로 마무리되게
+            Page<InspectionPlan> result = inspectionPlanRepository.findAll(pageable);
+
+            Function<InspectionPlan, InspectionPlanDTO> fn = (inspectionPlan -> {
+                InspectionPlanDTO dto =inspectionPlanMapper.toDTO(inspectionPlan);
+                int inspectionPlanCount = getInspectionPlanCount(inspectionPlan.getPurchaseOrder());
+                dto.setInspectionPlanCount(inspectionPlanCount);
+                dto.setPreviousInspectionPlanProgress(preInspectionPlanProgress(inspectionPlan.getInspectionPlanCode()));
                 return dto;
             });
             return new PageResultDTO<>(result, fn);

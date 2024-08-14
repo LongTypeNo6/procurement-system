@@ -44,4 +44,8 @@ public class PurchaseOrderController {
         model.addAttribute("inspectionPlanCount",inspectionPlanService.getInspectionPlanCount(PurchaseOrder.builder().purchaseOrderCode(purchaseOrderCode).build()));
     }
 
+    @RequestMapping("/inspectionPlanScheduleList")
+    public void inspectionPlanScheduleList(){
+        log.info("검수관리리스트 페이지 진입 완료");
+    }
 }

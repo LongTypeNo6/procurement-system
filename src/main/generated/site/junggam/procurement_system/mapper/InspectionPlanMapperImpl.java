@@ -16,7 +16,7 @@ import site.junggam.procurement_system.entity.TemMaterial;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-14T15:42:49+0900",
+    date = "2024-08-14T17:44:59+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -31,6 +31,7 @@ public class InspectionPlanMapperImpl implements InspectionPlanMapper {
         InspectionPlanDTO.InspectionPlanDTOBuilder inspectionPlanDTO = InspectionPlanDTO.builder();
 
         inspectionPlanDTO.purchaseOrderDTO( purchaseOrderToPurchaseOrderDTO( inspectionPlan.getPurchaseOrder() ) );
+        inspectionPlanDTO.purchaserAddress( inspectionPlanPurchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserAddress( inspectionPlan ) );
         inspectionPlanDTO.inspectionPlanCode( inspectionPlan.getInspectionPlanCode() );
         inspectionPlanDTO.inspectionPlanDateTime( inspectionPlan.getInspectionPlanDateTime() );
         inspectionPlanDTO.inspectionPlanMemo( inspectionPlan.getInspectionPlanMemo() );
@@ -353,6 +354,37 @@ public class InspectionPlanMapperImpl implements InspectionPlanMapper {
         purchaseOrderDTO.purchaseOrderStatus( purchaseOrder.getPurchaseOrderStatus() );
 
         return purchaseOrderDTO.build();
+    }
+
+    private String inspectionPlanPurchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserAddress(InspectionPlan inspectionPlan) {
+        if ( inspectionPlan == null ) {
+            return null;
+        }
+        PurchaseOrder purchaseOrder = inspectionPlan.getPurchaseOrder();
+        if ( purchaseOrder == null ) {
+            return null;
+        }
+        ProcurementPlan procurementPlan = purchaseOrder.getProcurementPlan();
+        if ( procurementPlan == null ) {
+            return null;
+        }
+        TemMaterial temMaterial = procurementPlan.getTemMaterial();
+        if ( temMaterial == null ) {
+            return null;
+        }
+        Contract contract = temMaterial.getContract();
+        if ( contract == null ) {
+            return null;
+        }
+        Purchaser purchaser = contract.getPurchaser();
+        if ( purchaser == null ) {
+            return null;
+        }
+        String purchaserAddress = purchaser.getPurchaserAddress();
+        if ( purchaserAddress == null ) {
+            return null;
+        }
+        return purchaserAddress;
     }
 
     protected PurchaseOrder purchaseOrderDTOToPurchaseOrder(PurchaseOrderDTO purchaseOrderDTO) {

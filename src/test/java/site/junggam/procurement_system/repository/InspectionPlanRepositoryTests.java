@@ -15,7 +15,8 @@ public class InspectionPlanRepositoryTests {
 
     @Autowired
     private InspectionPlanRepository inspectionPlanRepository;
-
+    
+    //쓸때 수정하고 쓸것!!!!, 형식 달라짐
     @Test
     public void isertInspectionPlan() {
         IntStream.rangeClosed(1,20).forEach(i -> {
@@ -24,7 +25,7 @@ public class InspectionPlanRepositoryTests {
                     .inspectionPlanDateTime(LocalDateTime.now())
                     .purchaseOrder(PurchaseOrder.builder().purchaseOrderCode("PO"+i).build())
                     .build();
-            inspectionPlanRepository.save(inspectionPlan);
+            //inspectionPlanRepository.save(inspectionPlan);
         });
     }
 

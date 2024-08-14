@@ -13,6 +13,7 @@ public interface InspectionPlanMapper {
     InspectionPlanMapper INSTANCE = Mappers.getMapper(InspectionPlanMapper.class);
 
     @Mapping(target = "inspectionPlanCount", ignore = true)
+    @Mapping(target = "previousInspectionPlanProgress", ignore = true)
     @Mapping(source = "purchaseOrder.procurementPlan.procurementPlanDeadLine", target = "purchaseOrderDTO.procurementPlanDeadLine")
     @Mapping(source = "purchaseOrder.procurementPlan.procurementPlanQuantity", target = "purchaseOrderDTO.procurementPlanQuantity")
     @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.materialName", target = "purchaseOrderDTO.materialName")
@@ -24,9 +25,11 @@ public interface InspectionPlanMapper {
     @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.contract.purchaser.purchaserManagerTel", target = "purchaseOrderDTO.purchaserManagerTel")
     @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.contract.purchaser.purchaserManagerEmail", target = "purchaseOrderDTO.purchaserManagerEmail")
     @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.contract.purchaser.purchaserManagerFax", target = "purchaseOrderDTO.purchaserManagerFax")
+    @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.contract.purchaser.purchaserAddress", target = "purchaserAddress")
     InspectionPlanDTO toDTO(InspectionPlan inspectionPlan);
 
     @Mapping(target = "inspectionPlanCount", ignore = true)
+    @Mapping(target = "previousInspectionPlanProgress", ignore = true)
     @Mapping(source = "purchaseOrder", target = "purchaseOrderDTO")
     List<InspectionPlanDTO> toDTOs(List<InspectionPlan> inspectionPlans);
 

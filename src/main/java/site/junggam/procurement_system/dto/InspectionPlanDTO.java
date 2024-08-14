@@ -40,4 +40,9 @@ public class InspectionPlanDTO {
     @Builder.Default
     private LocalDateTime inspectionResultDateTime=null;
 
+    private String purchaserAddress;
+
+    @Builder.Default
+    private Integer previousInspectionPlanProgress = 0;
+
 }
