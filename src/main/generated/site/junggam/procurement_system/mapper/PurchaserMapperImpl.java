@@ -7,7 +7,7 @@ import site.junggam.procurement_system.entity.Purchaser;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-15T12:00:25+0900",
+    date = "2024-08-15T19:24:12+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.12 (Eclipse Adoptium)"
 )
 @Component

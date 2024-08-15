@@ -2,9 +2,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>File Upload</title>
 </head>
 <body>
-테스트파일
+<h1>파일 업로드</h1>
+<form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="files" multiple><br>
+    <button type="button" onclick="uploadFile()">업로드</button><br>
+</form>
+<h2>파일 목록</h2>
+<ul id="fileList"></ul>
+
+<script>
+    function uploadFile() {
+        const formData = new FormData(document.getElementById('uploadForm'));
+        fetch('/api/files/upload', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert('파일 업로드 성공: ' + data.originalName);
+                loadFileList();
+            })
+            .catch(error => {
+                alert('파일 업로드 실패');
+                console.error('Error:', error);
+            });
+    }
+
+    function loadFileList() {
+        fetch('/api/files/list')
+            .then(response => response.json())
+            .then(files => {
+                const fileList = document.getElementById('fileList');
+                fileList.innerHTML = '';
+                files.forEach(file => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="/api/files/download/${file.id}">${file.originalName}</a>`;
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = '삭제';
+                    deleteButton.onclick = () => deleteFile(file.id);
+                    li.appendChild(deleteButton);
+                    fileList.appendChild(li);
+                });
+            });
+    }
+
+    function deleteFile(fileId) {
+        fetch(`/api/files/delete/${fileId}`, {
+            method: 'DELETE'
+        })
+            .then(() => {
+                alert('파일이 삭제되었습니다.');
+                loadFileList();
+            })
+            .catch(error => {
+                alert('파일 삭제 실패');
+                console.error('Error:', error);
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadFileList);
+</script>
 </body>
 </html>

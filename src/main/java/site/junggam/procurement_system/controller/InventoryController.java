@@ -21,4 +21,7 @@ public class InventoryController {
     @RequestMapping("/warehousingList")
     public void warehousingList() {
     }
+
+    @RequestMapping("/fileload")
+    public void fileload() {}
 }
