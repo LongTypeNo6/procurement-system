@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import site.junggam.procurement_system.dto.InspectionPlanDTO;
 import site.junggam.procurement_system.dto.PageRequestDTO;
 import site.junggam.procurement_system.dto.PageResultDTO;
 import site.junggam.procurement_system.dto.PurchaseOrderDTO;
@@ -18,11 +17,9 @@ import site.junggam.procurement_system.mapper.PurchaseOrderMapper;
 import site.junggam.procurement_system.repository.InspectionPlanRepository;
 import site.junggam.procurement_system.repository.PurchaseOrderRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Log4j2
 @Service

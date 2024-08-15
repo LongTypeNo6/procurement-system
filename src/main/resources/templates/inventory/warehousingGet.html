@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Title</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <th:block th:replace="~{/fragments/headFragment}"></th:block>
+</head>
+<body>
+    <th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
+    <!-- ======= main ======= -->
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>입고처리</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">메인</a></li>
+                    <li class="breadcrumb-item">재고관리</li>
+                    <li class="breadcrumb-item">입고대기</li>
+                    <li class="breadcrumb-item active">입고처리</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section dashboard">
+            <div class="row">
+                <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                거래내용
+                                <button type="button" class="btn btn-primary btn-sm">발주서보기</button>
+                                <button type="button" class="btn btn-primary btn-sm">거래계약서보기</button>
+                            </h5>
+                            <table class="table table-bordered">
+                                <tbody id="purchaseOrderHead"></tbody>
+                            </table>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>품목명</th>
+                                    <th>규격</th>
+                                    <th>수량</th>
+                                    <th>가격</th>
+                                </tr>
+                                </thead>
+                                <tbody id="purchaseOrderContent">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                입고/반품내역
+                            </h5>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>날짜</th>
+                                    <th>정품/반품</th>
+                                    <th>출하명세서</th>
+                                    <th>거래명세서</th>
+                                    <th>검수결과비고</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>7/17</td>
+                                    <td>반품</td>
+                                    <td><button type="button" class="btn btn-primary btn-sm">파일보기</button></td>
+                                    <td><button type="button" class="btn btn-primary btn-sm">파일보기</button></td>
+                                    <td>거래처측 제품 오출고로 반품</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">입고처리</h5>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">입고날짜</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" id="warehousingDate">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">입고수량</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" id="warehousingQuantity" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">출하명세서</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="file">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">거래명세서</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="file">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">검수결과 비고</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" style="height: 100px">이상 없음</textarea>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary">입고(정품)</button>
+                            <button type="button" class="btn btn-danger">반품</button>
+                        </div>
+                    </div>
+                </div>
+                <!--여기에 카드랑 내용 넣어주시면 됩니다-->
+            </div> <!--End row-->
+        </section>
+    </main>
+    <!-- End #main -->
+    <script th:inline="javascript">
+        $(document).ready(function (e) {
+            var warehousingCode=[[${warehousingCode}]];
+            console.log("입고코드는",warehousingCode);
+            $.getJSON("/inventorycontent/warehousing/" + warehousingCode, function(dto) {
+                console.log("응답받은 데이터", dto);
+                var purchaseOrderHead = "";
+                    purchaseOrderHead += '<tr>';
+                    purchaseOrderHead += '<th>거래처명</th>';
+                    purchaseOrderHead += '<td>' + dto.purchaseOrderDTO.purchaserName+ '</td>';
+                    purchaseOrderHead += '</tr>';
+                    purchaseOrderHead += '<tr>';
+                    purchaseOrderHead += '<th>발주일자</th>';
+                    purchaseOrderHead += '<td>' + formatDate(dto.purchaseOrderDTO.purchaseOrderDate)+ '</td>';
+                    purchaseOrderHead += '</tr>';
+                $("#purchaseOrderHead").append(purchaseOrderHead);
+                var purchaseOrderContent = "";
+                    purchaseOrderContent += '<tr>';
+                    purchaseOrderContent += '<td>1</td>';
+                    purchaseOrderContent += '<td>'+dto.purchaseOrderDTO.materialName+'</td>';
+                    purchaseOrderContent += '<td>'+dto.purchaseOrderDTO.materialTexture+'/'+dto.purchaseOrderDTO.materialStand+'</td>';
+                    purchaseOrderContent += '<td>'+dto.purchaseOrderDTO.procurementPlanQuantity+'개</td>';
+                    purchaseOrderContent += '<td>'+dto.purchaseOrderDTO.contractPrice+'원</td>';
+                    purchaseOrderContent += '</tr>';
+                    purchaseOrderContent += '<tr>';
+                    purchaseOrderContent += '<th colSpan="3">합계</th>';
+                    purchaseOrderContent += '<td>'+dto.purchaseOrderDTO.procurementPlanQuantity+'개</td>';
+                    purchaseOrderContent += '<td>'+(dto.purchaseOrderDTO.procurementPlanQuantity*dto.purchaseOrderDTO.contractPrice)+'원</td>';
+                    purchaseOrderContent += '</tr>';
+                $("#purchaseOrderContent").append(purchaseOrderContent);
+                $("#warehousingDate").val(todayValue());
+                $("#warehousingQuantity").val(dto.purchaseOrderDTO.procurementPlanQuantity);
+            });
+        })
+    </script>
+    <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
+</body>
+</html>

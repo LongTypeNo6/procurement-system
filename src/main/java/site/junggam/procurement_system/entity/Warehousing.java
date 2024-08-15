@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Builder
@@ -15,16 +16,12 @@ import java.time.LocalDateTime;
 public class Warehousing {
     @Id
     private String warehousingCode;
-    private LocalDateTime warehousingDate;
-    private String warehousingShipmentSpec ;
-    private String warehousingSpec;
-    private String warehousingResultMemo;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private WarehousingStatus warehousingStatus=WarehousingStatus.PENDING;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "purchaseOrderCode")
     private PurchaseOrder purchaseOrder;
 

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "procurementPlan")
+@ToString(exclude = {"procurementPlan","warehousing"})
 @Getter
 @Table(name="tbl_purchase_order")
 public class PurchaseOrder {
@@ -31,4 +31,7 @@ public class PurchaseOrder {
     public void changePurchaseOrderDate(LocalDateTime newPurchaseOrderDate) { this.purchaseOrderDate= newPurchaseOrderDate; }
 
     public void changePurchaseOrderMemo(String newPurchaseOrderMemo) { this.purchaseOrderMemo= newPurchaseOrderMemo; }
+
+    @OneToOne(mappedBy = "purchaseOrder",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Warehousing warehousing;
 }

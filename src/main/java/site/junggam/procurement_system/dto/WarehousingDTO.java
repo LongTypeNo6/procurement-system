@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import site.junggam.procurement_system.entity.WarehousingStatus;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Data
@@ -16,14 +18,12 @@ import java.time.LocalDateTime;
 public class WarehousingDTO {
 
     private String warehousingCode;
-    private LocalDateTime warehousingDate;
-    private String warehousingShipmentSpec ;
-    private String warehousingSpec;
-    private String warehousingResultMemo;
 
     @Builder.Default
     private WarehousingStatus warehousingStatus=WarehousingStatus.PENDING;
 
     private PurchaseOrderDTO purchaseOrderDTO;
 
+    @Builder.Default
+    private List<WarehousingHistoryDTO> warehousingHistoryDTOS = new ArrayList<>();
 }
