@@ -36,7 +36,7 @@ public class FileRestController {
     }
 
     @GetMapping("/download/{id}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable Long id) throws MalformedURLException {
+    public ResponseEntity<Resource> downloadFile(@PathVariable("id")Long id) throws MalformedURLException {
         Path filePath = fileService.getFilePath(id);
         Resource resource = new UrlResource(filePath.toUri());
 
@@ -47,7 +47,7 @@ public class FileRestController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteFile(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteFile(@PathVariable("id") Long id) {
         fileService.deleteFile(id);
         return ResponseEntity.ok().build();
     }
