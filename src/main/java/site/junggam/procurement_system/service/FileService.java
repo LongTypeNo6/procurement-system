@@ -9,6 +9,9 @@ import java.util.List;
 
 public interface FileService {
 
+    //폴더 만들기
+    void createDirectoryIfNotExists(String directoryPath);
+
     // 파일 업로드
     List<String> saveFiles(MultipartFile[] files);
     FileDTO uploadFile(MultipartFile multipartFile) throws IOException;

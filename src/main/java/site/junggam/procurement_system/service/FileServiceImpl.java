@@ -30,7 +30,20 @@ public class FileServiceImpl implements FileService {
     private final FileMapper fileMapper;
 
     @Override
+    public void createDirectoryIfNotExists(String directoryPath) {
+        Path path = Paths.get(directoryPath);
+        if (!Files.exists(path)) {
+            try {
+                Files.createDirectories(path);
+            } catch (IOException e) {
+                throw new RuntimeException("Could not create directory: " + directoryPath, e);
+            }
+        }
+    }
+
+    @Override
     public List<String> saveFiles(MultipartFile[] files) {
+
         List<String> savedFileNames = new ArrayList<>();
         try {
             for (MultipartFile file : files) {
@@ -44,6 +57,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public FileDTO uploadFile(MultipartFile multipartFile) throws IOException {
+        createDirectoryIfNotExists(uploadDir);
         String originalFilename = multipartFile.getOriginalFilename();
         String storedFilename = UUID.randomUUID().toString() + "_" + originalFilename;
         Path filePath = Paths.get(uploadDir, storedFilename);
