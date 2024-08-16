@@ -1,5 +1,7 @@
 package site.junggam.procurement_system.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import site.junggam.procurement_system.dto.WarehousingHistoryDTO;
@@ -8,7 +10,7 @@ import site.junggam.procurement_system.entity.WarehousingHistory;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-16T20:43:11+0900",
+    date = "2024-08-17T01:50:08+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -29,6 +31,20 @@ public class WarehousingHistoryMapperImpl implements WarehousingHistoryMapper {
         warehousingHistoryDTO.warehousingHistoryStatus( warehousingHistory.getWarehousingHistoryStatus() );
 
         return warehousingHistoryDTO.build();
+    }
+
+    @Override
+    public List<WarehousingHistoryDTO> toDtos(List<WarehousingHistory> warehousingHistories) {
+        if ( warehousingHistories == null ) {
+            return null;
+        }
+
+        List<WarehousingHistoryDTO> list = new ArrayList<WarehousingHistoryDTO>( warehousingHistories.size() );
+        for ( WarehousingHistory warehousingHistory : warehousingHistories ) {
+            list.add( toDto( warehousingHistory ) );
+        }
+
+        return list;
     }
 
     @Override

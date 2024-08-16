@@ -9,6 +9,14 @@ function escapeHtml(text) {
 }
 
 // 날짜를 "yyyy-MM-dd" 형식의 문자열로 변환
+function formatDateS(dateString) {
+    const date = new Date(dateString);
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    return month + '/' + day;
+}
+
+// 날짜를 "yyyy-MM-dd" 형식의 문자열로 변환
 function formatDate(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();

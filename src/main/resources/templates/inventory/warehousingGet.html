@@ -73,14 +73,8 @@
                                     <th>검수결과비고</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr>
-                                    <td>7/17</td>
-                                    <td>반품</td>
-                                    <td><button type="button" class="btn btn-primary btn-sm">파일보기</button></td>
-                                    <td><button type="button" class="btn btn-primary btn-sm">파일보기</button></td>
-                                    <td>거래처측 제품 오출고로 반품</td>
-                                </tr>
+                                <tbody id="warehousingHistory">
+
                                 </tbody>
                             </table>
                         </div>
@@ -122,6 +116,7 @@
                             </div>
                             <button type="button" class="btn btn-primary" id="setWarehousing">입고(정품)</button>
                             <button type="button" class="btn btn-danger" id="setReturn">반품</button>
+                            <a href="/inventory/warehousingList"><button type="button" class="btn btn-primary" >리스트</button></a>
                         </div>
                     </div>
                 </div>
@@ -134,46 +129,73 @@
         $(document).ready(function (e) {
             var warehousingCode=[[${warehousingCode}]];
             console.log("입고코드는",warehousingCode);
-            //거래내용셋팅, 입고처리 기본값셋팅
+            //거래내용셋팅, 입고처리란 기본값셋팅
             $.getJSON("/inventorycontent/warehousing/" + warehousingCode, function(dto) {
                 console.log("응답받은 데이터", dto);
                 var purchaseOrderHead = "";
-                    purchaseOrderHead += '<tr>';
-                    purchaseOrderHead += '<th>거래처명</th>';
-                    purchaseOrderHead += '<td>' + dto.purchaseOrderDTO.purchaserName+ '</td>';
-                    purchaseOrderHead += '</tr>';
-                    purchaseOrderHead += '<tr>';
-                    purchaseOrderHead += '<th>발주일자</th>';
-                    purchaseOrderHead += '<td>' + formatDate(dto.purchaseOrderDTO.purchaseOrderDate)+ '</td>';
-                    purchaseOrderHead += '</tr>';
+                purchaseOrderHead += '<tr>';
+                purchaseOrderHead += '<th>거래처명</th>';
+                purchaseOrderHead += '<td>' + dto.purchaseOrderDTO.purchaserName + '</td>';
+                purchaseOrderHead += '</tr>';
+                purchaseOrderHead += '<tr>';
+                purchaseOrderHead += '<th>발주일자</th>';
+                purchaseOrderHead += '<td>' + formatDate(dto.purchaseOrderDTO.purchaseOrderDate) + '</td>';
+                purchaseOrderHead += '</tr>';
                 $("#purchaseOrderHead").append(purchaseOrderHead);
                 var purchaseOrderContent = "";
-                    purchaseOrderContent += '<tr>';
-                    purchaseOrderContent += '<td>1</td>';
-                    purchaseOrderContent += '<td>'+dto.purchaseOrderDTO.materialName+'</td>';
-                    purchaseOrderContent += '<td>'+dto.purchaseOrderDTO.materialTexture+'/'+dto.purchaseOrderDTO.materialStand+'</td>';
-                    purchaseOrderContent += '<td>'+dto.purchaseOrderDTO.procurementPlanQuantity+'개</td>';
-                    purchaseOrderContent += '<td>'+dto.purchaseOrderDTO.contractPrice+'원</td>';
-                    purchaseOrderContent += '</tr>';
-                    purchaseOrderContent += '<tr>';
-                    purchaseOrderContent += '<th colSpan="3">합계</th>';
-                    purchaseOrderContent += '<td>'+dto.purchaseOrderDTO.procurementPlanQuantity+'개</td>';
-                    purchaseOrderContent += '<td>'+(dto.purchaseOrderDTO.procurementPlanQuantity*dto.purchaseOrderDTO.contractPrice)+'원</td>';
-                    purchaseOrderContent += '</tr>';
+                purchaseOrderContent += '<tr>';
+                purchaseOrderContent += '<td>1</td>';
+                purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.materialName + '</td>';
+                purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.materialTexture + '/' + dto.purchaseOrderDTO.materialStand + '</td>';
+                purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.procurementPlanQuantity + '개</td>';
+                purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.contractPrice + '원</td>';
+                purchaseOrderContent += '</tr>';
+                purchaseOrderContent += '<tr>';
+                purchaseOrderContent += '<th colSpan="3">합계</th>';
+                purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.procurementPlanQuantity + '개</td>';
+                purchaseOrderContent += '<td>' + (dto.purchaseOrderDTO.procurementPlanQuantity * dto.purchaseOrderDTO.contractPrice) + '원</td>';
+                purchaseOrderContent += '</tr>';
                 $("#purchaseOrderContent").append(purchaseOrderContent);
+                var warehousingHistory = "";
+                const historyStatusMapping = {
+                    "PENDING": "-",
+                    "RETURN": "반품",
+                    "WAREHOUSING" : "정품"
+                };
+                if(dto.warehousingHistoryDTOS.length!==0){
+                    $.each(dto.warehousingHistoryDTOS, function(idx, history) {
+                        warehousingHistory += '<tr>';
+                        warehousingHistory += '<td>'+formatDateS(history.warehousingDate)+'</td>';
+                        warehousingHistory += '<td>'+historyStatusMapping[history.warehousingHistoryStatus]+'</td>';
+                        warehousingHistory += '<td>';
+                        warehousingHistory += '<button type="button" class="btn btn-primary btn-sm">파일보기</button>';
+                        warehousingHistory += '</td>';
+                        warehousingHistory += '<td>';
+                        warehousingHistory += '<button type="button" class="btn btn-primary btn-sm">파일보기</button>';
+                        warehousingHistory += '</td>';
+                        warehousingHistory += '<td>'+history.warehousingResultMemo+'</td>';
+                        warehousingHistory += '</tr>';
+                    });
+                }else {
+                    warehousingHistory += '<tr>';
+                    warehousingHistory += '<td colspan="5">내역없음</td>';
+                    warehousingHistory += '</tr>';
+                }
+                $("#warehousingHistory").append(warehousingHistory);
                 $("#warehousingDate").val(todayValue());
                 $("#warehousingQuantity").val(dto.purchaseOrderDTO.procurementPlanQuantity);
             });
 
+
             //입고처리
-            var WarehousingHistoryStatus="";
+            var WarehousingHistoryStatus = "";
             $(document).on('click', '#setWarehousing', function () {
-                WarehousingHistoryStatus="WAREHOUSING"
+                WarehousingHistoryStatus = "WAREHOUSING"
                 addWarehousingHistory(WarehousingHistoryStatus);
             });
 
             $(document).on('click', '#setReturn', function () {
-                WarehousingHistoryStatus="RETURN"
+                WarehousingHistoryStatus = "RETURN"
                 addWarehousingHistory(WarehousingHistoryStatus);
             });
 
@@ -195,11 +217,11 @@
                     dataType: "text",
                     success: function (result) {
                         console.log("결과값result: " + result);
-                        uploadFile("warehousingShipmentSpec","warehousingShipmentSpec",result+"s");
-                        uploadFile("warehousingSpec","warehousingSpec",result);
+                        // uploadFile("warehousingShipmentSpec","warehousingShipmentSpec",result+"s");
+                        // uploadFile("warehousingSpec","warehousingSpec",result);
+                        self.location.reload();
                     }
                 })
-                self.location.reload();
             };
         })
     </script>

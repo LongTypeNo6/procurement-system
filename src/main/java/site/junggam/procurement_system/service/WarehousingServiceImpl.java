@@ -11,6 +11,7 @@ import site.junggam.procurement_system.dto.PageResultDTO;
 import site.junggam.procurement_system.dto.WarehousingDTO;
 import site.junggam.procurement_system.dto.WarehousingHistoryDTO;
 import site.junggam.procurement_system.entity.Warehousing;
+import site.junggam.procurement_system.entity.WarehousingHistory;
 import site.junggam.procurement_system.entity.WarehousingHistoryStatus;
 import site.junggam.procurement_system.entity.WarehousingStatus;
 import site.junggam.procurement_system.mapper.WarehousingHistoryMapper;
@@ -19,6 +20,8 @@ import site.junggam.procurement_system.repository.WarehousingHistoryRepository;
 import site.junggam.procurement_system.repository.WarehousingRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -39,7 +42,9 @@ public class WarehousingServiceImpl implements WarehousingService {
     public WarehousingDTO getWarehousing(String warehousingId) {
         Optional<Warehousing> result = warehousingRepository.findById(warehousingId);
         if (result.isPresent()) {
-            return warehousingMapper.toDTO(result.get());
+            WarehousingDTO warehousingDTO=warehousingMapper.toDTO(result.get());
+            warehousingDTO.setWarehousingHistoryDTOS(getWarehousingHistory(warehousingId));
+            return warehousingDTO;
         }
         return null;
     }
@@ -66,6 +71,12 @@ public class WarehousingServiceImpl implements WarehousingService {
             warehousingRepository.save(warehousing);
         }
         return warehousingHistoryCode;
+    }
+
+    @Override
+    public List<WarehousingHistoryDTO> getWarehousingHistory(String warehousingId) {
+        List<WarehousingHistory> warehousingHistoryList=warehousingHistoryRepository.findByWarehousingCode(warehousingId);
+        return warehousingHistoryMapper.toDtos(warehousingHistoryList);
     }
 
     @Override
