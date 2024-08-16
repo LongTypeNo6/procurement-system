@@ -1,5 +1,6 @@
 package site.junggam.procurement_system.service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,10 +27,15 @@ public class FileServiceImpl implements FileService {
     @Value("${file.upload-dir}")
     private String basePath;
 
-    private String uploadDir="";
+    private String uploadDir;
 
-    private void setUploadDir(String subDirectory){
-        this.uploadDir=basePath+subDirectory;
+    @PostConstruct
+    public void init() {
+        this.uploadDir = basePath; // 기본 경로로 초기화
+    }
+
+    private void setUploadDir(String subDirectory) {
+        this.uploadDir = Paths.get(basePath, subDirectory).toString(); // 서브 디렉토리 설정
     }
 
     private final FileRepository fileRepository;
@@ -54,13 +60,58 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<String> saveFiles(MultipartFile[] files, boolean overwrite, String subDirectory) {
+    public List<String> saveFilesWithId(MultipartFile[] files, boolean overwrite, String fileId, String subDirectory) {
+        setUploadDir(subDirectory);
+        List<String> savedFileNames = new ArrayList<>();
+        try {
+            for (int i = 0; i < files.length; i++) {
+                MultipartFile file = files[i];
+                String fileName = file.getOriginalFilename();  // 파일 이름은 원본 이름 그대로 사용
+                uploadFileWithCustomName(file, fileName, overwrite);
+
+                // 파일 정보를 DB에 저장
+                FileEntity fileEntity = FileEntity.builder()
+                        .fileCode(fileId + "-" + i)  // fileId는 여기서만 사용, 파일 이름에 사용하지 않음
+                        .originalName(file.getOriginalFilename())
+                        .storedName(fileName)
+                        .filePath(Paths.get(uploadDir, fileName).toString()) // 올바른 경로 설정
+                        .fileType(file.getContentType())
+                        .fileSize(file.getSize())
+                        .build();
+
+                fileRepository.save(fileEntity);
+                savedFileNames.add(fileName);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("파일 저장 실패: " + e.getMessage());
+        }
+        return savedFileNames;
+    }
+
+
+    private void uploadFileWithCustomName(MultipartFile file, String fileName, boolean overwrite) throws IOException {
+        createDirectoryIfNotExists(uploadDir);
+        Path filePath = Paths.get(uploadDir, fileName);
+
+        if (Files.exists(filePath)) {
+            if (overwrite) {
+                Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            } else {
+                throw new RuntimeException("파일이 이미 존재합니다: " + fileName);
+            }
+        } else {
+            Files.copy(file.getInputStream(), filePath);
+        }
+    }
+
+    @Override
+    public List<String> saveFiles(MultipartFile[] files, boolean overwrite) {
         List<String> savedFileNames = new ArrayList<>();
         try {
             for (MultipartFile file : files) {
                 String fileName = file.getOriginalFilename();
                 // 덮어쓰기 여부를 체크한 후 파일 업로드
-                uploadFile(file, overwrite,subDirectory);
+                uploadFile(file, overwrite);
                 savedFileNames.add(fileName);
             }
         } catch (Exception e) {
@@ -71,8 +122,7 @@ public class FileServiceImpl implements FileService {
 
 
     @Override
-    public FileDTO uploadFile(MultipartFile multipartFile, boolean overwrite, String subDirectory) throws IOException {
-        setUploadDir(subDirectory);
+    public FileDTO uploadFile(MultipartFile multipartFile, boolean overwrite) throws IOException {
         createDirectoryIfNotExists(uploadDir);
         String originalFilename = multipartFile.getOriginalFilename();
         String storedFilename = originalFilename;

@@ -9,11 +9,16 @@ import org.springframework.stereotype.Service;
 import site.junggam.procurement_system.dto.PageRequestDTO;
 import site.junggam.procurement_system.dto.PageResultDTO;
 import site.junggam.procurement_system.dto.WarehousingDTO;
+import site.junggam.procurement_system.dto.WarehousingHistoryDTO;
 import site.junggam.procurement_system.entity.Warehousing;
+import site.junggam.procurement_system.entity.WarehousingHistoryStatus;
 import site.junggam.procurement_system.entity.WarehousingStatus;
+import site.junggam.procurement_system.mapper.WarehousingHistoryMapper;
 import site.junggam.procurement_system.mapper.WarehousingMapper;
+import site.junggam.procurement_system.repository.WarehousingHistoryRepository;
 import site.junggam.procurement_system.repository.WarehousingRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -25,6 +30,11 @@ public class WarehousingServiceImpl implements WarehousingService {
     private final WarehousingRepository warehousingRepository;
     private final WarehousingMapper warehousingMapper;
 
+    private final WarehousingHistoryRepository warehousingHistoryRepository;
+    private final WarehousingHistoryMapper warehousingHistoryMapper;
+
+    private final FileService fileService;
+
     @Override
     public WarehousingDTO getWarehousing(String warehousingId) {
         Optional<Warehousing> result = warehousingRepository.findById(warehousingId);
@@ -32,6 +42,30 @@ public class WarehousingServiceImpl implements WarehousingService {
             return warehousingMapper.toDTO(result.get());
         }
         return null;
+    }
+
+    @Override
+    public String saveWarehousingHistory(WarehousingHistoryDTO warehousingHistoryDTO) {
+
+        //히스토리 정보 저장
+        log.info("들어온 DTO값"+warehousingHistoryDTO);
+        String warehousingCode=warehousingHistoryDTO.getWarehousingCode();
+        int historyNum;
+        historyNum=1+warehousingHistoryRepository.findByWarehousingCode(warehousingCode).size();
+        String warehousingHistoryCode=warehousingCode+"-"+historyNum;
+        warehousingHistoryDTO.setWarehousingHistoryCode(warehousingHistoryCode);
+        warehousingHistoryRepository.save(warehousingHistoryMapper.toEntity(warehousingHistoryDTO));
+
+        //여기는 입고 정보를 저장
+        Warehousing warehousing=warehousingRepository.findById(warehousingCode).get();
+        int orderQauntity=getWarehousing(warehousingCode).getPurchaseOrderDTO().getProcurementPlanQuantity();
+        int warehousingQauntity = warehousingHistoryDTO.getWarehousingQuantity();
+        boolean statusReult = warehousingHistoryDTO.getWarehousingHistoryStatus().equals(WarehousingHistoryStatus.WAREHOUSING);
+        if(statusReult && orderQauntity==warehousingQauntity){
+            warehousing.changeWarehousingStatus(WarehousingStatus.COMPLETED);
+            warehousingRepository.save(warehousing);
+        }
+        return warehousingHistoryCode;
     }
 
     @Override

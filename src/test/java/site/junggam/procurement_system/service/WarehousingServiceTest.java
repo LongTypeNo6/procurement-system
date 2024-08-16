@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import site.junggam.procurement_system.dto.PageRequestDTO;
+import site.junggam.procurement_system.dto.WarehousingHistoryDTO;
+
+import java.time.LocalDateTime;
 
 @SpringBootTest
 public class WarehousingServiceTest {
@@ -23,5 +26,21 @@ public class WarehousingServiceTest {
     @Transactional
     public void findAll() {
         System.out.println("결과값은 이렇게"+warehousingService.getAllWarehousingList(PageRequestDTO.builder().page(1).size(10).build()));
+    }
+
+    @Test
+    public void saveHistory(){
+        warehousingService.saveWarehousingHistory(
+                WarehousingHistoryDTO.builder()
+                        .warehousingDate(LocalDateTime.now())
+                        .warehousingQuantity(18)
+                        .warehousingResultMemo("이렇게입니다2")
+                        .warehousingCode("WARE-240813-001-006")
+                        .build()
+        );
+    }
+
+    @Test
+    public void countList(){
     }
 }

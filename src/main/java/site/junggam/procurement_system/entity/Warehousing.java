@@ -25,4 +25,6 @@ public class Warehousing {
     @JoinColumn(name = "purchaseOrderCode")
     private PurchaseOrder purchaseOrder;
 
+    public void changeWarehousingStatus(WarehousingStatus newStatus) {this.warehousingStatus=newStatus;}
+
 }

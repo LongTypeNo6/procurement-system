@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WarehousingHistoryDTO {
+    private String warehousingCode;
     private String warehousingHistoryCode;
     private LocalDateTime warehousingDate;
     private String warehousingShipmentSpec ;

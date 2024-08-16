@@ -28,13 +28,6 @@ public interface PurchaseOrderMapper {
 
     List<PurchaseOrderDTO> toDTOs(List<PurchaseOrder> purchaseOrderList);
 
-//    @Mapping(source = "inspectionPlanDeliveryProgress", target = "inspectionPlanDeliveryProgress")
-//    @Mapping(source = "inspectionPlanStatus", target = "inspectionPlanStatus")
-//    @Mapping(target = "purchaseOrder", ignore = true)
-//    InspectionPlanDTO toInspectionPlanDTO(InspectionPlan inspectionPlan);
-//
-//    List<InspectionPlanDTO> toInspectionPlanDTOs(List<InspectionPlan> inspectionPlanList);
-
     @Mapping(target = "purchaseOrderStatus",defaultValue = "PENDING")
     PurchaseOrder toEntity(PurchaseOrderDTO purchaseOrderDTO);
 

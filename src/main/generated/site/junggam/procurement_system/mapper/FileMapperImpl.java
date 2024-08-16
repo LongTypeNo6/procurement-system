@@ -7,7 +7,7 @@ import site.junggam.procurement_system.entity.FileEntity;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-16T10:54:59+0900",
+    date = "2024-08-16T20:28:32+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -21,7 +21,7 @@ public class FileMapperImpl implements FileMapper {
 
         FileDTO.FileDTOBuilder fileDTO = FileDTO.builder();
 
-        fileDTO.id( fileEntity.getId() );
+        fileDTO.fileCode( fileEntity.getFileCode() );
         fileDTO.originalName( fileEntity.getOriginalName() );
         fileDTO.storedName( fileEntity.getStoredName() );
         fileDTO.filePath( fileEntity.getFilePath() );
@@ -39,7 +39,7 @@ public class FileMapperImpl implements FileMapper {
 
         FileEntity.FileEntityBuilder fileEntity = FileEntity.builder();
 
-        fileEntity.id( fileDTO.getId() );
+        fileEntity.fileCode( fileDTO.getFileCode() );
         fileEntity.originalName( fileDTO.getOriginalName() );
         fileEntity.storedName( fileDTO.getStoredName() );
         fileEntity.filePath( fileDTO.getFilePath() );

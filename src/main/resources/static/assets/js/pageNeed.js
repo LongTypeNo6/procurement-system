@@ -27,12 +27,7 @@ function formatTime(dateString) {
 
 // "yyyy-MM-dd" 형식의 문자열을 Date 객체로 변환
 function parseDate(dateString) {
-    const parts = dateString.split('-');
-    const year = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1; // 월은 0부터 시작
-    const day = parseInt(parts[2], 10);
-
-    return new Date(year, month, day);
+    return dateString+"T00:00:00"
 }
 
 // 무한 스크롤 기능
@@ -61,3 +56,80 @@ function todayValue() {
     return todayValue;
 }
 
+function uploadFile(fileInputId, subDirectory, fileId) {
+    const files = document.querySelector(`#${fileInputId}`).files;
+
+    Array.from(files).reduce((promiseChain, file, index) => {
+        return promiseChain.then(() => {
+            return checkFileExists(file.name).then(exists => {
+                if (exists) {
+                    return confirm(`파일 ${file.name} 이미 존재합니다. 덮어쓰시겠습니까?`);
+                }
+                return true;
+            }).then(overwrite => {
+                if (overwrite) {
+                    const formData = new FormData();
+                    formData.append('files', file);
+                    formData.append('overwrite', true);
+                    formData.append('subDirectory', subDirectory);
+                    formData.append('fileId', fileId + '-' + index); // DB에만 저장되는 ID, 파일 이름에 붙지 않음
+                    return proceedUpload(formData);
+                }
+            });
+        });
+    }, Promise.resolve()).then(() => {
+        console.log("파일 모두 저장");
+    }).catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function checkFileExists(fileName) {
+    return fetch(`/api/files/check?fileName=${encodeURIComponent(fileName)}`, {
+        method: 'POST',
+    })
+        .then(response => response.json());
+}
+
+function proceedUpload(formData) {
+    return fetch('/api/files/upload', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(message => console.log(message))
+        .catch(error => console.error('Error:', error));
+}
+
+
+function loadFileList() {
+    fetch('/api/files/list')
+        .then(response => response.json())
+        .then(files => {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            files.forEach(file => {
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="/api/files/download/${file.id}">${file.originalName}</a>`;
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = '삭제';
+                deleteButton.onclick = () => deleteFile(file.id);
+                li.appendChild(deleteButton);
+                fileList.appendChild(li);
+            });
+        });
+}
+
+function deleteFile(fileId) {
+    fetch(`/api/files/delete/${fileId}`, {
+        method: 'DELETE'
+    })
+        .then(() => {
+            alert('파일이 삭제되었습니다.');
+            loadFileList();
+        })
+        .catch(error => {
+            alert('파일 삭제 실패');
+            console.error('Error:', error);
+        });
+}

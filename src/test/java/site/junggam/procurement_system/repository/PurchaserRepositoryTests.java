@@ -17,7 +17,7 @@ public class PurchaserRepositoryTests {
     @Test
     public void insertOurCompany(){
         Purchaser purchaser = Purchaser.builder()
-                .purchaserCode("01")
+                .purchaserCode("21")
                 .purchaserName("정감주식회사")
                 .purchaserPresident("양현일")
                 .purchaserAddress("경기도 수원시 mit 301호")

@@ -5,13 +5,11 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import site.junggam.procurement_system.dto.PageRequestDTO;
 import site.junggam.procurement_system.dto.PageResultDTO;
 import site.junggam.procurement_system.dto.WarehousingDTO;
+import site.junggam.procurement_system.dto.WarehousingHistoryDTO;
 import site.junggam.procurement_system.entity.Warehousing;
 import site.junggam.procurement_system.service.WarehousingService;
 
@@ -33,4 +31,12 @@ public class InventoryRestController {
     public ResponseEntity<WarehousingDTO> getWarehousing(@PathVariable("warehousingCode") String warehousingCode) {
         return new ResponseEntity<>(warehousingService.getWarehousing(warehousingCode), HttpStatus.OK);
     }
+
+    @PostMapping(value = "/warehousing/history/{warehousingCode}")
+    public ResponseEntity<String> saveWarehousingHistory(@RequestBody WarehousingHistoryDTO warehousingHistoryDTO) {
+        String warehousingHistoryCode=warehousingService.saveWarehousingHistory(warehousingHistoryDTO);
+        return new ResponseEntity<>(warehousingHistoryCode, HttpStatus.OK);
+    }
+
+
 }

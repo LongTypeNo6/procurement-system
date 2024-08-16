@@ -1,6 +1,7 @@
 package site.junggam.procurement_system.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.List;
 
+@Log4j2
 @RestController
 @RequestMapping("/api/files")
 @RequiredArgsConstructor
@@ -32,11 +34,20 @@ public class FileRestController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<List<String>> uploadFiles(@RequestParam("files") MultipartFile[] files ,@RequestParam("overwrite") boolean overwrite) throws IOException {
-        String subDirectory="/nahyeon";
-        List<String> fileNames = fileService.saveFiles(files,overwrite,subDirectory);
+    public ResponseEntity<List<String>> uploadFiles(
+            @RequestParam("files") MultipartFile[] files,
+            @RequestParam("overwrite") boolean overwrite,
+            @RequestParam("subDirectory") String subDirectory,
+            @RequestParam("fileId") String fileId) throws IOException {
+
+        // 파일 저장, 여기서 파일 ID는 DB에만 사용, 파일 이름은 원본 이름으로 저장
+        List<String> fileNames = fileService.saveFilesWithId(files, overwrite, fileId, subDirectory);
+        log.info("들어온 섭디렉토리"+subDirectory+fileNames);
+
         return ResponseEntity.ok().body(fileNames);
     }
+
+
 
     @GetMapping("/list")
     public ResponseEntity<List<FileDTO>> getFileList() {
