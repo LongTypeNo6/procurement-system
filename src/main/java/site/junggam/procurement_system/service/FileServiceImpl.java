@@ -30,6 +30,12 @@ public class FileServiceImpl implements FileService {
     private final FileMapper fileMapper;
 
     @Override
+    public boolean fileExists(String fileName) {
+        Path filePath = Paths.get(uploadDir, fileName);
+        return Files.exists(filePath);
+    }
+
+    @Override
     public void createDirectoryIfNotExists(String directoryPath) {
         Path path = Paths.get(directoryPath);
         if (!Files.exists(path)) {
@@ -42,12 +48,15 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<String> saveFiles(MultipartFile[] files) {
-
+    public List<String> saveFiles(MultipartFile[] files, boolean overwrite) {
         List<String> savedFileNames = new ArrayList<>();
         try {
             for (MultipartFile file : files) {
-                uploadFile(file);
+                String fileName = file.getOriginalFilename();
+
+                // 덮어쓰기 여부를 체크한 후 파일 업로드
+                uploadFile(file, overwrite);
+                savedFileNames.add(fileName);
             }
         } catch (Exception e) {
             throw new RuntimeException("파일 저장 실패: " + e.getMessage());
@@ -55,12 +64,34 @@ public class FileServiceImpl implements FileService {
         return savedFileNames;
     }
 
+
     @Override
-    public FileDTO uploadFile(MultipartFile multipartFile) throws IOException {
+    public FileDTO uploadFile(MultipartFile multipartFile, boolean overwrite) throws IOException {
         createDirectoryIfNotExists(uploadDir);
         String originalFilename = multipartFile.getOriginalFilename();
-        String storedFilename = UUID.randomUUID().toString() + "_" + originalFilename;
+        String storedFilename = originalFilename;
         Path filePath = Paths.get(uploadDir, storedFilename);
+
+        // 파일 중복 여부 확인
+        if (Files.exists(filePath)) {
+            if (overwrite) {
+                // 기존 파일 정보를 업데이트
+                FileEntity existingFileEntity = fileRepository.findByOriginalName(originalFilename)
+                        .orElseThrow(() -> new RuntimeException("파일을 찾을 수 없습니다: " + originalFilename));
+
+                Files.copy(multipartFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                existingFileEntity.setStoredName(storedFilename);
+                existingFileEntity.setFilePath(filePath.toString());
+                existingFileEntity.setFileType(multipartFile.getContentType());
+                existingFileEntity.setFileSize(multipartFile.getSize());
+
+                FileEntity updatedFile = fileRepository.save(existingFileEntity);
+                return fileMapper.toDTO(updatedFile);
+            } else {
+                throw new RuntimeException("파일이 이미 존재합니다: " + originalFilename);
+            }
+        }
 
         Files.copy(multipartFile.getInputStream(), filePath);
 
@@ -75,6 +106,7 @@ public class FileServiceImpl implements FileService {
         FileEntity savedFile = fileRepository.save(fileEntity);
         return fileMapper.toDTO(savedFile);
     }
+
 
     @Override
     public List<FileDTO> getFileList() {

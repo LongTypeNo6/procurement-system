@@ -9,12 +9,15 @@ import java.util.List;
 
 public interface FileService {
 
+    //파일 중복인지 확인
+    boolean fileExists(String fileName);
+
     //폴더 만들기
     void createDirectoryIfNotExists(String directoryPath);
 
     // 파일 업로드
-    List<String> saveFiles(MultipartFile[] files);
-    FileDTO uploadFile(MultipartFile multipartFile) throws IOException;
+    List<String> saveFiles(MultipartFile[] files, boolean overwrite);
+    FileDTO uploadFile(MultipartFile multipartFile, boolean overwrite) throws IOException;
 
     // 파일 목록 조회
     List<FileDTO> getFileList();

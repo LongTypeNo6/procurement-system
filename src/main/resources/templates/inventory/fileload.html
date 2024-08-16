@@ -15,21 +15,51 @@
 
 <script>
     function uploadFile() {
-        const formData = new FormData(document.getElementById('uploadForm'));
-        fetch('/api/files/upload', {
+        const files = document.querySelector('input[type="file"]').files;
+
+        Array.from(files).reduce((promiseChain, file) => {
+            return promiseChain.then(() => {
+                return checkFileExists(file.name).then(exists => {
+                    if (exists) {
+                        return confirm(`File ${file.name} already exists. Do you want to overwrite?`);
+                    }
+                    return true;
+                }).then(overwrite => {
+                    if (overwrite) {
+                        const formData = new FormData();
+                        formData.append('files', file);
+                        formData.append('overwrite', true);
+                        return proceedUpload(formData);
+                    }
+                });
+            });
+        }, Promise.resolve()).then(() => {
+            alert('All files processed.');
+            loadFileList();  // 모든 파일 처리가 완료된 후 파일 목록을 다시 로드
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function checkFileExists(fileName) {
+        return fetch(`/api/files/check?fileName=${fileName}`, {
+            method: 'POST',
+        })
+            .then(response => response.json());
+    }
+
+    function proceedUpload(formData) {
+        return fetch('/api/files/upload', {
             method: 'POST',
             body: formData
         })
             .then(response => response.json())
-            .then(data => {
-                alert('파일 업로드 성공: ' + data.originalName);
-                loadFileList();
-            })
-            .catch(error => {
-                alert('파일 업로드 실패');
-                console.error('Error:', error);
-            });
+            .then(message => alert(message))
+            .catch(error => console.error('Error:', error));
     }
+
+
+
 
     function loadFileList() {
         fetch('/api/files/list')

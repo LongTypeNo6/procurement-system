@@ -13,6 +13,8 @@ import site.junggam.procurement_system.service.FileService;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -23,9 +25,15 @@ public class FileRestController {
 
     private final FileService fileService;
 
+    @PostMapping("/check")
+    public ResponseEntity<Boolean> checkFileExists(@RequestParam("fileName") String fileName) {
+        boolean exists = fileService.fileExists(fileName);
+        return ResponseEntity.ok(exists);
+    }
+
     @PostMapping("/upload")
-    public ResponseEntity<List<String>> uploadFiles(@RequestParam("files") MultipartFile[] files) {
-        List<String> fileNames = fileService.saveFiles(files);
+    public ResponseEntity<List<String>> uploadFiles(@RequestParam("files") MultipartFile[] files ,@RequestParam("overwrite") boolean overwrite) {
+        List<String> fileNames = fileService.saveFiles(files,overwrite);
         return ResponseEntity.ok().body(fileNames);
     }
 
@@ -40,9 +48,13 @@ public class FileRestController {
         Path filePath = fileService.getFilePath(id);
         Resource resource = new UrlResource(filePath.toUri());
 
+        // 한글 파일명 처리
+        String encodedFileName = URLEncoder.encode(resource.getFilename(), StandardCharsets.UTF_8)
+                .replaceAll("\\+", "%20");
+
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + encodedFileName)
                 .body(resource);
     }
 
