@@ -32,8 +32,9 @@ public class FileRestController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<List<String>> uploadFiles(@RequestParam("files") MultipartFile[] files ,@RequestParam("overwrite") boolean overwrite) {
-        List<String> fileNames = fileService.saveFiles(files,overwrite);
+    public ResponseEntity<List<String>> uploadFiles(@RequestParam("files") MultipartFile[] files ,@RequestParam("overwrite") boolean overwrite) throws IOException {
+        String subDirectory="/nahyeon";
+        List<String> fileNames = fileService.saveFiles(files,overwrite,subDirectory);
         return ResponseEntity.ok().body(fileNames);
     }
 

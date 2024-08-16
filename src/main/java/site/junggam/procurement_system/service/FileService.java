@@ -16,8 +16,8 @@ public interface FileService {
     void createDirectoryIfNotExists(String directoryPath);
 
     // 파일 업로드
-    List<String> saveFiles(MultipartFile[] files, boolean overwrite);
-    FileDTO uploadFile(MultipartFile multipartFile, boolean overwrite) throws IOException;
+    List<String> saveFiles(MultipartFile[] files, boolean overwrite, String subDirectory) throws IOException;
+    FileDTO uploadFile(MultipartFile multipartFile, boolean overwrite, String subDirectory) throws IOException;
 
     // 파일 목록 조회
     List<FileDTO> getFileList();

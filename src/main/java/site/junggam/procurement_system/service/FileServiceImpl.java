@@ -24,7 +24,13 @@ import java.util.stream.Collectors;
 public class FileServiceImpl implements FileService {
 
     @Value("${file.upload-dir}")
-    private String uploadDir;
+    private String basePath;
+
+    private String uploadDir="";
+
+    private void setUploadDir(String subDirectory){
+        this.uploadDir=basePath+subDirectory;
+    }
 
     private final FileRepository fileRepository;
     private final FileMapper fileMapper;
@@ -48,14 +54,13 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<String> saveFiles(MultipartFile[] files, boolean overwrite) {
+    public List<String> saveFiles(MultipartFile[] files, boolean overwrite, String subDirectory) {
         List<String> savedFileNames = new ArrayList<>();
         try {
             for (MultipartFile file : files) {
                 String fileName = file.getOriginalFilename();
-
                 // 덮어쓰기 여부를 체크한 후 파일 업로드
-                uploadFile(file, overwrite);
+                uploadFile(file, overwrite,subDirectory);
                 savedFileNames.add(fileName);
             }
         } catch (Exception e) {
@@ -66,7 +71,8 @@ public class FileServiceImpl implements FileService {
 
 
     @Override
-    public FileDTO uploadFile(MultipartFile multipartFile, boolean overwrite) throws IOException {
+    public FileDTO uploadFile(MultipartFile multipartFile, boolean overwrite, String subDirectory) throws IOException {
+        setUploadDir(subDirectory);
         createDirectoryIfNotExists(uploadDir);
         String originalFilename = multipartFile.getOriginalFilename();
         String storedFilename = originalFilename;
@@ -106,7 +112,6 @@ public class FileServiceImpl implements FileService {
         FileEntity savedFile = fileRepository.save(fileEntity);
         return fileMapper.toDTO(savedFile);
     }
-
 
     @Override
     public List<FileDTO> getFileList() {
