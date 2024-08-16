@@ -80,13 +80,13 @@ function uploadFile(fileInputId, subDirectory, fileId) {
                     formData.append('files', file);
                     formData.append('overwrite', true);
                     formData.append('subDirectory', subDirectory);
-                    formData.append('fileId', fileId + '-' + index); // DB에만 저장되는 ID, 파일 이름에 붙지 않음
+                    formData.append('fileId', fileId );
                     return proceedUpload(formData);
                 }
             });
         });
     }, Promise.resolve()).then(() => {
-        console.log("파일 모두 저장");
+        alert("파일 모두 저장");
     }).catch(error => {
         console.error('Error:', error);
     });

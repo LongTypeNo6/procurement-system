@@ -25,17 +25,10 @@ import java.util.stream.Collectors;
 public class FileServiceImpl implements FileService {
 
     @Value("${file.upload-dir}")
-    private String basePath;
-
     private String uploadDir;
 
-    @PostConstruct
-    public void init() {
-        this.uploadDir = basePath; // 기본 경로로 초기화
-    }
-
-    private void setUploadDir(String subDirectory) {
-        this.uploadDir = Paths.get(basePath, subDirectory).toString(); // 서브 디렉토리 설정
+    private String setUploadDir(String subDirectory) {
+        return uploadDir+"/"+subDirectory;
     }
 
     private final FileRepository fileRepository;
@@ -61,24 +54,22 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public List<String> saveFilesWithId(MultipartFile[] files, boolean overwrite, String fileId, String subDirectory) {
-        setUploadDir(subDirectory);
         List<String> savedFileNames = new ArrayList<>();
         try {
             for (int i = 0; i < files.length; i++) {
                 MultipartFile file = files[i];
                 String fileName = file.getOriginalFilename();  // 파일 이름은 원본 이름 그대로 사용
-                uploadFileWithCustomName(file, fileName, overwrite);
+                uploadFileWithCustomName(file, fileName, overwrite,subDirectory);
 
                 // 파일 정보를 DB에 저장
                 FileEntity fileEntity = FileEntity.builder()
                         .fileCode(fileId + "-" + i)  // fileId는 여기서만 사용, 파일 이름에 사용하지 않음
                         .originalName(file.getOriginalFilename())
                         .storedName(fileName)
-                        .filePath(Paths.get(uploadDir, fileName).toString()) // 올바른 경로 설정
+                        .filePath(Paths.get(setUploadDir(subDirectory), fileName).toString()) // 올바른 경로 설정
                         .fileType(file.getContentType())
                         .fileSize(file.getSize())
                         .build();
-
                 fileRepository.save(fileEntity);
                 savedFileNames.add(fileName);
             }
@@ -89,9 +80,9 @@ public class FileServiceImpl implements FileService {
     }
 
 
-    private void uploadFileWithCustomName(MultipartFile file, String fileName, boolean overwrite) throws IOException {
-        createDirectoryIfNotExists(uploadDir);
-        Path filePath = Paths.get(uploadDir, fileName);
+    private void uploadFileWithCustomName(MultipartFile file, String fileName, boolean overwrite, String subDirectory) throws IOException {
+        createDirectoryIfNotExists(setUploadDir(subDirectory));
+        Path filePath = Paths.get(setUploadDir(subDirectory), fileName);
 
         if (Files.exists(filePath)) {
             if (overwrite) {
