@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class InventoryController {
 
+    //
     @RequestMapping("/warehousingGet")
     public void warehousingGet(@RequestParam("warehousingCode") String warehousingCode, Model model) {
         model.addAttribute("warehousingCode", warehousingCode);
@@ -22,6 +23,6 @@ public class InventoryController {
     public void warehousingList() {
     }
 
-    @RequestMapping("/fileload")
-    public void fileload() {}
+
+
 }

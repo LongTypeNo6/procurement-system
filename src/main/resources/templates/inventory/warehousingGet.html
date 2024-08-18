@@ -81,7 +81,7 @@
             <div class="col-lg-12">
                 <div class="card" >
                     <div class="card-body">
-                        <h5 class="card-title">입고처리</h5>
+                        <h5 class="card-title" id="warehousingCardTitle">입고처리</h5>
                         <span id="warehousingCard">
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">입고날짜</label>
@@ -170,11 +170,12 @@
                 "RETURN": "반품",
                 "WAREHOUSING": "정품"
             };
-            if(dto.warehousingStatus==="COMPLETED"){
+            if(dto.warehousingStatus==="COMPLETED") {
                 $("#warehousingCard").prop("hidden", true);
+                $("#warehousingCardTitle").html("입고완료");
             }
             if (dto.warehousingHistoryDTOS.length !== 0) {
-                $.each(dto.warehousingHistoryDTOS, function(idx, history) {
+                $.each(dto.warehousingHistoryDTOS, function (idx, history) {
                     warehousingHistory += '<tr>';
                     warehousingHistory += '<td>' + formatDateS(history.warehousingDate) + '</td>';
                     warehousingHistory += '<td>' + historyStatusMapping[history.warehousingHistoryStatus] + '</td>';
