@@ -190,7 +190,6 @@
         $("#setWarehousing").on("click", function () {
             saveWarehousingHistory("WAREHOUSING");
         });
-
         $("#setReturn").on("click", function () {
             saveWarehousingHistory("RETURN");
         });
@@ -199,7 +198,6 @@
         $("#warehousingShipmentSpec").on("change", function () {
             shipmentFile = $(this)[0].files[0];
         });
-
         $("#warehousingSpec").on("change", function () {
             specFile = $(this)[0].files[0];
         });
@@ -250,8 +248,8 @@
         }
 
         function submitWarehousingHistory(type) {
-            console.log("왜 안나와ㅜㅜ",warehousingSpecFileId);
-            console.log("왜 안나와ㅜㅜ",warehousingShipmentSpecFileId);
+            // console.log("왜 안나와ㅜㅜ",warehousingSpecFileId);
+            // console.log("왜 안나와ㅜㅜ",warehousingShipmentSpecFileId);
             var WarehousingHistoryDTO = {
                 warehousingCode: warehousingCode,
                 warehousingDate: parseDate($('#warehousingDate').val()),
@@ -269,6 +267,7 @@
                 dataType: "text",
                 success: function (result) {
                     console.log("입고 기록 저장 성공: ", result);
+                    self.location.reload();
                 }
             });
         }
