@@ -171,8 +171,8 @@
                     warehousingHistory += '<tr>';
                     warehousingHistory += '<td>' + formatDateS(history.warehousingDate) + '</td>';
                     warehousingHistory += '<td>' + historyStatusMapping[history.warehousingHistoryStatus] + '</td>';
-                    warehousingHistory += '<td><button type="button" class="btn btn-primary btn-sm">파일보기</button></td>';
-                    warehousingHistory += '<td><button type="button" class="btn btn-primary btn-sm">파일보기</button></td>';
+                    warehousingHistory += '<td><a href="/files/view/' +history.warehousingShipmentSpec + '" target="_blank"><button type="button" class="btn btn-primary btn-sm">파일보기</button></a></td>';
+                    warehousingHistory += '<td><a href="/files/view/' +history.warehousingSpec + '" target="_blank"><button type="button" class="btn btn-primary btn-sm">파일보기</button></a></td>';
                     warehousingHistory += '<td>' + history.warehousingResultMemo + '</td>';
                     warehousingHistory += '</tr>';
                 });
@@ -185,6 +185,9 @@
             $("#warehousingDate").val(todayValue());
             $("#warehousingQuantity").val(dto.purchaseOrderDTO.procurementPlanQuantity)
         });
+
+
+
 
         // 입고 처리 함수
         $("#setWarehousing").on("click", function () {
