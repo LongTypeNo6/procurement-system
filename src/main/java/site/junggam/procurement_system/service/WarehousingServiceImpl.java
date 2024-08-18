@@ -58,10 +58,6 @@ public class WarehousingServiceImpl implements WarehousingService {
         String warehousingHistoryCode=warehousingCode+"-"+historyNum;
         warehousingHistoryDTO.setWarehousingHistoryCode(warehousingHistoryCode);
 
-        //원래는 파일이 저장되면, 그 다음에 이걸 저장하는 게 맞지만 일단 돌아가게 하기 위해서
-        warehousingHistoryDTO.setWarehousingSpec(warehousingHistoryCode+"-0");
-        warehousingHistoryDTO.setWarehousingShipmentSpec(warehousingHistoryCode+"-0s");
-
         warehousingHistoryRepository.save(warehousingHistoryMapper.toEntity(warehousingHistoryDTO));
 
         //여기는 입고 정보를 저장

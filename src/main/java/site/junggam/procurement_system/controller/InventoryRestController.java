@@ -34,7 +34,9 @@ public class InventoryRestController {
 
     @PostMapping(value = "/warehousing/history/{warehousingCode}")
     public ResponseEntity<String> saveWarehousingHistory(@RequestBody WarehousingHistoryDTO warehousingHistoryDTO) {
+        log.info("응답받은 데이터"+warehousingHistoryDTO);
         String warehousingHistoryCode=warehousingService.saveWarehousingHistory(warehousingHistoryDTO);
+
         return new ResponseEntity<>(warehousingHistoryCode, HttpStatus.OK);
     }
 

@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
+import site.junggam.procurement_system.dto.AllFilesDTO;
 import site.junggam.procurement_system.dto.WarehousingHistoryDTO;
+import site.junggam.procurement_system.entity.AllFiles;
 import site.junggam.procurement_system.entity.Warehousing;
 import site.junggam.procurement_system.entity.WarehousingHistory;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-18T17:16:40+0900",
+    date = "2024-08-18T20:57:34+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -24,6 +26,7 @@ public class WarehousingHistoryMapperImpl implements WarehousingHistoryMapper {
 
         WarehousingHistoryDTO.WarehousingHistoryDTOBuilder warehousingHistoryDTO = WarehousingHistoryDTO.builder();
 
+        warehousingHistoryDTO.warehousingCode( warehousingHistoryWarehousingWarehousingCode( warehousingHistory ) );
         warehousingHistoryDTO.warehousingHistoryCode( warehousingHistory.getWarehousingHistoryCode() );
         warehousingHistoryDTO.warehousingDate( warehousingHistory.getWarehousingDate() );
         warehousingHistoryDTO.warehousingShipmentSpec( warehousingHistory.getWarehousingShipmentSpec() );
@@ -69,6 +72,49 @@ public class WarehousingHistoryMapperImpl implements WarehousingHistoryMapper {
         return warehousingHistory.build();
     }
 
+    @Override
+    public List<AllFilesDTO> toAllFilesDtos(List<AllFiles> allFiles) {
+        if ( allFiles == null ) {
+            return null;
+        }
+
+        List<AllFilesDTO> list = new ArrayList<AllFilesDTO>( allFiles.size() );
+        for ( AllFiles allFiles1 : allFiles ) {
+            list.add( allFilesToAllFilesDTO( allFiles1 ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<AllFiles> toAllFilesEntities(List<AllFilesDTO> allFilesDTOs) {
+        if ( allFilesDTOs == null ) {
+            return null;
+        }
+
+        List<AllFiles> list = new ArrayList<AllFiles>( allFilesDTOs.size() );
+        for ( AllFilesDTO allFilesDTO : allFilesDTOs ) {
+            list.add( allFilesDTOToAllFiles( allFilesDTO ) );
+        }
+
+        return list;
+    }
+
+    private String warehousingHistoryWarehousingWarehousingCode(WarehousingHistory warehousingHistory) {
+        if ( warehousingHistory == null ) {
+            return null;
+        }
+        Warehousing warehousing = warehousingHistory.getWarehousing();
+        if ( warehousing == null ) {
+            return null;
+        }
+        String warehousingCode = warehousing.getWarehousingCode();
+        if ( warehousingCode == null ) {
+            return null;
+        }
+        return warehousingCode;
+    }
+
     protected Warehousing warehousingHistoryDTOToWarehousing(WarehousingHistoryDTO warehousingHistoryDTO) {
         if ( warehousingHistoryDTO == null ) {
             return null;
@@ -79,5 +125,39 @@ public class WarehousingHistoryMapperImpl implements WarehousingHistoryMapper {
         warehousing.warehousingCode( warehousingHistoryDTO.getWarehousingCode() );
 
         return warehousing.build();
+    }
+
+    protected AllFilesDTO allFilesToAllFilesDTO(AllFiles allFiles) {
+        if ( allFiles == null ) {
+            return null;
+        }
+
+        AllFilesDTO.AllFilesDTOBuilder allFilesDTO = AllFilesDTO.builder();
+
+        allFilesDTO.inum( allFiles.getInum() );
+        allFilesDTO.fileName( allFiles.getFileName() );
+        allFilesDTO.path( allFiles.getPath() );
+        allFilesDTO.fileSize( allFiles.getFileSize() );
+        allFilesDTO.fileType( allFiles.getFileType() );
+        allFilesDTO.foreignCode( allFiles.getForeignCode() );
+
+        return allFilesDTO.build();
+    }
+
+    protected AllFiles allFilesDTOToAllFiles(AllFilesDTO allFilesDTO) {
+        if ( allFilesDTO == null ) {
+            return null;
+        }
+
+        AllFiles.AllFilesBuilder allFiles = AllFiles.builder();
+
+        allFiles.inum( allFilesDTO.getInum() );
+        allFiles.fileName( allFilesDTO.getFileName() );
+        allFiles.path( allFilesDTO.getPath() );
+        allFiles.fileSize( allFilesDTO.getFileSize() );
+        allFiles.fileType( allFilesDTO.getFileType() );
+        allFiles.foreignCode( allFilesDTO.getForeignCode() );
+
+        return allFiles.build();
     }
 }

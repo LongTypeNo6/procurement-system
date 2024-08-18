@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import site.junggam.procurement_system.entity.WarehousingHistoryStatus;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Data
@@ -16,12 +18,14 @@ public class WarehousingHistoryDTO {
     private String warehousingCode;
     private String warehousingHistoryCode;
     private LocalDateTime warehousingDate;
-    private String warehousingShipmentSpec;
-    private String warehousingSpec;
+
+    private Long warehousingShipmentSpec ;
+    private Long warehousingSpec ;
+
     private String warehousingResultMemo;
     private Integer warehousingQuantity;
 
     @Builder.Default
-    private WarehousingHistoryStatus warehousingHistoryStatus=WarehousingHistoryStatus.PENDING;
-
+    private WarehousingHistoryStatus warehousingHistoryStatus = WarehousingHistoryStatus.PENDING;
 }
+

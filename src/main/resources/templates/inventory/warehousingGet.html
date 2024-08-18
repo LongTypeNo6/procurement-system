@@ -3,237 +3,306 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
     <title>Title</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
-
     <th:block th:replace="~{/fragments/headFragment}"></th:block>
 </head>
 <body>
-    <th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
-    <th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
-    <!-- ======= main ======= -->
-    <main id="main" class="main">
-        <div class="pagetitle">
-            <h1>입고처리</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">메인</a></li>
-                    <li class="breadcrumb-item">재고관리</li>
-                    <li class="breadcrumb-item">입고대기</li>
-                    <li class="breadcrumb-item active">입고처리</li>
-                </ol>
-            </nav>
-        </div><!-- End Page Title -->
+<th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
+<th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
+<!-- ======= main ======= -->
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>입고처리</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">메인</a></li>
+                <li class="breadcrumb-item">재고관리</li>
+                <li class="breadcrumb-item">입고대기</li>
+                <li class="breadcrumb-item active">입고처리</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
-        <section class="section dashboard">
-            <div class="row">
-                <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                거래내용
-                                <button type="button" class="btn btn-primary btn-sm">발주서보기</button>
-                                <button type="button" class="btn btn-primary btn-sm">거래계약서보기</button>
-                            </h5>
-                            <table class="table table-bordered">
-                                <tbody id="purchaseOrderHead"></tbody>
-                            </table>
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>No.</th>
-                                    <th>품목명</th>
-                                    <th>규격</th>
-                                    <th>수량</th>
-                                    <th>가격</th>
-                                </tr>
-                                </thead>
-                                <tbody id="purchaseOrderContent">
-                                </tbody>
-                            </table>
-                        </div>
+    <section class="section dashboard">
+        <div class="row">
+            <!-- 거래내용 -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            거래내용
+                            <button type="button" class="btn btn-primary btn-sm">발주서보기</button>
+                            <button type="button" class="btn btn-primary btn-sm">거래계약서보기</button>
+                        </h5>
+                        <table class="table table-bordered">
+                            <tbody id="purchaseOrderHead"></tbody>
+                        </table>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>품목명</th>
+                                <th>규격</th>
+                                <th>수량</th>
+                                <th>가격</th>
+                            </tr>
+                            </thead>
+                            <tbody id="purchaseOrderContent">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                입고/반품내역
-                            </h5>
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>날짜</th>
-                                    <th>정품/반품</th>
-                                    <th>출하명세서</th>
-                                    <th>거래명세서</th>
-                                    <th>검수결과비고</th>
-                                </tr>
-                                </thead>
-                                <tbody id="warehousingHistory">
+            </div>
+            <!-- 입고/반품내역 -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            입고/반품내역
+                        </h5>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>날짜</th>
+                                <th>정품/반품</th>
+                                <th>출하명세서</th>
+                                <th>거래명세서</th>
+                                <th>검수결과비고</th>
+                            </tr>
+                            </thead>
+                            <tbody id="warehousingHistory"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- 입고처리 -->
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">입고처리</h5>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">입고날짜</label>
+                            <div class="col-sm-10">
+                                <input type="date" class="form-control" id="warehousingDate">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">입고수량</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="warehousingQuantity" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="inputText" class="col-sm-2 col-form-label">출하명세서</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="file" id="warehousingShipmentSpec">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="inputText" class="col-sm-2 col-form-label">거래명세서</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="file" id="warehousingSpec">
+                            </div>
+                        </div>
 
-                                </tbody>
-                            </table>
+                        <div class="row mb-3">
+                            <label for="inputText" class="col-sm-2 col-form-label">검수결과 비고</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" style="height: 100px" id="warehousingResultMemo">이상 없음</textarea>
+                            </div>
                         </div>
+                        <button type="button" class="btn btn-primary" id="setWarehousing">입고(정품)</button>
+                        <button type="button" class="btn btn-danger" id="setReturn">반품</button>
+                        <a href="/inventory/warehousingList"><button type="button" class="btn btn-primary">리스트</button></a>
                     </div>
                 </div>
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">입고처리</h5>
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label">입고날짜</label>
-                                <div class="col-sm-10">
-                                    <input type="date" class="form-control" id="warehousingDate">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label">입고수량</label>
-                                <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="warehousingQuantity" disabled>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="inputText" class="col-sm-2 col-form-label">출하명세서</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" type="file" id="warehousingShipmentSpec">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="inputText" class="col-sm-2 col-form-label">거래명세서</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" type="file" id="warehousingSpec">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="inputText" class="col-sm-2 col-form-label">검수결과 비고</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" style="height: 100px" id="warehousingResultMemo">이상 없음</textarea>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-primary" id="setWarehousing">입고(정품)</button>
-                            <button type="button" class="btn btn-danger" id="setReturn">반품</button>
-                            <a href="/inventory/warehousingList"><button type="button" class="btn btn-primary" >리스트</button></a>
-                        </div>
-                    </div>
-                </div>
-                <!--여기에 카드랑 내용 넣어주시면 됩니다-->
-            </div> <!--End row-->
-        </section>
-    </main>
-    <!-- End #main -->
-    <script th:inline="javascript">
-        $(document).ready(function (e) {
-            var warehousingCode=[[${warehousingCode}]];
-            var purchaserName
-            console.log("입고코드는",warehousingCode);
-            //거래내용셋팅, 입고처리란 기본값셋팅
-            $.getJSON("/inventorycontent/warehousing/" + warehousingCode, function(dto) {
-                console.log("응답받은 데이터", dto);
-                purchaserName=dto.purchaseOrderDTO.purchaserName;
-                var purchaseOrderHead = "";
-                purchaseOrderHead += '<tr>';
-                purchaseOrderHead += '<th>거래처명</th>';
-                purchaseOrderHead += '<td>' + dto.purchaseOrderDTO.purchaserName + '</td>';
-                purchaseOrderHead += '</tr>';
-                purchaseOrderHead += '<tr>';
-                purchaseOrderHead += '<th>발주일자</th>';
-                purchaseOrderHead += '<td>' + formatDate(dto.purchaseOrderDTO.purchaseOrderDate) + '</td>';
-                purchaseOrderHead += '</tr>';
-                $("#purchaseOrderHead").append(purchaseOrderHead);
-                var purchaseOrderContent = "";
-                purchaseOrderContent += '<tr>';
-                purchaseOrderContent += '<td>1</td>';
-                purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.materialName + '</td>';
-                purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.materialTexture + '/' + dto.purchaseOrderDTO.materialStand + '</td>';
-                purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.procurementPlanQuantity + '개</td>';
-                purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.contractPrice + '원</td>';
-                purchaseOrderContent += '</tr>';
-                purchaseOrderContent += '<tr>';
-                purchaseOrderContent += '<th colSpan="3">합계</th>';
-                purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.procurementPlanQuantity + '개</td>';
-                purchaseOrderContent += '<td>' + (dto.purchaseOrderDTO.procurementPlanQuantity * dto.purchaseOrderDTO.contractPrice) + '원</td>';
-                purchaseOrderContent += '</tr>';
-                $("#purchaseOrderContent").append(purchaseOrderContent);
-                var warehousingHistory = "";
-                const historyStatusMapping = {
-                    "PENDING": "-",
-                    "RETURN": "반품",
-                    "WAREHOUSING" : "정품"
-                };
-                if(dto.warehousingHistoryDTOS.length!==0){
-                    $.each(dto.warehousingHistoryDTOS, function(idx, history) {
-                        warehousingHistory += '<tr>';
-                        warehousingHistory += '<td>'+formatDateS(history.warehousingDate)+'</td>';
-                        warehousingHistory += '<td>'+historyStatusMapping[history.warehousingHistoryStatus]+'</td>';
-                        warehousingHistory += '<td>';
-                        warehousingHistory += '<button type="button" class="btn btn-primary btn-sm">파일보기</button>';
-                        warehousingHistory += '</td>';
-                        warehousingHistory += '<td>';
-                        warehousingHistory += '<button type="button" class="btn btn-primary btn-sm">파일보기</button>';
-                        warehousingHistory += '</td>';
-                        warehousingHistory += '<td>'+history.warehousingResultMemo+'</td>';
-                        warehousingHistory += '</tr>';
-                    });
-                }else {
+            </div>
+        </div> <!--End row-->
+    </section>
+</main>
+<!-- End #main -->
+<script th:inline="javascript">
+    $(document).ready(function (e) {
+        var warehousingCode = [[${warehousingCode}]];
+        var warehousingShipmentSpecFileId = null;
+        var warehousingSpecFileId = null;
+        var shipmentFile = null;
+        var specFile = null;
+
+        console.log("입고코드는", warehousingCode);
+
+        // 거래내용 및 입고 처리 기본 값 설정
+        $.getJSON("/inventorycontent/warehousing/" + warehousingCode, function(dto) {
+            console.log("응답받은 데이터", dto);
+            var purchaseOrderHead = "";
+            purchaseOrderHead += '<tr>';
+            purchaseOrderHead += '<th>거래처명</th>';
+            purchaseOrderHead += '<td>' + dto.purchaseOrderDTO.purchaserName + '</td>';
+            purchaseOrderHead += '</tr>';
+            purchaseOrderHead += '<tr>';
+            purchaseOrderHead += '<th>발주일자</th>';
+            purchaseOrderHead += '<td>' + formatDate(dto.purchaseOrderDTO.purchaseOrderDate) + '</td>';
+            $("#purchaseOrderHead").append(purchaseOrderHead);
+
+            var purchaseOrderContent = "";
+            purchaseOrderContent += '<tr>';
+            purchaseOrderContent += '<td>1</td>';
+            purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.materialName + '</td>';
+            purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.materialTexture + '/' + dto.purchaseOrderDTO.materialStand + '</td>';
+            purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.procurementPlanQuantity + '개</td>';
+            purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.contractPrice + '원</td>';
+            purchaseOrderContent += '</tr>';
+            purchaseOrderContent += '<tr>';
+            purchaseOrderContent += '<th colSpan="3">합계</th>';
+            purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.procurementPlanQuantity + '개</td>';
+            purchaseOrderContent += '<td>' + (dto.purchaseOrderDTO.procurementPlanQuantity * dto.purchaseOrderDTO.contractPrice) + '원</td>';
+            $("#purchaseOrderContent").append(purchaseOrderContent);
+
+            var warehousingHistory = "";
+            const historyStatusMapping = {
+                "PENDING": "-",
+                "RETURN": "반품",
+                "WAREHOUSING": "정품"
+            };
+            if (dto.warehousingHistoryDTOS.length !== 0) {
+                $.each(dto.warehousingHistoryDTOS, function(idx, history) {
                     warehousingHistory += '<tr>';
-                    warehousingHistory += '<td colspan="5">내역없음</td>';
+                    warehousingHistory += '<td>' + formatDateS(history.warehousingDate) + '</td>';
+                    warehousingHistory += '<td>' + historyStatusMapping[history.warehousingHistoryStatus] + '</td>';
+                    warehousingHistory += '<td><button type="button" class="btn btn-primary btn-sm">파일보기</button></td>';
+                    warehousingHistory += '<td><button type="button" class="btn btn-primary btn-sm">파일보기</button></td>';
+                    warehousingHistory += '<td>' + history.warehousingResultMemo + '</td>';
                     warehousingHistory += '</tr>';
-                }
-                $("#warehousingHistory").append(warehousingHistory);
-                $("#warehousingDate").val(todayValue());
-                $("#warehousingQuantity").val(dto.purchaseOrderDTO.procurementPlanQuantity);
-            });
-
-
-            //입고처리
-            var WarehousingHistoryStatus = "";
-            $(document).on('click', '#setWarehousing', function () {
-                WarehousingHistoryStatus = "WAREHOUSING"
-                addWarehousingHistory(WarehousingHistoryStatus);
-            });
-
-            $(document).on('click', '#setReturn', function () {
-                WarehousingHistoryStatus = "RETURN"
-                addWarehousingHistory(WarehousingHistoryStatus);
-            });
-
-            function addWarehousingHistory(historyStatus) {
-                console.log("발주검수저장"); // 함수가 호출되는지 확인
-                var WarehousingHistoryDTO = {
-                    warehousingCode: warehousingCode,
-                    warehousingDate: parseDate($('#warehousingDate').val()),
-                    warehousingQuantity: $('#warehousingQuantity').val(),
-                    warehousingResultMemo: $('#warehousingResultMemo').val(),
-                    warehousingHistoryStatus: historyStatus
-                };
-                console.log("수집한데이터", WarehousingHistoryDTO);
-                $.ajax({
-                    url: '/inventorycontent/warehousing/history/' + warehousingCode,
-                    type: "POST",
-                    data: JSON.stringify(WarehousingHistoryDTO),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "text",
-                    success: function (result) {
-                        console.log("결과값result: " + result);
-                        // Promise.all을 사용하여 모든 파일 업로드가 완료된 후 페이지를 리로드
-                        Promise.all([
-                            console.log("회사명"+purchaserName),
-                        ]).then(() => {
-                            // location.reload(); // 모든 업로드가 완료된 후 페이지 리로드
-                        // }).catch(error => {
-                            console.error("파일 업로드 중 오류 발생:", error);
-                        });
-                    }
                 });
+            } else {
+                warehousingHistory += '<tr>';
+                warehousingHistory += '<td colspan="5">내역없음</td>';
+                warehousingHistory += '</tr>';
+            }
+            $("#warehousingHistory").append(warehousingHistory);
+            $("#warehousingDate").val(todayValue());
+            $("#warehousingQuantity").val(dto.purchaseOrderDTO.procurementPlanQuantity)
+        });
+
+        // 입고 처리 함수
+        $("#setWarehousing").on("click", function () {
+            saveWarehousingHistory("WAREHOUSING");
+        });
+
+        $("#setReturn").on("click", function () {
+            saveWarehousingHistory("RETURN");
+        });
+
+        // 파일 선택 시 처리 (FormData에 중복되지 않도록 추가)
+        $("#warehousingShipmentSpec").on("change", function () {
+            shipmentFile = $(this)[0].files[0];
+        });
+
+        $("#warehousingSpec").on("change", function () {
+            specFile = $(this)[0].files[0];
+        });
+
+        function saveWarehousingHistory(type) {
+            if (shipmentFile || specFile) {
+                uploadFiles(type);
+            } else {
+                submitWarehousingHistory(type);
+            }
+        }
+
+        function uploadFiles(type) {
+            var formData = new FormData();
+
+            if (shipmentFile) {
+                formData.append("files", shipmentFile);
             }
 
-        })
-    </script>
-    <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
-    <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
+            if (specFile) {
+                formData.append("files", specFile);
+            }
+
+            $.ajax({
+                url: '/files/upload/' + warehousingCode + '/' + type,
+                processData: false,
+                contentType: false,
+                data: formData,
+                type: 'POST',
+                dataType: 'json',
+                success: function (result) {
+                    console.log("파일 업로드 성공: ", result);
+
+                    if (shipmentFile && result.length > 0) {
+                        warehousingShipmentSpecFileId = result[0].inum;
+                    }
+
+                    if (specFile && result.length > 1) {
+                        warehousingSpecFileId = result[1].inum;
+                    }
+
+                    submitWarehousingHistory(type);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("파일 업로드 실패: ", textStatus);
+                }
+            });
+        }
+
+        function submitWarehousingHistory(type) {
+            console.log("왜 안나와ㅜㅜ",warehousingSpecFileId);
+            console.log("왜 안나와ㅜㅜ",warehousingShipmentSpecFileId);
+            var WarehousingHistoryDTO = {
+                warehousingCode: warehousingCode,
+                warehousingDate: parseDate($('#warehousingDate').val()),
+                warehousingQuantity: $('#warehousingQuantity').val(),
+                warehousingResultMemo: $('#warehousingResultMemo').val(),
+                warehousingHistoryStatus: type,
+                warehousingShipmentSpec: warehousingShipmentSpecFileId,
+                warehousingSpec: warehousingSpecFileId
+            };
+            $.ajax({
+                url: '/inventorycontent/warehousing/history/' + warehousingCode,
+                type: "POST",
+                data: JSON.stringify(WarehousingHistoryDTO),
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (result) {
+                    console.log("입고 기록 저장 성공: ", result);
+                }
+            });
+        }
+
+        // 파일 확장자 및 크기 검증 함수
+        function checkExtension(fileName, fileSize) {
+            var regex = new RegExp("(.*?)\.(exe|sh|zip|alz|tiff)$");
+            var maxSize = 10485760; // 10MB
+
+            if (fileSize >= maxSize) {
+                alert("파일 사이즈 초과");
+                return false;
+            }
+
+            if (regex.test(fileName)) {
+                alert("해당 종류의 파일은 업로드할 수 없습니다.");
+                return false;
+            }
+            return true;
+        }
+
+        // FormData에 파일이 이미 있는지 확인하는 함수
+        function isFileAlreadyInFormData(fileName) {
+            for (var pair of formData.entries()) {
+                if (pair[1].name === fileName) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    });
+</script>
+
+<th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
+<th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
 </body>
 </html>
