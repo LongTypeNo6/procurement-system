@@ -14,7 +14,7 @@ import site.junggam.procurement_system.entity.Warehousing;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-18T21:43:31+0900",
+    date = "2024-08-18T22:55:30+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -143,6 +143,33 @@ public class WarehousingMapperImpl implements WarehousingMapper {
             return null;
         }
         return contractPrice;
+    }
+
+    private String purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserCode(PurchaseOrder purchaseOrder) {
+        if ( purchaseOrder == null ) {
+            return null;
+        }
+        ProcurementPlan procurementPlan = purchaseOrder.getProcurementPlan();
+        if ( procurementPlan == null ) {
+            return null;
+        }
+        TemMaterial temMaterial = procurementPlan.getTemMaterial();
+        if ( temMaterial == null ) {
+            return null;
+        }
+        Contract contract = temMaterial.getContract();
+        if ( contract == null ) {
+            return null;
+        }
+        Purchaser purchaser = contract.getPurchaser();
+        if ( purchaser == null ) {
+            return null;
+        }
+        String purchaserCode = purchaser.getPurchaserCode();
+        if ( purchaserCode == null ) {
+            return null;
+        }
+        return purchaserCode;
     }
 
     private String purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserName(PurchaseOrder purchaseOrder) {
@@ -299,6 +326,7 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         if ( contractPrice != null ) {
             purchaseOrderDTO.contractPrice( contractPrice );
         }
+        purchaseOrderDTO.purchaserCode( purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserCode( purchaseOrder ) );
         purchaseOrderDTO.purchaserName( purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserName( purchaseOrder ) );
         purchaseOrderDTO.purchaserManager( purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserManager( purchaseOrder ) );
         purchaseOrderDTO.purchaserManagerTel( purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserManagerTel( purchaseOrder ) );

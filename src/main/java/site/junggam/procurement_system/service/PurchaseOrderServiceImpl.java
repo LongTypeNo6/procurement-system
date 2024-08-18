@@ -10,12 +10,11 @@ import org.springframework.stereotype.Service;
 import site.junggam.procurement_system.dto.PageRequestDTO;
 import site.junggam.procurement_system.dto.PageResultDTO;
 import site.junggam.procurement_system.dto.PurchaseOrderDTO;
-import site.junggam.procurement_system.entity.InspectionPlan;
-import site.junggam.procurement_system.entity.InspectionPlanDeliveryProgress;
-import site.junggam.procurement_system.entity.PurchaseOrder;
+import site.junggam.procurement_system.entity.*;
 import site.junggam.procurement_system.mapper.PurchaseOrderMapper;
 import site.junggam.procurement_system.repository.InspectionPlanRepository;
 import site.junggam.procurement_system.repository.PurchaseOrderRepository;
+import site.junggam.procurement_system.repository.WarehousingRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +28,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
     private final PurchaseOrderRepository purchaseOrderRepository;
     private final PurchaseOrderMapper purchaseOrderMapper;
     private final InspectionPlanRepository inspectionPlanRepository;
+    private final WarehousingRepository warehousingRepository;
 
 
     private int getInspectionPlanCount(PurchaseOrder purchaseOrder) {
@@ -82,14 +82,24 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
 
     @Override
     public void savePurchaseOrder(PurchaseOrderDTO purchaseOrderDTO) {
+
+        String purchaseOrderCode=purchaseOrderDTO.getPurchaseOrderCode();
+        //발주저장
         Optional<PurchaseOrder> result
-                = purchaseOrderRepository.findById(purchaseOrderDTO.getPurchaseOrderCode());
+                = purchaseOrderRepository.findById(purchaseOrderCode);
         if(result.isPresent()) {
             PurchaseOrder purchaseOrder = result.get();
             purchaseOrder.changePurchaseOrderDate(purchaseOrderDTO.getPurchaseOrderDate());
             purchaseOrder.changePurchaseOrderStatus(purchaseOrderDTO.getPurchaseOrderStatus());
             purchaseOrder.changePurchaseOrderMemo(purchaseOrderDTO.getPurchaseOrderMemo());
             purchaseOrderRepository.save(purchaseOrder);
+
+            //입고대기 생성
+            warehousingRepository.save(Warehousing.builder()
+                    .warehousingCode("WARE"+purchaseOrderCode.substring(4))
+                    .purchaseOrder(purchaseOrder)
+                    .warehousingStatus(WarehousingStatus.PENDING)
+                    .build());
         }
 
     }

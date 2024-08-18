@@ -79,42 +79,44 @@
             </div>
             <!-- 입고처리 -->
             <div class="col-lg-12">
-                <div class="card">
+                <div class="card" >
                     <div class="card-body">
                         <h5 class="card-title">입고처리</h5>
-                        <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label">입고날짜</label>
-                            <div class="col-sm-10">
-                                <input type="date" class="form-control" id="warehousingDate">
+                        <span id="warehousingCard">
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">입고날짜</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" id="warehousingDate">
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label">입고수량</label>
-                            <div class="col-sm-10">
-                                <input type="number" class="form-control" id="warehousingQuantity" disabled>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">입고수량</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" id="warehousingQuantity" disabled>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="inputText" class="col-sm-2 col-form-label">출하명세서</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="file" id="warehousingShipmentSpec">
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">출하명세서</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="file" id="warehousingShipmentSpec">
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="inputText" class="col-sm-2 col-form-label">거래명세서</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="file" id="warehousingSpec">
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">거래명세서</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="file" id="warehousingSpec">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="row mb-3">
-                            <label for="inputText" class="col-sm-2 col-form-label">검수결과 비고</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" style="height: 100px" id="warehousingResultMemo">이상 없음</textarea>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">검수결과 비고</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" style="height: 100px" id="warehousingResultMemo">이상 없음</textarea>
+                                </div>
                             </div>
-                        </div>
-                        <button type="button" class="btn btn-primary" id="setWarehousing">입고(정품)</button>
-                        <button type="button" class="btn btn-danger" id="setReturn">반품</button>
+                            <button type="button" class="btn btn-primary" id="setWarehousing">입고(정품)</button>
+                            <button type="button" class="btn btn-danger" id="setReturn">반품</button>
+                        </span>
                         <a href="/inventory/warehousingList"><button type="button" class="btn btn-primary">리스트</button></a>
                     </div>
                 </div>
@@ -126,6 +128,7 @@
 <script th:inline="javascript">
     $(document).ready(function (e) {
         var warehousingCode = [[${warehousingCode}]];
+        var purchaserCode = null;
         var warehousingShipmentSpecFileId = null;
         var warehousingSpecFileId = null;
         var shipmentFile = null;
@@ -136,6 +139,7 @@
         // 거래내용 및 입고 처리 기본 값 설정
         $.getJSON("/inventorycontent/warehousing/" + warehousingCode, function(dto) {
             console.log("응답받은 데이터", dto);
+            purchaserCode=dto.purchaseOrderDTO.purchaserCode;
             var purchaseOrderHead = "";
             purchaseOrderHead += '<tr>';
             purchaseOrderHead += '<th>거래처명</th>';
@@ -166,6 +170,9 @@
                 "RETURN": "반품",
                 "WAREHOUSING": "정품"
             };
+            if(dto.warehousingStatus==="COMPLETED"){
+                $("#warehousingCard").prop("hidden", true);
+            }
             if (dto.warehousingHistoryDTOS.length !== 0) {
                 $.each(dto.warehousingHistoryDTOS, function(idx, history) {
                     warehousingHistory += '<tr>';
@@ -225,7 +232,7 @@
             }
 
             $.ajax({
-                url: '/files/upload/' + warehousingCode + '/' + type,
+                url: '/files/upload/' + warehousingCode + '/' + purchaserCode,
                 processData: false,
                 contentType: false,
                 data: formData,

@@ -29,6 +29,7 @@ public class PurchaseOrderDTO {
     private String materialStand; // 자재 규격
     private String materialTexture; // 자재 재질
     private double contractPrice; // 계약 금액
+    private String purchaserCode; //거래처코드(사업자등록번호)
     private String purchaserName; // 거래처 이름
     private String purchaserManager; // 거래처 담당자
     private String purchaserManagerTel; // 거래처 담당자 전화번호
