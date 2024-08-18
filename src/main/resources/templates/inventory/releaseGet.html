@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Title</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <th:block th:replace="~{/fragments/headFragment}"></th:block>
+</head>
+<body>
+    <th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
+    <!-- ======= main ======= -->
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>출고상세보기</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">메인</a></li>
+                    <li class="breadcrumb-item">재고관리</li>
+                    <li class="breadcrumb-item">출고요청</li>
+                    <li class="breadcrumb-item active">출고상세보기</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section dashboard">
+            <div class="row">
+                <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
+                <!--여기에 카드랑 내용 넣어주시면 됩니다-->
+            </div> <!--End row-->
+        </section>
+    </main>
+    <!-- End #main -->
+    <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
+</body>
+</html>

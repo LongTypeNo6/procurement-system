@@ -25,6 +25,7 @@ public class PurchaseOrderDTO {
 //    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime procurementPlanDeadLine; // 조달 계획 마감일
     private int procurementPlanQuantity; // 조달 계획 수량, Integer로 하면 널값에 대해서 처리해야하므로 기본값으로작성
+    private String materialCode; //자재코드
     private String materialName; // 자재 이름
     private String materialStand; // 자재 규격
     private String materialTexture; // 자재 재질

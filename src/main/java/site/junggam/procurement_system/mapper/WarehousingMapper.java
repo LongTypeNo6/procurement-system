@@ -13,6 +13,7 @@ public interface WarehousingMapper {
 
     @Mapping(source = "purchaseOrder.procurementPlan.procurementPlanDeadLine", target = "purchaseOrderDTO.procurementPlanDeadLine")
     @Mapping(source = "purchaseOrder.procurementPlan.procurementPlanQuantity", target = "purchaseOrderDTO.procurementPlanQuantity")
+    @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.materialCode", target = "purchaseOrderDTO.materialCode")
     @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.materialName", target = "purchaseOrderDTO.materialName")
     @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.materialStand", target = "purchaseOrderDTO.materialStand")
     @Mapping(source = "purchaseOrder.procurementPlan.temMaterial.materialTexture", target = "purchaseOrderDTO.materialTexture")

@@ -14,6 +14,7 @@ public interface PurchaseOrderMapper {
 
     @Mapping(source = "procurementPlan.procurementPlanDeadLine", target = "procurementPlanDeadLine")
     @Mapping(source = "procurementPlan.procurementPlanQuantity", target = "procurementPlanQuantity")
+    @Mapping(source = "procurementPlan.temMaterial.materialCode", target = "materialCode")
     @Mapping(source = "procurementPlan.temMaterial.materialName", target = "materialName")
     @Mapping(source = "procurementPlan.temMaterial.materialStand", target = "materialStand")
     @Mapping(source = "procurementPlan.temMaterial.materialTexture", target = "materialTexture")

@@ -16,7 +16,7 @@ import site.junggam.procurement_system.entity.TemMaterial;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-18T22:55:30+0900",
+    date = "2024-08-19T00:54:27+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -107,6 +107,25 @@ public class InspectionPlanMapperImpl implements InspectionPlanMapper {
             return null;
         }
         return procurementPlanQuantity;
+    }
+
+    private String purchaseOrderProcurementPlanTemMaterialMaterialCode(PurchaseOrder purchaseOrder) {
+        if ( purchaseOrder == null ) {
+            return null;
+        }
+        ProcurementPlan procurementPlan = purchaseOrder.getProcurementPlan();
+        if ( procurementPlan == null ) {
+            return null;
+        }
+        TemMaterial temMaterial = procurementPlan.getTemMaterial();
+        if ( temMaterial == null ) {
+            return null;
+        }
+        String materialCode = temMaterial.getMaterialCode();
+        if ( materialCode == null ) {
+            return null;
+        }
+        return materialCode;
     }
 
     private String purchaseOrderProcurementPlanTemMaterialMaterialName(PurchaseOrder purchaseOrder) {
@@ -363,6 +382,7 @@ public class InspectionPlanMapperImpl implements InspectionPlanMapper {
         if ( procurementPlanQuantity != null ) {
             purchaseOrderDTO.procurementPlanQuantity( procurementPlanQuantity );
         }
+        purchaseOrderDTO.materialCode( purchaseOrderProcurementPlanTemMaterialMaterialCode( purchaseOrder ) );
         purchaseOrderDTO.materialName( purchaseOrderProcurementPlanTemMaterialMaterialName( purchaseOrder ) );
         purchaseOrderDTO.materialStand( purchaseOrderProcurementPlanTemMaterialMaterialStand( purchaseOrder ) );
         purchaseOrderDTO.materialTexture( purchaseOrderProcurementPlanTemMaterialMaterialTexture( purchaseOrder ) );

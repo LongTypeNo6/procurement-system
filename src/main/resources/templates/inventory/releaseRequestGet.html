@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Title</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <th:block th:replace="~{/fragments/headFragment}"></th:block>
+</head>
+<body>
+    <th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
+    <!-- ======= main ======= -->
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>출고요청상세보기</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">메인</a></li>
+                    <li class="breadcrumb-item">재고관리</li>
+                    <li class="breadcrumb-item">출고요청</li>
+                    <li class="breadcrumb-item active">출고요청상세보기</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section dashboard">
+            <div class="row">
+                <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
+                <div class="col-lg-12">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">출고요청내용</h5>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">게획수립일</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" value="2024-05-30" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">품목명</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="itemCodeInput">
+                                        <button class="input-group-text" id="confirmSelectionBtn">검색</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">요청처</label>
+                                <div class="col-sm-10">
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected value="생산1팀">생산1팀</option>
+                                        <option value="생산2팀">생산2팀</option>
+                                        <option value="생산3팀">생산3팀</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">계획수량</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" value="100">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">불출희망일</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" value="2024-06-24">
+                                </div>
+                            </div>
+                            <div class="row mb">
+                                <div class="col-sm-10">
+                                    <button type="button" class="btn btn-primary">저장</button>
+                                    <a href="/inventory/releaseRequestList"><button type="button" class="btn btn-primary">리스트</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--여기에 카드랑 내용 넣어주시면 됩니다-->
+            </div> <!--End row-->
+        </section>
+    </main>
+    <!-- End #main -->
+    <script th:inline="javascript">
+        $(document).ready(function (e) {
+            var releaseCode = [[${releaseCode}]];
+            $.getJSON("/inventorycontent/release/" + releaseCode, function(data) {
+                console.log("응답데이터", data);
+                $('#purchaserName').val(data.purchaserName);
+            }).fail(function(jqxhr, textStatus, error) {
+                var err = textStatus + ", " + error;
+                console.log("발주 정보 요청 실패: " + err);
+            });
+        });
+    </script>
+    <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
+</body>
+</html>
