@@ -16,7 +16,7 @@ public class WarehousingHistoryDTO {
     private String warehousingCode;
     private String warehousingHistoryCode;
     private LocalDateTime warehousingDate;
-    private String warehousingShipmentSpec ;
+    private String warehousingShipmentSpec;
     private String warehousingSpec;
     private String warehousingResultMemo;
     private Integer warehousingQuantity;

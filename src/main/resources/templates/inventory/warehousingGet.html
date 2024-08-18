@@ -128,10 +128,12 @@
     <script th:inline="javascript">
         $(document).ready(function (e) {
             var warehousingCode=[[${warehousingCode}]];
+            var purchaserName
             console.log("입고코드는",warehousingCode);
             //거래내용셋팅, 입고처리란 기본값셋팅
             $.getJSON("/inventorycontent/warehousing/" + warehousingCode, function(dto) {
                 console.log("응답받은 데이터", dto);
+                purchaserName=dto.purchaseOrderDTO.purchaserName;
                 var purchaseOrderHead = "";
                 purchaseOrderHead += '<tr>';
                 purchaseOrderHead += '<th>거래처명</th>';
@@ -217,12 +219,18 @@
                     dataType: "text",
                     success: function (result) {
                         console.log("결과값result: " + result);
-                        uploadFile("warehousingShipmentSpec","warehousingShipmentSpec",result+"s");
-                        uploadFile("warehousingSpec","warehousingSpec",result);
-                        // self.location.reload();
+                        // Promise.all을 사용하여 모든 파일 업로드가 완료된 후 페이지를 리로드
+                        Promise.all([
+                            console.log("회사명"+purchaserName),
+                        ]).then(() => {
+                            // location.reload(); // 모든 업로드가 완료된 후 페이지 리로드
+                        // }).catch(error => {
+                            console.error("파일 업로드 중 오류 발생:", error);
+                        });
                     }
-                })
-            };
+                });
+            }
+
         })
     </script>
     <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>

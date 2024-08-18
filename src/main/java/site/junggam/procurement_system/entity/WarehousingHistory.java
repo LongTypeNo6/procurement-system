@@ -17,8 +17,8 @@ public class WarehousingHistory {
     @Id
     private String warehousingHistoryCode;
     private LocalDateTime warehousingDate;
-    private String warehousingShipmentSpecId ;
-    private String warehousingSpecId;
+    private String warehousingShipmentSpec;
+    private String warehousingSpec;
     private String warehousingResultMemo;
     private Integer warehousingQuantity;
 

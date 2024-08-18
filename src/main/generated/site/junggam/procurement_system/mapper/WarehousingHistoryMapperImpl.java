@@ -10,7 +10,7 @@ import site.junggam.procurement_system.entity.WarehousingHistory;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-17T01:50:08+0900",
+    date = "2024-08-18T16:17:41+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -26,6 +26,8 @@ public class WarehousingHistoryMapperImpl implements WarehousingHistoryMapper {
 
         warehousingHistoryDTO.warehousingHistoryCode( warehousingHistory.getWarehousingHistoryCode() );
         warehousingHistoryDTO.warehousingDate( warehousingHistory.getWarehousingDate() );
+        warehousingHistoryDTO.warehousingShipmentSpecId( warehousingHistory.getWarehousingShipmentSpecId() );
+        warehousingHistoryDTO.warehousingSpecId( warehousingHistory.getWarehousingSpecId() );
         warehousingHistoryDTO.warehousingResultMemo( warehousingHistory.getWarehousingResultMemo() );
         warehousingHistoryDTO.warehousingQuantity( warehousingHistory.getWarehousingQuantity() );
         warehousingHistoryDTO.warehousingHistoryStatus( warehousingHistory.getWarehousingHistoryStatus() );
@@ -58,6 +60,8 @@ public class WarehousingHistoryMapperImpl implements WarehousingHistoryMapper {
         warehousingHistory.warehousing( warehousingHistoryDTOToWarehousing( warehousingHistoryDTO ) );
         warehousingHistory.warehousingHistoryCode( warehousingHistoryDTO.getWarehousingHistoryCode() );
         warehousingHistory.warehousingDate( warehousingHistoryDTO.getWarehousingDate() );
+        warehousingHistory.warehousingShipmentSpecId( warehousingHistoryDTO.getWarehousingShipmentSpecId() );
+        warehousingHistory.warehousingSpecId( warehousingHistoryDTO.getWarehousingSpecId() );
         warehousingHistory.warehousingResultMemo( warehousingHistoryDTO.getWarehousingResultMemo() );
         warehousingHistory.warehousingQuantity( warehousingHistoryDTO.getWarehousingQuantity() );
         warehousingHistory.warehousingHistoryStatus( warehousingHistoryDTO.getWarehousingHistoryStatus() );

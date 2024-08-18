@@ -28,19 +28,4 @@ public class WarehousingServiceTest {
         System.out.println("결과값은 이렇게"+warehousingService.getAllWarehousingList(PageRequestDTO.builder().page(1).size(10).build()));
     }
 
-    @Test
-    public void saveHistory(){
-        warehousingService.saveWarehousingHistory(
-                WarehousingHistoryDTO.builder()
-                        .warehousingDate(LocalDateTime.now())
-                        .warehousingQuantity(18)
-                        .warehousingResultMemo("이렇게입니다2")
-                        .warehousingCode("WARE-240813-001-006")
-                        .build()
-        );
-    }
-
-    @Test
-    public void countList(){
-    }
 }

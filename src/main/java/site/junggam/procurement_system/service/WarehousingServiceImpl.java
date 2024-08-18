@@ -36,8 +36,6 @@ public class WarehousingServiceImpl implements WarehousingService {
     private final WarehousingHistoryRepository warehousingHistoryRepository;
     private final WarehousingHistoryMapper warehousingHistoryMapper;
 
-    private final FileService fileService;
-
     @Override
     public WarehousingDTO getWarehousing(String warehousingId) {
         Optional<Warehousing> result = warehousingRepository.findById(warehousingId);
@@ -59,6 +57,11 @@ public class WarehousingServiceImpl implements WarehousingService {
         historyNum=1+warehousingHistoryRepository.findByWarehousingCode(warehousingCode).size();
         String warehousingHistoryCode=warehousingCode+"-"+historyNum;
         warehousingHistoryDTO.setWarehousingHistoryCode(warehousingHistoryCode);
+
+        //원래는 파일이 저장되면, 그 다음에 이걸 저장하는 게 맞지만 일단 돌아가게 하기 위해서
+        warehousingHistoryDTO.setWarehousingSpecId(warehousingHistoryCode+"-0");
+        warehousingHistoryDTO.setWarehousingShipmentSpecId(warehousingHistoryCode+"-0s");
+
         warehousingHistoryRepository.save(warehousingHistoryMapper.toEntity(warehousingHistoryDTO));
 
         //여기는 입고 정보를 저장
