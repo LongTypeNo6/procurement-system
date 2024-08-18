@@ -10,7 +10,7 @@ import site.junggam.procurement_system.entity.WarehousingHistory;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-18T16:17:41+0900",
+    date = "2024-08-18T17:16:40+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -26,8 +26,8 @@ public class WarehousingHistoryMapperImpl implements WarehousingHistoryMapper {
 
         warehousingHistoryDTO.warehousingHistoryCode( warehousingHistory.getWarehousingHistoryCode() );
         warehousingHistoryDTO.warehousingDate( warehousingHistory.getWarehousingDate() );
-        warehousingHistoryDTO.warehousingShipmentSpecId( warehousingHistory.getWarehousingShipmentSpecId() );
-        warehousingHistoryDTO.warehousingSpecId( warehousingHistory.getWarehousingSpecId() );
+        warehousingHistoryDTO.warehousingShipmentSpec( warehousingHistory.getWarehousingShipmentSpec() );
+        warehousingHistoryDTO.warehousingSpec( warehousingHistory.getWarehousingSpec() );
         warehousingHistoryDTO.warehousingResultMemo( warehousingHistory.getWarehousingResultMemo() );
         warehousingHistoryDTO.warehousingQuantity( warehousingHistory.getWarehousingQuantity() );
         warehousingHistoryDTO.warehousingHistoryStatus( warehousingHistory.getWarehousingHistoryStatus() );
@@ -60,8 +60,8 @@ public class WarehousingHistoryMapperImpl implements WarehousingHistoryMapper {
         warehousingHistory.warehousing( warehousingHistoryDTOToWarehousing( warehousingHistoryDTO ) );
         warehousingHistory.warehousingHistoryCode( warehousingHistoryDTO.getWarehousingHistoryCode() );
         warehousingHistory.warehousingDate( warehousingHistoryDTO.getWarehousingDate() );
-        warehousingHistory.warehousingShipmentSpecId( warehousingHistoryDTO.getWarehousingShipmentSpecId() );
-        warehousingHistory.warehousingSpecId( warehousingHistoryDTO.getWarehousingSpecId() );
+        warehousingHistory.warehousingShipmentSpec( warehousingHistoryDTO.getWarehousingShipmentSpec() );
+        warehousingHistory.warehousingSpec( warehousingHistoryDTO.getWarehousingSpec() );
         warehousingHistory.warehousingResultMemo( warehousingHistoryDTO.getWarehousingResultMemo() );
         warehousingHistory.warehousingQuantity( warehousingHistoryDTO.getWarehousingQuantity() );
         warehousingHistory.warehousingHistoryStatus( warehousingHistoryDTO.getWarehousingHistoryStatus() );
