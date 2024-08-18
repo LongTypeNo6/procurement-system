@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +33,12 @@ public class AllFilesServiceImpl implements AllFilesService {
     private String uploadDir;
 
     private String setUploadDir(String subDirectory) {
-        String str = subDirectory;
-        String folderPath = str.replace("//", File.separator);
+        String folderPath = subDirectory.replace("//", File.separator);
         File uploadPathFolder = new File(uploadDir, folderPath);
         if (!uploadPathFolder.exists()) {
             uploadPathFolder.mkdirs();
         }
-        return folderPath;
+        return uploadPathFolder.getAbsolutePath();  // 절대 경로 반환
     }
 
     @Override
@@ -72,10 +72,10 @@ public class AllFilesServiceImpl implements AllFilesService {
 
             String folderPath = setUploadDir(subDirectory);
 
-            // 파일명 중복 처리
-            fileName = resolveFileNameConflict(folderPath, fileName);
+            // 파일명 앞에 타임스탬프 추가
+            fileName = addTimestampToFileName(fileName);
 
-            String saveName = uploadDir + File.separator + folderPath + File.separator + fileName;
+            String saveName = folderPath + File.separator + fileName;  // 절대 경로 사용
             Path savePath = Paths.get(saveName);
 
             try {
@@ -85,7 +85,7 @@ public class AllFilesServiceImpl implements AllFilesService {
                 // 파일 정보 DB 저장
                 AllFilesDTO allFilesDTO = AllFilesDTO.builder()
                         .fileName(fileName)
-                        .path(folderPath)
+                        .path(folderPath)  // 절대 경로 사용
                         .fileSize(uploadFile.getSize())
                         .fileType(uploadFile.getContentType())
                         .foreignCode(foreignCode) // 외부 코드 설정
@@ -107,21 +107,11 @@ public class AllFilesServiceImpl implements AllFilesService {
         return resultDTOList;
     }
 
-
-    private String resolveFileNameConflict(String folderPath, String fileName) {
-        File file = new File(uploadDir + File.separator + folderPath + File.separator + fileName);
-        int count = 1;
-
-        // 파일명이 중복될 경우 뒤에 숫자를 추가
-        while (file.exists()) {
-            String newFileName = fileName.substring(0, fileName.lastIndexOf('.'))
-                    + "(" + count + ")"
-                    + fileName.substring(fileName.lastIndexOf('.'));
-            file = new File(uploadDir + File.separator + folderPath + File.separator + newFileName);
-            count++;
-        }
-
-        return file.getName();
+    private String addTimestampToFileName(String fileName) {
+        String timestamp = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss").format(LocalDateTime.now());
+        String extension = fileName.substring(fileName.lastIndexOf('.'));
+        String nameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
+        return timestamp + "_" + nameWithoutExtension + extension;
     }
 
     private String makeTimeFolder() {
@@ -131,6 +121,6 @@ public class AllFilesServiceImpl implements AllFilesService {
         if (!uploadPathFolder.exists()) {
             uploadPathFolder.mkdirs();
         }
-        return folderPath;
+        return uploadPathFolder.getAbsolutePath();  // 절대 경로 반환
     }
 }
