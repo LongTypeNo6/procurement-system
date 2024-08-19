@@ -46,7 +46,7 @@
                                 <div class="col-sm-10">
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="materialName">
-                                        <button class="input-group-text" id="confirmSelectionBtn">검색</button>
+                                        <button type="button" class="input-group-text" id="materialSelectionBtn" data-bs-toggle="modal" data-bs-target="#materialSelection">검색</button>
                                     </div>
                                 </div>
                             </div>
@@ -89,6 +89,53 @@
                         </div>
                     </div>
                 </div>
+
+                <!--이하 모달창 테스트-->
+                <!-- Modal Dialog Scrollable -->
+                <div class="modal fade" id="materialSelection" tabindex="-1">
+                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">검색</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">자재리스트</h5>
+                                                <div class="row mb-3">
+                                                    <div class="col-sm-12">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="materialSearch">
+                                                            <button type="button" class="input-group-text">검색</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row mb-3">
+                                                    <div class="col-sm-12" >
+                                                        <!-- List group With Checkboxes and radios -->
+                                                        <div class="form-control">
+                                                            <ul class="list-group" style="height:200px; overflow-y: auto;">
+                                                                <span id="materialList" class="list-group-flush"></span>
+                                                            </ul><!-- End List Checkboxes and radios -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End Modal Dialog Scrollable-->
                 <!--여기에 카드랑 내용 넣어주시면 됩니다-->
             </div> <!--End row-->
         </section>
@@ -98,6 +145,29 @@
         $(document).ready(function (e) {
             var releaseCode = [[${releaseCode}]];
             $('#releaseRequestDate').val(todayValue());
+            $("#materialSelectionBtn").on("click", function () {
+                console.log("검색버튼 클릭됨")
+                $("#materialSearch").on("input", function () {
+                    var keyword = $("#materialSearch").val();
+                    console.log("검색 키워드: " + keyword);
+                    $.getJSON("/temMaterialcontent/materialList?keyword=" + keyword, function(data) {
+                        console.log("검색기능 잘 되나?"+data)
+                        var str = "";
+                        $.each(data, function(idx, dto) {
+                            str += '<li class="list-group-item">';
+                            str += '<input class="form-check-input me-1" type="radio" name="gridRadios" value="'+dto.materialCode+'" aria-label="...">';
+                            str += ' '+dto.materialName;
+                            str += '</li>';
+                        });
+                        $("#materialList").html(str);
+                    }).fail(function(jqxhr, textStatus, error) {
+                        var err = textStatus + ", " + error;
+                        console.log("자재 정보 요청 실패: " + err);
+                    });
+
+
+                })
+            })
             $.getJSON("/inventorycontent/release/" + releaseCode, function(data) {
                 console.log("응답데이터", data);
                 $('#materialName').val(data.materialName);
@@ -107,7 +177,7 @@
                 $('#releaseRequestMemo').val(data.releaseRequestMemo);
             }).fail(function(jqxhr, textStatus, error) {
                 var err = textStatus + ", " + error;
-                console.log("발주 정보 요청 실패: " + err);
+                console.log("출고요청 정보 요청 실패: " + err);
             });
             $("#saveReleaseRequest").on("click", function () {
                 var releaseDTO={
@@ -131,7 +201,6 @@
                         self.location.reload();
                     }
                 });
-
 
 
             });

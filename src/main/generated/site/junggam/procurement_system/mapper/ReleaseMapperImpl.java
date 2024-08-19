@@ -1,18 +1,16 @@
 package site.junggam.procurement_system.mapper;
 
-import java.time.LocalDateTime;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import site.junggam.procurement_system.dto.ReleaseDTO;
 import site.junggam.procurement_system.entity.Contract;
-import site.junggam.procurement_system.entity.ProcurementPlan;
 import site.junggam.procurement_system.entity.Purchaser;
 import site.junggam.procurement_system.entity.Release;
 import site.junggam.procurement_system.entity.TemMaterial;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-19T09:39:08+0900",
+    date = "2024-08-19T17:43:56+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -26,17 +24,12 @@ public class ReleaseMapperImpl implements ReleaseMapper {
 
         ReleaseDTO.ReleaseDTOBuilder releaseDTO = ReleaseDTO.builder();
 
-        releaseDTO.procurementPlanDeadLine( releaseProcurementPlanProcurementPlanDeadLine( release ) );
-        Integer procurementPlanQuantity = releaseProcurementPlanProcurementPlanQuantity( release );
-        if ( procurementPlanQuantity != null ) {
-            releaseDTO.procurementPlanQuantity( procurementPlanQuantity );
-        }
-        releaseDTO.materialCode( releaseProcurementPlanTemMaterialMaterialCode( release ) );
-        releaseDTO.materialName( releaseProcurementPlanTemMaterialMaterialName( release ) );
-        releaseDTO.materialStand( releaseProcurementPlanTemMaterialMaterialStand( release ) );
-        releaseDTO.materialTexture( releaseProcurementPlanTemMaterialMaterialTexture( release ) );
-        releaseDTO.purchaserCode( releaseProcurementPlanTemMaterialContractPurchaserPurchaserCode( release ) );
-        releaseDTO.purchaserName( releaseProcurementPlanTemMaterialContractPurchaserPurchaserName( release ) );
+        releaseDTO.materialCode( releaseTemMaterialMaterialCode( release ) );
+        releaseDTO.materialName( releaseTemMaterialMaterialName( release ) );
+        releaseDTO.materialStand( releaseTemMaterialMaterialStand( release ) );
+        releaseDTO.materialTexture( releaseTemMaterialMaterialTexture( release ) );
+        releaseDTO.purchaserCode( releaseTemMaterialContractPurchaserPurchaserCode( release ) );
+        releaseDTO.purchaserName( releaseTemMaterialContractPurchaserPurchaserName( release ) );
         releaseDTO.releaseCode( release.getReleaseCode() );
         releaseDTO.releaseRequestDept( release.getReleaseRequestDept() );
         releaseDTO.releaseRequestDate( release.getReleaseRequestDate() );
@@ -77,45 +70,11 @@ public class ReleaseMapperImpl implements ReleaseMapper {
         return release.build();
     }
 
-    private LocalDateTime releaseProcurementPlanProcurementPlanDeadLine(Release release) {
+    private String releaseTemMaterialMaterialCode(Release release) {
         if ( release == null ) {
             return null;
         }
-        ProcurementPlan procurementPlan = release.getProcurementPlan();
-        if ( procurementPlan == null ) {
-            return null;
-        }
-        LocalDateTime procurementPlanDeadLine = procurementPlan.getProcurementPlanDeadLine();
-        if ( procurementPlanDeadLine == null ) {
-            return null;
-        }
-        return procurementPlanDeadLine;
-    }
-
-    private Integer releaseProcurementPlanProcurementPlanQuantity(Release release) {
-        if ( release == null ) {
-            return null;
-        }
-        ProcurementPlan procurementPlan = release.getProcurementPlan();
-        if ( procurementPlan == null ) {
-            return null;
-        }
-        Integer procurementPlanQuantity = procurementPlan.getProcurementPlanQuantity();
-        if ( procurementPlanQuantity == null ) {
-            return null;
-        }
-        return procurementPlanQuantity;
-    }
-
-    private String releaseProcurementPlanTemMaterialMaterialCode(Release release) {
-        if ( release == null ) {
-            return null;
-        }
-        ProcurementPlan procurementPlan = release.getProcurementPlan();
-        if ( procurementPlan == null ) {
-            return null;
-        }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
+        TemMaterial temMaterial = release.getTemMaterial();
         if ( temMaterial == null ) {
             return null;
         }
@@ -126,15 +85,11 @@ public class ReleaseMapperImpl implements ReleaseMapper {
         return materialCode;
     }
 
-    private String releaseProcurementPlanTemMaterialMaterialName(Release release) {
+    private String releaseTemMaterialMaterialName(Release release) {
         if ( release == null ) {
             return null;
         }
-        ProcurementPlan procurementPlan = release.getProcurementPlan();
-        if ( procurementPlan == null ) {
-            return null;
-        }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
+        TemMaterial temMaterial = release.getTemMaterial();
         if ( temMaterial == null ) {
             return null;
         }
@@ -145,15 +100,11 @@ public class ReleaseMapperImpl implements ReleaseMapper {
         return materialName;
     }
 
-    private String releaseProcurementPlanTemMaterialMaterialStand(Release release) {
+    private String releaseTemMaterialMaterialStand(Release release) {
         if ( release == null ) {
             return null;
         }
-        ProcurementPlan procurementPlan = release.getProcurementPlan();
-        if ( procurementPlan == null ) {
-            return null;
-        }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
+        TemMaterial temMaterial = release.getTemMaterial();
         if ( temMaterial == null ) {
             return null;
         }
@@ -164,15 +115,11 @@ public class ReleaseMapperImpl implements ReleaseMapper {
         return materialStand;
     }
 
-    private String releaseProcurementPlanTemMaterialMaterialTexture(Release release) {
+    private String releaseTemMaterialMaterialTexture(Release release) {
         if ( release == null ) {
             return null;
         }
-        ProcurementPlan procurementPlan = release.getProcurementPlan();
-        if ( procurementPlan == null ) {
-            return null;
-        }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
+        TemMaterial temMaterial = release.getTemMaterial();
         if ( temMaterial == null ) {
             return null;
         }
@@ -183,15 +130,11 @@ public class ReleaseMapperImpl implements ReleaseMapper {
         return materialTexture;
     }
 
-    private String releaseProcurementPlanTemMaterialContractPurchaserPurchaserCode(Release release) {
+    private String releaseTemMaterialContractPurchaserPurchaserCode(Release release) {
         if ( release == null ) {
             return null;
         }
-        ProcurementPlan procurementPlan = release.getProcurementPlan();
-        if ( procurementPlan == null ) {
-            return null;
-        }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
+        TemMaterial temMaterial = release.getTemMaterial();
         if ( temMaterial == null ) {
             return null;
         }
@@ -210,15 +153,11 @@ public class ReleaseMapperImpl implements ReleaseMapper {
         return purchaserCode;
     }
 
-    private String releaseProcurementPlanTemMaterialContractPurchaserPurchaserName(Release release) {
+    private String releaseTemMaterialContractPurchaserPurchaserName(Release release) {
         if ( release == null ) {
             return null;
         }
-        ProcurementPlan procurementPlan = release.getProcurementPlan();
-        if ( procurementPlan == null ) {
-            return null;
-        }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
+        TemMaterial temMaterial = release.getTemMaterial();
         if ( temMaterial == null ) {
             return null;
         }

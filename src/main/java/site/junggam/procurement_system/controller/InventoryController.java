@@ -40,4 +40,9 @@ public class InventoryController {
     public void releaseGet() {
     }
 
+    //창고재고리스트
+    @RequestMapping("/inventoryList")
+    public void inventoryList() {
+    }
+
 }

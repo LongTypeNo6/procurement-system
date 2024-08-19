@@ -25,7 +25,6 @@ public class ReleaseRepositoryTests {
                 .releaseDesireQuantity(10)
                 .releaseRequestMemo("출고요청비고")
                 .releaseDate(LocalDateTime.now())
-                .procurementPlan(ProcurementPlan.builder().procurementPlanCode("PROC-240813-001-001").build())
                 .build();
         releaseRepository.save(release);
     }

@@ -24,10 +24,9 @@ public class TemMaterial {
     private LocalDateTime materialModDate;
     private Integer materialSafeQuantity;
 
-    //실재고
-    private Integer materialQuantity;
-
     @OneToOne(mappedBy = "temMaterial", fetch = FetchType.LAZY)
     private Contract contract;
-
+    //아예 재고엔티티 추가 하고 연결
+    @OneToOne(mappedBy = "temMaterial", fetch = FetchType.LAZY)
+    private Inventory inventory;
 }

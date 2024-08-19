@@ -21,7 +21,7 @@ public class ReleaseDTO {
     @Builder.Default
     private LocalDateTime releaseRequestDate=LocalDateTime.now() ; //출고요청한날
     private LocalDateTime releaseDesireDate ; //출고희망일
-    private int releaseDesireQuantity ; //출고희망양
+    private int releaseDesireQuantity; //출고희망양
     private String releaseRequestMemo; //출고요청비고
     private LocalDateTime releaseDate ; //실출고일
     @Builder.Default

@@ -7,7 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.junggam.procurement_system.dto.*;
-import site.junggam.procurement_system.entity.Warehousing;
+import site.junggam.procurement_system.entity.*;
+import site.junggam.procurement_system.service.InventoryService;
 import site.junggam.procurement_system.service.ProductService;
 import site.junggam.procurement_system.service.ReleaseService;
 import site.junggam.procurement_system.service.WarehousingService;
@@ -20,6 +21,7 @@ public class InventoryRestController {
 
     private final WarehousingService warehousingService;
     private final ReleaseService releaseService;
+    private final InventoryService inventoryService;
 
     //입고관련
     @GetMapping(value = "/warehousingList", produces = "application/json")
@@ -53,6 +55,30 @@ public class InventoryRestController {
         releaseService.saveReleaseRequest(releaseDTO);
         return new ResponseEntity<>("저장되었습니다", HttpStatus.OK);
     }
+    @GetMapping(value = "/releaseList", produces = "application/json")
+    public ResponseEntity<PageResultDTO<ReleaseDTO, Release>> getAllReleaseList(PageRequestDTO pageRequestDTO) {
+        log.info("창고재고리스트 가져오기 레스트 컨트롤러 진입");
+        PageResultDTO<ReleaseDTO, Release> releaseDTOList = releaseService.getReleaseList(pageRequestDTO);
+        log.info("창고재고리스트 가져오기 완료");
+        return new ResponseEntity<>(releaseDTOList, HttpStatus.OK);
+    }
 
 
+    //창고재고리스트
+    @GetMapping(value = "/inventoryList", produces = "application/json")
+    public ResponseEntity<PageResultDTO<InventoryDTO, Inventory>> getAllInventoryList(PageRequestDTO pageRequestDTO) {
+        log.info("창고재고리스트 가져오기 레스트 컨트롤러 진입");
+        PageResultDTO<InventoryDTO, Inventory> inventoryDTOList = inventoryService.getInventoryList(pageRequestDTO);
+        log.info("창고재고리스트 가져오기 완료");
+        return new ResponseEntity<>(inventoryDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/totallMaterialQuantity", produces = "application/json")
+    public ResponseEntity<Integer> getTotallMaterialQuantity(){
+        return new ResponseEntity<>(inventoryService.getTotallMaterialQuantity(), HttpStatus.OK);
+    }
+    @GetMapping(value = "/totallMaterialPrice", produces = "application/json")
+    public ResponseEntity<Double> getTotallMaterialPrice(){
+        return new ResponseEntity<>(inventoryService.getTotallMaterialPrice(), HttpStatus.OK);
+    }
 }

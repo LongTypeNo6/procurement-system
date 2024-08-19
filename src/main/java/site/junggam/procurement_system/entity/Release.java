@@ -32,6 +32,6 @@ public class Release {
     private ReleaseStaus releaseStaus = ReleaseStaus.PENDING;
 
     @OneToOne
-    @JoinColumn(name = "procurement_plan_code")
-    private ProcurementPlan procurementPlan;
+    @JoinColumn(name = "material_code")
+    private TemMaterial temMaterial;
 }

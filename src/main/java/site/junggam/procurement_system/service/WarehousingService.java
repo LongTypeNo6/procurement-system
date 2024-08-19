@@ -19,7 +19,7 @@ public interface WarehousingService {
     //입고내역보기(히스토리)
     List<WarehousingHistoryDTO> getWarehousingHistory(String warehousingId);
 
-    //입고대기리스트보기
+    //입고대기리스트보기(조건=상태가 펜딩)
     PageResultDTO<WarehousingDTO, Warehousing> getAllWarehousingList(PageRequestDTO pageRequestDTO);
 
 }
