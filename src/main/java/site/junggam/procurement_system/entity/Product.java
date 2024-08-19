@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,6 +29,5 @@ public class Product {
     private LocalDateTime productModDate;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ProductUnit> productUnits;
-
+    private Set<ProductUnit> productUnits = new HashSet<>();
 }

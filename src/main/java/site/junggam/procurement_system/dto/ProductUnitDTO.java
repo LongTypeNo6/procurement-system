@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class ProductUnitDTO {
     private String productCode;
     private String unitCode;
-
 }

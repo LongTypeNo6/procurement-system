@@ -8,11 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 import site.junggam.procurement_system.dto.ProductDTO;
 import site.junggam.procurement_system.dto.ProductUnitDTO;
 import site.junggam.procurement_system.entity.Product;
+import site.junggam.procurement_system.entity.ProductUnit;
+import site.junggam.procurement_system.entity.ProductUnitId;
+import site.junggam.procurement_system.entity.Unit;
 import site.junggam.procurement_system.repository.ProductRepository;
 import site.junggam.procurement_system.repository.ProductUnitRepository;
+import site.junggam.procurement_system.repository.UnitRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -22,23 +27,59 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductUnitRepository productUnitRepository;
+    private final UnitRepository unitRepository;
 
     @Override
     @Transactional
-    public String insertProduct(ProductDTO productDTO) {
+    public String insertProduct(ProductDTO productDTO, List<String> unitCodes) {
         String newProductCode = generateNextProductCode();
-        productDTO.setProductCode(newProductCode);
-        //Product product = dtoToEntity(productDTO);
         Product product = convertToEntity(productDTO);
+        product.setProductCode(newProductCode);
+
+        Set<ProductUnit> productUnits = unitCodes.stream()
+                .map(unitCode -> {
+                    Unit unit = unitRepository.findById(unitCode).orElse(null);
+                    return new ProductUnit(new ProductUnitId(product.getProductCode(), unitCode), product, unit);
+                })
+                .collect(Collectors.toSet());
+        product.setProductUnits(productUnits);
         Product saveProduct = productRepository.save(product);
         return saveProduct.getProductCode();
+
+//        String newProductCode = generateNextProductCode();
+//        productDTO.setProductCode(newProductCode);
+//        Product product = convertToEntity(productDTO);
+//        Product saveProduct = productRepository.save(product);
+//        return saveProduct.getProductCode();
     }
 
     @Override
-    public void updateProduct(ProductDTO productDTO) {
-        if (productRepository.existsById(productDTO.getProductCode())) {
+    public void updateProduct(String productCode, ProductDTO productDTO, List<String> unitCodes) {
+//        if (productRepository.existsById(productDTO.getProductCode())) {
+//            Product product = convertToEntity(productDTO);
+//            productRepository.save(product);
+//        }
+
+        Product existingProduct = productRepository.findById(productCode).orElse(null);
+        if (existingProduct != null) {
             Product product = convertToEntity(productDTO);
-            productRepository.save(product);
+            existingProduct.setProductName(product.getProductName());
+            existingProduct.setProductPrice(product.getProductPrice());
+            existingProduct.setProductStand(product.getProductStand());
+            existingProduct.setProductTexture(product.getProductTexture());
+            existingProduct.setProductDrawFile(product.getProductDrawFile());
+            existingProduct.setProductEtcFile(product.getProductEtcFile());
+            existingProduct.setProductRegDate(product.getProductRegDate());
+            existingProduct.setProductModDate(product.getProductModDate());
+
+            Set<ProductUnit> productUnits = unitCodes.stream()
+                    .map(unitCode -> {
+                        Unit unit = unitRepository.findById(unitCode).orElse(null);
+                        return new ProductUnit(new ProductUnitId(productCode, unitCode), existingProduct, unit);
+                    })
+                    .collect(Collectors.toSet());
+            existingProduct.setProductUnits(productUnits);
+            productRepository.save(existingProduct);
         }
     }
 
@@ -50,8 +91,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Optional<ProductDTO> getProduct(String productCode) {
-        return productRepository.findById(productCode)
-                .map(this::convertToDTO);
+//        return productRepository.findById(productCode)
+//                .map(this::convertToDTO);
+        Product product = productRepository.findById(productCode).orElse(null);
+        ProductDTO productDTO = convertToDTO(product);
+        return Optional.of(productDTO);
     }
 
     @Override

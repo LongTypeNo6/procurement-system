@@ -7,13 +7,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import site.junggam.procurement_system.dto.MaterialDTO;
-import site.junggam.procurement_system.dto.ProductDTO;
-import site.junggam.procurement_system.dto.ProductUnitDTO;
-import site.junggam.procurement_system.dto.UnitDTO;
-import site.junggam.procurement_system.entity.Material;
-import site.junggam.procurement_system.entity.Product;
-import site.junggam.procurement_system.entity.Unit;
+import site.junggam.procurement_system.dto.*;
+import site.junggam.procurement_system.entity.*;
+import site.junggam.procurement_system.repository.MaterialRepository;
+import site.junggam.procurement_system.repository.UnitRepository;
 import site.junggam.procurement_system.service.*;
 
 import java.io.File;
@@ -21,6 +18,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -33,6 +31,9 @@ public class ProductController {
     private final UnitService unitService;
     private final UnitMaterialService unitMaterialService;
     private final MaterialService materialService;
+
+    private final UnitRepository unitRepository;
+    private final MaterialRepository materialRepository;
 
 
     // 테스트 부분..
@@ -54,17 +55,47 @@ public class ProductController {
     @GetMapping("/productRegister")
     public void productRegister(Model model) {
         model.addAttribute("product", new ProductDTO());
+        model.addAttribute("units", unitService.getListUnit());
     }
 
     // 제품 등록 처리 메소드
     @PostMapping("/productRegisterPro")
-    public String productRegisterPro(
-            @ModelAttribute ProductDTO productDTO,
+    public String productRegisterPro(@ModelAttribute("product") Product product,
+                                     @RequestParam("unitCodes") List<String> unitCodes,
+            @RequestParam("product_name") String productName,
+            @RequestParam("product_price") Double productPrice,
+            @RequestParam("product_stand") String productStand,
+            @RequestParam("product_texture") String productTexture,
+            @RequestParam("product_draw_file") MultipartFile productDrawFile,
+            @RequestParam("product_etc_file") MultipartFile productEtcFile,
             RedirectAttributes redirectAttributes) {
 
         log.info("제품 등록 ..");
 
-        productService.insertProduct(productDTO);
+        // 현재 날짜와 시간을 등록일 및 수정일로 설정
+        LocalDateTime now = LocalDateTime.now();
+
+        // 파일 저장 처리
+        String drawFilePath = saveFile(productDrawFile);
+        String etcFilePath = saveFile(productEtcFile);
+
+        // DTO 객체 생성 및 값 설정
+        ProductDTO productDTO = ProductDTO.builder()
+                .productName(productName)
+                .productPrice(productPrice)
+                .productStand(productStand)
+                .productTexture(productTexture)
+                .productDrawFile(drawFilePath)
+                .productEtcFile(etcFilePath)
+                .productRegDate(now)
+                .productModDate(now)
+                .build();
+
+        // 제품 등록 처리
+        productService.insertProduct(productDTO, unitCodes);
+
+        // 등록 성공 메시지 설정
+        redirectAttributes.addFlashAttribute("message", "제품이 등록되었습니다. 코드: " + productDTO.getProductCode());
 
         // 제품 목록 페이지로 리다이렉트
         return "redirect:/product/getListProduct";
@@ -73,19 +104,15 @@ public class ProductController {
     // 제품 수정 페이지 폼
     @GetMapping("/productModify/{productCode}")
     public void productModify(@PathVariable String productCode, Model model) {
-        Optional<ProductDTO> product = productService.getProduct(productCode);
-        if (product.isPresent()) {
-            model.addAttribute("product", product.get());
-            //return "redirect:/product/productModify"; // View name (JSP or Thymeleaf template)
-        } else {
-            //return "error/404"; // Handle not found
-        }
+        model.addAttribute("product", productService.getProduct(productCode));
+        model.addAttribute("units", unitRepository.findAll());
+        //return "redirect:/product/productModify/{productCode}";
     }
 
     // 제품 수정 처리 메서드
     @PostMapping("/productModifyPro")
-    public String productModifyPro(@ModelAttribute ProductDTO productDTO) {
-        productService.updateProduct(productDTO);
+    public String productModifyPro(@PathVariable String productCode, @ModelAttribute("productDTO") ProductDTO productDTO, @RequestParam("unitCodes") List<String> unitCodes) {
+        productService.updateProduct(productCode, productDTO, unitCodes);
         return "redirect:/product/getListProduct";
     }
 
@@ -97,18 +124,25 @@ public class ProductController {
 
     // 제품 조회 메소드
     @GetMapping("/getProduct/{productCode}")
-    public void getProduct(@PathVariable String productCode, Model model) {
+    public String getProduct(@PathVariable("productCode") String productCode, Model model) {
         log.info("제품 조회, 코드: " + productCode);
 
-        Optional<ProductDTO> product = productService.getProduct(productCode);
-        if (product.isPresent()) {
-            model.addAttribute("product", product.get());
-            //return "redirect:/product/getProduct"; // View name (JSP or Thymeleaf template)
-        } else {
-            //return "error/404"; // Handle not found
-        }
+//        Optional<ProductDTO> product = productService.getProduct(productCode);
+//        if (product.isPresent()) {
+//            model.addAttribute("product", product.get());
+//            //return "redirect:/product/getProduct"; // View name (JSP or Thymeleaf template)
+//        } else {
+//            //return "error/404"; // Handle not found
+//        }
 
-        //return "product/getProduct"; // 제품 상세보기 페이지 (view.html)
+        model.addAttribute("product", productService.getProduct(productCode));
+        //return "/product/productDetail"; // 제품 상세보기 페이지 (view.html)
+        return "redirect:/product/productDetail";
+    }
+
+    @RequestMapping("/productDetail")
+    public void productDetail(Product product, Model model) {
+        log.info("제품상세보기.. : "+product);
     }
 
 
@@ -144,7 +178,7 @@ public class ProductController {
     // (제품+유닛) 등록 처리 메서드
     @PostMapping("/productUnitRegisterPro")
     public String productUnitRegisterPro(@ModelAttribute ProductUnitDTO productUnitDTO, RedirectAttributes redirectAttributes) {
-        log.info("제품 등록 ..");
+        log.info("(제품+유닛) 등록 ..");
 
         productUnitService.insertProductUnit(productUnitDTO);
 
@@ -175,18 +209,47 @@ public class ProductController {
     // 유닛 등록 페이지 폼
     @GetMapping("/unitRegister")
     public void unitRegister(Model model) {
-        model.addAttribute("unit", new UnitDTO());
+        //model.addAttribute("unit", new UnitDTO());
+        model.addAttribute("unit", new Unit());
+        model.addAttribute("materials", materialService.getListMaterial());
     }
 
     // 유닛 등록 처리 메소드
     @PostMapping("/unitRegisterPro")
-    public String unitRegisterPro(
-            @ModelAttribute UnitDTO unitDTO,
+    public String unitRegisterPro(@ModelAttribute("unit") Unit unit,
+                                  @RequestParam("unit_name") String unitName,
+                                  @RequestParam("unit_stand") String unitStand,
+                                  @RequestParam("unit_texture") String unitTexture,
+                                  @RequestParam("unit_draw_file") MultipartFile unitDrawFile,
+                                  @RequestParam("unit_etc_file") MultipartFile unitEtcFile,
+                                  @RequestParam("materialCodes") List<String> materialCodes,
             RedirectAttributes redirectAttributes) {
 
         log.info("유닛 등록 ..");
 
-        unitService.insertUnit(unitDTO);
+        // 현재 날짜와 시간을 등록일 및 수정일로 설정
+        LocalDateTime now = LocalDateTime.now();
+
+        // 파일 저장 처리
+        String drawFilePath = saveFile(unitDrawFile);
+        String etcFilePath = saveFile(unitEtcFile);
+
+        // DTO 객체 생성 및 값 설정
+        UnitDTO unitDTO = UnitDTO.builder()
+                .unitName(unitName)
+                .unitStand(unitStand)
+                .unitTexture(unitTexture)
+                .unitDrawFile(drawFilePath)
+                .unitEtcFile(etcFilePath)
+                .unitRegDate(now)
+                .unitModDate(now)
+                .build();
+
+        // 유닛 등록 처리
+        unitService.insertUnit(unitDTO, materialCodes);
+
+        // 등록 성공 메시지 설정
+        redirectAttributes.addFlashAttribute("message", "유닛이 등록되었습니다. 코드: " + unitDTO.getUnitCode());
 
         // 유닛 목록 페이지로 리다이렉트
         return "redirect:/product/getListUnit";
@@ -272,12 +335,41 @@ public class ProductController {
     // 자재 등록 처리 메소드
     @PostMapping("/materialRegisterPro")
     public String materialRegisterPro(
-            @ModelAttribute MaterialDTO materialDTO,
+            @RequestParam("material_name") String materialName,
+            @RequestParam("material_stand") String materialStand,
+            @RequestParam("material_texture") String materialTexture,
+            @RequestParam("material_draw_file") MultipartFile materialDrawFile,
+            @RequestParam("material_etc_file") MultipartFile materialEtcFile,
+            @RequestParam("material_safe_quantity") Integer materialSafeQuantity,
+            //@ModelAttribute MaterialDTO materialDTO,
             RedirectAttributes redirectAttributes) {
 
         log.info("자재 등록 ..");
 
-        materialService.insertMaterial(materialDTO);
+        // 현재 날짜와 시간을 등록일 및 수정일로 설정
+        LocalDateTime now = LocalDateTime.now();
+
+        // 파일 저장 처리
+        String drawFilePath = saveFile(materialDrawFile);
+        String etcFilePath = saveFile(materialEtcFile);
+
+        // DTO 객체 생성 및 값 설정
+        MaterialDTO materialDTO = MaterialDTO.builder()
+                .materialName(materialName)
+                .materialStand(materialStand)
+                .materialTexture(materialTexture)
+                .materialDrawFile(drawFilePath)
+                .materialEtcFile(etcFilePath)
+                .materialRegDate(now)
+                .materialModDate(now)
+                .materialSafeQuantity(materialSafeQuantity)
+                .build();
+
+        // 자재 등록 처리
+        String materialCode = materialService.insertMaterial(materialDTO);
+
+        // 등록 성공 메시지 설정
+        redirectAttributes.addFlashAttribute("message", "자재가 등록되었습니다. 코드: " + materialCode);
 
         // 자재 목록 페이지로 리다이렉트
         return "redirect:/product/getListMaterial";

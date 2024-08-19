@@ -6,15 +6,14 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import site.junggam.procurement_system.dto.UnitDTO;
 import site.junggam.procurement_system.dto.UnitMaterialDTO;
-import site.junggam.procurement_system.entity.Material;
-import site.junggam.procurement_system.entity.Product;
-import site.junggam.procurement_system.entity.Unit;
+import site.junggam.procurement_system.entity.*;
 import site.junggam.procurement_system.repository.MaterialRepository;
 import site.junggam.procurement_system.repository.ProductRepository;
 import site.junggam.procurement_system.repository.UnitRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -27,13 +26,27 @@ public class UnitServiceImpl implements UnitService {
     private final MaterialRepository materialRepository; // Add MaterialRepository
 
     @Override
-    public String insertUnit(UnitDTO unitDTO) {
+    public String insertUnit(UnitDTO unitDTO, List<String> materialCodes) {
         String newUnitCode = generateNextUnitCode();
-        unitDTO.setUnitCode(newUnitCode);
         Unit unit = convertToEntity(unitDTO);
-
+        unit.setUnitCode(newUnitCode);
+        Set<UnitMaterial> unitMaterials = materialCodes.stream()
+                .map(materialCode -> {
+                    Material material = materialRepository.findById(materialCode).orElse(null);
+                    return new UnitMaterial(new UnitMaterialId(unit.getUnitCode(), materialCode), unit, material);
+                })
+                .collect(Collectors.toSet());
+        unit.setUnitMaterials(unitMaterials);
         Unit saveUnit = unitRepository.save(unit);
         return saveUnit.getUnitCode();
+
+//        String newUnitCode = generateNextUnitCode();
+//        unitDTO.setUnitCode(newUnitCode);
+//        Unit unit = convertToEntity(unitDTO);
+//
+//        Unit saveUnit = unitRepository.save(unit);
+//        //return saveUnit.getUnitCode();
+//        //return unitDTO;
     }
 
     @Override

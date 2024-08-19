@@ -23,5 +23,4 @@ public class ProductDTO {
     private LocalDateTime productRegDate;
     private LocalDateTime productModDate;
     private Set<ProductUnitDTO> productUnits;
-
 }
