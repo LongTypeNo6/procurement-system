@@ -175,7 +175,7 @@
                             <tr th:each="product, productState : ${products}">
                                 <th scope="row" th:text="${productState.count }"></th>
                                 <td>제품</td>
-                                <td><a href="제품상세보기.html" th:text="${product.productName}"></a></td>
+                                <td><a th:href="@{/product/getProduct/{productCode}(productCode=${product.productCode})}" th:text="${product.productName}"></a></td>
                                 <td th:text="${product.productCode}"></td>
                                 <td th:text="${product.productStand}"></td>
                                 <td th:text="${product.productTexture}"></td>

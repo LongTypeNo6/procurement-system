@@ -14,6 +14,8 @@ import site.junggam.procurement_system.dto.ProductDTO;
 import site.junggam.procurement_system.entity.Product;
 import site.junggam.procurement_system.service.ProductService;
 
+import java.util.List;
+
 @Log4j2
 @RestController
 @RequiredArgsConstructor
@@ -22,12 +24,12 @@ public class ProductRestController {
     private final ProductService productService;
 
     @PostMapping("/productRegisterProApi")
-    public ResponseEntity<String> registerProduct(@RequestBody @Validated ProductDTO productDTO) { //@Valid
+    public ResponseEntity<String> registerProduct(@RequestBody @Validated ProductDTO productDTO, List<String> unitCodes) { //@Valid
         System.out.println("콘솔 로그 기록..");
         log.info("product insert test..");
         try {
             // 제품 등록 처리
-            String productCode = productService.insertProduct(productDTO);
+            String productCode = productService.insertProduct(productDTO, unitCodes);
             return new ResponseEntity<>("Product registered successfully with code: " + productCode, HttpStatus.CREATED);
         } catch (Exception e) {
             log.error("Error occurred while registering product", e);

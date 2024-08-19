@@ -90,52 +90,81 @@
 
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">
-                                    자재리스트
-                                    <!-- <a href="자재검색창.html"> -->
-                                    <button type="button" class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#modalDialogScrollable">자재추가</button>
+                                    유닛리스트
+                                    <!-- <a href="유닛검색창.html"> -->
+                                    <button type="button" class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#modalDialogScrollable">유닛추가</button>
                                     <!-- </a> -->
                                 </label>
                                 <div class="col-sm-10">
+<!--                                    <label for="unitCodes">Units:</label>-->
+<!--                                    <select name="unitCodes" id="unitCodes" multiple>-->
+<!--                                        <option th:each="unit : ${units}" th:value="${unit.unitCode}" th:text="${unit.unitName}"></option>-->
+<!--                                    </select>-->
                                     <table class="table table-hover">
                                         <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">자재명</th>
-                                            <th scope="col">수량(개)</th>
-                                            <th scope="col">투입공정</th>
+                                            <th scope="col">유닛명</th>
+                                            <th scope="col">유닛코드</th>
+                                            <th scope="col">규격</th>
+                                            <th scope="col">재질</th>
                                             <th scope="col">삭제</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
+                                        <tr th:each="unit, state : ${units}">
+                                            <th scope="row">[[${state.count}]]</th>
+                                            <td><span th:text="${unit.unitName}"></span></td>
+                                            <td><span th:text="${unit.unitCode}"></span><input type="hidden" name="unitCodes" th:value="${unit.unitCode}"></td>
+                                            <td><span th:text="${unit.unitStand}"></span></td>
+                                            <td><span th:text="${unit.unitTexture }"></span></td>
+                                            <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>
+                                        </tr>
+<!--                                        <tr>-->
+<!--                                            <th scope="row">1</th>-->
+<!--                                            <td><span>유닛명3</span></td>-->
+<!--                                            <td><span>유닛코드</span><input type="hidden" name="materialCodes" value="BU-00005"></td>-->
+<!--                                            <td><span>규격</span></td>-->
+<!--                                            <td><span>재질</span></td>-->
+<!--                                            <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <th scope="row">2</th>-->
+<!--                                            <td><span>유닛명4</span></td>-->
+<!--                                            <td><span>유닛코드</span><input type="hidden" name="materialCodes" value="BU-00006"></td>-->
+<!--                                            <td><span>규격</span></td>-->
+<!--                                            <td><span>재질</span></td>-->
+<!--                                            <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>-->
+<!--                                        </tr>-->
+                                        <tr hidden="hidden">
                                             <th scope="row">1</th>
                                             <td>펜대</td>
                                             <td><input type="number" value="1"></td>
                                             <td><input type="text" value="최종조립"></td>
                                             <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>
                                         </tr>
-                                        <tr>
+                                        <tr hidden="hidden">
                                             <th scope="row">2</th>
                                             <td>펜촉</td>
                                             <td><input type="number" value="3"></td>
                                             <td><input type="text" value="1차조립"></td>
                                             <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>
                                         </tr>
-                                        <tr>
+                                        <tr hidden="hidden">
                                             <th scope="row">3</th>
                                             <td>버튼</td>
                                             <td><input type="number" value="3"></td>
                                             <td><input type="text" value="2차조립"></td>
                                             <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>
                                         </tr>
-                                        <tr>
+                                        <tr hidden="hidden">
                                             <th scope="row">4</th>
                                             <td>그립</td>
                                             <td><input type="number" value="1"></td>
                                             <td><input type="text" value="최종조립"></td>
                                             <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>
                                         </tr>
-                                        <tr>
+                                        <tr hidden="hidden">
                                             <th scope="row">5</th>
                                             <td>...</td>
                                             <td></td>

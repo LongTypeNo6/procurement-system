@@ -25,5 +25,5 @@ public class Material {
     private LocalDateTime materialRegDate;
     private LocalDateTime materialModDate;
     private Integer materialSafeQuantity;
-
+    //현재고 컬럼 추가예정..
 }

@@ -98,66 +98,46 @@
                                     <!-- </a> -->
                                 </label>
                                 <div class="col-sm-10">
+<!--                                    <label for="materialCodes">Materials:</label>-->
+<!--                                    <select name="materialCodes" id="materialCodes" multiple>-->
+<!--                                        <option th:each="material : ${materials}" th:value="${material.materialCode}" th:text="${material.materialName}"></option>-->
+<!--                                    </select>-->
                                     <table class="table table-hover">
                                         <thead>
                                         <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">자재명</th>
-                                            <th scope="col">수량(개)</th>
-                                            <th scope="col">투입공정</th>
+                                            <th scope="col">자재코드</th>
+                                            <th scope="col">규격</th>
+                                            <th scope="col">재질</th>
                                             <th scope="col">삭제</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>회전자</td>
-                                            <td><input type="number" value="1"></td>
-                                            <td><input type="text" value="1차조립"></td>
+                                        <tr th:each="material, materialState : ${materials}">
+                                            <th scope="row">[[${materialState.count}]]</th>
+                                            <td><span th:text="${material.materialName}"></span></td>
+                                            <td><span th:text="${material.materialCode}"></span><input type="hidden" name="materialCodes" th:value="${material.materialCode}"></td>
+                                            <td><span th:text="${material.materialStand}"></span></td>
+                                            <td><span th:text="${material.materialTexture }"></span></td>
                                             <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>
                                         </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>자석</td>
-                                            <td><input type="number" value="1"></td>
-                                            <td><input type="text" value="1차조립"></td>
-                                            <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>스테이터</td>
-                                            <td><input type="number" value="1"></td>
-                                            <td><input type="text" value="2차조립"></td>
-                                            <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">4</th>
-                                            <td>코일</td>
-                                            <td><input type="number" value="1"></td>
-                                            <td><input type="text" value="2차조립"></td>
-                                            <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">5</th>
-                                            <td>축</td>
-                                            <td><input type="number" value="1"></td>
-                                            <td><input type="text" value="최종조립"></td>
-                                            <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">6</th>
-                                            <td>베어링</td>
-                                            <td><input type="number" value="10"></td>
-                                            <td><input type="text" value="최종조립"></td>
-                                            <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">5</th>
-                                            <td>...</td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-
+<!--                                        <tr>-->
+<!--                                            <th scope="row">1</th>-->
+<!--                                            <td><span>자재명3</span></td>-->
+<!--                                            <td><span>자재코드</span><input type="hidden" name="materialCodes" value="BM-00003"></td>-->
+<!--                                            <td><span>규격</span></td>-->
+<!--                                            <td><span>재질</span></td>-->
+<!--                                            <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <th scope="row">2</th>-->
+<!--                                            <td><span>자재명4</span></td>-->
+<!--                                            <td><span>자재코드</span><input type="hidden" name="materialCodes" value="BM-00004"></td>-->
+<!--                                            <td><span>규격</span></td>-->
+<!--                                            <td><span>재질</span></td>-->
+<!--                                            <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>-->
+<!--                                        </tr>-->
                                         </tbody>
                                     </table>
                                 </div>

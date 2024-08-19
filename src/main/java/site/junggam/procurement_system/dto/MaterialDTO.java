@@ -21,5 +21,4 @@ public class MaterialDTO {
     private LocalDateTime materialRegDate;
     private LocalDateTime materialModDate;
     private Integer materialSafeQuantity;
-
 }

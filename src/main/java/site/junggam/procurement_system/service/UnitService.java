@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface UnitService {
     // 유닛 등록
-    String insertUnit(UnitDTO unitDTO);
+    String insertUnit(UnitDTO unitDTO, List<String> materialCodes);
 
     // 유닛 수정
     void updateUnit(UnitDTO unitDTO);

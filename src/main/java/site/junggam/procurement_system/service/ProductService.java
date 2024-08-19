@@ -8,10 +8,10 @@ import java.util.Optional;
 
 public interface ProductService {
     // 제품 등록
-    String insertProduct(ProductDTO productDTO);
+    String insertProduct(ProductDTO productDTO, List<String> unitCodes);
 
     // 제품 수정
-    void updateProduct(ProductDTO productDTO);
+    void updateProduct(String productCode, ProductDTO productDTO, List<String> unitCodes);
 
     // 제품 삭제
     void deleteProduct(String productCode);

@@ -23,5 +23,4 @@ public class UnitDTO {
     private LocalDateTime unitModDate;
 
     private Set<UnitMaterialDTO> unitMaterials;
-
 }

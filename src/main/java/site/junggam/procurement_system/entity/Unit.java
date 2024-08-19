@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -26,10 +27,5 @@ public class Unit {
     private LocalDateTime unitModDate;
 
     @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UnitMaterial> unitMaterials;
-
-    @ManyToOne
-    @JoinColumn(name = "product_code")
-    private Product product;
-
+    private Set<UnitMaterial> unitMaterials = new HashSet<>();
 }
