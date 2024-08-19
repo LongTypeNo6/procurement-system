@@ -47,6 +47,12 @@ public class InventoryRestController {
         return new ResponseEntity<>(releaseService.getReleaseRequest(releaseCode), HttpStatus.OK);
     }
 
+    @PostMapping(value = "/release/{releaseCode}")
+    public ResponseEntity<String> saveReleaseCode(@RequestBody ReleaseDTO releaseDTO) {
+        log.info("응답받은 데이터는 "+releaseDTO);
+        releaseService.saveReleaseRequest(releaseDTO);
+        return new ResponseEntity<>("저장되었습니다", HttpStatus.OK);
+    }
 
 
 }

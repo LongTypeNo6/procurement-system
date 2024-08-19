@@ -24,6 +24,9 @@ public class TemMaterial {
     private LocalDateTime materialModDate;
     private Integer materialSafeQuantity;
 
+    //실재고
+    private Integer materialQuantity;
+
     @OneToOne(mappedBy = "temMaterial", fetch = FetchType.LAZY)
     private Contract contract;
 

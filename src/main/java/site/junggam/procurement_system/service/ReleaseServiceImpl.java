@@ -28,4 +28,9 @@ public class ReleaseServiceImpl implements ReleaseService {
             return releaseDTO;
         }else return null;
     }
+
+    @Override
+    public void saveReleaseRequest(ReleaseDTO releaseDTO) {
+        releaseRepository.save(releaseMapper.toEntity(releaseDTO));
+    }
 }

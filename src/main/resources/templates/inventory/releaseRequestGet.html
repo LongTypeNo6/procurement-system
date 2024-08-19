@@ -54,7 +54,8 @@
                                 <label class="col-sm-2 col-form-label">요청처</label>
                                 <div class="col-sm-10">
                                     <select class="form-select" aria-label="Default select example" id="releaseRequestDept">
-                                        <option selected value="생산1팀">생산1팀</option>
+                                        <option selected>-</option>
+                                        <option value="생산1팀">생산1팀</option>
                                         <option value="생산2팀">생산2팀</option>
                                         <option value="생산3팀">생산3팀</option>
                                     </select>
@@ -64,7 +65,7 @@
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">출고희망수량</label>
                                 <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="releaseQuantity">
+                                    <input type="number" class="form-control" id="releaseDesireQuantity">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -81,7 +82,7 @@
                             </div>
                             <div class="row mb">
                                 <div class="col-sm-10">
-                                    <button type="button" class="btn btn-primary">저장</button>
+                                    <button type="button" class="btn btn-primary" id="saveReleaseRequest">저장</button>
                                     <a href="/inventory/releaseRequestList"><button type="button" class="btn btn-primary">리스트</button></a>
                                 </div>
                             </div>
@@ -96,20 +97,44 @@
     <script th:inline="javascript">
         $(document).ready(function (e) {
             var releaseCode = [[${releaseCode}]];
+            $('#releaseRequestDate').val(todayValue());
             $.getJSON("/inventorycontent/release/" + releaseCode, function(data) {
                 console.log("응답데이터", data);
-                $('#releaseRequestDate').val(todayValue());
                 $('#materialName').val(data.materialName);
                 $('#releaseRequestDept').val(data.releaseRequestDept);
-                $('#releaseQuantity').val(data.releaseQuantity);
+                $('#releaseDesireQuantity').val(data.releaseDesireQuantity);
                 $('#releaseDesireDate').val(formatDate(data.releaseDesireDate));
                 $('#releaseRequestMemo').val(data.releaseRequestMemo);
             }).fail(function(jqxhr, textStatus, error) {
                 var err = textStatus + ", " + error;
                 console.log("발주 정보 요청 실패: " + err);
             });
+            $("#saveReleaseRequest").on("click", function () {
+                var releaseDTO={
+                    releaseCode : releaseCode,
+                    releaseRequestDate : parseDate($('#releaseRequestDate').val()),
+                    materialName : $('#materialName').val(),
+                    releaseRequestDept : $('#releaseRequestDept').val(),
+                    releaseDesireQuantity: $('#releaseDesireQuantity').val(),
+                    releaseDesireDate : parseDate($('#releaseDesireDate').val()),
+                    releaseRequestMemo: $('#releaseRequestMemo').val()
+                }
+                console.log("보낼 값은 이러합니다"+releaseDTO)
+                $.ajax({
+                    url: '/inventorycontent/release/' + releaseCode,
+                    type: "POST",
+                    data: JSON.stringify(releaseDTO),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "text",
+                    success: function (result) {
+                        console.log("입고 기록 저장 성공: ", result);
+                        self.location.reload();
+                    }
+                });
 
 
+
+            });
         });
     </script>
     <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>

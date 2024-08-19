@@ -12,7 +12,7 @@ import site.junggam.procurement_system.entity.TemMaterial;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-19T01:06:38+0900",
+    date = "2024-08-19T09:39:08+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -53,6 +53,28 @@ public class ReleaseMapperImpl implements ReleaseMapper {
         releaseDTO.releaseStaus( release.getReleaseStaus() );
 
         return releaseDTO.build();
+    }
+
+    @Override
+    public Release toEntity(ReleaseDTO releaseDTO) {
+        if ( releaseDTO == null ) {
+            return null;
+        }
+
+        Release.ReleaseBuilder release = Release.builder();
+
+        release.releaseCode( releaseDTO.getReleaseCode() );
+        release.releaseRequestDept( releaseDTO.getReleaseRequestDept() );
+        release.releaseRequestDate( releaseDTO.getReleaseRequestDate() );
+        release.releaseDesireDate( releaseDTO.getReleaseDesireDate() );
+        release.releaseDesireQuantity( releaseDTO.getReleaseDesireQuantity() );
+        release.releaseRequestMemo( releaseDTO.getReleaseRequestMemo() );
+        release.releaseDate( releaseDTO.getReleaseDate() );
+        release.releaseQuantity( releaseDTO.getReleaseQuantity() );
+        release.releaseMemo( releaseDTO.getReleaseMemo() );
+        release.releaseStaus( releaseDTO.getReleaseStaus() );
+
+        return release.build();
     }
 
     private LocalDateTime releaseProcurementPlanProcurementPlanDeadLine(Release release) {
