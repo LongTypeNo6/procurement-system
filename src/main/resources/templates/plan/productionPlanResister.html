@@ -84,13 +84,13 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">조달마감날짜</label>
                                     <div class="col-sm-10">
-                                        <input type="date" class="form-control">
+                                        <input type="date" class="form-control" id="productionPlanDeadLine">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputNumber" class="col-sm-2 col-form-label">생산수량</label>
                                     <div class="col-sm-10">
-                                        <input type="number" class="form-control">
+                                        <input type="number" class="form-control" id="productionPlanQuantity">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -116,8 +116,8 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-10">
-                                        <a href="조달계획리스트.html"><button type="button" class="btn btn-primary">저장</button></a>
-                                        <a href="조달계획리스트.html"><button type="button" class="btn btn-primary">리스트</button></a>
+                                        <button type="button" class="btn btn-primary" id="resisterProductionPlan">저장</button>
+                                        <a href="/plan/productionPlanList"><button type="button" class="btn btn-primary">리스트</button></a>
                                     </div>
                                 </div>
                                 <!-- 모달창 생산 구분 바꿀때-->
@@ -219,6 +219,7 @@
                         $(".division").text(divisionMapping[newDivision]);
                         $("#divisionListName").text(divisionMapping[newDivision]+'리스트')
                         $("#divisionSearchList").html("");
+                        $("#bomList").html("");
                         $("input[name='division'][value='" + newDivision + "']").prop('checked', true);
                         $('#productionPlanRegDate').val(todayValue());
                         $("#changeDivision").modal('hide');
@@ -319,39 +320,75 @@
                                 productIdx+=1;
                                 str += '<tr>';
                                 str += '<th scope="row">'+productIdx+'</th>';
-                                str += '<td>'+dto.materialName+'</td>';
-                                str += '<td>'+(productDto.productBomQuantity*dto.unitBomQuantity)+'</td>';
-                                str += '<td></td>';
+                                str += '<td id="materialName'+productIdx+'">'+dto.materialName+'</td>';
+                                str += '<td id="bomQuantity'+productIdx+'">'+(productDto.productBomQuantity*dto.unitBomQuantity)+'</td>';
+                                str += '<td id="procurementPlanQuantity'+productIdx+'"></td>';
                                 str += '<td>'+productDto.productBomProcess+' | '+dto.unitBomProcess+'</td>';
-                                str += '<td><input type="date" class="form-control"></td>';
+                                str += '<td><input type="date" class="form-control" name="procurementPlanDeadLine" id="procurementPlanDeadLine'+productIdx+'"></td>';
                                 str += '</tr>';
                             });
                         });
                         $("#bomList").html(str);
                     }else if(previousDivision==="unit") {
                         str = "";
+                        let unitIdx=0;
                         $.each(data, function (idx, dto) {
+                            unitIdx+=1;
                             str += '<tr>';
-                            str += '<th scope="row">'+(idx+1)+'</th>';
-                            str += '<td>'+dto.materialName+'</td>';
-                            str += '<td>'+dto.unitBomQuantity+'</td>';
-                            str += '<td></td>';
+                            str += '<th scope="row">'+unitIdx+'</th>';
+                            str += '<td id="materialName'+unitIdx+'">'+dto.materialName+'</td>';
+                            str += '<td id="bomQuantity'+unitIdx+'">'+dto.unitBomQuantity+'</td>';
+                            str += '<td id="procurementPlanQuantity'+unitIdx+'"></td>';
                             str += '<td>'+dto.unitBomProcess+'</td>';
-                            str += '<td><input type="date" class="form-control"></td>';
+                            str += '<td><input type="date" class="form-control" name="procurementPlanDeadLine" id="procurementPlanDeadLine'+unitIdx+'"></td>';
                             str += '</tr>';
                         });
                         $("#bomList").html(str);
                     }
+                    let productionPlanDate = $("#productionPlanDate").val();
+                    if (productionPlanDate) {
+                        console.log("생산날짜가 설정되어 있음: " + productionPlanDate);
+                        setDeadLines(prevWeekday(productionPlanDate));
+                    } else {
+                        console.log("생산날짜가 설정되어 있지 않음.");
+                    }
+                    calculateQuantity();
                 })
             });
+
             $("#productionPlanDate").on("input", function () {
+                let productionPlanDate=$("#productionPlanDate").val();
                 console.log("생산날짜 바뀜")
+                let deadLine = prevWeekday(productionPlanDate);
+                $("#productionPlanDeadLine").val(deadLine);
+                setDeadLines(deadLine);
             })
+            $("#productionPlanDeadLine").on("input", function () {
+                setDeadLines($("#productionPlanDeadLine").val());
+            })
+            function setDeadLines(sourceDeadLine){
+                console.log("조달마감날짜 바뀜")
+                $("input[name='procurementPlanDeadLine']").val(sourceDeadLine)
+            }
+            $("#productionPlanQuantity").on("input", function () {
+                calculateQuantity();
+            });
+            function calculateQuantity() {
+                const productionPlanQuantity = parseInt($("#productionPlanQuantity").val());
+                if (!isNaN(productionPlanQuantity)) {
+                    $("#bomList tr").each(function(index, element) {
+                        const bomQuantity = parseInt($(element).find("[id^='bomQuantity']").text());
+                        const procurementQuantity = productionPlanQuantity * bomQuantity;
+                        $(element).find("[id^='procurementPlanQuantity']").text(procurementQuantity);
+                    });
+                }
+            }
+
+
+
 
         });
     </script>
-
-
     <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
     <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
 </body>

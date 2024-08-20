@@ -50,4 +50,13 @@ public class PlanRestController {
     public ResponseEntity<List<ProductBomDTO>> getProductBomLit(@PathVariable("productCode") String productCode) {
         return new ResponseEntity<>(planService.getProductBomList(productCode), HttpStatus.OK);
     }
+
+    @PostMapping(value = "/productionPlan/{productionPlanCode}")
+    public ResponseEntity<String> resisterProductionPlan(@RequestBody ProductionPlanDTO productionPlanDTO){
+        log.info("생산계획 레스트컨트롤러 집입");
+        log.info(productionPlanDTO);
+        planService.insertProductionPlan(productionPlanDTO);
+        log.info("생산계획처리 완료!!!");
+        return new ResponseEntity<>("생산계획등록", HttpStatus.OK);
+    }
 }
