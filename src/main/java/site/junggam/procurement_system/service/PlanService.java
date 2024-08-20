@@ -1,8 +1,6 @@
 package site.junggam.procurement_system.service;
 
-import site.junggam.procurement_system.dto.MaterialDTO;
-import site.junggam.procurement_system.dto.ProductDTO;
-import site.junggam.procurement_system.dto.UnitDTO;
+import site.junggam.procurement_system.dto.*;
 
 import java.util.List;
 
@@ -17,5 +15,10 @@ public interface PlanService {
     //자재 검색(출고요청용)
     List<MaterialDTO> getMaterialListSearching(String keyword);
 
+    //유닛코드로 유닛BOM리스트 불러오기
+    List<UnitBomDTO> getUnitBomList(String unitCode);
+
+    //프로덕트BOM코드로 찾기
+    public ProductBomDTO getProductBomWithUnits(Long productBomId);
 
 }

@@ -3,18 +3,10 @@ package site.junggam.procurement_system.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import site.junggam.procurement_system.dto.MaterialDTO;
-import site.junggam.procurement_system.dto.ProductDTO;
-import site.junggam.procurement_system.dto.UnitDTO;
-import site.junggam.procurement_system.entity.Material;
-import site.junggam.procurement_system.entity.Product;
-import site.junggam.procurement_system.entity.Unit;
-import site.junggam.procurement_system.mapper.MaterialMapper;
-import site.junggam.procurement_system.mapper.ProductMapper;
-import site.junggam.procurement_system.mapper.UnitMapper;
-import site.junggam.procurement_system.repository.MaterialRepository;
-import site.junggam.procurement_system.repository.ProductRepository;
-import site.junggam.procurement_system.repository.UnitRepository;
+import site.junggam.procurement_system.dto.*;
+import site.junggam.procurement_system.entity.*;
+import site.junggam.procurement_system.mapper.*;
+import site.junggam.procurement_system.repository.*;
 
 import java.util.List;
 
@@ -29,6 +21,11 @@ public class PlanServiceImpl implements PlanService {
     private final ProductMapper productMapper;
     private final UnitRepository unitRepository;
     private final UnitMapper unitMapper;
+    private final ProductBomRepository productBomRepository;
+    private final ProductBomMapper productBomMapper;
+    private final UnitBomRepository unitBomRepository;
+    private final UnitBomMapper unitBomMapper;
+
 
     @Override
     public List<ProductDTO> getProductListSearching(String keyword) {
@@ -62,5 +59,19 @@ public class PlanServiceImpl implements PlanService {
             log.error(e);
             throw e;
         }
+    }
+
+    @Override
+    public List<UnitBomDTO> getUnitBomList(String unitCode) {
+        Unit unit = Unit.builder().unitCode(unitCode).build();
+        List<UnitBom> result=unitBomRepository.findByunit(unit);
+        return unitBomMapper.toDTOs(result);
+    }
+
+    @Override
+    public ProductBomDTO getProductBomWithUnits(Long productBomId) {
+        ProductBom productBom = productBomRepository.findById(productBomId).orElseThrow();
+        List<UnitBom> unitBoms = unitBomRepository.findByunit(Unit.builder().unitCode(productBom.getUnit().getUnitCode()).build());
+        return productBomMapper.toDTOWithUnits(productBom, unitBoms);
     }
 }
