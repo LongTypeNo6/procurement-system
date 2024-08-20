@@ -92,7 +92,7 @@
                                 <label class="col-sm-2 col-form-label">
                                     유닛리스트
                                     <!-- <a href="유닛검색창.html"> -->
-                                    <button type="button" class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#modalDialogScrollable">유닛추가</button>
+                                    <button type="button" onclick="alert('유닛찾기 기능 구현예정..');" class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#modalDialogScrollable">유닛찾기</button>
                                     <!-- </a> -->
                                 </label>
                                 <div class="col-sm-10">
@@ -112,30 +112,22 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="unit, state : ${units}">
-                                            <th scope="row">[[${state.count}]]</th>
-                                            <td><span th:text="${unit.unitName}"></span></td>
-                                            <td><span th:text="${unit.unitCode}"></span><input type="hidden" name="unitCodes" th:value="${unit.unitCode}"></td>
-                                            <td><span th:text="${unit.unitStand}"></span></td>
-                                            <td><span th:text="${unit.unitTexture }"></span></td>
-                                            <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td><span>유닛명3</span></td>
+                                            <td><span>유닛코드</span><input type="text" name="materialCodes" placeholder="실제 디비에 있는 유닛코드(BU-00001) 입력"></td>
+                                            <td><span>규격</span></td>
+                                            <td><span>재질</span></td>
+                                            <td><button type="button" onclick="alert('삭제 기능 미구현..');" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>
                                         </tr>
-<!--                                        <tr>-->
-<!--                                            <th scope="row">1</th>-->
-<!--                                            <td><span>유닛명3</span></td>-->
-<!--                                            <td><span>유닛코드</span><input type="hidden" name="materialCodes" value="BU-00005"></td>-->
-<!--                                            <td><span>규격</span></td>-->
-<!--                                            <td><span>재질</span></td>-->
-<!--                                            <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>-->
-<!--                                        </tr>-->
-<!--                                        <tr>-->
-<!--                                            <th scope="row">2</th>-->
-<!--                                            <td><span>유닛명4</span></td>-->
-<!--                                            <td><span>유닛코드</span><input type="hidden" name="materialCodes" value="BU-00006"></td>-->
-<!--                                            <td><span>규격</span></td>-->
-<!--                                            <td><span>재질</span></td>-->
-<!--                                            <td><button type="button" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>-->
-<!--                                        </tr>-->
+                                        <tr>
+                                            <th scope="row">2</th>
+                                            <td><span>유닛명4</span></td>
+                                            <td><span>유닛코드</span><input type="text" name="materialCodes" placeholder="실제 디비에 있는 유닛코드(BU-00001) 입력"></td>
+                                            <td><span>규격</span></td>
+                                            <td><span>재질</span></td>
+                                            <td><button type="button" onclick="alert('삭제 기능 미구현..');" class="btn btn-danger"><i class="bi bi-exclamation-octagon"></i></button></td>
+                                        </tr>
                                         <tr hidden="hidden">
                                             <th scope="row">1</th>
                                             <td>펜대</td>

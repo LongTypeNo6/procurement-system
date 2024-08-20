@@ -16,6 +16,7 @@ import site.junggam.procurement_system.service.*;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -101,18 +102,112 @@ public class ProductController {
         return "redirect:/product/getListProduct";
     }
 
-    // 제품 수정 페이지 폼
+    // 제품 수정 페이지 폼1
     @GetMapping("/productModify/{productCode}")
-    public void productModify(@PathVariable String productCode, Model model) {
+    public String productModify(@PathVariable("productCode") String productCode, Model model) {
         model.addAttribute("product", productService.getProduct(productCode));
         model.addAttribute("units", unitRepository.findAll());
         //return "redirect:/product/productModify/{productCode}";
+        return "redirect:/product/productEdit?productCode=" + productCode;
+    }
+
+    // 제품 수정 폼2(redirect)
+    @GetMapping("/productEdit")
+    public void productEdit(@RequestParam("productCode") String productCode, Model model) {
+        log.info("제품수정폼 : " + productCode);
+
+        // Product 객체를 서비스에서 조회하여 모델에 추가
+        Optional<ProductDTO> productDTO = productService.getProduct(productCode);
+
+        // 기본값을 설정할 ProductDTO 객체를 선언
+        //ProductDTO productWithUnits = null;
+
+        if(productDTO.isPresent()) {
+            ProductDTO product = productDTO.get();
+
+            // 날짜를 LocalDate로 변환하여 문자열로 변환
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String regDateFormatted = product.getProductRegDate().toLocalDate().format(formatter);
+            model.addAttribute("productRegDate", regDateFormatted);
+            String modDateFormatted = product.getProductModDate().toLocalDate().format(formatter);
+            model.addAttribute("productModDate", modDateFormatted);
+
+            // ProductUnitDTO를 기반으로 UnitDTO를 설정
+            List<UnitDTO> unitDTOList = product.getProductUnits().stream()
+                    .map(pud -> unitService.getUnit(pud.getUnitCode()).orElse(null))
+                    .filter(unit -> unit != null)
+                    .collect(Collectors.toList());
+
+            model.addAttribute("units", unitDTOList);
+            log.info("units : "+ unitDTOList);
+
+            // 새로운 ProductDTO를 생성 (UnitDTO 리스트로 설정)
+            ProductDTO productWithUnits = ProductDTO.builder()
+                    .productCode(product.getProductCode())
+                    .productName(product.getProductName())
+                    .productPrice(product.getProductPrice())
+                    .productStand(product.getProductStand())
+                    .productTexture(product.getProductTexture())
+                    .productDrawFile(product.getProductDrawFile())
+                    .productEtcFile(product.getProductEtcFile())
+                    .productRegDate(product.getProductRegDate())
+                    .productModDate(product.getProductModDate())
+                    .productUnits(product.getProductUnits())
+                    .build();
+        }
+        //model.addAttribute("product", productWithUnits);
+        //log.info("productDTO : "+productWithUnits);
+
+        model.addAttribute("product", productDTO);
+        log.info("productDTO : "+productDTO);
+
+        //return "productEdit"; // 수정폼 이름
     }
 
     // 제품 수정 처리 메서드
     @PostMapping("/productModifyPro")
-    public String productModifyPro(@PathVariable String productCode, @ModelAttribute("productDTO") ProductDTO productDTO, @RequestParam("unitCodes") List<String> unitCodes) {
+    public String productModifyPro(@RequestParam("product_code") String productCode,
+                                   //@ModelAttribute("productDTO") ProductDTO productDTO,
+                                   @ModelAttribute("product") Product product,
+                                     @RequestParam("unitCodes") List<String> unitCodes,
+                                     @RequestParam("product_name") String productName,
+                                     @RequestParam("product_price") Double productPrice,
+                                     @RequestParam("product_stand") String productStand,
+                                     @RequestParam("product_texture") String productTexture,
+                                     @RequestParam("product_draw_file") MultipartFile productDrawFile,
+                                     @RequestParam("product_etc_file") MultipartFile productEtcFile,
+                                     RedirectAttributes redirectAttributes) {
+//    public String productModifyPro(@PathVariable String productCode, @ModelAttribute("productDTO") ProductDTO productDTO,
+//         @RequestParam("unitCodes") List<String> unitCodes) {
+        //productService.updateProduct(productCode, productDTO, unitCodes);
+
+        log.info("제품 수정 ..");
+
+        // 현재 날짜와 시간을 등록일 및 수정일로 설정
+        LocalDateTime now = LocalDateTime.now();
+
+        // 파일 저장 처리
+        String drawFilePath = saveFile(productDrawFile);
+        String etcFilePath = saveFile(productEtcFile);
+
+        // DTO 객체 생성 및 값 설정
+        ProductDTO productDTO = ProductDTO.builder()
+                .productName(productName)
+                .productPrice(productPrice)
+                .productStand(productStand)
+                .productTexture(productTexture)
+                .productDrawFile(drawFilePath)
+                .productEtcFile(etcFilePath)
+                //.productRegDate(now)
+                .productModDate(now)
+                .build();
+
+        // 제품 수정 처리
         productService.updateProduct(productCode, productDTO, unitCodes);
+
+        // 수정 성공 메시지 설정
+        redirectAttributes.addFlashAttribute("message", "제품이 수정되었습니다. 코드: " + productDTO.getProductCode());
+
         return "redirect:/product/getListProduct";
     }
 
@@ -137,12 +232,61 @@ public class ProductController {
 
         model.addAttribute("product", productService.getProduct(productCode));
         //return "/product/productDetail"; // 제품 상세보기 페이지 (view.html)
-        return "redirect:/product/productDetail";
+        //return "redirect:/product/productDetail";
+        return "redirect:/product/productDetail?productCode=" + productCode;
     }
 
-    @RequestMapping("/productDetail")
-    public void productDetail(Product product, Model model) {
-        log.info("제품상세보기.. : "+product);
+    // 제품 조회 폼
+    @GetMapping("/productDetail")
+    public void productDetail(@RequestParam("productCode") String productCode, Model model) {
+        log.info("제품상세보기.. 코드: " + productCode);
+
+        // Product 객체를 서비스에서 조회하여 모델에 추가
+        Optional<ProductDTO> productDTO = productService.getProduct(productCode);
+
+        // 기본값을 설정할 ProductDTO 객체를 선언
+        //ProductDTO productWithUnits = null;
+
+        if(productDTO.isPresent()) {
+            ProductDTO product = productDTO.get();
+
+            // 날짜를 LocalDate로 변환하여 문자열로 변환
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String regDateFormatted = product.getProductRegDate().toLocalDate().format(formatter);
+            model.addAttribute("productRegDate", regDateFormatted);
+            String modDateFormatted = product.getProductModDate().toLocalDate().format(formatter);
+            model.addAttribute("productModDate", modDateFormatted);
+
+            // ProductUnitDTO를 기반으로 UnitDTO를 설정
+            List<UnitDTO> unitDTOList = product.getProductUnits().stream()
+                    .map(pud -> unitService.getUnit(pud.getUnitCode()).orElse(null))
+                    .filter(unit -> unit != null)
+                    .collect(Collectors.toList());
+
+            model.addAttribute("units", unitDTOList);
+            log.info("units : "+ unitDTOList);
+
+            // 새로운 ProductDTO를 생성 (UnitDTO 리스트로 설정)
+            ProductDTO productWithUnits = ProductDTO.builder()
+                    .productCode(product.getProductCode())
+                    .productName(product.getProductName())
+                    .productPrice(product.getProductPrice())
+                    .productStand(product.getProductStand())
+                    .productTexture(product.getProductTexture())
+                    .productDrawFile(product.getProductDrawFile())
+                    .productEtcFile(product.getProductEtcFile())
+                    .productRegDate(product.getProductRegDate())
+                    .productModDate(product.getProductModDate())
+                    .productUnits(product.getProductUnits())
+                    .build();
+        }
+        //model.addAttribute("product", productWithUnits);
+        //log.info("productDTO : "+productWithUnits);
+
+        model.addAttribute("product", productDTO);
+        log.info("productDTO : "+productDTO);
+
+        //return "productDetail"; // 뷰 이름
     }
 
 
@@ -177,7 +321,8 @@ public class ProductController {
     }
     // (제품+유닛) 등록 처리 메서드
     @PostMapping("/productUnitRegisterPro")
-    public String productUnitRegisterPro(@ModelAttribute ProductUnitDTO productUnitDTO, RedirectAttributes redirectAttributes) {
+    public String productUnitRegisterPro(@ModelAttribute ProductUnitDTO productUnitDTO,
+                                         RedirectAttributes redirectAttributes) {
         log.info("(제품+유닛) 등록 ..");
 
         productUnitService.insertProductUnit(productUnitDTO);

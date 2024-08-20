@@ -24,4 +24,11 @@ public class ProductUnit {
     @MapsId("unitCode")
     @JoinColumn(name = "unit_code")
     private Unit unit;
+
+//    @Id
+//    private String unit_code;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "product_code")
+//    private Product product;
 }
