@@ -16,5 +16,7 @@ public interface ProcurementPlanMapper {
     @Mapping(source = "productionPlan.productionPlanCode", target = "productionPlanCode")
     ProcurementPlanDTO toDTO(ProcurementPlan procurementPlan);
 
+    @Mapping(source = "materialName", target = "material.materialName")
+    @Mapping(source = "materialCode", target = "material.materialCode")
     ProcurementPlan toEntity(ProcurementPlanDTO procurementPlanDTO);
 }

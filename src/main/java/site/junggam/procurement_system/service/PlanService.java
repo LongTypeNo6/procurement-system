@@ -26,7 +26,4 @@ public interface PlanService {
 
     //생산계획추가
     void insertProductionPlan(ProductionPlanDTO productionPlanDTO);
-
-    //조달계획추가
-    void insertProcurementPlan(ProcurementPlanDTO procurementPlanDTO, String productionPlanCode);
 }

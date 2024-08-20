@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 public class ProcurementPlan {
     @Id
     private String procurementPlanCode;
-    private LocalDateTime procurementPlantRegDate;
+    @Builder.Default
+    private LocalDateTime procurementPlantRegDate = LocalDateTime.now();
     private LocalDateTime procurementPlanDeadLine;
     private Integer procurementPlanQuantity;
 

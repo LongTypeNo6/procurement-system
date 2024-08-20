@@ -13,7 +13,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ProcurementPlanDTO {
     private String procurementPlanCode;
-    private LocalDateTime procurementPlantRegDate;
+
+    @Builder.Default
+    private LocalDateTime procurementPlantRegDate = LocalDateTime.now();
+
     private LocalDateTime procurementPlanDeadLine;
     private Integer procurementPlanQuantity;
 

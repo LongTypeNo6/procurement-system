@@ -122,9 +122,13 @@ public class PlanServiceImpl implements PlanService {
     @Transactional
     public void insertProductionPlan(ProductionPlanDTO productionPlanDTO) {
         String productionPlanCode = generatePlanCode(productionPlanDTO.getProductionPlanDate());
-        productionPlanDTO.getProcurementPlanDTOList().forEach(procurementPlanDTO -> {
-            insertProcurementPlan(procurementPlanDTO,productionPlanCode);
-        });
+        List<ProcurementPlanDTO> procurementPlanDTOList=productionPlanDTO.getProcurementPlanDTOList();
+        for(int i=0; i<procurementPlanDTOList.size(); i++) {
+            ProcurementPlanDTO procurementPlanDTO = procurementPlanDTOList.get(i);
+            String procurementPlanCode = "PROC"+productionPlanCode.substring(4)+"-"+String.format("%03d", i+1);
+            procurementPlanDTO.setProcurementPlanCode(procurementPlanCode);
+            procurementPlanRepository.save(procurementPlanMapper.toEntity(procurementPlanDTO));
+        }
         productionPlanDTO.setProductionPlanCode(productionPlanCode);
         ProductionPlan productionPlan= productionPlanMapper.toEntity(productionPlanDTO);
         if(productionPlanDTO.getProductCode()!=null){
@@ -135,12 +139,5 @@ public class PlanServiceImpl implements PlanService {
         productionPlanRepository.save(productionPlan);
     }
 
-    @Override
-    public void insertProcurementPlan(ProcurementPlanDTO procurementPlanDTO, String productionPlanCode) {
-        String procurementPlanCode=procurementPlanDTO.getProcurementPlanCode();
-        int sequence = Integer.parseInt(procurementPlanCode);
-        procurementPlanCode = productionPlanCode.substring(0,12)+String.format("%03d", sequence);
-        procurementPlanDTO.setProcurementPlanCode(procurementPlanCode);
-        procurementPlanRepository.save(procurementPlanMapper.toEntity(procurementPlanDTO));
-    }
+
 }

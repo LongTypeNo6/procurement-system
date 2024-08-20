@@ -22,7 +22,9 @@ import java.util.List;
 public class ProductionPlanDTO {
 
     private String productionPlanCode;
-    private LocalDateTime productionPlanRegDate;
+
+    @Builder.Default
+    private LocalDateTime productionPlanRegDate = LocalDateTime.now();
     private LocalDateTime productionPlanDate;
     private LocalDateTime productionPlanDeadLine;
     private Integer productionPlanQuantity;
