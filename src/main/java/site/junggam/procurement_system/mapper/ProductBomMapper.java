@@ -9,28 +9,23 @@ import site.junggam.procurement_system.entity.UnitBom;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {UnitBomMapper.class})
+@Mapper(componentModel = "spring")
 public interface ProductBomMapper {
 
     ProductBomMapper INSTANCE = Mappers.getMapper(ProductBomMapper.class);
 
     @Mapping(source = "product.productName", target = "productName")
     @Mapping(source = "product.productCode", target = "productCode")
+    @Mapping(source = "unit.unitName", target = "unitName")
+    @Mapping(source = "unit.unitCode", target = "unitCode")
     ProductBomDTO toDTO(ProductBom productBom);
 
     List<ProductBomDTO> toDTOs(List<ProductBom> productBoms);
 
-    @Mapping(source = "productName", target = "product.productName")
     @Mapping(source = "productCode", target = "product.productCode")
+    @Mapping(source = "unitCode", target = "unit.unitCode")
     ProductBom toEntity(ProductBomDTO productBomDTO);
 
-    // Additional manual mapping method
-    default ProductBomDTO toDTOWithUnits(ProductBom productBom, List<UnitBom> unitBoms) {
-        ProductBomDTO productBomDTO = toDTO(productBom);
-        productBomDTO.setUnitBomDTOList(
-                UnitBomMapper.INSTANCE.toDTOs(unitBoms)
-        );
-        return productBomDTO;
-    }
+
 }
 

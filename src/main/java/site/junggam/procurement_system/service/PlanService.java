@@ -18,7 +18,14 @@ public interface PlanService {
     //유닛코드로 유닛BOM리스트 불러오기
     List<UnitBomDTO> getUnitBomList(String unitCode);
 
-    //프로덕트BOM코드로 찾기
-    public ProductBomDTO getProductBomWithUnits(Long productBomId);
+    //프로덕트코드로 유닛BOM리스트 불러오기
+    List<UnitBomDTO> getUnitBomListWithProductCode(String productCode);
+
+    //프로덕트코드로 프로덕트BOM리스트 불러오기
+    List<ProductBomDTO> getProductBomList(String productCode);
+
+    //생산계획추가
+    void insertProductionPlan(ProductionPlanDTO productionPlan);
+
 
 }

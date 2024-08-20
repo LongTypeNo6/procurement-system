@@ -36,7 +36,7 @@ public class ProductBomRepositoryTest {
                         .product(product)
                         .unit(Unit.builder().unitCode(unitCode).build())
                         .productBomQuantity((int)(Math.random()*9+1))
-                        .productBomProcess("유닛만드는공정"+i+j)
+                        .productBomProcess("제품만드는공정"+i+j)
                         .build();
                 productBomRepository.save(productBom);
             }

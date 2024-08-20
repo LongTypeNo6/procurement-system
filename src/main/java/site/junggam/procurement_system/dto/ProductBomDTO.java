@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -12,10 +13,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductBomDTO {
+
     private Long id;
     private String productName;
     private String productCode;
+    private String unitName;
+    private String unitCode;
     private int productBomQuantity;
     private String productBomProcess;
-    private List<UnitBomDTO> unitBomDTOList;
+
+    @Builder.Default
+    private List<UnitBomDTO> unitBomDTOList = new ArrayList<>(); ;
 }

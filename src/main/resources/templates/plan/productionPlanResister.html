@@ -77,7 +77,7 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">생산날짜</label>
                                     <div class="col-sm-10">
-                                        <input type="date" class="form-control" >
+                                        <input type="date" class="form-control" id="productionPlanDate">
                                     </div>
                                 </div>
 
@@ -87,17 +87,15 @@
                                         <input type="date" class="form-control">
                                     </div>
                                 </div>
-
                                 <div class="row mb-3">
                                     <label for="inputNumber" class="col-sm-2 col-form-label">생산수량</label>
                                     <div class="col-sm-10">
                                         <input type="number" class="form-control">
                                     </div>
                                 </div>
-
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">
-                                        자재리스트
+                                        조달리스트
                                     </label>
                                     <div class="col-sm-10">
                                         <table class="table table-hover">
@@ -111,8 +109,7 @@
                                                 <th scope="col">조달마감일자</th>
                                             </tr>
                                             </thead>
-                                            <tbody>
-
+                                            <tbody id="bomList">
                                             </tbody>
                                         </table>
                                     </div>
@@ -299,7 +296,6 @@
                 // 풋터에 저장된 선택된 자재명과 자재코드 가져오기
                 var selectedName = $("#selectedDivisionFooter").text().replace("선택 : ", "");
                 var selectedCode = $("#selectedDivisionFooter").attr("data-division-code");
-
                 if (selectedCode && selectedName) {
                     console.log("선택한 값은 Code:", selectedCode, "Name:", selectedName);
                     // 선택된 값을 input 필드에 설정하는 코드 예시:
@@ -311,7 +307,47 @@
                 } else {
                     console.log("선택된 값이 없습니다.");
                 }
+                //아래에 Bom리스트 추가
+                $.getJSON("/plan/"+previousDivision+"BomList/" + selectedCode, function(data) {
+                    console.log("조달리스트 잘 불러오나?"+data)
+                    let str;
+                    if(previousDivision==="product"){
+                        str = "";
+                        let productIdx=0;
+                        $.each(data, function(idx, productDto) {
+                            $.each(productDto.unitBomDTOList, function(idx, dto) {
+                                productIdx+=1;
+                                str += '<tr>';
+                                str += '<th scope="row">'+productIdx+'</th>';
+                                str += '<td>'+dto.materialName+'</td>';
+                                str += '<td>'+(productDto.productBomQuantity*dto.unitBomQuantity)+'</td>';
+                                str += '<td></td>';
+                                str += '<td>'+productDto.productBomProcess+' | '+dto.unitBomProcess+'</td>';
+                                str += '<td><input type="date" class="form-control"></td>';
+                                str += '</tr>';
+                            });
+                        });
+                        $("#bomList").html(str);
+                    }else if(previousDivision==="unit") {
+                        str = "";
+                        $.each(data, function (idx, dto) {
+                            str += '<tr>';
+                            str += '<th scope="row">'+(idx+1)+'</th>';
+                            str += '<td>'+dto.materialName+'</td>';
+                            str += '<td>'+dto.unitBomQuantity+'</td>';
+                            str += '<td></td>';
+                            str += '<td>'+dto.unitBomProcess+'</td>';
+                            str += '<td><input type="date" class="form-control"></td>';
+                            str += '</tr>';
+                        });
+                        $("#bomList").html(str);
+                    }
+                })
             });
+            $("#productionPlanDate").on("input", function () {
+                console.log("생산날짜 바뀜")
+            })
+
         });
     </script>
 

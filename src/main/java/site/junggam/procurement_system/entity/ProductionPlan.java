@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @ToString(exclude = "Product")
 @Table(name="tbl_production_plan")
 public class ProductionPlan {

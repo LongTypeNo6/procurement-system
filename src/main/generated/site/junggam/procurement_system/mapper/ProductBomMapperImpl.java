@@ -7,10 +7,11 @@ import org.springframework.stereotype.Component;
 import site.junggam.procurement_system.dto.ProductBomDTO;
 import site.junggam.procurement_system.entity.Product;
 import site.junggam.procurement_system.entity.ProductBom;
+import site.junggam.procurement_system.entity.Unit;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-20T22:14:44+0900",
+    date = "2024-08-21T01:30:53+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -26,6 +27,8 @@ public class ProductBomMapperImpl implements ProductBomMapper {
 
         productBomDTO.productName( productBomProductProductName( productBom ) );
         productBomDTO.productCode( productBomProductProductCode( productBom ) );
+        productBomDTO.unitName( productBomUnitUnitName( productBom ) );
+        productBomDTO.unitCode( productBomUnitUnitCode( productBom ) );
         productBomDTO.id( productBom.getId() );
         productBomDTO.productBomQuantity( productBom.getProductBomQuantity() );
         productBomDTO.productBomProcess( productBom.getProductBomProcess() );
@@ -56,6 +59,7 @@ public class ProductBomMapperImpl implements ProductBomMapper {
         ProductBom.ProductBomBuilder productBom = ProductBom.builder();
 
         productBom.product( productBomDTOToProduct( productBomDTO ) );
+        productBom.unit( productBomDTOToUnit( productBomDTO ) );
         productBom.id( productBomDTO.getId() );
         productBom.productBomQuantity( productBomDTO.getProductBomQuantity() );
         productBom.productBomProcess( productBomDTO.getProductBomProcess() );
@@ -93,6 +97,36 @@ public class ProductBomMapperImpl implements ProductBomMapper {
         return productCode;
     }
 
+    private String productBomUnitUnitName(ProductBom productBom) {
+        if ( productBom == null ) {
+            return null;
+        }
+        Unit unit = productBom.getUnit();
+        if ( unit == null ) {
+            return null;
+        }
+        String unitName = unit.getUnitName();
+        if ( unitName == null ) {
+            return null;
+        }
+        return unitName;
+    }
+
+    private String productBomUnitUnitCode(ProductBom productBom) {
+        if ( productBom == null ) {
+            return null;
+        }
+        Unit unit = productBom.getUnit();
+        if ( unit == null ) {
+            return null;
+        }
+        String unitCode = unit.getUnitCode();
+        if ( unitCode == null ) {
+            return null;
+        }
+        return unitCode;
+    }
+
     protected Product productBomDTOToProduct(ProductBomDTO productBomDTO) {
         if ( productBomDTO == null ) {
             return null;
@@ -100,9 +134,20 @@ public class ProductBomMapperImpl implements ProductBomMapper {
 
         Product.ProductBuilder product = Product.builder();
 
-        product.productName( productBomDTO.getProductName() );
         product.productCode( productBomDTO.getProductCode() );
 
         return product.build();
+    }
+
+    protected Unit productBomDTOToUnit(ProductBomDTO productBomDTO) {
+        if ( productBomDTO == null ) {
+            return null;
+        }
+
+        Unit.UnitBuilder unit = Unit.builder();
+
+        unit.unitCode( productBomDTO.getUnitCode() );
+
+        return unit.build();
     }
 }

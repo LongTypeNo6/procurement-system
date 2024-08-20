@@ -4,13 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import site.junggam.procurement_system.dto.MaterialDTO;
-import site.junggam.procurement_system.dto.ProductDTO;
-import site.junggam.procurement_system.dto.UnitDTO;
+import org.springframework.web.bind.annotation.*;
+import site.junggam.procurement_system.dto.*;
 import site.junggam.procurement_system.entity.Product;
 import site.junggam.procurement_system.service.MaterialService;
 import site.junggam.procurement_system.service.PlanService;
@@ -44,5 +39,15 @@ public class PlanRestController {
         log.info("받은 키워드는 "+keyword);
         List<MaterialDTO> materialDTOList = planService.getMaterialListSearching(keyword);
         return new ResponseEntity<>(materialDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/unitBomList/{unitCode}")
+    public ResponseEntity<List<UnitBomDTO>> getUnitBomLit(@PathVariable("unitCode") String unitCode) {
+        return new ResponseEntity<>(planService.getUnitBomList(unitCode), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/productBomList/{productCode}")
+    public ResponseEntity<List<ProductBomDTO>> getProductBomLit(@PathVariable("productCode") String productCode) {
+        return new ResponseEntity<>(planService.getProductBomList(productCode), HttpStatus.OK);
     }
 }
