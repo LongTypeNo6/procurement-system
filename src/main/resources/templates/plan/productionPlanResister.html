@@ -54,12 +54,14 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">제품(유닛)코드</label>
+                                    <label class="col-sm-2 col-form-label">자재명</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" value="PROD-1234-5678" disabled>
+                                        <div class="input-group mb">
+                                            <input type="text" class="form-control" id="materialName" required>
+                                            <button type="button" class="input-group-text" id="materialSelectionBtn" data-bs-toggle="modal" data-bs-target="#materialSelection">검색</button>
+                                        </div>
                                     </div>
                                 </div>
-
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">제품(유닛)명</label>
                                     <div class="col-sm-10">

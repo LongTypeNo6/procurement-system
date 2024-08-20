@@ -21,13 +21,15 @@ public class ProductionPlan {
     private LocalDateTime productionPlanDeadLine;
     private Integer productionPlanQuantity;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "productCode")
-//    private Product Product;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "UnitCode")
-//    private Unit Unit;
+    @Builder.Default
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productCode")
+    private Product Product=null;
+
+    @Builder.Default
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "UnitCode")
+    private Unit Unit=null;
 
 
 }
