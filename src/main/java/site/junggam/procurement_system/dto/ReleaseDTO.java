@@ -36,6 +36,8 @@ public class ReleaseDTO {
     private String materialTexture; // 자재 재질
     private String purchaserCode; //거래처코드(사업자등록번호)
     private String purchaserName; // 거래처 이름
+    private int availableQuantity; //가용재고
+    private int materialQuantity; //실재고수량
 
     @Builder.Default
     private ReleaseStaus releaseStaus = ReleaseStaus.PENDING;

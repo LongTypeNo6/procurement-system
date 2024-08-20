@@ -31,7 +31,7 @@ public class Release {
     @Builder.Default
     private ReleaseStaus releaseStaus = ReleaseStaus.PENDING;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "material_code")
     private TemMaterial temMaterial;
 }

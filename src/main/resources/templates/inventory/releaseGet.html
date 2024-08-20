@@ -11,31 +11,228 @@
     <th:block th:replace="~{/fragments/headFragment}"></th:block>
 </head>
 <body>
-    <th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
-    <th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
-    <!-- ======= main ======= -->
-    <main id="main" class="main">
-        <div class="pagetitle">
-            <h1>출고상세보기</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">메인</a></li>
-                    <li class="breadcrumb-item">재고관리</li>
-                    <li class="breadcrumb-item">출고요청</li>
-                    <li class="breadcrumb-item active">출고상세보기</li>
-                </ol>
-            </nav>
-        </div><!-- End Page Title -->
+<th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
+<th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
+<!-- ======= main ======= -->
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>출고요청상세보기</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">메인</a></li>
+                <li class="breadcrumb-item">재고관리</li>
+                <li class="breadcrumb-item">출고요청</li>
+                <li class="breadcrumb-item active">출고요청상세보기</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 
-        <section class="section dashboard">
-            <div class="row">
-                <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
-                <!--여기에 카드랑 내용 넣어주시면 됩니다-->
-            </div> <!--End row-->
-        </section>
-    </main>
-    <!-- End #main -->
-    <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
-    <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
+    <section class="section dashboard">
+        <div class="row">
+            <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
+            <div class="col-lg-12">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">출고요청내용</h5>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">출고요청일</label>
+                            <div class="col-sm-10">
+                                <input type="date" class="form-control" id="releaseRequestDate" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">자재명</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="materialCode" hidden="hidden">
+                                    <input type="text" class="form-control" id="materialName" required>
+                                    <button type="button" class="input-group-text" id="materialSelectionBtn" data-bs-toggle="modal" data-bs-target="#materialSelection">검색</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">요청처</label>
+                            <div class="col-sm-10">
+                                <select class="form-select" aria-label="Default select example" id="releaseRequestDept" required>
+                                    <option selected>-</option>
+                                    <option value="생산1팀">생산1팀</option>
+                                    <option value="생산2팀">생산2팀</option>
+                                    <option value="생산3팀">생산3팀</option>
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">출고희망수량</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="releaseDesireQuantity" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">출고희망일</label>
+                            <div class="col-sm-10">
+                                <input type="date" class="form-control" id="releaseDesireDate" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">비고</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" style="height: 100px" id="releaseRequestMemo"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb">
+                            <div class="col-sm-10">
+                                <button type="button" class="btn btn-primary" id="saveReleaseRequest">저장</button>
+                                <a href="/inventory/releaseRequestList"><button type="button" class="btn btn-primary">리스트</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--이하 모달창 테스트-->
+            <!-- Modal Dialog Scrollable -->
+            <div class="modal fade" id="materialSelection" tabindex="-1">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">검색</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">자재리스트</h5>
+                                            <div class="row mb-3">
+                                                <div class="col-sm-12">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" id="materialSearch" placeholder="코드 또는 자재명 검색">
+                                                        <button type="button" class="input-group-text">검색</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row mb-3">
+                                                <div class="col-sm-12" >
+                                                    <!-- List group With Checkboxes and radios -->
+                                                    <div class="form-control">
+                                                        <ul class="list-group" style="height:200px; overflow-y: auto;">
+                                                            <span id="materialList" class="list-group-flush"></span>
+                                                        </ul><!-- End List Checkboxes and radios -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <span id="selectedMaterialFooter">선택한 자재: </span>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                            <button type="button" class="btn btn-primary" id="materialSubmit">확인</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End Modal Dialog Scrollable-->
+            <!--여기에 카드랑 내용 넣어주시면 됩니다-->
+        </div> <!--End row-->
+    </section>
+</main>
+<!-- End #main -->
+<script th:inline="javascript">
+    $(document).ready(function (e) {
+        var releaseCode = [[${releaseCode}]];
+        $('#releaseRequestDate').val(todayValue());
+        $("#materialSelectionBtn").on("click", function () {
+            console.log("검색버튼 클릭됨")
+            var selectedCode = null;
+            $("#materialSearch").on("input", function () {
+                var keyword = $("#materialSearch").val();
+                console.log("검색 키워드: " + keyword);
+                $.getJSON("/temMaterialcontent/materialList?keyword=" + keyword, function(data) {
+                    console.log("검색기능 잘 되나?"+data)
+                    var str = "";
+                    $.each(data, function(idx, dto) {
+                        str += '<li class="list-group-item">';
+                        str += '<input class="form-check-input me-1" type="radio" name="gridRadios" value="'+dto.materialCode+'" data-material-name="'+dto.materialName+'" aria-label="...">';
+                        str += ' '+dto.materialName;
+                        str += '</li>';
+                    });
+                    $("#materialList").html(str);
+                    if (selectedCode) {
+                        $("input[name='gridRadios'][value='" + selectedCode + "']").prop("checked", true);
+                    }
+                    $("input[name='gridRadios']").change(function() {
+                        var selectedName = $(this).data('materialName');
+                        selectedCode = $(this).val();
+                        $("#selectedMaterialFooter").text("선택한 자재: " + selectedName);
+                        $("#selectedMaterialFooter").attr("data-material-code",selectedCode);
+                    });
+                }).fail(function(jqxhr, textStatus, error) {
+                    var err = textStatus + ", " + error;
+                    console.log("자재 정보 요청 실패: " + err);
+                });
+            })
+        })
+        $("#materialSubmit").on("click", function () {
+            // 풋터에 저장된 선택된 자재명과 자재코드 가져오기
+            var selectedName = $("#selectedMaterialFooter").text().replace("선택한 자재: ", "");
+            var selectedCode = $("#selectedMaterialFooter").attr("data-material-code");
+
+            if (selectedCode && selectedName) {
+                console.log("선택한 값은 Code:", selectedCode, "Name:", selectedName);
+                // 선택된 값을 input 필드에 설정하는 코드 예시:
+                $("#materialName").val(selectedName);
+                // 추가로 materialCode를 숨겨진 필드에 저장하거나 다른 방법으로 처리 가능
+                $("#materialCode").val(selectedCode); // 숨겨진 필드가 있다고 가정
+                // 모달 창 닫기
+                $("#materialSelection").modal('hide');
+            } else {
+                console.log("선택된 값이 없습니다.");
+            }
+        });
+        $.getJSON("/inventorycontent/release/" + releaseCode, function(data) {
+            console.log("응답데이터", data);
+            $('#materialName').val(data.materialName);
+            $('#releaseRequestDept').val(data.releaseRequestDept);
+            $('#releaseDesireQuantity').val(data.releaseDesireQuantity);
+            $('#releaseDesireDate').val(formatDate(data.releaseDesireDate));
+            $('#releaseRequestMemo').val(data.releaseRequestMemo);
+        }).fail(function(jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            console.log("출고요청 정보 요청 실패: " + err);
+        });
+        $("#saveReleaseRequest").on("click", function () {
+            var releaseDTO={
+                releaseCode : releaseCode,
+                releaseRequestDate : parseDate($('#releaseRequestDate').val()),
+                materialCode : $('#materialCode').val(),
+                materialName : $('#materialName').val(),
+                releaseRequestDept : $('#releaseRequestDept').val(),
+                releaseDesireQuantity: $('#releaseDesireQuantity').val(),
+                releaseDesireDate : parseDate($('#releaseDesireDate').val()),
+                releaseRequestMemo: $('#releaseRequestMemo').val()
+            }
+            console.log("보낼 값은 이러합니다"+releaseDTO)
+            $.ajax({
+                url: '/inventorycontent/release/' + releaseCode,
+                type: "POST",
+                data: JSON.stringify(releaseDTO),
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (result) {
+                    console.log("입고 기록 저장 성공: ", result);
+                    self.location.reload();
+                }
+            });
+        });
+    });
+</script>
+<th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
+<th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
 </body>
 </html>

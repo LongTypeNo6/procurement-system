@@ -26,8 +26,7 @@ public class TemMaterialDTO {
     private Integer materialSafeQuantity;
     private ContractDTO contractDTO;
 
-    //실재고
-    private Integer materialQuantity;
+    private InventoryDTO inventoryDTO;
 
     @Builder.Default
     private List<ProcurementPlanDTO> procurementPlanDTOList = new ArrayList<>();

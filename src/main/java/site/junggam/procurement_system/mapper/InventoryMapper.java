@@ -10,6 +10,7 @@ import site.junggam.procurement_system.entity.Inventory;
 public interface InventoryMapper {
     InventoryMapper INSTANCE = Mappers.getMapper(InventoryMapper.class);
 
+
     @Mapping(source = "temMaterial.materialCode", target = "materialCode")
     @Mapping(source = "temMaterial.materialName", target = "materialName")
     @Mapping(source = "temMaterial.materialSafeQuantity", target = "materialSafeQuantity")

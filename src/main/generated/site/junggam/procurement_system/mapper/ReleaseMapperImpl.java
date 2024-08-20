@@ -4,13 +4,14 @@ import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import site.junggam.procurement_system.dto.ReleaseDTO;
 import site.junggam.procurement_system.entity.Contract;
+import site.junggam.procurement_system.entity.Inventory;
 import site.junggam.procurement_system.entity.Purchaser;
 import site.junggam.procurement_system.entity.Release;
 import site.junggam.procurement_system.entity.TemMaterial;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-19T23:47:13+0900",
+    date = "2024-08-20T12:10:16+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -24,6 +25,8 @@ public class ReleaseMapperImpl implements ReleaseMapper {
 
         ReleaseDTO.ReleaseDTOBuilder releaseDTO = ReleaseDTO.builder();
 
+        releaseDTO.availableQuantity( releaseTemMaterialInventoryAvailableQuantity( release ) );
+        releaseDTO.materialQuantity( releaseTemMaterialInventoryMaterialQuantity( release ) );
         releaseDTO.materialCode( releaseTemMaterialMaterialCode( release ) );
         releaseDTO.materialName( releaseTemMaterialMaterialName( release ) );
         releaseDTO.materialStand( releaseTemMaterialMaterialStand( release ) );
@@ -69,6 +72,38 @@ public class ReleaseMapperImpl implements ReleaseMapper {
         release.releaseStaus( releaseDTO.getReleaseStaus() );
 
         return release.build();
+    }
+
+    private int releaseTemMaterialInventoryAvailableQuantity(Release release) {
+        if ( release == null ) {
+            return 0;
+        }
+        TemMaterial temMaterial = release.getTemMaterial();
+        if ( temMaterial == null ) {
+            return 0;
+        }
+        Inventory inventory = temMaterial.getInventory();
+        if ( inventory == null ) {
+            return 0;
+        }
+        int availableQuantity = inventory.getAvailableQuantity();
+        return availableQuantity;
+    }
+
+    private int releaseTemMaterialInventoryMaterialQuantity(Release release) {
+        if ( release == null ) {
+            return 0;
+        }
+        TemMaterial temMaterial = release.getTemMaterial();
+        if ( temMaterial == null ) {
+            return 0;
+        }
+        Inventory inventory = temMaterial.getInventory();
+        if ( inventory == null ) {
+            return 0;
+        }
+        int materialQuantity = inventory.getMaterialQuantity();
+        return materialQuantity;
     }
 
     private String releaseTemMaterialMaterialCode(Release release) {

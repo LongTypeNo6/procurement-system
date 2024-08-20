@@ -30,14 +30,14 @@ public class InventoryController {
     }
 
     //출고상세보기
-    @RequestMapping("/releaseRequestGet")
-    public void releaseRequestGet(@RequestParam("releaseCode") String releaseCode, Model model) {
+    @RequestMapping("/releaseGet")
+    public void releasetGet(@RequestParam("releaseCode") String releaseCode, Model model) {
         model.addAttribute("releaseCode", releaseCode);
     }
 
     //출고상세보기
-    @RequestMapping("/releaseGet")
-    public void releaseGet() {
+    @RequestMapping("/releaseRequestGet")
+    public void releaseRequestGet() {
     }
 
     //창고재고리스트

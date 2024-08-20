@@ -11,6 +11,7 @@ import java.util.List;
 public interface TemMaterialMapper {
     TemMaterialMapper INSTANCE = Mappers.getMapper(TemMaterialMapper.class);
 
+
     TemMaterialDTO toDTO(TemMaterial temMaterial);
 
     List<TemMaterialDTO> toDTOs(List<TemMaterial> temMaterials);
