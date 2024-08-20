@@ -11,9 +11,11 @@ import java.util.List;
 
 public interface MaterialRepository extends JpaRepository<Material, String> {
 
+    //출고검색용
     @Query("SELECT m FROM Material m WHERE m.materialName LIKE %:keyword% OR m.materialCode LIKE %:keyword%")
     Page<Material> findByIdAndNameWithPage(@Param("keyword") String keyword, Pageable pageable);
 
+    //출고검색용
     @Query("SELECT m FROM Material m WHERE m.materialName LIKE %:keyword% OR m.materialCode LIKE %:keyword%")
     List<Material> findByIdAndName(@Param("keyword") String keyword);
 }
