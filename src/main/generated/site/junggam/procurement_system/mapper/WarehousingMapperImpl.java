@@ -6,15 +6,15 @@ import org.springframework.stereotype.Component;
 import site.junggam.procurement_system.dto.PurchaseOrderDTO;
 import site.junggam.procurement_system.dto.WarehousingDTO;
 import site.junggam.procurement_system.entity.Contract;
+import site.junggam.procurement_system.entity.Material;
 import site.junggam.procurement_system.entity.ProcurementPlan;
 import site.junggam.procurement_system.entity.PurchaseOrder;
 import site.junggam.procurement_system.entity.Purchaser;
-import site.junggam.procurement_system.entity.TemMaterial;
 import site.junggam.procurement_system.entity.Warehousing;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-20T12:10:16+0900",
+    date = "2024-08-20T16:06:15+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -65,7 +65,7 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         return procurementPlanQuantity;
     }
 
-    private String purchaseOrderProcurementPlanTemMaterialMaterialCode(PurchaseOrder purchaseOrder) {
+    private String purchaseOrderProcurementPlanMaterialMaterialCode(PurchaseOrder purchaseOrder) {
         if ( purchaseOrder == null ) {
             return null;
         }
@@ -73,18 +73,18 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         if ( procurementPlan == null ) {
             return null;
         }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        String materialCode = temMaterial.getMaterialCode();
+        String materialCode = material.getMaterialCode();
         if ( materialCode == null ) {
             return null;
         }
         return materialCode;
     }
 
-    private String purchaseOrderProcurementPlanTemMaterialMaterialName(PurchaseOrder purchaseOrder) {
+    private String purchaseOrderProcurementPlanMaterialMaterialName(PurchaseOrder purchaseOrder) {
         if ( purchaseOrder == null ) {
             return null;
         }
@@ -92,18 +92,18 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         if ( procurementPlan == null ) {
             return null;
         }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        String materialName = temMaterial.getMaterialName();
+        String materialName = material.getMaterialName();
         if ( materialName == null ) {
             return null;
         }
         return materialName;
     }
 
-    private String purchaseOrderProcurementPlanTemMaterialMaterialStand(PurchaseOrder purchaseOrder) {
+    private String purchaseOrderProcurementPlanMaterialMaterialStand(PurchaseOrder purchaseOrder) {
         if ( purchaseOrder == null ) {
             return null;
         }
@@ -111,18 +111,18 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         if ( procurementPlan == null ) {
             return null;
         }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        String materialStand = temMaterial.getMaterialStand();
+        String materialStand = material.getMaterialStand();
         if ( materialStand == null ) {
             return null;
         }
         return materialStand;
     }
 
-    private String purchaseOrderProcurementPlanTemMaterialMaterialTexture(PurchaseOrder purchaseOrder) {
+    private String purchaseOrderProcurementPlanMaterialMaterialTexture(PurchaseOrder purchaseOrder) {
         if ( purchaseOrder == null ) {
             return null;
         }
@@ -130,18 +130,18 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         if ( procurementPlan == null ) {
             return null;
         }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        String materialTexture = temMaterial.getMaterialTexture();
+        String materialTexture = material.getMaterialTexture();
         if ( materialTexture == null ) {
             return null;
         }
         return materialTexture;
     }
 
-    private Double purchaseOrderProcurementPlanTemMaterialContractContractPrice(PurchaseOrder purchaseOrder) {
+    private Double purchaseOrderProcurementPlanMaterialContractContractPrice(PurchaseOrder purchaseOrder) {
         if ( purchaseOrder == null ) {
             return null;
         }
@@ -149,11 +149,11 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         if ( procurementPlan == null ) {
             return null;
         }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        Contract contract = temMaterial.getContract();
+        Contract contract = material.getContract();
         if ( contract == null ) {
             return null;
         }
@@ -164,7 +164,7 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         return contractPrice;
     }
 
-    private String purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserCode(PurchaseOrder purchaseOrder) {
+    private String purchaseOrderProcurementPlanMaterialContractPurchaserPurchaserCode(PurchaseOrder purchaseOrder) {
         if ( purchaseOrder == null ) {
             return null;
         }
@@ -172,11 +172,11 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         if ( procurementPlan == null ) {
             return null;
         }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        Contract contract = temMaterial.getContract();
+        Contract contract = material.getContract();
         if ( contract == null ) {
             return null;
         }
@@ -191,7 +191,7 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         return purchaserCode;
     }
 
-    private String purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserName(PurchaseOrder purchaseOrder) {
+    private String purchaseOrderProcurementPlanMaterialContractPurchaserPurchaserName(PurchaseOrder purchaseOrder) {
         if ( purchaseOrder == null ) {
             return null;
         }
@@ -199,11 +199,11 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         if ( procurementPlan == null ) {
             return null;
         }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        Contract contract = temMaterial.getContract();
+        Contract contract = material.getContract();
         if ( contract == null ) {
             return null;
         }
@@ -218,7 +218,7 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         return purchaserName;
     }
 
-    private String purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserManager(PurchaseOrder purchaseOrder) {
+    private String purchaseOrderProcurementPlanMaterialContractPurchaserPurchaserManager(PurchaseOrder purchaseOrder) {
         if ( purchaseOrder == null ) {
             return null;
         }
@@ -226,11 +226,11 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         if ( procurementPlan == null ) {
             return null;
         }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        Contract contract = temMaterial.getContract();
+        Contract contract = material.getContract();
         if ( contract == null ) {
             return null;
         }
@@ -245,7 +245,7 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         return purchaserManager;
     }
 
-    private String purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserManagerTel(PurchaseOrder purchaseOrder) {
+    private String purchaseOrderProcurementPlanMaterialContractPurchaserPurchaserManagerTel(PurchaseOrder purchaseOrder) {
         if ( purchaseOrder == null ) {
             return null;
         }
@@ -253,11 +253,11 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         if ( procurementPlan == null ) {
             return null;
         }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        Contract contract = temMaterial.getContract();
+        Contract contract = material.getContract();
         if ( contract == null ) {
             return null;
         }
@@ -272,7 +272,7 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         return purchaserManagerTel;
     }
 
-    private String purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserManagerEmail(PurchaseOrder purchaseOrder) {
+    private String purchaseOrderProcurementPlanMaterialContractPurchaserPurchaserManagerEmail(PurchaseOrder purchaseOrder) {
         if ( purchaseOrder == null ) {
             return null;
         }
@@ -280,11 +280,11 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         if ( procurementPlan == null ) {
             return null;
         }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        Contract contract = temMaterial.getContract();
+        Contract contract = material.getContract();
         if ( contract == null ) {
             return null;
         }
@@ -299,7 +299,7 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         return purchaserManagerEmail;
     }
 
-    private String purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserManagerFax(PurchaseOrder purchaseOrder) {
+    private String purchaseOrderProcurementPlanMaterialContractPurchaserPurchaserManagerFax(PurchaseOrder purchaseOrder) {
         if ( purchaseOrder == null ) {
             return null;
         }
@@ -307,11 +307,11 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         if ( procurementPlan == null ) {
             return null;
         }
-        TemMaterial temMaterial = procurementPlan.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        Contract contract = temMaterial.getContract();
+        Contract contract = material.getContract();
         if ( contract == null ) {
             return null;
         }
@@ -338,20 +338,20 @@ public class WarehousingMapperImpl implements WarehousingMapper {
         if ( procurementPlanQuantity != null ) {
             purchaseOrderDTO.procurementPlanQuantity( procurementPlanQuantity );
         }
-        purchaseOrderDTO.materialCode( purchaseOrderProcurementPlanTemMaterialMaterialCode( purchaseOrder ) );
-        purchaseOrderDTO.materialName( purchaseOrderProcurementPlanTemMaterialMaterialName( purchaseOrder ) );
-        purchaseOrderDTO.materialStand( purchaseOrderProcurementPlanTemMaterialMaterialStand( purchaseOrder ) );
-        purchaseOrderDTO.materialTexture( purchaseOrderProcurementPlanTemMaterialMaterialTexture( purchaseOrder ) );
-        Double contractPrice = purchaseOrderProcurementPlanTemMaterialContractContractPrice( purchaseOrder );
+        purchaseOrderDTO.materialCode( purchaseOrderProcurementPlanMaterialMaterialCode( purchaseOrder ) );
+        purchaseOrderDTO.materialName( purchaseOrderProcurementPlanMaterialMaterialName( purchaseOrder ) );
+        purchaseOrderDTO.materialStand( purchaseOrderProcurementPlanMaterialMaterialStand( purchaseOrder ) );
+        purchaseOrderDTO.materialTexture( purchaseOrderProcurementPlanMaterialMaterialTexture( purchaseOrder ) );
+        Double contractPrice = purchaseOrderProcurementPlanMaterialContractContractPrice( purchaseOrder );
         if ( contractPrice != null ) {
             purchaseOrderDTO.contractPrice( contractPrice );
         }
-        purchaseOrderDTO.purchaserCode( purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserCode( purchaseOrder ) );
-        purchaseOrderDTO.purchaserName( purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserName( purchaseOrder ) );
-        purchaseOrderDTO.purchaserManager( purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserManager( purchaseOrder ) );
-        purchaseOrderDTO.purchaserManagerTel( purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserManagerTel( purchaseOrder ) );
-        purchaseOrderDTO.purchaserManagerEmail( purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserManagerEmail( purchaseOrder ) );
-        purchaseOrderDTO.purchaserManagerFax( purchaseOrderProcurementPlanTemMaterialContractPurchaserPurchaserManagerFax( purchaseOrder ) );
+        purchaseOrderDTO.purchaserCode( purchaseOrderProcurementPlanMaterialContractPurchaserPurchaserCode( purchaseOrder ) );
+        purchaseOrderDTO.purchaserName( purchaseOrderProcurementPlanMaterialContractPurchaserPurchaserName( purchaseOrder ) );
+        purchaseOrderDTO.purchaserManager( purchaseOrderProcurementPlanMaterialContractPurchaserPurchaserManager( purchaseOrder ) );
+        purchaseOrderDTO.purchaserManagerTel( purchaseOrderProcurementPlanMaterialContractPurchaserPurchaserManagerTel( purchaseOrder ) );
+        purchaseOrderDTO.purchaserManagerEmail( purchaseOrderProcurementPlanMaterialContractPurchaserPurchaserManagerEmail( purchaseOrder ) );
+        purchaseOrderDTO.purchaserManagerFax( purchaseOrderProcurementPlanMaterialContractPurchaserPurchaserManagerFax( purchaseOrder ) );
         purchaseOrderDTO.purchaseOrderCode( purchaseOrder.getPurchaseOrderCode() );
         purchaseOrderDTO.purchaseOrderDate( purchaseOrder.getPurchaseOrderDate() );
         purchaseOrderDTO.purchaseOrderMemo( purchaseOrder.getPurchaseOrderMemo() );

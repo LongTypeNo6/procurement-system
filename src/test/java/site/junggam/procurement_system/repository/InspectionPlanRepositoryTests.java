@@ -19,13 +19,13 @@ public class InspectionPlanRepositoryTests {
     //쓸때 수정하고 쓸것!!!!, 형식 달라짐
     @Test
     public void isertInspectionPlan() {
-        IntStream.rangeClosed(1,20).forEach(i -> {
+        IntStream.rangeClosed(1,3).forEach(i -> {
             InspectionPlan inspectionPlan = InspectionPlan.builder()
-                    .inspectionPlanCode("IPC-"+i)
+                    .inspectionPlanCode("INSP-240813-001-001-"+i)
                     .inspectionPlanDateTime(LocalDateTime.now())
-                    .purchaseOrder(PurchaseOrder.builder().purchaseOrderCode("PO"+i).build())
+                    .purchaseOrder(PurchaseOrder.builder().purchaseOrderCode("PURC-240813-001-001").build())
                     .build();
-            //inspectionPlanRepository.save(inspectionPlan);
+            inspectionPlanRepository.save(inspectionPlan);
         });
     }
 

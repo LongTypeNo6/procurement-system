@@ -12,9 +12,10 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"contract", "inventory"})
 @Table(name = "tbl_material")
 public class Material {
+
     @Id
     private String materialCode;
     private String materialName;
@@ -25,5 +26,10 @@ public class Material {
     private LocalDateTime materialRegDate;
     private LocalDateTime materialModDate;
     private Integer materialSafeQuantity;
-    //현재고 컬럼 추가예정..
+
+    @OneToOne(mappedBy = "material", fetch = FetchType.LAZY)
+    private Contract contract;
+
+    @OneToOne(mappedBy = "material", fetch = FetchType.LAZY)
+    private Inventory inventory;
 }

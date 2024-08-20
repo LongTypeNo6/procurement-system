@@ -10,7 +10,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString(exclude = "contract")
+@ToString //(exclude = "contract")
 public class TemMaterial {
     //임시 엔티티
     @Id
@@ -24,9 +24,9 @@ public class TemMaterial {
     private LocalDateTime materialModDate;
     private Integer materialSafeQuantity;
 
-    @OneToOne(mappedBy = "temMaterial", fetch = FetchType.LAZY)
-    private Contract contract;
-    //아예 재고엔티티 추가 하고 연결
-    @OneToOne(mappedBy = "temMaterial", fetch = FetchType.LAZY)
-    private Inventory inventory;
+//    @OneToOne(mappedBy = "temMaterial", fetch = FetchType.LAZY)
+//    private Contract contract;
+//    //아예 재고엔티티 추가 하고 연결
+//    @OneToOne(mappedBy = "temMaterial", fetch = FetchType.LAZY)
+//    private Inventory inventory;
 }

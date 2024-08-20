@@ -1,16 +1,13 @@
 package site.junggam.procurement_system.dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import site.junggam.procurement_system.entity.InspectionPlanDeliveryProgress;
 import site.junggam.procurement_system.entity.InspectionPlanStatus;
-import site.junggam.procurement_system.entity.PurchaseOrder;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Builder

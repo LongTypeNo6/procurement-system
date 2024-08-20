@@ -3,6 +3,7 @@ package site.junggam.procurement_system.service;
 import org.springframework.data.domain.Page;
 import site.junggam.procurement_system.dto.MaterialDTO;
 import site.junggam.procurement_system.dto.ProductDTO;
+import site.junggam.procurement_system.dto.TemMaterialDTO;
 import site.junggam.procurement_system.entity.Material;
 
 import java.awt.print.Pageable;
@@ -30,6 +31,8 @@ public interface MaterialService {
     //Page<MaterialDTO> searchMaterial(String type, Pageable pageable);
     List<MaterialDTO> searchMaterial(String keyword);
 
+    //자재 검색(출고요청용)
+    List<MaterialDTO> getMaterialListSearching(String keyword);
 
     //DTO->Entity
 //    default Material dtoToEntity(MaterialDTO materialDTO) {

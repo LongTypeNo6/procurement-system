@@ -1,11 +1,9 @@
 package site.junggam.procurement_system.dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import site.junggam.procurement_system.entity.ProcurementPlan;
 import site.junggam.procurement_system.entity.ReleaseStaus;
 
 import java.time.LocalDateTime;

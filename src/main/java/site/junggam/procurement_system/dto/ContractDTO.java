@@ -15,6 +15,6 @@ public class ContractDTO {
     private String contractFile ;
     private Double contractPrice;
     private Integer contractLeadTime;
-    private TemMaterialDTO temMaterialDTO;
+    private MaterialDTO MaterialDTO;
     private PurchaserDTO purchaserDTO;
 }

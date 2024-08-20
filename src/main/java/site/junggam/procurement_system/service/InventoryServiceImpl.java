@@ -9,15 +9,9 @@ import org.springframework.stereotype.Service;
 import site.junggam.procurement_system.dto.InventoryDTO;
 import site.junggam.procurement_system.dto.PageRequestDTO;
 import site.junggam.procurement_system.dto.PageResultDTO;
-import site.junggam.procurement_system.dto.TemMaterialDTO;
 import site.junggam.procurement_system.entity.Inventory;
-import site.junggam.procurement_system.entity.PurchaseOrder;
-import site.junggam.procurement_system.entity.TemMaterial;
 import site.junggam.procurement_system.mapper.InventoryMapper;
-import site.junggam.procurement_system.mapper.TemMaterialMapper;
 import site.junggam.procurement_system.repository.InventoryRepository;
-import site.junggam.procurement_system.repository.PurchaseOrderRepository;
-import site.junggam.procurement_system.repository.TemMaterialRepository;
 
 import java.util.function.Function;
 

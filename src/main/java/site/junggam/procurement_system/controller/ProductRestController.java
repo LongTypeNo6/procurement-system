@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import site.junggam.procurement_system.dto.MaterialDTO;
 import site.junggam.procurement_system.dto.ProductDTO;
+import site.junggam.procurement_system.dto.TemMaterialDTO;
 import site.junggam.procurement_system.entity.Product;
+import site.junggam.procurement_system.service.MaterialService;
 import site.junggam.procurement_system.service.ProductService;
 
 import java.util.List;
@@ -22,6 +22,7 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductRestController {
     private final ProductService productService;
+    private final MaterialService materialService;
 
     @PostMapping("/productRegisterProApi")
     public ResponseEntity<String> registerProduct(@RequestBody @Validated ProductDTO productDTO, List<String> unitCodes) { //@Valid
@@ -36,5 +37,13 @@ public class ProductRestController {
             return new ResponseEntity<>("Error occurred while registering product", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping(value = "/materialListSearching", produces = "application/json")
+    public ResponseEntity<List<MaterialDTO>> getTemMaterialList(@RequestParam("keyword")String keyword) {
+        log.info("받은 키워드는 "+keyword);
+        List<MaterialDTO> materialDTOList = materialService.getMaterialListSearching(keyword);
+        return new ResponseEntity<>(materialDTOList, HttpStatus.OK);
+    }
+
 
 }

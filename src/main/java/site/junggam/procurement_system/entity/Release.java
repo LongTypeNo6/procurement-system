@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"procurementPlan"})
+@ToString(exclude = {"procurementPlan","material"})
 @Getter
 @Table(name="tbl_release")
 public class Release {
@@ -33,5 +33,5 @@ public class Release {
 
     @ManyToOne
     @JoinColumn(name = "material_code")
-    private TemMaterial temMaterial;
+    private Material material;
 }

@@ -16,9 +16,9 @@ public class TemMaterialTests {
     @Autowired
     private TemMaterialService service;
     
-    @Test
-    public void findAll() {
-        List<TemMaterialDTO> list=service.getTemMaterialList("1");
-        System.out.println("여기입니다"+list);
-    }
+//    @Test
+//    public void findAll() {
+//        List<TemMaterialDTO> list=service.getTemMaterialList("1");
+//        System.out.println("여기입니다"+list);
+//    }
 }

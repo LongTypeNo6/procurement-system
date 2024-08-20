@@ -17,5 +17,5 @@ public class ProcurementPlanDTO {
     private LocalDateTime procurementPlantRegDate;
     private LocalDateTime procurementPlanDeadLine;
     private Integer procurementPlanQuantity;
-    private TemMaterialDTO temMaterialDTO;
+    private MaterialDTO materialDTO;
 }

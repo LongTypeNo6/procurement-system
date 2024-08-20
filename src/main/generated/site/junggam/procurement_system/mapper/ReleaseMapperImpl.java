@@ -5,13 +5,13 @@ import org.springframework.stereotype.Component;
 import site.junggam.procurement_system.dto.ReleaseDTO;
 import site.junggam.procurement_system.entity.Contract;
 import site.junggam.procurement_system.entity.Inventory;
+import site.junggam.procurement_system.entity.Material;
 import site.junggam.procurement_system.entity.Purchaser;
 import site.junggam.procurement_system.entity.Release;
-import site.junggam.procurement_system.entity.TemMaterial;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-20T15:22:39+0900",
+    date = "2024-08-20T16:06:15+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -25,14 +25,14 @@ public class ReleaseMapperImpl implements ReleaseMapper {
 
         ReleaseDTO.ReleaseDTOBuilder releaseDTO = ReleaseDTO.builder();
 
-        releaseDTO.availableQuantity( releaseTemMaterialInventoryAvailableQuantity( release ) );
-        releaseDTO.materialQuantity( releaseTemMaterialInventoryMaterialQuantity( release ) );
-        releaseDTO.materialCode( releaseTemMaterialMaterialCode( release ) );
-        releaseDTO.materialName( releaseTemMaterialMaterialName( release ) );
-        releaseDTO.materialStand( releaseTemMaterialMaterialStand( release ) );
-        releaseDTO.materialTexture( releaseTemMaterialMaterialTexture( release ) );
-        releaseDTO.purchaserCode( releaseTemMaterialContractPurchaserPurchaserCode( release ) );
-        releaseDTO.purchaserName( releaseTemMaterialContractPurchaserPurchaserName( release ) );
+        releaseDTO.availableQuantity( releaseMaterialInventoryAvailableQuantity( release ) );
+        releaseDTO.materialQuantity( releaseMaterialInventoryMaterialQuantity( release ) );
+        releaseDTO.materialCode( releaseMaterialMaterialCode( release ) );
+        releaseDTO.materialName( releaseMaterialMaterialName( release ) );
+        releaseDTO.materialStand( releaseMaterialMaterialStand( release ) );
+        releaseDTO.materialTexture( releaseMaterialMaterialTexture( release ) );
+        releaseDTO.purchaserCode( releaseMaterialContractPurchaserPurchaserCode( release ) );
+        releaseDTO.purchaserName( releaseMaterialContractPurchaserPurchaserName( release ) );
         releaseDTO.releaseCode( release.getReleaseCode() );
         releaseDTO.releaseRequestDept( release.getReleaseRequestDept() );
         releaseDTO.releaseRequestDate( release.getReleaseRequestDate() );
@@ -59,7 +59,7 @@ public class ReleaseMapperImpl implements ReleaseMapper {
 
         Release.ReleaseBuilder release = Release.builder();
 
-        release.temMaterial( releaseDTOToTemMaterial( releaseDTO ) );
+        release.material( releaseDTOToMaterial( releaseDTO ) );
         release.releaseCode( releaseDTO.getReleaseCode() );
         release.releaseRequestDept( releaseDTO.getReleaseRequestDept() );
         release.releaseRequestDate( releaseDTO.getReleaseRequestDate() );
@@ -74,15 +74,15 @@ public class ReleaseMapperImpl implements ReleaseMapper {
         return release.build();
     }
 
-    private int releaseTemMaterialInventoryAvailableQuantity(Release release) {
+    private int releaseMaterialInventoryAvailableQuantity(Release release) {
         if ( release == null ) {
             return 0;
         }
-        TemMaterial temMaterial = release.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = release.getMaterial();
+        if ( material == null ) {
             return 0;
         }
-        Inventory inventory = temMaterial.getInventory();
+        Inventory inventory = material.getInventory();
         if ( inventory == null ) {
             return 0;
         }
@@ -90,15 +90,15 @@ public class ReleaseMapperImpl implements ReleaseMapper {
         return availableQuantity;
     }
 
-    private int releaseTemMaterialInventoryMaterialQuantity(Release release) {
+    private int releaseMaterialInventoryMaterialQuantity(Release release) {
         if ( release == null ) {
             return 0;
         }
-        TemMaterial temMaterial = release.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = release.getMaterial();
+        if ( material == null ) {
             return 0;
         }
-        Inventory inventory = temMaterial.getInventory();
+        Inventory inventory = material.getInventory();
         if ( inventory == null ) {
             return 0;
         }
@@ -106,75 +106,75 @@ public class ReleaseMapperImpl implements ReleaseMapper {
         return materialQuantity;
     }
 
-    private String releaseTemMaterialMaterialCode(Release release) {
+    private String releaseMaterialMaterialCode(Release release) {
         if ( release == null ) {
             return null;
         }
-        TemMaterial temMaterial = release.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = release.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        String materialCode = temMaterial.getMaterialCode();
+        String materialCode = material.getMaterialCode();
         if ( materialCode == null ) {
             return null;
         }
         return materialCode;
     }
 
-    private String releaseTemMaterialMaterialName(Release release) {
+    private String releaseMaterialMaterialName(Release release) {
         if ( release == null ) {
             return null;
         }
-        TemMaterial temMaterial = release.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = release.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        String materialName = temMaterial.getMaterialName();
+        String materialName = material.getMaterialName();
         if ( materialName == null ) {
             return null;
         }
         return materialName;
     }
 
-    private String releaseTemMaterialMaterialStand(Release release) {
+    private String releaseMaterialMaterialStand(Release release) {
         if ( release == null ) {
             return null;
         }
-        TemMaterial temMaterial = release.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = release.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        String materialStand = temMaterial.getMaterialStand();
+        String materialStand = material.getMaterialStand();
         if ( materialStand == null ) {
             return null;
         }
         return materialStand;
     }
 
-    private String releaseTemMaterialMaterialTexture(Release release) {
+    private String releaseMaterialMaterialTexture(Release release) {
         if ( release == null ) {
             return null;
         }
-        TemMaterial temMaterial = release.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = release.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        String materialTexture = temMaterial.getMaterialTexture();
+        String materialTexture = material.getMaterialTexture();
         if ( materialTexture == null ) {
             return null;
         }
         return materialTexture;
     }
 
-    private String releaseTemMaterialContractPurchaserPurchaserCode(Release release) {
+    private String releaseMaterialContractPurchaserPurchaserCode(Release release) {
         if ( release == null ) {
             return null;
         }
-        TemMaterial temMaterial = release.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = release.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        Contract contract = temMaterial.getContract();
+        Contract contract = material.getContract();
         if ( contract == null ) {
             return null;
         }
@@ -189,15 +189,15 @@ public class ReleaseMapperImpl implements ReleaseMapper {
         return purchaserCode;
     }
 
-    private String releaseTemMaterialContractPurchaserPurchaserName(Release release) {
+    private String releaseMaterialContractPurchaserPurchaserName(Release release) {
         if ( release == null ) {
             return null;
         }
-        TemMaterial temMaterial = release.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = release.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        Contract contract = temMaterial.getContract();
+        Contract contract = material.getContract();
         if ( contract == null ) {
             return null;
         }
@@ -212,15 +212,15 @@ public class ReleaseMapperImpl implements ReleaseMapper {
         return purchaserName;
     }
 
-    protected TemMaterial releaseDTOToTemMaterial(ReleaseDTO releaseDTO) {
+    protected Material releaseDTOToMaterial(ReleaseDTO releaseDTO) {
         if ( releaseDTO == null ) {
             return null;
         }
 
-        TemMaterial.TemMaterialBuilder temMaterial = TemMaterial.builder();
+        Material.MaterialBuilder material = Material.builder();
 
-        temMaterial.materialCode( releaseDTO.getMaterialCode() );
+        material.materialCode( releaseDTO.getMaterialCode() );
 
-        return temMaterial.build();
+        return material.build();
     }
 }

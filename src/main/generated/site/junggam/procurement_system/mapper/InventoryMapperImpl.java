@@ -4,11 +4,11 @@ import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import site.junggam.procurement_system.dto.InventoryDTO;
 import site.junggam.procurement_system.entity.Inventory;
-import site.junggam.procurement_system.entity.TemMaterial;
+import site.junggam.procurement_system.entity.Material;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-20T15:22:39+0900",
+    date = "2024-08-20T16:06:15+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -22,9 +22,9 @@ public class InventoryMapperImpl implements InventoryMapper {
 
         InventoryDTO.InventoryDTOBuilder inventoryDTO = InventoryDTO.builder();
 
-        inventoryDTO.materialCode( inventoryTemMaterialMaterialCode( inventory ) );
-        inventoryDTO.materialName( inventoryTemMaterialMaterialName( inventory ) );
-        Integer materialSafeQuantity = inventoryTemMaterialMaterialSafeQuantity( inventory );
+        inventoryDTO.materialCode( inventoryMaterialMaterialCode( inventory ) );
+        inventoryDTO.materialName( inventoryMaterialMaterialName( inventory ) );
+        Integer materialSafeQuantity = inventoryMaterialMaterialSafeQuantity( inventory );
         if ( materialSafeQuantity != null ) {
             inventoryDTO.materialSafeQuantity( materialSafeQuantity );
         }
@@ -45,7 +45,7 @@ public class InventoryMapperImpl implements InventoryMapper {
 
         Inventory.InventoryBuilder inventory = Inventory.builder();
 
-        inventory.temMaterial( inventoryDTOToTemMaterial( inventoryDTO ) );
+        inventory.material( inventoryDTOToMaterial( inventoryDTO ) );
         inventory.materialCode( inventoryDTO.getMaterialCode() );
         inventory.materialQuantity( inventoryDTO.getMaterialQuantity() );
         inventory.releaseDesireSumQuantity( inventoryDTO.getReleaseDesireSumQuantity() );
@@ -56,60 +56,60 @@ public class InventoryMapperImpl implements InventoryMapper {
         return inventory.build();
     }
 
-    private String inventoryTemMaterialMaterialCode(Inventory inventory) {
+    private String inventoryMaterialMaterialCode(Inventory inventory) {
         if ( inventory == null ) {
             return null;
         }
-        TemMaterial temMaterial = inventory.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = inventory.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        String materialCode = temMaterial.getMaterialCode();
+        String materialCode = material.getMaterialCode();
         if ( materialCode == null ) {
             return null;
         }
         return materialCode;
     }
 
-    private String inventoryTemMaterialMaterialName(Inventory inventory) {
+    private String inventoryMaterialMaterialName(Inventory inventory) {
         if ( inventory == null ) {
             return null;
         }
-        TemMaterial temMaterial = inventory.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = inventory.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        String materialName = temMaterial.getMaterialName();
+        String materialName = material.getMaterialName();
         if ( materialName == null ) {
             return null;
         }
         return materialName;
     }
 
-    private Integer inventoryTemMaterialMaterialSafeQuantity(Inventory inventory) {
+    private Integer inventoryMaterialMaterialSafeQuantity(Inventory inventory) {
         if ( inventory == null ) {
             return null;
         }
-        TemMaterial temMaterial = inventory.getTemMaterial();
-        if ( temMaterial == null ) {
+        Material material = inventory.getMaterial();
+        if ( material == null ) {
             return null;
         }
-        Integer materialSafeQuantity = temMaterial.getMaterialSafeQuantity();
+        Integer materialSafeQuantity = material.getMaterialSafeQuantity();
         if ( materialSafeQuantity == null ) {
             return null;
         }
         return materialSafeQuantity;
     }
 
-    protected TemMaterial inventoryDTOToTemMaterial(InventoryDTO inventoryDTO) {
+    protected Material inventoryDTOToMaterial(InventoryDTO inventoryDTO) {
         if ( inventoryDTO == null ) {
             return null;
         }
 
-        TemMaterial.TemMaterialBuilder temMaterial = TemMaterial.builder();
+        Material.MaterialBuilder material = Material.builder();
 
-        temMaterial.materialCode( inventoryDTO.getMaterialCode() );
+        material.materialCode( inventoryDTO.getMaterialCode() );
 
-        return temMaterial.build();
+        return material.build();
     }
 }

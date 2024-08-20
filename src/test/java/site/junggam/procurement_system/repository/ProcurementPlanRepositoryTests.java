@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import site.junggam.procurement_system.entity.Material;
 import site.junggam.procurement_system.entity.ProcurementPlan;
 import site.junggam.procurement_system.entity.TemMaterial;
 
@@ -24,7 +25,7 @@ public class ProcurementPlanRepositoryTests {
                     .procurementPlanDeadLine(LocalDateTime.now())
                     .procurementPlantRegDate(LocalDateTime.now())
                     .procurementPlanQuantity(i)
-                    .temMaterial(TemMaterial.builder().materialCode("BM-0000"+i).build())
+                    .material(Material.builder().materialCode("BM-0000"+i).build())
                     .build();
             procurementPlanRepository.save(procurementPlan);
         });
@@ -34,7 +35,7 @@ public class ProcurementPlanRepositoryTests {
                     .procurementPlanDeadLine(LocalDateTime.now())
                     .procurementPlantRegDate(LocalDateTime.now())
                     .procurementPlanQuantity(i)
-                    .temMaterial(TemMaterial.builder().materialCode("BM-000"+i).build())
+                    .material(Material.builder().materialCode("BM-000"+i).build())
                     .build();
             procurementPlanRepository.save(procurementPlan);
         });
@@ -45,7 +46,7 @@ public class ProcurementPlanRepositoryTests {
     public void getProcurementPlan(){
         String procurementPlanCode = "PPC-14";
         Optional<ProcurementPlan> procurementPlan=procurementPlanRepository.findById(procurementPlanCode);
-        System.out.println(procurementPlan.get().getTemMaterial());
+        System.out.println(procurementPlan.get().getMaterial());
 //        System.out.println(procurementPlan.get());
     }
 }

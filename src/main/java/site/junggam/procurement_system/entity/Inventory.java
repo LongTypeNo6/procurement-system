@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString(exclude = "temMaterial")
+@ToString(exclude = "material")
 @Table(name="tbl_inventory")
 public class Inventory {
 
@@ -18,7 +18,7 @@ public class Inventory {
     @MapsId
     @OneToOne
     @JoinColumn(name = "material_code")
-    private TemMaterial temMaterial;
+    private Material material;
 
     private int materialQuantity; //실재고수량
     private int releaseDesireSumQuantity; //모든 출고요청희망 수량

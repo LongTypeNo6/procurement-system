@@ -10,17 +10,17 @@ import site.junggam.procurement_system.entity.Release;
 public interface ReleaseMapper {
     ReleaseMapper INSTANCE = Mappers.getMapper(ReleaseMapper.class);
 
-    @Mapping(source = "temMaterial.inventory.availableQuantity", target = "availableQuantity")
-    @Mapping(source = "temMaterial.inventory.materialQuantity", target = "materialQuantity")
-    @Mapping(source = "temMaterial.materialCode", target = "materialCode")
-    @Mapping(source = "temMaterial.materialName", target = "materialName")
-    @Mapping(source = "temMaterial.materialStand", target = "materialStand")
-    @Mapping(source = "temMaterial.materialTexture", target = "materialTexture")
-    @Mapping(source = "temMaterial.contract.purchaser.purchaserCode", target = "purchaserCode")
-    @Mapping(source = "temMaterial.contract.purchaser.purchaserName", target = "purchaserName")
+    @Mapping(source = "material.inventory.availableQuantity", target = "availableQuantity")
+    @Mapping(source = "material.inventory.materialQuantity", target = "materialQuantity")
+    @Mapping(source = "material.materialCode", target = "materialCode")
+    @Mapping(source = "material.materialName", target = "materialName")
+    @Mapping(source = "material.materialStand", target = "materialStand")
+    @Mapping(source = "material.materialTexture", target = "materialTexture")
+    @Mapping(source = "material.contract.purchaser.purchaserCode", target = "purchaserCode")
+    @Mapping(source = "material.contract.purchaser.purchaserName", target = "purchaserName")
     ReleaseDTO toDTO(Release release);
 
-    @Mapping(source = "materialCode", target = "temMaterial.materialCode")
+    @Mapping(source = "materialCode", target = "material.materialCode")
     Release toEntity(ReleaseDTO releaseDTO);
 
 }

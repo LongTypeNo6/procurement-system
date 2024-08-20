@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import site.junggam.procurement_system.entity.Inventory;
+import site.junggam.procurement_system.entity.Material;
 import site.junggam.procurement_system.entity.TemMaterial;
 
 @SpringBootTest
@@ -15,13 +16,13 @@ public class InvertoryRepositoryTests {
     InventoryRepository inventoryRepository;
 
     @Autowired
-    TemMaterialRepository temMaterialRepository;
+    MaterialRepository materialRepository;
 
     @Test
     @Commit
     @Transactional // 테스트 메서드에 트랜잭션을 적용
     public void insert() {
-        // material_code에 해당하는 TemMaterial이 있는지 확인
+        // material_code에 해당하는 Material이 있는지 확인
         for(int i=1;i<21;i++){
             String materialCode = "BM-000";
             if(i<10){
@@ -30,12 +31,12 @@ public class InvertoryRepositoryTests {
             }else {
                 materialCode +=i;
             }
-            // TemMaterial을 데이터베이스에서 조회
-            TemMaterial temMaterial = temMaterialRepository.findById(materialCode)
-                    .orElseThrow(() -> new RuntimeException("TemMaterial not found with code: "));
+            // Material을 데이터베이스에서 조회
+            Material material = materialRepository.findById(materialCode)
+                    .orElseThrow(() -> new RuntimeException("없음 "));
             // Inventory 엔티티 생성 및 저장
             Inventory inventory = Inventory.builder()
-                    .temMaterial(temMaterial) // 존재하는 TemMaterial 사용
+                    .material(material) // 존재하는 Material 사용
                     .materialQuantity((int)(Math.random()*100+1))
                     .releaseDesireSumQuantity((int)(Math.random()*100+1))
                     .procurementPlanSumQuantity((int)(Math.random()*100+1))

@@ -11,11 +11,11 @@ public interface InventoryMapper {
     InventoryMapper INSTANCE = Mappers.getMapper(InventoryMapper.class);
 
 
-    @Mapping(source = "temMaterial.materialCode", target = "materialCode")
-    @Mapping(source = "temMaterial.materialName", target = "materialName")
-    @Mapping(source = "temMaterial.materialSafeQuantity", target = "materialSafeQuantity")
+    @Mapping(source = "material.materialCode", target = "materialCode")
+    @Mapping(source = "material.materialName", target = "materialName")
+    @Mapping(source = "material.materialSafeQuantity", target = "materialSafeQuantity")
     InventoryDTO toDTO(Inventory inventory);
 
-    @Mapping(source = "materialCode", target = "temMaterial.materialCode")
+    @Mapping(source = "materialCode", target = "material.materialCode")
     Inventory toEntity(InventoryDTO inventoryDTO);
 }

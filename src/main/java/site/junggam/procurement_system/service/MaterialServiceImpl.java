@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import site.junggam.procurement_system.dto.MaterialDTO;
 import site.junggam.procurement_system.entity.Material;
 import site.junggam.procurement_system.entity.Product;
+import site.junggam.procurement_system.entity.TemMaterial;
+import site.junggam.procurement_system.mapper.MaterialMapper;
+import site.junggam.procurement_system.mapper.TemMaterialMapper;
 import site.junggam.procurement_system.repository.MaterialRepository;
 
 import java.awt.print.Pageable;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MaterialServiceImpl implements MaterialService {
     private final MaterialRepository materialRepository;
+    private final MaterialMapper materialMapper;
 
     @Override
     public String insertMaterial(MaterialDTO materialDTO) {
@@ -60,6 +64,18 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public List<MaterialDTO> searchMaterial(String keyword) {
         return getListMaterial();
+    }
+
+    //자재 검색(출고요청용)
+    @Override
+    public List<MaterialDTO> getMaterialListSearching(String keyword) {
+        try {
+            List<Material> result = materialRepository.findByIdAndName(keyword);
+            return materialMapper.toDTOs(result);
+        }catch (Exception e) {
+            log.error(e);
+            throw e;
+        }
     }
 
 

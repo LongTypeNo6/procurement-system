@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -21,4 +23,9 @@ public class MaterialDTO {
     private LocalDateTime materialRegDate;
     private LocalDateTime materialModDate;
     private Integer materialSafeQuantity;
+
+    private InventoryDTO inventoryDTO;
+
+    @Builder.Default
+    private List<ProcurementPlanDTO> procurementPlanDTOList = new ArrayList<>();
 }

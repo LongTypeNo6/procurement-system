@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"temMaterial","purchaseOrder"})
+@ToString(exclude = {"material","purchaseOrder"})
 @Getter
 @Table(name="tbl_procurement_plan")
 public class ProcurementPlan {
@@ -23,6 +23,6 @@ public class ProcurementPlan {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "materialCode")
-    private TemMaterial temMaterial;
+    private Material material;
 
 }
