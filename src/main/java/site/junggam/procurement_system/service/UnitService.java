@@ -28,6 +28,8 @@ public interface UnitService {
     // 유닛 검색
     List<UnitDTO> searchUnit(String keyword);
 
+    // UnitCode로 UnitDTO를 변환하는 메소드
+    //Optional<UnitDTO> getUnitByCode(String unitCode);
 
     //엔티티->디티오, 디티오->엔티티 변환 default 메서드 작성..
     //DTO->Entity

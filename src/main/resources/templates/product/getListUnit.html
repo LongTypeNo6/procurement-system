@@ -122,9 +122,24 @@
 
                         </div><!-- End Default Accordion Example -->
                         <p></p>
-                        <a href="/product/productRegister"><button type="button" class="btn btn-primary btn-sm">제품등록</button></a>
-                        <a href="/product/unitRegister"><button type="button" class="btn btn-primary btn-sm">유닛등록</button></a>
-                        <a href="/product/materialRegister"><button type="button" class="btn btn-primary btn-sm">자재등록</button></a>
+
+                        <!--                        <a href="/product/productRegister"><button type="button" class="btn btn-primary btn-sm">제품등록</button></a>-->
+                        <!--                        <a href="/product/unitRegister"><button type="button" class="btn btn-primary btn-sm">유닛등록</button></a>-->
+                        <!--                        <a href="/product/materialRegister"><button type="button" class="btn btn-primary btn-sm">자재등록</button></a>-->
+
+                        <div style="position:relative;">
+                            <span style="position:;">
+                                <a href="/product/getListProduct"><button type="button" class="btn btn-primary btn-sm">제품목록</button></a>
+                                <a href="/product/getListUnit"><button type="button" class="btn btn-primary btn-sm">유닛목록</button></a>
+                                <a href="/product/getListMaterial"><button type="button" class="btn btn-primary btn-sm">자재목록</button></a>
+                            </span>
+                            <span style="position:absolute; right:0;">
+<!--                                <a href="/product/productRegister"><button type="button" class="btn btn-primary btn-sm">제품등록</button></a>-->
+                                <a href="/product/unitRegister"><button type="button" class="btn btn-primary btn-sm">유닛등록</button></a>
+<!--                                <a href="/product/materialRegister"><button type="button" class="btn btn-primary btn-sm">자재등록</button></a>-->
+                            </span>
+                        </div>
+
                         <p></p>
                         <!-- Table with hoverable rows -->
                         <table class="table table-hover">
