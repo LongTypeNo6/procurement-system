@@ -46,7 +46,7 @@
                                 <div class="col-sm-10">
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="materialCode" hidden="hidden">
-                                        <input type="text" class="form-control" id="materialName">
+                                        <input type="text" class="form-control" id="materialName" required>
                                         <button type="button" class="input-group-text" id="materialSelectionBtn" data-bs-toggle="modal" data-bs-target="#materialSelection">검색</button>
                                     </div>
                                 </div>
@@ -54,7 +54,7 @@
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">요청처</label>
                                 <div class="col-sm-10">
-                                    <select class="form-select" aria-label="Default select example" id="releaseRequestDept">
+                                    <select class="form-select" aria-label="Default select example" id="releaseRequestDept" required>
                                         <option selected>-</option>
                                         <option value="생산1팀">생산1팀</option>
                                         <option value="생산2팀">생산2팀</option>
@@ -66,13 +66,13 @@
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">출고희망수량</label>
                                 <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="releaseDesireQuantity">
+                                    <input type="number" class="form-control" id="releaseDesireQuantity" required>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">출고희망일</label>
                                 <div class="col-sm-10">
-                                    <input type="date" class="form-control" id="releaseDesireDate">
+                                    <input type="date" class="form-control" id="releaseDesireDate" required>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -211,6 +211,7 @@
                     releaseCode : releaseCode,
                     releaseRequestDate : parseDate($('#releaseRequestDate').val()),
                     materialCode : $('#materialCode').val(),
+                    materialName : $('#materialName').val(),
                     releaseRequestDept : $('#releaseRequestDept').val(),
                     releaseDesireQuantity: $('#releaseDesireQuantity').val(),
                     releaseDesireDate : parseDate($('#releaseDesireDate').val()),
