@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Log4j2
@@ -32,7 +31,8 @@ public class PlanServiceImpl implements PlanService {
     private final UnitBomMapper unitBomMapper;
     private final ProductionPlanRepository productionPlanRepository;
     private final ProductionPlanMapper productionPlanMapper;
-
+    private final ProcurementPlanRepository procurementPlanRepository;
+    private final ProcurementPlanMapper procurementPlanMapper;
 
     @Override
     public List<ProductDTO> getProductListSearching(String keyword) {
@@ -98,19 +98,6 @@ public class PlanServiceImpl implements PlanService {
         return dtoList;
     }
 
-    @Override
-    @Transactional
-    public void insertProductionPlan(ProductionPlanDTO productionPlanDTO) {
-        productionPlanDTO.setProductionPlanCode(generatePlanCode(productionPlanDTO.getProductionPlanDate()));
-        ProductionPlan productionPlan= productionPlanMapper.toEntity(productionPlanDTO);
-        if(productionPlanDTO.getProductCode()!=null){
-            productionPlan.setProduct(Product.builder().productCode(productionPlanDTO.getProductCode()).build());
-        }else if(productionPlanDTO.getUnitCode()!=null){
-            productionPlan.setUnit(Unit.builder().unitCode(productionPlanDTO.getUnitCode()).build());
-        }
-        productionPlanRepository.save(productionPlan);
-    }
-
     private String generatePlanCode(LocalDateTime localDateTime) {
         // 0. 받아온 날짜 형태 바꾸기
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
@@ -129,5 +116,31 @@ public class PlanServiceImpl implements PlanService {
         }
         // 6. 최종 코드를 생성
         return dateCode + newSequence;
+    }
+
+    @Override
+    @Transactional
+    public void insertProductionPlan(ProductionPlanDTO productionPlanDTO) {
+        String productionPlanCode = generatePlanCode(productionPlanDTO.getProductionPlanDate());
+        productionPlanDTO.getProcurementPlanDTOList().forEach(procurementPlanDTO -> {
+            insertProcurementPlan(procurementPlanDTO,productionPlanCode);
+        });
+        productionPlanDTO.setProductionPlanCode(productionPlanCode);
+        ProductionPlan productionPlan= productionPlanMapper.toEntity(productionPlanDTO);
+        if(productionPlanDTO.getProductCode()!=null){
+            productionPlan.setProduct(Product.builder().productCode(productionPlanDTO.getProductCode()).build());
+        }else if(productionPlanDTO.getUnitCode()!=null){
+            productionPlan.setUnit(Unit.builder().unitCode(productionPlanDTO.getUnitCode()).build());
+        }
+        productionPlanRepository.save(productionPlan);
+    }
+
+    @Override
+    public void insertProcurementPlan(ProcurementPlanDTO procurementPlanDTO, String productionPlanCode) {
+        String procurementPlanCode=procurementPlanDTO.getProcurementPlanCode();
+        int sequence = Integer.parseInt(procurementPlanCode);
+        procurementPlanCode = productionPlanCode.substring(0,12)+String.format("%03d", sequence);
+        procurementPlanDTO.setProcurementPlanCode(procurementPlanCode);
+        procurementPlanRepository.save(procurementPlanMapper.toEntity(procurementPlanDTO));
     }
 }

@@ -25,7 +25,8 @@ public interface PlanService {
     List<ProductBomDTO> getProductBomList(String productCode);
 
     //생산계획추가
-    void insertProductionPlan(ProductionPlanDTO productionPlan);
+    void insertProductionPlan(ProductionPlanDTO productionPlanDTO);
 
-
+    //조달계획추가
+    void insertProcurementPlan(ProcurementPlanDTO procurementPlanDTO, String productionPlanCode);
 }

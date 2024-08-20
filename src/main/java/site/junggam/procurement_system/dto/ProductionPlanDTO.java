@@ -12,6 +12,8 @@ import site.junggam.procurement_system.entity.Product;
 import site.junggam.procurement_system.entity.Unit;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -34,4 +36,7 @@ public class ProductionPlanDTO {
     private String unitCode=null;
     @Builder.Default
     private String unitName=null;
+
+    @Builder.Default
+    private List<ProcurementPlanDTO> procurementPlanDTOList=new ArrayList<>();
 }

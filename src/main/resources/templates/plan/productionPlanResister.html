@@ -382,11 +382,57 @@
                         $(element).find("[id^='procurementPlanQuantity']").text(procurementQuantity);
                     });
                 }
-            }
+            };
 
+            $("#resisterProductionPlan").on("click", function () {
+                // ProductionPlanDTO 객체 생성
+                var ProductionPlanDTO = {};
+                if(previousDivision==="product"){
+                    ProductionPlanDTO = {
+                        productionPlanRegDate: parseDate($('#productionPlanRegDate').val()),
+                        productionPlanDate: parseDate($('#productionPlanDate').val()),
+                        productionPlanDeadLine: parseDate($('#productionPlanDeadLine').val()),
+                        productionPlanQuantity: $('#productionPlanQuantity').val(),
+                        productCode: $('#divisionCode').val(),
+                        procurementPlanDTOList: []
+                    };
+                }else if(previousDivision==="unit") {
+                    ProductionPlanDTO = {
+                        productionPlanRegDate: parseDate($('#productionPlanRegDate').val()),
+                        productionPlanDate: parseDate($('#productionPlanDate').val()),
+                        productionPlanDeadLine: parseDate($('#productionPlanDeadLine').val()),
+                        productionPlanQuantity: $('#productionPlanQuantity').val(),
+                        unitCode: $('#divisionCode').val(),
+                        procurementPlanDTOList: []
+                    };
+                }
+                // 조달 계획 리스트 데이터 수집
+                $('#bomList tr').each(function(index, element) {
+                    var procurementPlanDTO = {
+                        materialName: $(element).find('#materialName' + (index + 1)).text(),
+                        bomQuantity: $(element).find('#bomQuantity' + (index + 1)).text(),
+                        procurementPlanQuantity: $(element).find('#procurementPlanQuantity' + (index + 1)).text(),
+                        procurementPlanDeadLine: parseDate($(element).find('#procurementPlanDeadLine' + (index + 1)).val())
+                    };
+                    ProductionPlanDTO.procurementPlanDTOList.push(procurementPlanDTO);
+                });
 
-
-
+                // AJAX 요청으로 서버로 전송
+                $.ajax({
+                    url: '/plan/registerProductionPlan', // 서버의 엔드포인트 URL
+                    type: "POST",
+                    data: JSON.stringify(ProductionPlanDTO),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log("생산 계획 저장 성공: ", result);
+                        self.location.reload();
+                    },
+                    error: function (error) {
+                        console.log("생산 계획 저장 실패: ", error);
+                    }
+                });
+            });
         });
     </script>
     <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
