@@ -20,6 +20,7 @@ public interface ReleaseMapper {
     @Mapping(source = "temMaterial.contract.purchaser.purchaserName", target = "purchaserName")
     ReleaseDTO toDTO(Release release);
 
+    @Mapping(source = "materialCode", target = "temMaterial.materialCode")
     Release toEntity(ReleaseDTO releaseDTO);
 
 }

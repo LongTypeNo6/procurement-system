@@ -39,7 +39,10 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     @Override
     public void saveReleaseRequest(ReleaseDTO releaseDTO) {
-        releaseRepository.save(releaseMapper.toEntity(releaseDTO));
+        log.info("서비스까지 온 데이터 DTO"+releaseDTO);
+        Release entity=releaseMapper.toEntity(releaseDTO);
+        log.info("변형된엔티티"+entity);
+        releaseRepository.save(entity);
     }
 
     @Override

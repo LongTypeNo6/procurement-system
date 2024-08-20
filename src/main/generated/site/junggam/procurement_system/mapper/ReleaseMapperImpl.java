@@ -10,7 +10,7 @@ import site.junggam.procurement_system.entity.TemMaterial;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-19T17:43:56+0900",
+    date = "2024-08-19T23:47:13+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -56,6 +56,7 @@ public class ReleaseMapperImpl implements ReleaseMapper {
 
         Release.ReleaseBuilder release = Release.builder();
 
+        release.temMaterial( releaseDTOToTemMaterial( releaseDTO ) );
         release.releaseCode( releaseDTO.getReleaseCode() );
         release.releaseRequestDept( releaseDTO.getReleaseRequestDept() );
         release.releaseRequestDate( releaseDTO.getReleaseRequestDate() );
@@ -174,5 +175,17 @@ public class ReleaseMapperImpl implements ReleaseMapper {
             return null;
         }
         return purchaserName;
+    }
+
+    protected TemMaterial releaseDTOToTemMaterial(ReleaseDTO releaseDTO) {
+        if ( releaseDTO == null ) {
+            return null;
+        }
+
+        TemMaterial.TemMaterialBuilder temMaterial = TemMaterial.builder();
+
+        temMaterial.materialCode( releaseDTO.getMaterialCode() );
+
+        return temMaterial.build();
     }
 }

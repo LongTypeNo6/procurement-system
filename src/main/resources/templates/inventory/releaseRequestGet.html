@@ -45,6 +45,7 @@
                                 <label class="col-sm-2 col-form-label">자재명</label>
                                 <div class="col-sm-10">
                                     <div class="input-group">
+                                        <input type="text" class="form-control" id="materialCode" hidden="hidden">
                                         <input type="text" class="form-control" id="materialName">
                                         <button type="button" class="input-group-text" id="materialSelectionBtn" data-bs-toggle="modal" data-bs-target="#materialSelection">검색</button>
                                     </div>
@@ -130,8 +131,9 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <span id="selectedMaterialFooter">선택한 자재: </span>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                <button type="button" class="btn btn-primary" id="materialSubmit">확인</button>
                             </div>
                         </div>
                     </div>
@@ -147,6 +149,7 @@
             $('#releaseRequestDate').val(todayValue());
             $("#materialSelectionBtn").on("click", function () {
                 console.log("검색버튼 클릭됨")
+                var selectedCode = null;
                 $("#materialSearch").on("input", function () {
                     var keyword = $("#materialSearch").val();
                     console.log("검색 키워드: " + keyword);
@@ -155,19 +158,43 @@
                         var str = "";
                         $.each(data, function(idx, dto) {
                             str += '<li class="list-group-item">';
-                            str += '<input class="form-check-input me-1" type="radio" name="gridRadios" value="'+dto.materialCode+'" aria-label="...">';
+                            str += '<input class="form-check-input me-1" type="radio" name="gridRadios" value="'+dto.materialCode+'" data-material-name="'+dto.materialName+'" aria-label="...">';
                             str += ' '+dto.materialName;
                             str += '</li>';
                         });
                         $("#materialList").html(str);
+                        if (selectedCode) {
+                            $("input[name='gridRadios'][value='" + selectedCode + "']").prop("checked", true);
+                        }
+                        $("input[name='gridRadios']").change(function() {
+                            var selectedName = $(this).data('materialName');
+                            selectedCode = $(this).val();
+                            $("#selectedMaterialFooter").text("선택한 자재: " + selectedName);
+                            $("#selectedMaterialFooter").attr("data-material-code",selectedCode);
+                        });
                     }).fail(function(jqxhr, textStatus, error) {
                         var err = textStatus + ", " + error;
                         console.log("자재 정보 요청 실패: " + err);
                     });
-
-
                 })
             })
+            $("#materialSubmit").on("click", function () {
+                // 풋터에 저장된 선택된 자재명과 자재코드 가져오기
+                var selectedName = $("#selectedMaterialFooter").text().replace("선택한 자재: ", "");
+                var selectedCode = $("#selectedMaterialFooter").attr("data-material-code");
+
+                if (selectedCode && selectedName) {
+                    console.log("선택한 값은 Code:", selectedCode, "Name:", selectedName);
+                    // 선택된 값을 input 필드에 설정하는 코드 예시:
+                    $("#materialName").val(selectedName);
+                    // 추가로 materialCode를 숨겨진 필드에 저장하거나 다른 방법으로 처리 가능
+                    $("#materialCode").val(selectedCode); // 숨겨진 필드가 있다고 가정
+                    // 모달 창 닫기
+                    $("#materialSelection").modal('hide');
+                } else {
+                    console.log("선택된 값이 없습니다.");
+                }
+            });
             $.getJSON("/inventorycontent/release/" + releaseCode, function(data) {
                 console.log("응답데이터", data);
                 $('#materialName').val(data.materialName);
@@ -183,7 +210,7 @@
                 var releaseDTO={
                     releaseCode : releaseCode,
                     releaseRequestDate : parseDate($('#releaseRequestDate').val()),
-                    materialName : $('#materialName').val(),
+                    materialCode : $('#materialCode').val(),
                     releaseRequestDept : $('#releaseRequestDept').val(),
                     releaseDesireQuantity: $('#releaseDesireQuantity').val(),
                     releaseDesireDate : parseDate($('#releaseDesireDate').val()),
@@ -201,8 +228,6 @@
                         self.location.reload();
                     }
                 });
-
-
             });
         });
     </script>
