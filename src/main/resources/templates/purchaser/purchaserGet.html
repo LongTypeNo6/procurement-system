@@ -29,11 +29,137 @@
         <section class="section dashboard">
             <div class="row">
                 <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">거래처정보</h5>
+                            <form>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">사업자등록자번호</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" id="purchaserCode" disabled>
+                                    </div>
+                                    <label for="inputNumber" class="col-sm-2 col-form-label">사업자등록증</label>
+                                    <div class="col-sm-4">
+                                        <input class="form-control" type="file" id="formFile" disabled>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">상호명</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserName" disabled>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">대표자</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserPresident" disabled>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">주소</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserAddress" disabled>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">업태</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserType" disabled>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">종목</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserCategory" disabled>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputNumber" class="col-sm-2 col-form-label">전화번호</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserTel" disabled>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputNumber" class="col-sm-2 col-form-label">팩스</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserFax" disabled>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputNumber" class="col-sm-2 col-form-label">이메일</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserEmail" disabled>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">담당자</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserManager" disabled>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputNumber" class="col-sm-2 col-form-label">전화번호</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserManagerTel" disabled>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputNumber" class="col-sm-2 col-form-label">팩스</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserManagerFax" disabled>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputNumber" class="col-sm-2 col-form-label">이메일</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserManagerEmail" disabled>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mb-3">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">비고</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" style="height: 100px" id="purchaserMemo" disabled></textarea>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-10">
+                                        <button type="submit" class="btn btn-primary">수정</button>
+                                        <button type="submit" class="btn btn-primary">리스트</button>
+                                    </div>
+                                </div>
+                            </form><!-- End General Form Elements -->
+                        </div>
+                    </div>
+                </div>
                 <!--여기에 카드랑 내용 넣어주시면 됩니다-->
             </div> <!--End row-->
         </section>
     </main>
     <!-- End #main -->
+    <script th:inline="javascript">
+        $(document).ready(function (e) {
+            var purchaserCode = [[${purchaserCode}]];
+            $.getJSON("/purchasercontent/" + purchaserCode, function(dto) {
+                console.log("조달계획 잘 불러오나?"+dto)
+                $("#purchaserCode").val(dto.purchaserCode);
+                $("#purchaserName").val(dto.purchaserName);
+                $("#purchaserAddress").val(dto.purchaserAddress);
+                $("#purchaserFax").val(dto.purchaserFax);
+                $("#purchaserEmail").val(dto.purchaserEmail);
+                $("#purchaserType").val(dto.purchaserType);
+                $("#purchaserTel").val(dto.purchaserTel);
+                $("#purchaserCategory").val(dto.purchaserCategory);
+                $("#purchaserPresident").val(dto.purchaserPresident);
+                $("#purchaserManager").val(dto.purchaserManager);
+                $("#purchaserManagerTel").val(dto.purchaserManagerTel);
+                $("#purchaserManagerEmail").val(dto.purchaserManagerEmail);
+                $("#purchaserManagerFax").val(dto.purchaserManagerFax);
+                $("#purchaserMemo").val(dto.purchaserMemo);
+            })
+        });
+    </script>
     <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
     <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
 </body>

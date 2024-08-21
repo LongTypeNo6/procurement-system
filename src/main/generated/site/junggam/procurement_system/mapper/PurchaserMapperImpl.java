@@ -7,7 +7,7 @@ import site.junggam.procurement_system.entity.Purchaser;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-21T12:13:18+0900",
+    date = "2024-08-21T18:12:39+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -34,6 +34,7 @@ public class PurchaserMapperImpl implements PurchaserMapper {
         purchaserDTO.purchaserManagerTel( purchaser.getPurchaserManagerTel() );
         purchaserDTO.purchaserManagerEmail( purchaser.getPurchaserManagerEmail() );
         purchaserDTO.purchaserManagerFax( purchaser.getPurchaserManagerFax() );
+        purchaserDTO.purchaserMemo( purchaser.getPurchaserMemo() );
 
         return purchaserDTO.build();
     }
@@ -59,6 +60,7 @@ public class PurchaserMapperImpl implements PurchaserMapper {
         purchaser.purchaserManagerTel( purchaserDTO.getPurchaserManagerTel() );
         purchaser.purchaserManagerEmail( purchaserDTO.getPurchaserManagerEmail() );
         purchaser.purchaserManagerFax( purchaserDTO.getPurchaserManagerFax() );
+        purchaser.purchaserMemo( purchaserDTO.getPurchaserMemo() );
 
         return purchaser.build();
     }
