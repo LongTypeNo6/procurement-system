@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.junggam.procurement_system.dto.*;
+import site.junggam.procurement_system.entity.ProcurementPlan;
 import site.junggam.procurement_system.entity.Product;
 import site.junggam.procurement_system.entity.ProductionPlan;
 import site.junggam.procurement_system.entity.Warehousing;
@@ -63,7 +64,7 @@ public class PlanRestController {
     }
 
     @GetMapping(value = "/productionPlanList", produces = "application/json")
-    public ResponseEntity<PageResultDTO<ProductionPlanDTO, ProductionPlan>> getWarehousingList(PageRequestDTO pageRequestDTO) {
+    public ResponseEntity<PageResultDTO<ProductionPlanDTO, ProductionPlan>> getProductionPlanList(PageRequestDTO pageRequestDTO) {
         PageResultDTO<ProductionPlanDTO, ProductionPlan> productionPlanDTOList = planService.getProductionPlanList(pageRequestDTO);
         return new ResponseEntity<>(productionPlanDTOList, HttpStatus.OK);
     }
@@ -71,5 +72,11 @@ public class PlanRestController {
     @GetMapping(value = "/productionPlanGet/{productionPlanCode}")
     public ResponseEntity<ProductionPlanDTO> getProductionPlan(@PathVariable("productionPlanCode") String productionPlanCode) {
         return new ResponseEntity<>(planService.getProductionPlan(productionPlanCode), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/procurementPlanList", produces = "application/json")
+    public ResponseEntity<PageResultDTO<ProcurementPlanDTO, ProcurementPlan>> getProcurementList(PageRequestDTO pageRequestDTO) {
+        PageResultDTO<ProcurementPlanDTO, ProcurementPlan> procurementPlanDTOList = planService.getProcurementPlanList(pageRequestDTO);
+        return new ResponseEntity<>(procurementPlanDTOList, HttpStatus.OK);
     }
 }

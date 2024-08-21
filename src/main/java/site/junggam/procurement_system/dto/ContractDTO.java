@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import site.junggam.procurement_system.entity.ContractStatus;
 
 @Data
 @Builder
@@ -12,9 +13,14 @@ import lombok.NoArgsConstructor;
 public class ContractDTO {
 
     private String contractCode;
-    private String contractFile ;
+    private String contractFile;
     private Double contractPrice;
     private Integer contractLeadTime;
-    private MaterialDTO MaterialDTO;
+
+    // DTO 클래스에 대한 필드
+    private MaterialDTO materialDTO;
     private PurchaserDTO purchaserDTO;
+
+    @Builder.Default
+    private ContractStatus contractStatus = ContractStatus.PENDING;
 }

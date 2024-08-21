@@ -5,13 +5,15 @@ import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import site.junggam.procurement_system.dto.ProcurementPlanDTO;
+import site.junggam.procurement_system.entity.Contract;
+import site.junggam.procurement_system.entity.ContractStatus;
 import site.junggam.procurement_system.entity.Material;
 import site.junggam.procurement_system.entity.ProcurementPlan;
 import site.junggam.procurement_system.entity.ProductionPlan;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-21T12:13:18+0900",
+    date = "2024-08-21T15:23:30+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -27,11 +29,13 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
 
         procurementPlanDTO.materialName( procurementPlanMaterialMaterialName( procurementPlan ) );
         procurementPlanDTO.materialCode( procurementPlanMaterialMaterialCode( procurementPlan ) );
+        procurementPlanDTO.contractStatus( procurementPlanMaterialContractContractStatus( procurementPlan ) );
         procurementPlanDTO.productionPlanCode( procurementPlanProductionPlanProductionPlanCode( procurementPlan ) );
         procurementPlanDTO.procurementPlanCode( procurementPlan.getProcurementPlanCode() );
         procurementPlanDTO.procurementPlantRegDate( procurementPlan.getProcurementPlantRegDate() );
         procurementPlanDTO.procurementPlanDeadLine( procurementPlan.getProcurementPlanDeadLine() );
         procurementPlanDTO.procurementPlanQuantity( procurementPlan.getProcurementPlanQuantity() );
+        procurementPlanDTO.procurementPlanStatus( procurementPlan.getProcurementPlanStatus() );
 
         return procurementPlanDTO.build();
     }
@@ -64,6 +68,7 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
         procurementPlan.procurementPlantRegDate( procurementPlanDTO.getProcurementPlantRegDate() );
         procurementPlan.procurementPlanDeadLine( procurementPlanDTO.getProcurementPlanDeadLine() );
         procurementPlan.procurementPlanQuantity( procurementPlanDTO.getProcurementPlanQuantity() );
+        procurementPlan.procurementPlanStatus( procurementPlanDTO.getProcurementPlanStatus() );
 
         return procurementPlan.build();
     }
@@ -96,6 +101,25 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
             return null;
         }
         return materialCode;
+    }
+
+    private ContractStatus procurementPlanMaterialContractContractStatus(ProcurementPlan procurementPlan) {
+        if ( procurementPlan == null ) {
+            return null;
+        }
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
+            return null;
+        }
+        Contract contract = material.getContract();
+        if ( contract == null ) {
+            return null;
+        }
+        ContractStatus contractStatus = contract.getContractStatus();
+        if ( contractStatus == null ) {
+            return null;
+        }
+        return contractStatus;
     }
 
     private String procurementPlanProductionPlanProductionPlanCode(ProcurementPlan procurementPlan) {

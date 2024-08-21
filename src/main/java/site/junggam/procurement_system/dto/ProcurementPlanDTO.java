@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import site.junggam.procurement_system.entity.ContractStatus;
+import site.junggam.procurement_system.entity.ProcurementPlanStatus;
 
 import java.time.LocalDateTime;
 
@@ -30,5 +32,9 @@ public class ProcurementPlanDTO {
     @Builder.Default
     private int bomQuantity=0;
 
+    @Builder.Default
+    private ProcurementPlanStatus procurementPlanStatus=ProcurementPlanStatus.ESTABLISHED;
+
+    private ContractStatus contractStatus;
 
 }

@@ -25,4 +25,8 @@ public class Contract {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "purchaserCode")
     private Purchaser purchaser;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private ContractStatus contractStatus=ContractStatus.PENDING;
 }

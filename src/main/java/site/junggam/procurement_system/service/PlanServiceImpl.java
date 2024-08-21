@@ -163,10 +163,8 @@ public class PlanServiceImpl implements PlanService {
     public ProductionPlanDTO getProductionPlan(String productionPlanCode) {
         ProductionPlan productionPlan = productionPlanRepository.findById(productionPlanCode)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid production plan code: " + productionPlanCode));
-
         List<ProcurementPlan> procurementPlanList = procurementPlanRepository.findByProductionPlan(productionPlan);
         List<ProcurementPlanDTO> procurementPlanDTOList = procurementPlanMapper.toDTOs(procurementPlanList);
-
         if (productionPlan.getProduct() == null) {
             // Unit 처리 로직 (이미 작동 중)
             String unitCode = productionPlan.getUnit().getUnitCode();
@@ -183,11 +181,9 @@ public class PlanServiceImpl implements PlanService {
         } else {
             // Product 처리 로직
             List<ProductBom> productBomList = productBomRepository.findByProduct(productionPlan.getProduct());
-
             for (ProcurementPlanDTO procurementPlanDTO : procurementPlanDTOList) {
                 int totalBomQuantity = 0;
                 StringBuilder bomProcesses = new StringBuilder();
-
                 // ProductBom 처리
                 for (ProductBom productBom : productBomList) {
                     List<UnitBom> unitBomList = unitBomRepository.findByunit(Unit.builder().unitCode(productBom.getUnit().getUnitCode()).build());
@@ -203,7 +199,6 @@ public class PlanServiceImpl implements PlanService {
                         }
                     }
                 }
-
                 // 설정된 값들을 DTO에 적용
                 procurementPlanDTO.setBomProcess(bomProcesses.toString().trim());
                 procurementPlanDTO.setBomQuantity(totalBomQuantity);
@@ -214,6 +209,22 @@ public class PlanServiceImpl implements PlanService {
         productionPlanDTO.setProcurementPlanDTOList(procurementPlanDTOList);
 
         return productionPlanDTO;
+    }
+
+    @Override
+    public PageResultDTO<ProcurementPlanDTO, ProcurementPlan> getProcurementPlanList(PageRequestDTO pageRequestDTO) {
+        try {
+            Pageable pageable = pageRequestDTO.getPageable(Sort.by("procurementPlanCode").descending()); //나주에 바꿀것
+            Page<ProcurementPlan> result = procurementPlanRepository.findAll(pageable);
+            Function<ProcurementPlan, ProcurementPlanDTO> fn = (procurementPlan -> {
+                ProcurementPlanDTO dto = procurementPlanMapper.toDTO(procurementPlan);
+                return dto;
+            });
+            return new PageResultDTO<>(result, fn);
+        } catch (Exception e) {
+            log.error("에러메세지", e);
+            throw e; // or handle the exception appropriately
+        }
     }
 
 }

@@ -31,4 +31,8 @@ public class ProcurementPlan {
     @JoinColumn(name = "productionPlanCode")
     private ProductionPlan productionPlan;
 
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private ProcurementPlanStatus procurementPlanStatus=ProcurementPlanStatus.ESTABLISHED;
+
 }

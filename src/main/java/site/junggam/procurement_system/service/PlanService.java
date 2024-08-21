@@ -1,6 +1,7 @@
 package site.junggam.procurement_system.service;
 
 import site.junggam.procurement_system.dto.*;
+import site.junggam.procurement_system.entity.ProcurementPlan;
 import site.junggam.procurement_system.entity.ProductionPlan;
 import site.junggam.procurement_system.entity.PurchaseOrder;
 
@@ -34,4 +35,7 @@ public interface PlanService {
 
     //생산계획 상세보기
     ProductionPlanDTO getProductionPlan(String productionPlanCode);
+
+    //조달계획리스트 보기
+    PageResultDTO<ProcurementPlanDTO, ProcurementPlan> getProcurementPlanList(PageRequestDTO pageRequestDTO);
 }
