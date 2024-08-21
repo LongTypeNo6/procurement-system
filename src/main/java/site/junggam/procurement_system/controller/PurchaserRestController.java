@@ -11,6 +11,8 @@ import site.junggam.procurement_system.entity.Purchaser;
 import site.junggam.procurement_system.entity.Warehousing;
 import site.junggam.procurement_system.service.PurchaserService;
 
+import java.util.List;
+
 @Log4j2
 @RestController
 @RequestMapping("/purchasercontent")
@@ -37,6 +39,13 @@ public class PurchaserRestController {
     @GetMapping(value = "/list", produces = "application/json")
     public ResponseEntity<PageResultDTO<PurchaserDTO, Purchaser>> getPurchaserList(PageRequestDTO pageRequestDTO) {
         PageResultDTO<PurchaserDTO, Purchaser> purchaserDTOList = purchaserService.getPurchaserList(pageRequestDTO);
+        return new ResponseEntity<>(purchaserDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/listSearching", produces = "application/json")
+    public ResponseEntity<List<PurchaserDTO>> getPurchaserListSearching(@RequestParam("keyword")String keyword) {
+        log.info("받은 키워드는 "+keyword);
+        List<PurchaserDTO> purchaserDTOList = purchaserService.getPurchaserSearch(keyword);
         return new ResponseEntity<>(purchaserDTOList, HttpStatus.OK);
     }
 }

@@ -1,5 +1,7 @@
 package site.junggam.procurement_system.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import site.junggam.procurement_system.dto.PurchaserDTO;
@@ -7,7 +9,7 @@ import site.junggam.procurement_system.entity.Purchaser;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-21T22:59:32+0900",
+    date = "2024-08-22T00:47:13+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -37,6 +39,20 @@ public class PurchaserMapperImpl implements PurchaserMapper {
         purchaserDTO.purchaserMemo( purchaser.getPurchaserMemo() );
 
         return purchaserDTO.build();
+    }
+
+    @Override
+    public List<PurchaserDTO> toDtos(List<Purchaser> purchasers) {
+        if ( purchasers == null ) {
+            return null;
+        }
+
+        List<PurchaserDTO> list = new ArrayList<PurchaserDTO>( purchasers.size() );
+        for ( Purchaser purchaser : purchasers ) {
+            list.add( toDto( purchaser ) );
+        }
+
+        return list;
     }
 
     @Override

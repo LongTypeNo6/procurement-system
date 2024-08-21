@@ -6,15 +6,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import site.junggam.procurement_system.dto.PageRequestDTO;
-import site.junggam.procurement_system.dto.PageResultDTO;
-import site.junggam.procurement_system.dto.ProcurementPlanDTO;
-import site.junggam.procurement_system.dto.PurchaserDTO;
+import site.junggam.procurement_system.dto.*;
 import site.junggam.procurement_system.entity.ProcurementPlan;
+import site.junggam.procurement_system.entity.Product;
 import site.junggam.procurement_system.entity.Purchaser;
 import site.junggam.procurement_system.mapper.PurchaserMapper;
 import site.junggam.procurement_system.repository.PurchaserRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -52,5 +51,16 @@ public class PurchaserServiceImpl implements PurchaserService {
     @Override
     public void savePurchaser(PurchaserDTO purchaserDTO) {
         purchaserRepository.save(purchaserMapper.toEntity(purchaserDTO));
+    }
+
+    @Override
+    public List<PurchaserDTO> getPurchaserSearch(String keyword) {
+        try {
+            List<Purchaser> result = purchaserRepository.findByIdAndName(keyword);
+            return purchaserMapper.toDtos(result);
+        }catch (Exception e) {
+            log.error(e);
+            throw e;
+        }
     }
 }

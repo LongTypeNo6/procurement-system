@@ -7,6 +7,8 @@ import site.junggam.procurement_system.dto.PurchaserDTO;
 import site.junggam.procurement_system.entity.PurchaseOrder;
 import site.junggam.procurement_system.entity.Purchaser;
 
+import java.util.List;
+
 public interface PurchaserService {
 
     //거래처 상세보기
@@ -17,4 +19,7 @@ public interface PurchaserService {
 
     //거래처 저장
     void savePurchaser(PurchaserDTO purchaserDTO);
+
+    //거래처 검색결과
+    List<PurchaserDTO> getPurchaserSearch(String keyword);
 }
