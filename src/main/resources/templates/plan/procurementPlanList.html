@@ -146,7 +146,7 @@
                         str += '<td><a href="/plan/procurementPlanGet?procurementPlanCode='+dto.procurementPlanCode+'">'+dto.materialName+'</a></td>';
                         str += '<td>'+dto.procurementPlanQuantity+'</td>';
                         str += '<td>'+formatDate(dto.procurementPlanDeadLine)+'</td>';
-                        str += '<td>'+formatDate(dto.procurementPlantRegDate)+'</td>';
+                        str += '<td>'+formatDate(dto.procurementPlanRegDate)+'</td>';
                         str += '</tr>';
                     });
                     $("#procurementList").append(str); // 데이터를 덮어쓰지 않고 추가

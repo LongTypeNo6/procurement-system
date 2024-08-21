@@ -16,7 +16,7 @@ public class ProcurementPlan {
     @Id
     private String procurementPlanCode;
     @Builder.Default
-    private LocalDateTime procurementPlantRegDate = LocalDateTime.now();
+    private LocalDateTime procurementPlanRegDate = LocalDateTime.now();
     private LocalDateTime procurementPlanDeadLine;
     private Integer procurementPlanQuantity;
 

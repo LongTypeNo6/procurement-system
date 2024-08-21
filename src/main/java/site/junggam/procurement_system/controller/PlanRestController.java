@@ -79,4 +79,9 @@ public class PlanRestController {
         PageResultDTO<ProcurementPlanDTO, ProcurementPlan> procurementPlanDTOList = planService.getProcurementPlanList(pageRequestDTO);
         return new ResponseEntity<>(procurementPlanDTOList, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/procurementPlanGet/{procurementPlanCode}")
+    public ResponseEntity<ProcurementPlanDTO> getProcurementPlan(@PathVariable("procurementPlanCode") String procurementPlanCode) {
+        return new ResponseEntity<>(planService.getProcurementPlan(procurementPlanCode), HttpStatus.OK);
+    }
 }

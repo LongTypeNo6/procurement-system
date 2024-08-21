@@ -195,7 +195,6 @@ public class PlanServiceImpl implements PlanService {
                                     .append(" | ")
                                     .append(unitBom.getUnitBomProcess())
                                     .append(" ");
-
                         }
                     }
                 }
@@ -225,6 +224,13 @@ public class PlanServiceImpl implements PlanService {
             log.error("에러메세지", e);
             throw e; // or handle the exception appropriately
         }
+    }
+
+    @Override
+    public ProcurementPlanDTO getProcurementPlan(String procurementPlanCode) {
+        ProcurementPlan procurementPlan = procurementPlanRepository.findById(procurementPlanCode).get();
+        ProcurementPlanDTO procurementPlanDTO = procurementPlanMapper.toDTO(procurementPlan);
+        return procurementPlanDTO;
     }
 
 }

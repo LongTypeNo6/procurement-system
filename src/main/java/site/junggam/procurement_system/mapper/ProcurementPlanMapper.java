@@ -12,11 +12,12 @@ import java.util.List;
 public interface ProcurementPlanMapper {
     ProcurementPlanMapper INSTANCE = Mappers.getMapper(ProcurementPlanMapper.class);
 
-
     @Mapping(source = "material.materialName", target = "materialName")
     @Mapping(source = "material.materialCode", target = "materialCode")
     @Mapping(source = "material.contract.contractStatus", target = "contractStatus")
     @Mapping(source = "productionPlan.productionPlanCode", target = "productionPlanCode")
+    @Mapping(source = "productionPlan.productionPlanDeadLine", target = "productionPlanDeadLine")
+    @Mapping(source = "material.inventory.availableQuantity", target ="availableQuantity")
     ProcurementPlanDTO toDTO(ProcurementPlan procurementPlan);
 
     List<ProcurementPlanDTO> toDTOs(List<ProcurementPlan> procurementPlans);

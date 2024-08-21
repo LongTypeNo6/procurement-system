@@ -17,7 +17,7 @@ public class ProcurementPlanDTO {
     private String procurementPlanCode;
 
     @Builder.Default
-    private LocalDateTime procurementPlantRegDate = LocalDateTime.now();
+    private LocalDateTime procurementPlanRegDate = LocalDateTime.now();
 
     private LocalDateTime procurementPlanDeadLine;
     private Integer procurementPlanQuantity;
@@ -36,5 +36,8 @@ public class ProcurementPlanDTO {
     private ProcurementPlanStatus procurementPlanStatus=ProcurementPlanStatus.ESTABLISHED;
 
     private ContractStatus contractStatus;
+
+    private int availableQuantity;
+    private LocalDateTime productionPlanDeadLine;
 
 }

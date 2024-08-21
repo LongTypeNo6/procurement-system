@@ -1,5 +1,6 @@
 package site.junggam.procurement_system.mapper;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -7,13 +8,14 @@ import org.springframework.stereotype.Component;
 import site.junggam.procurement_system.dto.ProcurementPlanDTO;
 import site.junggam.procurement_system.entity.Contract;
 import site.junggam.procurement_system.entity.ContractStatus;
+import site.junggam.procurement_system.entity.Inventory;
 import site.junggam.procurement_system.entity.Material;
 import site.junggam.procurement_system.entity.ProcurementPlan;
 import site.junggam.procurement_system.entity.ProductionPlan;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-21T15:23:30+0900",
+    date = "2024-08-21T16:33:06+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -31,8 +33,10 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
         procurementPlanDTO.materialCode( procurementPlanMaterialMaterialCode( procurementPlan ) );
         procurementPlanDTO.contractStatus( procurementPlanMaterialContractContractStatus( procurementPlan ) );
         procurementPlanDTO.productionPlanCode( procurementPlanProductionPlanProductionPlanCode( procurementPlan ) );
+        procurementPlanDTO.productionPlanDeadLine( procurementPlanProductionPlanProductionPlanDeadLine( procurementPlan ) );
+        procurementPlanDTO.availableQuantity( procurementPlanMaterialInventoryAvailableQuantity( procurementPlan ) );
         procurementPlanDTO.procurementPlanCode( procurementPlan.getProcurementPlanCode() );
-        procurementPlanDTO.procurementPlantRegDate( procurementPlan.getProcurementPlantRegDate() );
+        procurementPlanDTO.procurementPlanRegDate( procurementPlan.getProcurementPlanRegDate() );
         procurementPlanDTO.procurementPlanDeadLine( procurementPlan.getProcurementPlanDeadLine() );
         procurementPlanDTO.procurementPlanQuantity( procurementPlan.getProcurementPlanQuantity() );
         procurementPlanDTO.procurementPlanStatus( procurementPlan.getProcurementPlanStatus() );
@@ -65,7 +69,7 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
         procurementPlan.material( procurementPlanDTOToMaterial( procurementPlanDTO ) );
         procurementPlan.productionPlan( procurementPlanDTOToProductionPlan( procurementPlanDTO ) );
         procurementPlan.procurementPlanCode( procurementPlanDTO.getProcurementPlanCode() );
-        procurementPlan.procurementPlantRegDate( procurementPlanDTO.getProcurementPlantRegDate() );
+        procurementPlan.procurementPlanRegDate( procurementPlanDTO.getProcurementPlanRegDate() );
         procurementPlan.procurementPlanDeadLine( procurementPlanDTO.getProcurementPlanDeadLine() );
         procurementPlan.procurementPlanQuantity( procurementPlanDTO.getProcurementPlanQuantity() );
         procurementPlan.procurementPlanStatus( procurementPlanDTO.getProcurementPlanStatus() );
@@ -135,6 +139,37 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
             return null;
         }
         return productionPlanCode;
+    }
+
+    private LocalDateTime procurementPlanProductionPlanProductionPlanDeadLine(ProcurementPlan procurementPlan) {
+        if ( procurementPlan == null ) {
+            return null;
+        }
+        ProductionPlan productionPlan = procurementPlan.getProductionPlan();
+        if ( productionPlan == null ) {
+            return null;
+        }
+        LocalDateTime productionPlanDeadLine = productionPlan.getProductionPlanDeadLine();
+        if ( productionPlanDeadLine == null ) {
+            return null;
+        }
+        return productionPlanDeadLine;
+    }
+
+    private int procurementPlanMaterialInventoryAvailableQuantity(ProcurementPlan procurementPlan) {
+        if ( procurementPlan == null ) {
+            return 0;
+        }
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
+            return 0;
+        }
+        Inventory inventory = material.getInventory();
+        if ( inventory == null ) {
+            return 0;
+        }
+        int availableQuantity = inventory.getAvailableQuantity();
+        return availableQuantity;
     }
 
     protected Material procurementPlanDTOToMaterial(ProcurementPlanDTO procurementPlanDTO) {

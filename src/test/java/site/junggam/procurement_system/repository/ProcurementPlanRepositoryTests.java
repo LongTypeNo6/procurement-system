@@ -23,7 +23,7 @@ public class ProcurementPlanRepositoryTests {
             ProcurementPlan procurementPlan = ProcurementPlan.builder()
                     .procurementPlanCode("PROC-240813-001-00"+i)
                     .procurementPlanDeadLine(LocalDateTime.now())
-                    .procurementPlantRegDate(LocalDateTime.now())
+                    .procurementPlanRegDate(LocalDateTime.now())
                     .procurementPlanQuantity(i)
                     .material(Material.builder().materialCode("BM-0000"+i).build())
                     .build();
@@ -33,7 +33,7 @@ public class ProcurementPlanRepositoryTests {
             ProcurementPlan procurementPlan = ProcurementPlan.builder()
                     .procurementPlanCode("PROC-240813-001-0"+i)
                     .procurementPlanDeadLine(LocalDateTime.now())
-                    .procurementPlantRegDate(LocalDateTime.now())
+                    .procurementPlanRegDate(LocalDateTime.now())
                     .procurementPlanQuantity(i)
                     .material(Material.builder().materialCode("BM-000"+i).build())
                     .build();

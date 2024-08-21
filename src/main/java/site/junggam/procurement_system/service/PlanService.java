@@ -38,4 +38,7 @@ public interface PlanService {
 
     //조달계획리스트 보기
     PageResultDTO<ProcurementPlanDTO, ProcurementPlan> getProcurementPlanList(PageRequestDTO pageRequestDTO);
+
+    //조달계획 상세보기
+    ProcurementPlanDTO getProcurementPlan(String procurementPlanCode);
 }
