@@ -25,12 +25,10 @@
                 </ol>
             </nav>
         </div><!-- End Page Title -->
-
         <section class="section dashboard">
             <div class="row">
                 <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
                 <div class="col-lg-12">
-
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">조달계획</h5>
@@ -95,100 +93,148 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">
-                                계약정보 : 계약
+                            <h5 class="card-title" id="contractStatus">
+                                계약정보 :
                             </h5>
                             <div class="row mb-3">
-                                <label for="inputNumber" class="col-sm-2 col-form-label">계약서</label>
+                                <label for="estimateFile" class="col-sm-2 col-form-label">견적서</label>
                                 <div class="col-sm-10">
-                                    <a href="#">240723_A상사_계약서_최종.pdf</a>
+                                    <input class="form-control" type="file" id="estimateFile" multiple>
+                                    <br>
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">파일명</th>
+                                            <th scope="col">삭제</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="estimateFileList">
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="inputPassword" class="col-sm-2 col-form-label">계약비고</label>
+                                <label for="inputPassword" class="col-sm-2 col-form-label">견적비고</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" style="height: 100px" disabled></textarea>
+                                    <textarea class="form-control" style="height: 100px" id="estimateMemo"></textarea>
                                 </div>
                             </div>
                             <hr>
-                            <!-- General Form Elements -->
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">계약서</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="file" id="contractFile" multiple>
+                                    <br>
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">파일명</th>
+                                            <th scope="col">삭제</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="contractFileList">
+                                        </tbody>
+                                    </table>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">리드타임 (L / T)</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">게약비고</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" style="height: 100px"></textarea>
+                                </div>
+                            </div>
+                            <hr>
                             <form>
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">사업자등록자번호</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" value="124-22-60260" disabled>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" value="">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <a href="거래처검색창.html"><button type="button" class="btn btn-primary">검색</button></a>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">상호명</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" value="A물산" disabled>
+                                        <input type="text" class="form-control" disabled>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">대표자</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" value="ooo대표님" disabled>
+                                        <input type="text" class="form-control" disabled>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">주소</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" value="서울특별시 중구 어쩌구" disabled>
+                                        <input type="text" class="form-control" disabled>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">업태</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" value="제조업" disabled>
+                                        <input type="text" class="form-control" disabled>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label class="col-sm-2 col-form-label">종목</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" value="기자재" disabled>
+                                        <input type="text" class="form-control" disabled>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputNumber" class="col-sm-2 col-form-label">전화번호</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" value="031-1234-5678" disabled>
+                                        <input type="text" class="form-control" disabled>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputNumber" class="col-sm-2 col-form-label">팩스</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" value="031-1234-5678" disabled>
+                                        <input type="text" class="form-control" disabled>
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="row mb-3">
+                                <div class=" row mb-3">
                                     <label class="col-sm-2 col-form-label">담당자</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" value="OOO사장님" disabled>
+                                        <input type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputNumber" class="col-sm-2 col-form-label">전화번호</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" value="031-1234-5678" disabled>
+                                        <input type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputNumber" class="col-sm-2 col-form-label">이메일</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" value="Aaa@aaa.com" disabled>
+                                        <input type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputNumber" class="col-sm-2 col-form-label">팩스</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" value="031-1234-5678" disabled>
+                                        <input type="text" class="form-control">
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row mb-3">
                                     <div class="col-sm-10">
+                                        <a href="조달계획리스트.html"><button type="button" class="btn btn-primary">계약정보저장</button></a>
+                                        <a href="조달계획리스트.html"><button type="button" class="btn btn-primary">계약정보저장 및 조달진행</button></a>
                                         <a href="조달계획리스트.html"><button type="button" class="btn btn-primary">리스트</button></a>
                                     </div>
                                 </div>
@@ -204,8 +250,8 @@
     <script th:inline="javascript">
         $(document).ready(function (e) {
             var procurementPlanCode = [[${procurementPlanCode}]];
+            var estimateFileList = [];
             $.getJSON("/plan/procurementPlanGet/" + procurementPlanCode, function(dto) {
-                console.log("조달계획 잘 불러오나?"+dto)
                 $("#productionPlanCode").val(dto.productionPlanCode);
                 $("#procurementPlanCode").val(dto.procurementPlanCode);
                 $("#procurementPlanRegDate").val(formatDate(dto.procurementPlanRegDate));
@@ -215,18 +261,55 @@
                 $("#materialName").val(dto.materialName);
                 $("#availableQuantity").val(dto.availableQuantity);
                 $("#procurementPlanQuantity").val(dto.procurementPlanQuantity);
-                if(dto.procurementPlanStatus==="ESTABLISHED"){
+                if(dto.procurementPlanStatus === "ESTABLISHED") {
                     $("#procurementPlanQuantity").prop("disabled", false);
                     $("#procurementPlanDeadLine").prop("disabled", false);
                 }
-                if(dto.contractStatus==="ESTABLISHED"){
-                    console.log("미계약상태임")
-                }else if(dto.contractStatus==="IN_PROGRESS"){
-                    console.log("계약협상중인상태임")
-                }else if(dto.contractStatus==="CONFIRMED"){
-                    console.log("계약상태임")
+                setContract(dto.contractStatus);
+            });
+
+            function setContract(contractStatus) {
+                if (contractStatus === "PENDING") {
+                    console.log("미계약상태임");
+                    $("#contractStatus").text("계약정보 : 미계약");
+                    $("#estimateFile").on("change", function () {
+                        let files = $(this)[0].files;
+                        for (var i = 0; i < files.length; i++) {
+                            estimateFileList.push({
+                                name: files[i].name,
+                                url: URL.createObjectURL(files[i]) // 로컬 파일 URL 생성
+                            });
+                        }
+                        displayFileList();
+                    });
+                } else if (contractStatus === "NEGOTIATION") {
+                    console.log("계약협상중인상태임");
+                } else if (contractStatus === "CONFIRMED") {
+                    console.log("계약상태임");
                 }
-            })
+            }
+            function displayFileList() {
+                let fileTable = "";
+                for (var i = 0; i < fileList.length; i++) {
+                    fileTable += `
+                <tr>
+                    <th scope="row"><input type="radio" name="estimate" value="${fileList[i].name}"></th>
+                    <td><a href="${fileList[i].url}" target="_blank">${fileList[i].name}</a></td>
+                    <td><button type="button" class="btn btn-danger delete-estimate-file-btn" data-estimateindex="${i}"><i class="bi bi-exclamation-octagon"></i></button></td>
+                </tr>`;
+                }
+                $("#estimateFileList").html(fileTable);
+            }
+            // 이벤트 위임을 사용하여 동적으로 생성된 버튼에 이벤트 핸들러를 바인딩
+            $(document).on("click", ".delete-estimate-file-btn", function() {
+                let index = $(this).data("estimateindex");
+                console.log("삭제할 파일 인덱스: ", index);
+                removeFile(index);
+            });
+            function removeFile(index) {
+                fileList.splice(index, 1);  // 배열에서 파일 제거
+                displayFileList();  // 테이블 업데이트
+            }
         });
     </script>
 
