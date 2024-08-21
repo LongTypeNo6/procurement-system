@@ -113,7 +113,7 @@
                     $.each(data.dtoList, function(idx, dto) {
                         str += '<tr>';
                         str += '<th scope="row">' + ((page - 1) * data.size + idx + 1) + '</th>';
-                        str += '<td><a href="purchaser/purchaserGet?purchaserCode='+dto.purchaserCode+'">'+dto.purchaserName+'</td>';
+                        str += '<td><a href="/purchaser/purchaserGet?purchaserCode='+dto.purchaserCode+'">'+dto.purchaserName+'</td>';
                         str += '<td>'+dto.purchaserPresident+'</td>';
                         str += '<td>'+getFirstTwoWords(dto.purchaserAddress)+'</td>';
                         str += '<td>'+dto.purchaserTel+'</td>';
