@@ -89,4 +89,14 @@ function todayValue() {
     const todayValue = `${year}-${month}-${day}`;
     return todayValue;
 }
-
+//두번째 단어까지+...리턴, 주소지에 사용예정
+function getFirstTwoWords(input) {
+    // 공백을 기준으로 문자열을 나눕니다.
+    var words = input.split(' ');
+    // 배열의 첫 번째와 두 번째 요소를 합쳐서 반환합니다.
+    if (words.length >= 2) {
+        return words[0] + ' ' + words[1]+' ···';
+    }
+    // 단어가 2개 미만일 경우 그대로 반환합니다.
+    return input;
+}

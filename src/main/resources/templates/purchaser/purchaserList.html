@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Title</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <th:block th:replace="~{/fragments/headFragment}"></th:block>
+</head>
+<body>
+    <th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
+    <!-- ======= main ======= -->
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>거래처리스트</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">메인</a></li>
+                    <li class="breadcrumb-item">발주계획</li>
+                    <li class="breadcrumb-item active">거래처</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+        <section class="section dashboard">
+            <div class="row">
+                <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
+                <div class="col-lg-12">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="filter">
+                                <a href="#"><button type="button" class="btn btn-primary btn-sm">거래처목록파일업로드</button></a>
+                                <a class="icon" href="#"><button type="button" class="btn btn-primary btn-sm">개별거래처등록</button></a>
+                            </div>
+                            <h5 class="card-title">거래처리스트</h5>
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <b>검색 | 전체 : -</b>
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                                         data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <div class="row mb-3">
+                                                <label for="inputPassword" class="col-sm-1 col-form-label">검색</label>
+                                                <div class="col-sm-2">
+                                                    <select class="form-select" aria-label="Default select example">
+                                                        <option selected>전체</option>
+                                                        <option value="1">거래처명</option>
+                                                        <option value="2">대표자명</option>
+                                                        <option value="3">사업자등록번호</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" id="itemCodeInput">
+                                                        <button class="input-group-text" id="confirmSelectionBtn">검색</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- End Default Accordion Example -->
+                            <!-- Table with hoverable rows -->
+                            <br>
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">거래처명</th>
+                                    <th scope="col">대표자명</th>
+                                    <th scope="col">주소</th>
+                                    <th scope="col">대표번호</th>
+                                    <th scope="col">대표이메일</th>
+                                    <th scope="col">담당자</th>
+                                    <th scope="col">담당연락처</th>
+                                    <th scope="col">담당이메일</th>
+                                </tr>
+                                </thead>
+                                <tbody id="purchaserList">
+                                </tbody>
+                            </table>
+                            <!-- End Table with hoverable rows -->
+                        </div>
+                    </div>
+                </div>
+                <!--여기에 카드랑 내용 넣어주시면 됩니다-->
+            </div> <!--End row-->
+        </section>
+    </main>
+    <!-- End #main -->
+    <script th:inline="javascript">
+        var totalPage = 0;
+        var currentPage = 1;
+        $(document).ready(function (e) {
+            console.log("자바스크립트작동")
+            function getPurchaserContent(page) {
+                return $.getJSON(`/purchasercontent/list?page=${page}&size=10`, function(data) {
+                    console.log("요청", data);
+                    // 첫 번째 요청에서 totalPage 값 설정
+                    if (totalPage === 0) {
+                        totalPage = data.totalPage;
+                    }
+                    var str = "";
+                    $.each(data.dtoList, function(idx, dto) {
+                        str += '<tr>';
+                        str += '<th scope="row">' + ((page - 1) * data.size + idx + 1) + '</th>';
+                        str += '<td><a href="purchaser/purchaserGet?purchaserCode='+dto.purchaserCode+'">'+dto.purchaserName+'</td>';
+                        str += '<td>'+dto.purchaserPresident+'</td>';
+                        str += '<td>'+getFirstTwoWords(dto.purchaserAddress)+'</td>';
+                        str += '<td>'+dto.purchaserTel+'</td>';
+                        str += '<td>'+dto.purchaserEmail+'</td>';
+                        str += '<td>'+dto.purchaserManager+'</td>';
+                        str += '<td>'+dto.purchaserManagerTel+'</td>';
+                        str += '<td>'+dto.purchaserManagerEmail+'</td>';
+                        str += '</tr>';
+                    });
+                    $("#purchaserList").append(str); // 데이터를 덮어쓰지 않고 추가
+                });
+            }
+            getPurchaserContent(1);
+            setupInfiniteScroll(getPurchaserContent);
+        })
+    </script>
+    <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
+</body>
+</html>
