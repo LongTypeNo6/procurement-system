@@ -40,7 +40,7 @@
                                     </div>
                                     <label for="inputNumber" class="col-sm-2 col-form-label">사업자등록증</label>
                                     <div class="col-sm-4">
-                                        <input class="form-control" type="file" id="formFile" >
+                                        <input class="form-control" type="file" id="formFile">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -139,7 +139,9 @@
     <!-- End #main -->
     <script th:inline="javascript">
         $(document).ready(function (e) {
+            var purchaserCode;
             $("#savePurchaser").on("click", function () {
+                // 먼저 다른 데이터를 서버로 전송
                 var purchaserDTO = {
                     purchaserCode: $('#purchaserCode').val(),
                     purchaserName: $('#purchaserName').val(),
@@ -156,7 +158,7 @@
                     purchaserManagerFax: $('#purchaserManagerFax').val(),
                     purchaserMemo: $('#purchaserMemo').val()
                 };
-                console.log("저장버튼 클릭"+purchaserDTO)
+                purchaserCode = $('#purchaserCode').val();
                 $.ajax({
                     url: '/purchasercontent/register',
                     type: "POST",
@@ -164,30 +166,43 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "text",
                     success: function (result) {
-                        console.log("저장 성공: ", result);
-                        alert("저장했습니다.");  // 저장 성공 시 알럿 창 표시
-                        window.location.href = "/purchaser/purchaserList";  // 원하는 페이지로 리다이렉트
+                        console.log("데이터 저장 성공: ", result);
+                        alert("저장했습니다.");
+                        uploadFile(purchaserCode);  // 파일 업로드 함수 호출
                     },
                     error: function (error) {
-                        console.log("저장 실패: ", error);
-                        alert("저장에 실패했습니다. 다시 시도해주세요.");  // 실패 시 알럿 창 표시
+                        console.log("데이터 저장 실패: ", error);
+                        alert("데이터 저장에 실패했습니다. 다시 시도해주세요.");
                     }
                 });
-                // $.ajax({
-                //     url: '/files/upload/' + warehousingCode + '/' + purchaserCode,
-                //     processData: false,
-                //     contentType: false,
-                //     data: formData,
-                //     type: 'POST',
-                //     dataType: 'json',
-                //     success: function (result) {
-                //         console.log("파일 업로드 성공: ", result);
-                //     },
-                //     error: function (jqXHR, textStatus, errorThrown) {
-                //         console.log("파일 업로드 실패: ", textStatus);
-                //     }
-                // });
             });
+
+            function uploadFile(purchaserCode) {
+                var formData = new FormData();
+                var fileInput = $('#formFile')[0].files[0];
+                if (fileInput) {
+                    formData.append("file", fileInput);
+                    $.ajax({
+                        url: '/files/uploadOne/' + purchaserCode + '/' + purchaserCode,  // 파일 업로드 경로
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function (result) {
+                            console.log("파일 업로드 성공: ", result);
+                            window.location.href = "/purchaser/purchaserList";  // 업로드 후 페이지 리다이렉트
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("파일 업로드 실패: ", textStatus);
+                            alert("파일 업로드에 실패했습니다. 다시 시도해주세요.");
+                        }
+                    });
+                } else {
+                    // 파일이 없는 경우에도 페이지 리다이렉트
+                    window.location.href = "/purchaser/purchaserList";
+                }
+            }
         });
     </script>
     <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>

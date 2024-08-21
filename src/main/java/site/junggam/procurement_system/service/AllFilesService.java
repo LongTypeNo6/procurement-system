@@ -10,4 +10,5 @@ public interface AllFilesService {
     List<AllFilesDTO> getFilesByForeignCode(String foreignCode);
     void deleteFile(Long inum);
     List<AllFilesDTO> uploadFiles(MultipartFile[] uploadFiles, String foreignCode, String subDirectory);
+    AllFilesDTO uploadFile(MultipartFile uploadFile, String foreignCode, String subDirectory);
 }

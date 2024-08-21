@@ -50,6 +50,21 @@ public class AllFilesController {
         }
     }
 
+    @PostMapping("/uploadOne/{foreignCode}/{subDirectory}")
+    public ResponseEntity<?> uploadFile(
+            @RequestParam("file") MultipartFile file,
+            @PathVariable("foreignCode") String foreignCode,
+            @PathVariable("subDirectory") String subDirectory) {
+        try {
+            // 파일 업로드 처리
+            AllFilesDTO uploadedFile = allFilesService.uploadFile(file, foreignCode, subDirectory);
+            return new ResponseEntity<>(uploadedFile, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            log.error("파일 업로드 중 오류 발생: {}", e.getMessage());
+            return new ResponseEntity<>("파일 업로드 실패: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/list/{foreignCode}")
     public ResponseEntity<List<AllFilesDTO>> getFilesByForeignCode(@PathVariable("foreignCode") String foreignCode) {
         log.info("파일목록을 위한 코드는"+foreignCode);
