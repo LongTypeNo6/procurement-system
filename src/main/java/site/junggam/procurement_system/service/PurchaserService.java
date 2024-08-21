@@ -14,4 +14,7 @@ public interface PurchaserService {
 
     //거래처리스트 보기
     PageResultDTO<PurchaserDTO, Purchaser> getPurchaserList(PageRequestDTO pageRequestDTO);
+
+    //거래처 저장
+    void savePurchaser(PurchaserDTO purchaserDTO);
 }

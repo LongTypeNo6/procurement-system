@@ -23,4 +23,8 @@ public class PurchaserController {
         log.info("발주코드는 "+purchaserCode);
         model.addAttribute("purchaserCode",purchaserCode);
     }
+
+    @GetMapping("/purchaserRegister")
+    public void purchaserRegister() {
+    }
 }

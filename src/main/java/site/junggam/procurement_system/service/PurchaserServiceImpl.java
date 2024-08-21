@@ -48,4 +48,9 @@ public class PurchaserServiceImpl implements PurchaserService {
             throw e; // or handle the exception appropriately
         }
     }
+
+    @Override
+    public void savePurchaser(PurchaserDTO purchaserDTO) {
+        purchaserRepository.save(purchaserMapper.toEntity(purchaserDTO));
+    }
 }
