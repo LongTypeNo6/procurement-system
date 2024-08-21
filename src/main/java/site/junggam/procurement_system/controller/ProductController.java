@@ -181,7 +181,7 @@ public class ProductController {
 //         @RequestParam("unitCodes") List<String> unitCodes) {
         //productService.updateProduct(productCode, productDTO, unitCodes);
 
-        log.info("제품 수정 ..");
+        log.info("제품 수정 : "+productCode);
 
         // 현재 날짜와 시간을 등록일 및 수정일로 설정
         LocalDateTime now = LocalDateTime.now();
@@ -220,7 +220,7 @@ public class ProductController {
     // 제품 조회 메소드
     @GetMapping("/getProduct/{productCode}")
     public String getProduct(@PathVariable("productCode") String productCode, Model model) {
-        log.info("제품 조회, 코드: " + productCode);
+        log.info("제품 조회 : " + productCode);
 
 //        Optional<ProductDTO> product = productService.getProduct(productCode);
 //        if (product.isPresent()) {
@@ -239,7 +239,7 @@ public class ProductController {
     // 제품 조회 폼
     @GetMapping("/productDetail")
     public void productDetail(@RequestParam("productCode") String productCode, Model model) {
-        log.info("제품상세보기.. 코드: " + productCode);
+        log.info("제품상세보기 : " + productCode);
 
         // Product 객체를 서비스에서 조회하여 모델에 추가
         Optional<ProductDTO> productDTO = productService.getProduct(productCode);
@@ -400,22 +400,94 @@ public class ProductController {
         return "redirect:/product/getListUnit";
     }
 
-    // 유닛 수정 페이지 폼
-    @GetMapping("/unitModify")
-    public void unitModify(@PathVariable String unitCode, Model model) {
-        Optional<UnitDTO> unit = unitService.getUnit(unitCode);
-        if (unit.isPresent()) {
-            model.addAttribute("unit", unit.get());
-            //return "redirect:/product/unitModify"; // View name (JSP or Thymeleaf template)
-        } else {
-            //return "error/404"; // Handle not found
+    // 유닛 수정 페이지 폼1
+    @GetMapping("/unitModify/{unitCode}")
+    public String unitModify(@PathVariable("unitCode") String unitCode, Model model) {
+//        Optional<UnitDTO> unit = unitService.getUnit(unitCode);
+//        if (unit.isPresent()) {
+//            model.addAttribute("unit", unit.get());
+//            //return "redirect:/product/unitModify"; // View name (JSP or Thymeleaf template)
+//        } else {
+//            //return "error/404"; // Handle not found
+//        }
+
+        return "redirect:/product/unitEdit?unitCode=" + unitCode;
+    }
+
+    // 유닛 수정 페이지 폼2
+    @GetMapping("/unitEdit")
+    public void unitEdit(@RequestParam("unitCode") String unitCode, Model model) {
+        log.info("유닛수정폼 : " + unitCode);
+
+        // Unit 객체를 서비스에서 조회하여 모델에 추가
+        Optional<UnitDTO> unitDTO = unitService.getUnit(unitCode);
+
+        if(unitDTO.isPresent()) {
+            UnitDTO unitDTO2 = unitDTO.get();
+
+            // 날짜를 LocalDate로 변환하여 문자열로 변환
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String regDateFormatted = unitDTO2.getUnitRegDate().toLocalDate().format(formatter);
+            model.addAttribute("unitRegDate", regDateFormatted);
+            String modDateFormatted = unitDTO2.getUnitModDate().toLocalDate().format(formatter);
+            model.addAttribute("unitModDate", modDateFormatted);
+
+            // UnitMaterialDTO를 기반으로 MaterialDTO를 설정
+            Set<MaterialDTO> materialDTOList = unitDTO2.getUnitMaterials().stream()
+                    .map(pud -> materialService.getMaterial(pud.getMaterialCode()).orElse(null))
+                    .filter(material -> material != null)
+                    .collect(Collectors.toSet());
+
+            model.addAttribute("materials", materialDTOList);
+            log.info("materials : "+ materialDTOList);
         }
+
+        model.addAttribute("unit", unitDTO);
+        log.info("unit : "+unitDTO);
+
+        //return "unitEdit"; // 수정폼 이름
     }
 
     // 유닛 수정 처리 메소드
     @PostMapping("/unitModifyPro")
-    public String unitModifyPro(@ModelAttribute UnitDTO unitDTO) {
-        unitService.updateUnit(unitDTO);
+    public String unitModifyPro(@RequestParam("unit_code") String unitCode,
+                                @ModelAttribute("unit") Unit unit,
+                                //@ModelAttribute UnitDTO unitDTO,
+                                @RequestParam("unit_name") String unitName,
+                                @RequestParam("unit_stand") String unitStand,
+                                @RequestParam("unit_texture") String unitTexture,
+                                @RequestParam("unit_draw_file") MultipartFile unitDrawFile,
+                                @RequestParam("unit_etc_file") MultipartFile unitEtcFile,
+                                @RequestParam("materialCodes") List<String> materialCodes,
+                                RedirectAttributes redirectAttributes) {
+
+        log.info("유닛 수정 : "+unitCode);
+
+        // 현재 날짜와 시간을 등록일 및 수정일로 설정
+        LocalDateTime now = LocalDateTime.now();
+
+        // 파일 저장 처리
+        String drawFilePath = saveFile(unitDrawFile);
+        String etcFilePath = saveFile(unitEtcFile);
+
+        // DTO 객체 생성 및 값 설정
+        UnitDTO unitDTO = UnitDTO.builder()
+                //.unitCode(unitCode)
+                .unitName(unitName)
+                .unitStand(unitStand)
+                .unitTexture(unitTexture)
+                .unitDrawFile(drawFilePath)
+                .unitEtcFile(etcFilePath)
+                .unitRegDate(now)
+                .unitModDate(now)
+                .build();
+
+        // 유닛 수정 처리
+        unitService.updateUnit(unitCode, unitDTO, materialCodes);
+
+        // 수정 성공 메시지 설정
+        redirectAttributes.addFlashAttribute("message", "유닛이 수정되었습니다. 코드: " + unitDTO.getUnitCode());
+
         return "redirect:/product/getListUnit";
     }
 
@@ -429,16 +501,57 @@ public class ProductController {
 
     // 유닛 조회 메소드
     @GetMapping("/getUnit/{unitCode}")
-    public void getUnit(@PathVariable String unitCode, Model model) {
-        log.info("유닛 조회, 코드: " + unitCode);
+    public String getUnit(@PathVariable("unitCode") String unitCode, Model model) {
+        log.info("유닛 조회 : " + unitCode);
 
-        Optional<UnitDTO> unit = unitService.getUnit(unitCode);
-        if (unit.isPresent()) {
-            model.addAttribute("unit", unit.get());
-            //return "redirect:/product/getUnit"; // View name (JSP or Thymeleaf template)
-        } else {
-            //return "error/404"; // Handle not found
+//        Optional<UnitDTO> unit = unitService.getUnit(unitCode);
+//        if (unit.isPresent()) {
+//            model.addAttribute("unit", unit.get());
+//            //return "redirect:/product/getUnit"; // View name (JSP or Thymeleaf template)
+//        } else {
+//            //return "error/404"; // Handle not found
+//        }
+
+        model.addAttribute("unit", unitService.getUnit(unitCode));
+        //return "/product/unitDetail"; // 유닛 상세보기 페이지 (view.html)
+        //return "redirect:/product/unitDetail";
+        return "redirect:/product/unitDetail?unitCode=" + unitCode;
+    }
+
+    // 유닛 조회 폼
+    @GetMapping("/unitDetail")
+    public void unitDetail(@RequestParam("unitCode") String unitCode, Model model) {
+        log.info("유닛상세보기 : " + unitCode);
+
+        // Unit 객체를 서비스에서 조회하여 모델에 추가
+        Optional<UnitDTO> unitDTO = unitService.getUnit(unitCode);
+
+        if(unitDTO.isPresent()) {
+            UnitDTO unitDTO2 = unitDTO.get();
+
+            // 날짜를 LocalDate로 변환하여 문자열로 변환
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String regDateFormatted = unitDTO2.getUnitRegDate().toLocalDate().format(formatter);
+            model.addAttribute("unitRegDate", regDateFormatted);
+            String modDateFormatted = unitDTO2.getUnitModDate().toLocalDate().format(formatter);
+            model.addAttribute("unitModDate", modDateFormatted);
+
+            // UnitMaterialDTO를 기반으로 MaterialDTO를 설정
+            Set<MaterialDTO> materialDTOList = unitDTO2.getUnitMaterials().stream()
+                    .map(pud -> materialService.getMaterial(pud.getMaterialCode()).orElse(null))
+                    .filter(material -> material != null)
+                    .collect(Collectors.toSet());
+
+            model.addAttribute("materials", materialDTOList);
+            log.info("materials : "+ materialDTOList);
+
+            // 새로운 UnitDTO를 생성 (MeterialDTO 리스트로 설정)
         }
+
+        model.addAttribute("unit", unitDTO);
+        log.info("unit : "+unitDTO);
+
+        //return "unitDetail"; // 뷰 이름
     }
 
     // 유닛 목록 메소드
@@ -520,19 +633,87 @@ public class ProductController {
         return "redirect:/product/getListMaterial";
     }
 
-    // 자재 수정 폼 메서드
+    // 자재 수정 폼1 메서드
     @GetMapping("/materialModify/{materialCode}")
-    public void materialModify(@PathVariable String materialCode, Model model) {
-        MaterialDTO materialDTO = materialService.getMaterial(materialCode)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid material code"));
-        model.addAttribute("materialDTO", materialDTO);
+    public String materialModify(@PathVariable("materialCode") String materialCode, Model model) {
+//        MaterialDTO materialDTO = materialService.getMaterial(materialCode)
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid material code"));
+//        model.addAttribute("materialDTO", materialDTO);
+
+        return "redirect:/product/materialEdit?materialCode=" + materialCode;
+    }
+
+    // 자재 수정 폼2 메서드
+    @GetMapping("/materialEdit")
+    public void materialEdit(@RequestParam("materialCode") String materialCode, Model model) {
+        log.info("자재수정폼 : " + materialCode);
+
+        // material 객체를 서비스에서 조회하여 모델에 추가
+        Optional<MaterialDTO> materialDTO = materialService.getMaterial(materialCode);
+
+        if(materialDTO.isPresent()) {
+            model.addAttribute("material", materialDTO);
+            log.info("material : " + materialDTO);
+        }
+
+        //return "materialEdit"; // 수정폼 이름
     }
 
     // 자재 수정 처리 메서드
     @PostMapping("/materialModifyPro")
-    public String materialModifyPro(@ModelAttribute MaterialDTO materialDTO, RedirectAttributes redirectAttributes) {
+    public String materialModifyPro(@RequestParam("material_code") String materialCode,
+                                    @RequestParam("material_name") String materialName,
+                                    @RequestParam("material_stand") String materialStand,
+                                    @RequestParam("material_texture") String materialTexture,
+                                    @RequestParam("material_draw_file") MultipartFile materialDrawFile,
+                                    @RequestParam("material_etc_file") MultipartFile materialEtcFile,
+                                    @RequestParam("material_safe_quantity") Integer materialSafeQuantity,
+                                    //@ModelAttribute("materialDTO") MaterialDTO mtDTO,
+                                    //@ModelAttribute("material") Material material,
+                                    RedirectAttributes redirectAttributes) {
+
+        log.info("자재 수정 : " + materialCode);
+
+        // 자재의 현재 상태를 데이터베이스에서 조회
+        Optional<MaterialDTO> existingMaterial = materialService.getMaterial(materialCode);
+
+        // 현재 날짜와 시간을 등록일 및 수정일로 설정
+        LocalDateTime now = LocalDateTime.now();
+
+        // 파일 저장 처리
+//        String drawFilePath = saveFile(materialDrawFile);
+//        String etcFilePath = saveFile(materialEtcFile);
+        String drawFilePath = existingMaterial.get().getMaterialDrawFile();
+        String etcFilePath = existingMaterial.get().getMaterialEtcFile();
+
+        // 파일 저장 처리
+        if (materialDrawFile != null && !materialDrawFile.isEmpty()) {
+            drawFilePath = saveFile(materialDrawFile); // 새 파일 저장
+        }
+        if (materialEtcFile != null && !materialEtcFile.isEmpty()) {
+            etcFilePath = saveFile(materialEtcFile); // 새 파일 저장
+        }
+
+        // DTO 객체 생성 및 값 설정
+        MaterialDTO materialDTO = MaterialDTO.builder()
+                .materialCode(materialCode)
+                .materialName(materialName)
+                .materialStand(materialStand)
+                .materialTexture(materialTexture)
+                .materialDrawFile(drawFilePath)
+                .materialEtcFile(etcFilePath)
+                .materialRegDate(existingMaterial.get().getMaterialRegDate())
+                .materialModDate(now)
+                .materialSafeQuantity(materialSafeQuantity)
+                .build();
+
+        // 자재 수정 처리
         materialService.updateMaterial(materialDTO);
-        redirectAttributes.addFlashAttribute("message", "Material updated successfully!");
+
+        // 수정 성공 메시지 설정
+        redirectAttributes.addFlashAttribute("message", "자재가 수정되었습니다. 코드: " + materialCode);
+
+        // 자재 목록 페이지로 리다이렉트
         return "redirect:/product/getListMaterial";
     }
 
@@ -546,10 +727,28 @@ public class ProductController {
 
     // 자재 조회 메서드
     @GetMapping("/getMaterial/{materialCode}")
-    public void getMaterial(@PathVariable String materialCode, Model model) {
-        log.info("자재 조회, 코드: " + materialCode);
+    public String getMaterial(@PathVariable("materialCode") String materialCode, Model model) {
+        log.info("자재 조회 : " + materialCode);
+
+//        Optional<MaterialDTO> material = materialService.getMaterial(materialCode);
+//        if (material.isPresent()) {
+//            model.addAttribute("material", material.get());
+//            //return "redirect:/product/getMaterial"; // View name (JSP or Thymeleaf template)
+//        } else {
+//            //return "error/404"; // Handle not found
+//        }
+
+        return "redirect:/product/materialDetail?materialCode=" + materialCode;
+    }
+
+    // 자재 조회 폼
+    @GetMapping("/materialDetail")
+    public void materialDetail(@RequestParam("materialCode") String materialCode, Model model) {
+        log.info("자재상세보기 : " + materialCode);
 
         Optional<MaterialDTO> material = materialService.getMaterial(materialCode);
+        log.info("material : " + material);
+
         if (material.isPresent()) {
             model.addAttribute("material", material.get());
             //return "redirect:/product/getMaterial"; // View name (JSP or Thymeleaf template)

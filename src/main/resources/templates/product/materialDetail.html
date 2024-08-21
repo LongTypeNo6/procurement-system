@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>자재 조회</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <th:block th:replace="~{/fragments/headFragment}"></th:block>
+</head>
+
+<body>
+
+<th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
+<th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
+
+<!-- ======= main ======= -->
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>자재 조회</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">메인</a></li>
+                <li class="breadcrumb-item">발주계획</li>
+                <li class="breadcrumb-item">제품</li>
+                <li class="breadcrumb-item active">자재조회</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div class="row">
+            <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
+            <!--여기에 카드랑 내용 넣어주시면 됩니다..-->
+
+            <div class="col-lg-12">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">자재조회</h5>
+
+                        <!-- General Form Elements -->
+                        <form>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">등록날짜</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" th:value="${materialRegDate}" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">마지막수정날짜</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" th:value="${materialModDate}" disabled>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">자재코드</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" th:value="${material.materialCode}" disabled>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">자재명</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" th:value="${material.materialName}" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">안전재고</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="material_safe_quantity" class="form-control" th:value="${material.materialSafeQuantity}" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">규격</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control"  th:value="${material.materialStand}" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">재질</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" th:value="${material.materialTexture}" disabled>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">도면</label>
+                                <div class="col-sm-10">
+<!--                                        <input class="form-control" type="file" id="formFile" disabled><br />-->
+                                    <span th:text="@{${material.materialDrawFile}}"></span>
+<!--                                        <img th:src="@{${material.materialDrawFile}}" alt="Etc File"/>-->
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">참고문서</label>
+                                <div class="col-sm-10">
+<!--                                        <input class="form-control" type="file" id="formFile" disabled><br />-->
+                                    <span th:text="@{${material.materialEtcFile}}"></span>
+<!--                                        <img th:src="@{${material.materialEtcFile}}" alt="Etc File"/>-->
+                                </div>
+                            </div>
+
+
+
+                            <div class="row mb-3">
+                                <div class="col-sm-10">
+                                    <a th:href="@{/product/materialModify/{materialCode}(materialCode=${material.materialCode})}"><button type="button" class="btn btn-primary">수정</button></a>
+                                    <a href="/product/getListMaterial"><button type="button" class="btn btn-primary">리스트</button></a>
+                                    <a href="생산계획처리.html"><button type="button" class="btn btn-primary">생산계획등록</button></a>
+                                </div>
+                            </div>
+                        </form><!-- End General Form Elements -->
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div> <!--End row-->
+    </section>
+
+</main>
+<!-- End #main -->
+
+<th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
+<th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
+
+</body>
+</html>

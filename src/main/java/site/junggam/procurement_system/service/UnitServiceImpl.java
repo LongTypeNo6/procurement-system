@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import site.junggam.procurement_system.dto.ProductDTO;
 import site.junggam.procurement_system.dto.UnitDTO;
 import site.junggam.procurement_system.dto.UnitMaterialDTO;
 import site.junggam.procurement_system.entity.*;
@@ -50,10 +51,31 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public void updateUnit(UnitDTO unitDTO) {
-        if (unitRepository.existsById(unitDTO.getUnitCode())) {
+    public void updateUnit(String unitCode, UnitDTO unitDTO, List<String> materialCodes) {
+//        if (unitRepository.existsById(unitDTO.getUnitCode())) {
+//            Unit unit = convertToEntity(unitDTO);
+//            unitRepository.save(unit);
+//        }
+
+        Unit existingUnit = unitRepository.findById(unitCode).orElse(null);
+        if (existingUnit != null) {
             Unit unit = convertToEntity(unitDTO);
-            unitRepository.save(unit);
+            existingUnit.setUnitName(unit.getUnitName());
+            existingUnit.setUnitStand(unit.getUnitStand());
+            existingUnit.setUnitTexture(unit.getUnitTexture());
+            existingUnit.setUnitDrawFile(unit.getUnitDrawFile());
+            existingUnit.setUnitEtcFile(unit.getUnitEtcFile());
+            existingUnit.setUnitRegDate(unit.getUnitRegDate());
+            existingUnit.setUnitModDate(unit.getUnitModDate());
+
+            Set<UnitMaterial> unitMaterials = materialCodes.stream()
+                    .map(materialCode -> {
+                        Material material = materialRepository.findById(materialCode).orElse(null);
+                        return new UnitMaterial(new UnitMaterialId(unitCode, materialCode), existingUnit, material);
+                    })
+                    .collect(Collectors.toSet());
+            existingUnit.setUnitMaterials(unitMaterials);
+            unitRepository.save(existingUnit);
         }
     }
 
@@ -64,8 +86,11 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public Optional<UnitDTO> getUnit(String unitCode) {
-        return unitRepository.findById(unitCode)
-                .map(this::convertToDTO);
+//        return unitRepository.findById(unitCode)
+//                .map(this::convertToDTO);
+        Unit unit = unitRepository.findById(unitCode).orElse(null);
+        UnitDTO unitDTO = convertToDTO(unit);
+        return Optional.of(unitDTO);
     }
 
     @Override

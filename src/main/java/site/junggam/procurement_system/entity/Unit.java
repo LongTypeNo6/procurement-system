@@ -28,4 +28,15 @@ public class Unit {
 
     @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UnitMaterial> unitMaterials = new HashSet<>();
+
+    public void addUnitMaterial(UnitMaterial unitMaterial) {
+        unitMaterials.add(unitMaterial);
+        unitMaterial.setUnit(this);
+    }
+
+    public void removeUnitMaterial(UnitMaterial unitMaterial) {
+        unitMaterials.remove(unitMaterial);
+        unitMaterial.setUnit(null);
+    }
+
 }

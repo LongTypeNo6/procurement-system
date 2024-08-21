@@ -15,6 +15,7 @@ import site.junggam.procurement_system.repository.ProductRepository;
 import site.junggam.procurement_system.repository.ProductUnitRepository;
 import site.junggam.procurement_system.repository.UnitRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -55,10 +56,27 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void updateProduct(String productCode, ProductDTO productDTO, List<String> unitCodes) {
-//        if (productRepository.existsById(productDTO.getProductCode())) {
-//            Product product = convertToEntity(productDTO);
-//            productRepository.save(product);
+
+//        Product product = productRepository.findById(productDTO.getProductCode()).orElseThrow();
+//
+//        // 엔티티 정보 업데이트
+//        product.setProductName(productDTO.getProductName());
+//        // 나머지 필드 업데이트
+//
+//        // 기존 유닛 처리
+//        List<ProductUnit> existingUnits = new ArrayList<>(product.getProductUnits());
+//        for (ProductUnit unit : existingUnits) {
+//            if (!productDTO.getProductUnits().contains(unit)) {
+//                product.removeProductUnit(unit);
+//            }
 //        }
+//        for (ProductUnitDTO unitDTO : productDTO.getProductUnits()) {
+//            ProductUnit unit = new ProductUnit();
+//            unit.setUnitCode(unitDTO.getUnitCode());
+//            product.addProductUnit(unit);
+//        }
+//
+//        productRepository.save(product);
 
         Product existingProduct = productRepository.findById(productCode).orElse(null);
         if (existingProduct != null) {
@@ -81,6 +99,7 @@ public class ProductServiceImpl implements ProductService {
             existingProduct.setProductUnits(productUnits);
             productRepository.save(existingProduct);
         }
+
     }
 
     @Override
