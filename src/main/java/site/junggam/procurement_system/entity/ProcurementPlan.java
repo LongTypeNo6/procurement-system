@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString(exclude = {"material","purchaseOrder","productionPlan"})
 @Getter
+@Setter
 @Table(name="tbl_procurement_plan")
 public class ProcurementPlan {
     @Id

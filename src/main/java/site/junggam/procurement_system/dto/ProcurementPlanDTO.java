@@ -25,5 +25,10 @@ public class ProcurementPlanDTO {
 
     private String productionPlanCode;
 
+    @Builder.Default
+    private String bomProcess=null;
+    @Builder.Default
+    private int bomQuantity=0;
+
 
 }

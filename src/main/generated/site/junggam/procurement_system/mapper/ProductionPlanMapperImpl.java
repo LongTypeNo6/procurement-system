@@ -1,5 +1,7 @@
 package site.junggam.procurement_system.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import site.junggam.procurement_system.dto.ProductionPlanDTO;
@@ -9,7 +11,7 @@ import site.junggam.procurement_system.entity.Unit;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-21T02:26:08+0900",
+    date = "2024-08-21T08:15:38+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -34,6 +36,20 @@ public class ProductionPlanMapperImpl implements ProductionPlanMapper {
         productionPlanDTO.productionPlanQuantity( productionPlan.getProductionPlanQuantity() );
 
         return productionPlanDTO.build();
+    }
+
+    @Override
+    public List<ProductionPlanDTO> toDTOs(List<ProductionPlan> productionPlans) {
+        if ( productionPlans == null ) {
+            return null;
+        }
+
+        List<ProductionPlanDTO> list = new ArrayList<ProductionPlanDTO>( productionPlans.size() );
+        for ( ProductionPlan productionPlan : productionPlans ) {
+            list.add( toDTO( productionPlan ) );
+        }
+
+        return list;
     }
 
     @Override

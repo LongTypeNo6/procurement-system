@@ -9,7 +9,7 @@ import site.junggam.procurement_system.entity.ProductionPlan;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-21T06:38:51+0900",
+    date = "2024-08-21T11:36:26+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -43,6 +43,7 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
         ProcurementPlan.ProcurementPlanBuilder procurementPlan = ProcurementPlan.builder();
 
         procurementPlan.material( procurementPlanDTOToMaterial( procurementPlanDTO ) );
+        procurementPlan.productionPlan( procurementPlanDTOToProductionPlan( procurementPlanDTO ) );
         procurementPlan.procurementPlanCode( procurementPlanDTO.getProcurementPlanCode() );
         procurementPlan.procurementPlantRegDate( procurementPlanDTO.getProcurementPlantRegDate() );
         procurementPlan.procurementPlanDeadLine( procurementPlanDTO.getProcurementPlanDeadLine() );
@@ -107,5 +108,17 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
         material.materialCode( procurementPlanDTO.getMaterialCode() );
 
         return material.build();
+    }
+
+    protected ProductionPlan procurementPlanDTOToProductionPlan(ProcurementPlanDTO procurementPlanDTO) {
+        if ( procurementPlanDTO == null ) {
+            return null;
+        }
+
+        ProductionPlan.ProductionPlanBuilder productionPlan = ProductionPlan.builder();
+
+        productionPlan.productionPlanCode( procurementPlanDTO.getProductionPlanCode() );
+
+        return productionPlan.build();
     }
 }

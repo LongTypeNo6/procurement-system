@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.junggam.procurement_system.dto.*;
 import site.junggam.procurement_system.entity.Product;
+import site.junggam.procurement_system.entity.ProductionPlan;
+import site.junggam.procurement_system.entity.Warehousing;
 import site.junggam.procurement_system.service.MaterialService;
 import site.junggam.procurement_system.service.PlanService;
 
@@ -58,5 +60,16 @@ public class PlanRestController {
         planService.insertProductionPlan(productionPlanDTO);
         log.info("생산계획처리 완료!!!");
         return new ResponseEntity<>("생산계획등록", HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/productionPlanList", produces = "application/json")
+    public ResponseEntity<PageResultDTO<ProductionPlanDTO, ProductionPlan>> getWarehousingList(PageRequestDTO pageRequestDTO) {
+        PageResultDTO<ProductionPlanDTO, ProductionPlan> productionPlanDTOList = planService.getProductionPlanList(pageRequestDTO);
+        return new ResponseEntity<>(productionPlanDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/productionPlanGet/{productionPlanCode}")
+    public ResponseEntity<ProductionPlanDTO> getProductionPlan(@PathVariable("productionPlanCode") String productionPlanCode) {
+        return new ResponseEntity<>(planService.getProductionPlan(productionPlanCode), HttpStatus.OK);
     }
 }

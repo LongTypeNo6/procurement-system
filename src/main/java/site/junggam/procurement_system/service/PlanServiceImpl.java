@@ -3,6 +3,9 @@ package site.junggam.procurement_system.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import site.junggam.procurement_system.dto.*;
 import site.junggam.procurement_system.entity.*;
@@ -13,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 @Service
 @Log4j2
@@ -119,16 +123,9 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    @Transactional
     public void insertProductionPlan(ProductionPlanDTO productionPlanDTO) {
         String productionPlanCode = generatePlanCode(productionPlanDTO.getProductionPlanDate());
         List<ProcurementPlanDTO> procurementPlanDTOList=productionPlanDTO.getProcurementPlanDTOList();
-        for(int i=0; i<procurementPlanDTOList.size(); i++) {
-            ProcurementPlanDTO procurementPlanDTO = procurementPlanDTOList.get(i);
-            String procurementPlanCode = "PROC"+productionPlanCode.substring(4)+"-"+String.format("%03d", i+1);
-            procurementPlanDTO.setProcurementPlanCode(procurementPlanCode);
-            procurementPlanRepository.save(procurementPlanMapper.toEntity(procurementPlanDTO));
-        }
         productionPlanDTO.setProductionPlanCode(productionPlanCode);
         ProductionPlan productionPlan= productionPlanMapper.toEntity(productionPlanDTO);
         if(productionPlanDTO.getProductCode()!=null){
@@ -137,6 +134,36 @@ public class PlanServiceImpl implements PlanService {
             productionPlan.setUnit(Unit.builder().unitCode(productionPlanDTO.getUnitCode()).build());
         }
         productionPlanRepository.save(productionPlan);
+        for(int i=0; i<procurementPlanDTOList.size(); i++) {
+            ProcurementPlanDTO procurementPlanDTO = procurementPlanDTOList.get(i);
+            String procurementPlanCode = "PROC"+productionPlanCode.substring(4)+"-"+String.format("%03d", i+1);
+            procurementPlanDTO.setProcurementPlanCode(procurementPlanCode);
+            procurementPlanDTO.setProductionPlanCode(productionPlanCode);
+            procurementPlanRepository.save(procurementPlanMapper.toEntity(procurementPlanDTO));
+        }
+    }
+
+    @Override
+    public PageResultDTO<ProductionPlanDTO, ProductionPlan> getProductionPlanList(PageRequestDTO pageRequestDTO) {
+        try {
+            Pageable pageable = pageRequestDTO.getPageable(Sort.by("productionPlanCode").descending()); //나주에 바꿀것
+            Page<ProductionPlan> result = productionPlanRepository.findAll(pageable);
+            Function<ProductionPlan, ProductionPlanDTO> fn = (productionPlan -> {
+                ProductionPlanDTO dto = productionPlanMapper.toDTO(productionPlan);
+                return dto;
+            });
+            return new PageResultDTO<>(result, fn);
+        } catch (Exception e) {
+            log.error("에러메세지", e);
+            throw e; // or handle the exception appropriately
+        }
+    }
+
+    @Override
+    public ProductionPlanDTO getProductionPlan(String productionPlanCode) {
+        ProductionPlan productionPlan =productionPlanRepository.findById(productionPlanCode).get();
+//        List<ProcurementPlanDTO> procurementPlanDTOList=procurementPlanRepository.findByMaterial()
+        return productionPlanMapper.toDTO(productionPlan);
     }
 
 
