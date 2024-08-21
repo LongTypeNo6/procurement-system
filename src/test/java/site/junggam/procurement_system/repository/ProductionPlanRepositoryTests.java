@@ -21,7 +21,7 @@ public class ProductionPlanRepositoryTests {
     public void insertProductionPlan() {
         IntStream.rangeClosed(1,9).forEach(i->{
             ProductionPlan productionPlan = ProductionPlan.builder()
-                    .productionPlanCode("PLAN-240813-00"+i)
+                    .productionPlanCode("PLAN-240821-00"+i)
                     .productionPlanDate(LocalDateTime.now())
                     .productionPlanDeadLine(LocalDateTime.now())
                     .productionPlanRegDate(LocalDateTime.now())
@@ -29,9 +29,9 @@ public class ProductionPlanRepositoryTests {
                     .build();
             productionPlanRepository.save(productionPlan);
         });
-        IntStream.rangeClosed(10,20).forEach(i->{
+        IntStream.rangeClosed(10,15).forEach(i->{
             ProductionPlan productionPlan = ProductionPlan.builder()
-                    .productionPlanCode("PLAN-240813-0"+i)
+                    .productionPlanCode("PLAN-240821-0"+i)
                     .productionPlanDate(LocalDateTime.now())
                     .productionPlanDeadLine(LocalDateTime.now())
                     .productionPlanRegDate(LocalDateTime.now())

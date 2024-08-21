@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductRestController {
     private final ProductService productService;
-    private final MaterialService materialService;
+
 
     @PostMapping("/productRegisterProApi")
     public ResponseEntity<String> registerProduct(@RequestBody @Validated ProductDTO productDTO, List<String> unitCodes) { //@Valid
@@ -38,12 +38,8 @@ public class ProductRestController {
         }
     }
 
-    @GetMapping(value = "/materialListSearching", produces = "application/json")
-    public ResponseEntity<List<MaterialDTO>> getTemMaterialList(@RequestParam("keyword")String keyword) {
-        log.info("받은 키워드는 "+keyword);
-        List<MaterialDTO> materialDTOList = materialService.getMaterialListSearching(keyword);
-        return new ResponseEntity<>(materialDTOList, HttpStatus.OK);
-    }
+
+
 
 
 }

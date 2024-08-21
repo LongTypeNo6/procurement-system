@@ -7,8 +7,34 @@ function escapeHtml(text) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 }
+//받은날짜를 다음 평일로 리턴
+function nextWeekday(inputDateValue) {
 
-// 날짜를 "yyyy-MM-dd" 형식의 문자열로 변환
+    const inputDate = new Date(inputDateValue);
+    let nextWeekday = new Date(inputDate);
+
+    // 다음 평일 계산
+    do {
+        nextWeekday.setDate(nextWeekday.getDate() + 1);
+    } while (nextWeekday.getDay() === 0 || nextWeekday.getDay() === 6); // 0 = Sunday, 6 = Saturday
+
+    return formatDate(nextWeekday)
+}
+//받은날짜를 이전 평일로 리턴
+function prevWeekday(inputDateValue) {
+
+    const inputDate = new Date(inputDateValue);
+    let prevWeekday = new Date(inputDate);
+
+    // 이전 평일 계산
+    do {
+        prevWeekday.setDate(prevWeekday.getDate() - 1);
+    } while (prevWeekday.getDay() === 0 || prevWeekday.getDay() === 6); // 0 = Sunday, 6 = Saturday
+
+    return formatDate(prevWeekday)
+}
+
+// 날짜를 "MM/dd" 형식의 문자열로 변환
 function formatDateS(dateString) {
     const date = new Date(dateString);
     const month = ('0' + (date.getMonth() + 1)).slice(-2);

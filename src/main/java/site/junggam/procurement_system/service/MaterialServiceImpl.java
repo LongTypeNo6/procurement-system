@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MaterialServiceImpl implements MaterialService {
     private final MaterialRepository materialRepository;
-    private final MaterialMapper materialMapper;
+
 
     @Override
     public String insertMaterial(MaterialDTO materialDTO) {
@@ -66,17 +66,7 @@ public class MaterialServiceImpl implements MaterialService {
         return getListMaterial();
     }
 
-    //자재 검색(출고요청용)
-    @Override
-    public List<MaterialDTO> getMaterialListSearching(String keyword) {
-        try {
-            List<Material> result = materialRepository.findByIdAndName(keyword);
-            return materialMapper.toDTOs(result);
-        }catch (Exception e) {
-            log.error(e);
-            throw e;
-        }
-    }
+
 
 
     private MaterialDTO convertToDTO(Material material) {

@@ -44,8 +44,8 @@
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">자재명</label>
                                 <div class="col-sm-10">
-                                    <div class="input-group">
                                         <input type="text" class="form-control" id="materialCode" hidden="hidden">
+                                    <div class="input-group mb">
                                         <input type="text" class="form-control" id="materialName" required>
                                         <button type="button" class="input-group-text" id="materialSelectionBtn" data-bs-toggle="modal" data-bs-target="#materialSelection">검색</button>
                                     </div>
@@ -109,7 +109,7 @@
                                                 <div class="row mb-3">
                                                     <div class="col-sm-12">
                                                         <div class="input-group">
-                                                            <input type="text" class="form-control" id="materialSearch" placeholder="코드 또는 자재명 검색">
+                                                            <input type="text" class="form-control" id="materialSearch" placeholder="코드 또는 자재명 입력">
                                                             <button type="button" class="input-group-text">검색</button>
                                                         </div>
                                                     </div>
@@ -153,7 +153,7 @@
                 $("#materialSearch").on("input", function () {
                     var keyword = $("#materialSearch").val();
                     console.log("검색 키워드: " + keyword);
-                    $.getJSON("/product/materialListSearching?keyword=" + keyword, function(data) {
+                    $.getJSON("/plan/materialListSearching?keyword=" + keyword, function(data) {
                         console.log("검색기능 잘 되나?"+data)
                         var str = "";
                         $.each(data, function(idx, dto) {

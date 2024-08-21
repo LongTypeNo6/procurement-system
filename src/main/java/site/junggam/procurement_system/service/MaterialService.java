@@ -31,8 +31,7 @@ public interface MaterialService {
     //Page<MaterialDTO> searchMaterial(String type, Pageable pageable);
     List<MaterialDTO> searchMaterial(String keyword);
 
-    //자재 검색(출고요청용)
-    List<MaterialDTO> getMaterialListSearching(String keyword);
+
 
     //DTO->Entity
 //    default Material dtoToEntity(MaterialDTO materialDTO) {

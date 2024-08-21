@@ -12,10 +12,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProcurementPlanDTO {
-
     private String procurementPlanCode;
     private LocalDateTime procurementPlantRegDate;
     private LocalDateTime procurementPlanDeadLine;
     private Integer procurementPlanQuantity;
-    private MaterialDTO materialDTO;
+
+    private String materialCode;
+    private String materialName;
+
+    private String productionPlanCode;
+
+
 }
