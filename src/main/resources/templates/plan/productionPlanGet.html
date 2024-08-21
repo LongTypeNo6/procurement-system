@@ -156,7 +156,18 @@
                 $("#productionPlanDeadLine").val(formatDate(dto.productionPlanDeadLine));
                 $("#productionPlanQuantity").val(dto.productionPlanQuantity);
                 console.log(dto.procurementPlanDTOList)
-
+                let str = "";
+                $.each(dto.procurementPlanDTOList, function(idx, pDto) {
+                    str += '<tr>';
+                    str += '<th scope="row">'+(idx+1)+'</th>';
+                    str += '<td id="materialName'+(idx+1)+'" data-material-code="'+pDto.materialCode+'">'+pDto.materialName+'</td>';
+                    str += '<td id="bomQuantity'+(idx+1)+'">'+pDto.bomQuantity+'</td>';
+                    str += '<td id="procurementPlanQuantity'+(idx+1)+'">'+pDto.procurementPlanQuantity+'</td>';
+                    str += '<td>'+pDto.bomProcess+'</td>';
+                    str += '<td><input type="date" class="form-control" name="procurementPlanDeadLine" id="procurementPlanDeadLine'+(idx+1)+'" value="'+formatDate(pDto.procurementPlanDeadLine)+'"></td>';
+                    str += '</tr>';
+                });
+                $("#bomList").html(str);
             })
         });
     </script>

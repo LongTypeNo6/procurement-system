@@ -12,5 +12,5 @@ public interface ProcurementPlanRepository extends JpaRepository<ProcurementPlan
     List<ProcurementPlan> findByMaterial(Material material);
 
     @EntityGraph(attributePaths = {"productionPlan"}, type = EntityGraph.EntityGraphType.FETCH)
-    List<ProductionPlan> findByProductionPlan(ProductionPlan productionPlan);
+    List<ProcurementPlan> findByProductionPlan(ProductionPlan productionPlan);
 }

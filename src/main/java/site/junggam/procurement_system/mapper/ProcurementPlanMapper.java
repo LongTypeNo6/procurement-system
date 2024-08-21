@@ -6,6 +6,8 @@ import org.mapstruct.factory.Mappers;
 import site.junggam.procurement_system.dto.ProcurementPlanDTO;
 import site.junggam.procurement_system.entity.ProcurementPlan;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface ProcurementPlanMapper {
     ProcurementPlanMapper INSTANCE = Mappers.getMapper(ProcurementPlanMapper.class);
@@ -15,6 +17,8 @@ public interface ProcurementPlanMapper {
     @Mapping(source = "material.materialCode", target = "materialCode")
     @Mapping(source = "productionPlan.productionPlanCode", target = "productionPlanCode")
     ProcurementPlanDTO toDTO(ProcurementPlan procurementPlan);
+
+    List<ProcurementPlanDTO> toDTOs(List<ProcurementPlan> procurementPlans);
 
     @Mapping(source = "materialName", target = "material.materialName")
     @Mapping(source = "materialCode", target = "material.materialCode")

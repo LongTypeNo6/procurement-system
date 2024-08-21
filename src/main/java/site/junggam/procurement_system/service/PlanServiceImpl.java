@@ -161,10 +161,59 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public ProductionPlanDTO getProductionPlan(String productionPlanCode) {
-        ProductionPlan productionPlan =productionPlanRepository.findById(productionPlanCode).get();
-//        List<ProcurementPlanDTO> procurementPlanDTOList=procurementPlanRepository.findByMaterial()
-        return productionPlanMapper.toDTO(productionPlan);
-    }
+        ProductionPlan productionPlan = productionPlanRepository.findById(productionPlanCode)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid production plan code: " + productionPlanCode));
 
+        List<ProcurementPlan> procurementPlanList = procurementPlanRepository.findByProductionPlan(productionPlan);
+        List<ProcurementPlanDTO> procurementPlanDTOList = procurementPlanMapper.toDTOs(procurementPlanList);
+
+        if (productionPlan.getProduct() == null) {
+            // Unit 처리 로직 (이미 작동 중)
+            String unitCode = productionPlan.getUnit().getUnitCode();
+            List<UnitBom> unitBomList = unitBomRepository.findByunit(Unit.builder().unitCode(unitCode).build());
+            for (ProcurementPlanDTO procurementPlanDTO : procurementPlanDTOList) {
+                for (UnitBom unitBom : unitBomList) {
+                    if (procurementPlanDTO.getMaterialCode().equals(unitBom.getMaterial().getMaterialCode())) {
+                        procurementPlanDTO.setBomProcess(unitBom.getUnitBomProcess());
+                        procurementPlanDTO.setBomQuantity(unitBom.getUnitBomQuantity());
+                        break;
+                    }
+                }
+            }
+        } else {
+            // Product 처리 로직
+            List<ProductBom> productBomList = productBomRepository.findByProduct(productionPlan.getProduct());
+
+            for (ProcurementPlanDTO procurementPlanDTO : procurementPlanDTOList) {
+                int totalBomQuantity = 0;
+                StringBuilder bomProcesses = new StringBuilder();
+
+                // ProductBom 처리
+                for (ProductBom productBom : productBomList) {
+                    List<UnitBom> unitBomList = unitBomRepository.findByunit(Unit.builder().unitCode(productBom.getUnit().getUnitCode()).build());
+                    for (UnitBom unitBom : unitBomList) {
+                        if (procurementPlanDTO.getMaterialCode().equals(unitBom.getMaterial().getMaterialCode())) {
+                            int bomQuantity = productBom.getProductBomQuantity() * unitBom.getUnitBomQuantity();
+                            totalBomQuantity += bomQuantity;
+                            bomProcesses.append(productBom.getProductBomProcess())
+                                    .append(" | ")
+                                    .append(unitBom.getUnitBomProcess())
+                                    .append(" ");
+
+                        }
+                    }
+                }
+
+                // 설정된 값들을 DTO에 적용
+                procurementPlanDTO.setBomProcess(bomProcesses.toString().trim());
+                procurementPlanDTO.setBomQuantity(totalBomQuantity);
+            }
+        }
+
+        ProductionPlanDTO productionPlanDTO = productionPlanMapper.toDTO(productionPlan);
+        productionPlanDTO.setProcurementPlanDTOList(procurementPlanDTOList);
+
+        return productionPlanDTO;
+    }
 
 }
