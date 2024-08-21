@@ -14,7 +14,7 @@ public interface UnitService {
     String insertUnit(UnitDTO unitDTO, List<String> materialCodes);
 
     // 유닛 수정
-    void updateUnit(UnitDTO unitDTO);
+    void updateUnit(String unitCode, UnitDTO unitDTO, List<String> materialCodes);
 
     // 유닛 삭제
     void deleteUnit(String unitCode);

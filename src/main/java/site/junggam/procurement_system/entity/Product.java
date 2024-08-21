@@ -36,14 +36,14 @@ public class Product {
     //private List<ProductUnit> productUnits = new ArrayList<>();
 
 
-//    public void addProductUnit(ProductUnit productUnit) {
-//        productUnits.add(productUnit);
-//        productUnit.setProduct(this);
-//    }
-//
-//    public void removeProductUnit(ProductUnit productUnit) {
-//        productUnits.remove(productUnit);
-//        productUnit.setProduct(null);
-//    }
+    public void addProductUnit(ProductUnit productUnit) {
+        productUnits.add(productUnit);
+        productUnit.setProduct(this);
+    }
+
+    public void removeProductUnit(ProductUnit productUnit) {
+        productUnits.remove(productUnit);
+        productUnit.setProduct(null);
+    }
 
 }

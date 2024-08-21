@@ -104,7 +104,7 @@
                                                 <div class="input-group mb-3">
 
                                                     <input type="text" class="form-control" id="itemCodeInput">
-                                                    <button class="input-group-text" id="confirmSelectionBtn">검색</button>
+                                                    <button onclick="alert('검색 기능은 구현예정..')" class="input-group-text" id="confirmSelectionBtn">검색</button>
                                                 </div>
                                             </div>
 
@@ -160,7 +160,7 @@
                             <tr th:each="unit, unitState : ${units}">
                                 <th scope="row" th:text="${unitState.count }"></th>
                                 <td>유닛</td>
-                                <td><a href="유닛상세보기.html" th:text="${unit.unitName}"></a></td>
+                                <td><a th:href="@{/product/getUnit/{unitCode}(unitCode=${unit.unitCode})}" th:text="${unit.unitName}"></a></td>
                                 <td th:text="${unit.unitCode}"></td>
                                 <td th:text="${unit.unitStand}"></td>
                                 <td th:text="${unit.unitTexture}"></td>

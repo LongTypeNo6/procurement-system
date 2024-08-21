@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>제품 조회</title>
+    <title>유닛 조회</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -19,13 +19,13 @@
 <!-- ======= main ======= -->
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>제품 조회</h1>
+        <h1>유닛 조회</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">메인</a></li>
                 <li class="breadcrumb-item">발주계획</li>
                 <li class="breadcrumb-item">제품</li>
-                <li class="breadcrumb-item active">제품조회</li>
+                <li class="breadcrumb-item active">유닛조회</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -39,92 +39,79 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">제품조회</h5>
+                        <h5 class="card-title">유닛조회</h5>
 
                         <!-- General Form Elements -->
                         <form>
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">등록날짜</label>
                                 <div class="col-sm-10">
-                                    <input type="date" class="form-control" th:value="${productRegDate}" disabled>
+                                    <input type="date" class="form-control" th:value="${unitRegDate}" disabled>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">마지막수정날짜</label>
                                 <div class="col-sm-10">
-                                    <input type="date" class="form-control" th:value="${productModDate}" disabled>
+                                    <input type="date" class="form-control" th:value="${unitModDate}" disabled>
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label">제품코드</label>
+                                <label class="col-sm-2 col-form-label">유닛코드</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" th:value="${product.get().productCode}" disabled>
+                                    <input type="text" class="form-control" th:value="${unit.get().unitCode}" disabled>
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <label for="inputText" class="col-sm-2 col-form-label">품목명</label>
+                                <label for="inputText" class="col-sm-2 col-form-label">유닛명</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" th:value="${product.get().productName}" disabled>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="inputText" class="col-sm-2 col-form-label">단가</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" th:value="${product.get().productPrice}" disabled>
+                                    <input type="text" class="form-control" th:value="${unit.get().unitName}" disabled>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputText" class="col-sm-2 col-form-label">규격</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control"  th:value="${product.get().productStand}" disabled>
+                                    <input type="text" class="form-control"  th:value="${unit.get().unitStand}" disabled>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputText" class="col-sm-2 col-form-label">재질</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" th:value="${product.get().productTexture}" disabled>
+                                    <input type="text" class="form-control" th:value="${unit.get().unitTexture}" disabled>
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <label for="inputNumber" class="col-sm-2 col-form-label">도면</label>
                                 <div class="col-sm-10">
-<!--                                        <input class="form-control" type="file" id="formFile" disabled><br />-->
-                                    <span th:text="@{${product.get().productDrawFile}}"></span>
-<!--                                        <img th:src="@{${product.get().productDrawFile}}" alt="Etc File"/>-->
+                                    <!--                                        <input class="form-control" type="file" id="formFile" disabled><br />-->
+                                    <span th:text="@{${unit.get().unitDrawFile}}"></span>
+                                    <!--                                        <img th:src="@{${unit.get().unitDrawFile}}" alt="Etc File"/>-->
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputNumber" class="col-sm-2 col-form-label">참고문서</label>
                                 <div class="col-sm-10">
-<!--                                        <input class="form-control" type="file" id="formFile" disabled><br />-->
-                                    <span th:text="@{${product.get().productEtcFile}}"></span>
-<!--                                        <img th:src="@{${product.get().productEtcFile}}" alt="Etc File"/>-->
+                                    <!--                                        <input class="form-control" type="file" id="formFile" disabled><br />-->
+                                    <span th:text="@{${unit.get().unitEtcFile}}"></span>
+                                    <!--                                        <img th:src="@{${unit.get().unitEtcFile}}" alt="Etc File"/>-->
                                 </div>
                             </div>
 
 
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">
-                                    유닛리스트
+                                    자재리스트
                                 </label>
                                 <div class="col-sm-10">
-                                    <ul hidden="hidden">
-                                        <li th:each="unit : ${units}">
-                                            <p>
-                                                <strong>Unit Code:</strong> <span th:text="${unit.unitCode}"></span>
-                                                <strong>Unit Name:</strong> <span th:text="${unit.unitName}"></span>
-                                            </p>
-                                        </li>
-                                    </ul>
+
                                     <table class="table table-hover">
                                         <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">유닛명</th>
-                                            <th scope="col">유닛코드</th>
+                                            <th scope="col">자재명</th>
+                                            <th scope="col">자재코드</th>
                                             <th scope="col">규격</th>
                                             <th scope="col">재질</th>
                                             <th scope="col">등록일</th>
@@ -134,17 +121,16 @@
                                             <th scope="col">자재명</th>
                                             <th scope="col">수량(개)</th>
                                             <th scope="col">투입공정</th>
-
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="unit, state : ${units}">
+                                        <tr th:each="material, state : ${materials}">
                                             <th scope="row" th:text="${state.count }"></th>
-                                            <td th:text="${unit.unitName}"></td>
-                                            <td th:text="${unit.unitCode}"></td>
-                                            <td th:text="${unit.unitStand}"></td>
-                                            <td th:text="${unit.unitTexture}"></td>
-                                            <td>[[${#temporals.format(unit.unitRegDate, 'yyyy/MM/dd')}]]</td>
+                                            <td th:text="${material.materialName}"></td>
+                                            <td th:text="${material.materialCode}"></td>
+                                            <td th:text="${material.materialStand}"></td>
+                                            <td th:text="${material.materialTexture}"></td>
+                                            <td>[[${#temporals.format(material.materialRegDate, 'yyyy/MM/dd')}]]</td>
                                         </tr>
                                         <tr hidden="hidden">
                                             <th scope="row">1</th>
@@ -183,8 +169,8 @@
 
                             <div class="row mb-3">
                                 <div class="col-sm-10">
-                                    <a th:href="@{/product/productModify/{productCode}(productCode=${product.get().productCode})}"><button type="button" class="btn btn-primary">수정</button></a>
-                                    <a href="/product/getListProduct"><button type="button" class="btn btn-primary">리스트</button></a>
+                                    <a th:href="@{/product/unitModify/{unitCode}(unitCode=${unit.get().unitCode})}"><button type="button" class="btn btn-primary">수정</button></a>
+                                    <a href="/product/getListUnit"><button type="button" class="btn btn-primary">리스트</button></a>
                                     <a href="생산계획처리.html"><button type="button" class="btn btn-primary">생산계획등록</button></a>
                                 </div>
                             </div>
