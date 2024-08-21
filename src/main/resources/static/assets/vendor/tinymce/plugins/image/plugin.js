@@ -81,13 +81,7 @@
       isNone() {
         return !this.tag;
       }
-      map(mapper) {
-        if (this.tag) {
-          return Optional.some(mapper(this.value));
-        } else {
-          return Optional.none();
-        }
-      }
+
       bind(binder) {
         if (this.tag) {
           return binder(this.value);
