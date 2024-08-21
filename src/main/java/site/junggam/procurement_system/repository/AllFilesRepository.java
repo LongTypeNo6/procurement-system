@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface AllFilesRepository extends JpaRepository<AllFiles,Long> {
     List<AllFiles> findByForeignCode(String foreignCode);
+    AllFiles findOneByForeignCode(String foreignCode);
 }

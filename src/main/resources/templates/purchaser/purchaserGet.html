@@ -41,7 +41,7 @@
                                     </div>
                                     <label for="inputNumber" class="col-sm-2 col-form-label">사업자등록증</label>
                                     <div class="col-sm-4">
-                                        <input class="form-control" type="file" id="formFile" disabled>
+                                        <a id="viewFileBtn" target="_blank"><button type="button" class="btn btn-primary btn-sm">파일보기</button></a>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -125,8 +125,8 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-10">
-                                        <button type="button" class="btn btn-primary" id="modifyPurchaser">수정</button>
-                                        <a href="purchaser/purchaserList"><button type="button" class="btn btn-primary">리스트</button></a>
+                                        <button type="button" class="btn btn-primary" id="modifyPurchaser" hidden="hidden">수정</button>
+                                        <a href="/purchaser/purchaserList"><button type="button" class="btn btn-primary">리스트</button></a>
                                     </div>
                                 </div>
                             </form><!-- End General Form Elements -->
@@ -157,7 +157,91 @@
                 $("#purchaserManagerEmail").val(dto.purchaserManagerEmail);
                 $("#purchaserManagerFax").val(dto.purchaserManagerFax);
                 $("#purchaserMemo").val(dto.purchaserMemo);
+                $("#viewFileBtn").prop("href","/files/foreignCode/view/"+purchaserCode);
             })
+
+            //수정하기버튼
+            $("#modifyPurchaser").on("click", function () {
+                $("#purchaserCode").prop("disabled",false);
+                $("#purchaserName").prop("disabled",false);
+                $("#purchaserAddress").prop("disabled",false);
+                $("#purchaserFax").prop("disabled",false);
+                $("#purchaserEmail").prop("disabled",false);
+                $("#purchaserType").prop("disabled",false);
+                $("#purchaserTel").prop("disabled",false);
+                $("#purchaserCategory").prop("disabled",false);
+                $("#purchaserPresident").prop("disabled",false);
+                $("#purchaserManager").prop("disabled",false);
+                $("#purchaserManagerTel").prop("disabled",false);
+                $("#purchaserManagerEmail").prop("disabled",false);
+                $("#purchaserManagerFax").prop("disabled",false);
+                $("#purchaserMemo").prop("disabled",false);
+                $("#modifyPurchaser").val("저장");
+                $("#modifyPurchaser").attr("id","savePurchaser");
+            })
+
+            $("#savePurchaser").on("click", function () {
+                // 먼저 다른 데이터를 서버로 전송
+                var purchaserDTO = {
+                    purchaserCode: $('#purchaserCode').val(),
+                    purchaserName: $('#purchaserName').val(),
+                    purchaserAddress: $('#purchaserAddress').val(),
+                    purchaserFax: $('#purchaserFax').val(),
+                    purchaserEmail: $('#purchaserEmail').val(),
+                    purchaserType: $('#purchaserType').val(),
+                    purchaserTel: $('#purchaserTel').val(),
+                    purchaserCategory: $('#purchaserCategory').val(),
+                    purchaserPresident: $('#purchaserPresident').val(),
+                    purchaserManager: $('#purchaserManager').val(),
+                    purchaserManagerTel: $('#purchaserManagerTel').val(),
+                    purchaserManagerEmail: $('#purchaserManagerEmail').val(),
+                    purchaserManagerFax: $('#purchaserManagerFax').val(),
+                    purchaserMemo: $('#purchaserMemo').val()
+                };
+                $.ajax({
+                    url: '/purchasercontent/register',
+                    type: "POST",
+                    data: JSON.stringify(purchaserDTO),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "text",
+                    success: function (result) {
+                        console.log("데이터 저장 성공: ", result);
+                        alert("저장했습니다.");
+                        uploadFile(purchaserCode);  // 파일 업로드 함수 호출
+                    },
+                    error: function (error) {
+                        console.log("데이터 저장 실패: ", error);
+                        alert("데이터 저장에 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            });
+
+            function uploadFile(purchaserCode) {
+                var formData = new FormData();
+                var fileInput = $('#formFile')[0].files[0];
+                if (fileInput) {
+                    formData.append("file", fileInput);
+                    $.ajax({
+                        url: '/files/uploadOne/' + purchaserCode + '/' + purchaserCode,  // 파일 업로드 경로
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function (result) {
+                            console.log("파일 업로드 성공: ", result);
+                            window.location.href = "/purchaser/purchaserGet?purchaserCode="+purchaserCode;  // 업로드 후 페이지 리다이렉트
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("파일 업로드 실패: ", textStatus);
+                            alert("파일 업로드에 실패했습니다. 다시 시도해주세요.");
+                        }
+                    });
+                } else {
+                    // 파일이 없는 경우에도 페이지 리다이렉트
+                    window.location.href = "/purchaser/purchaserGet?purchaserCode="+purchaserCode;
+                }
+            }
         });
     </script>
     <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
