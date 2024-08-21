@@ -37,6 +37,10 @@ public class PlanServiceImpl implements PlanService {
     private final ProductionPlanMapper productionPlanMapper;
     private final ProcurementPlanRepository procurementPlanRepository;
     private final ProcurementPlanMapper procurementPlanMapper;
+    private final EstimateRepository estimateRepository;
+    private final EstimateMapper estimateMapper;
+    private final ContractRepository contractRepository;
+    private final ContractMapper contractMapper;
 
     @Override
     public List<ProductDTO> getProductListSearching(String keyword) {
@@ -203,7 +207,6 @@ public class PlanServiceImpl implements PlanService {
                 procurementPlanDTO.setBomQuantity(totalBomQuantity);
             }
         }
-
         ProductionPlanDTO productionPlanDTO = productionPlanMapper.toDTO(productionPlan);
         productionPlanDTO.setProcurementPlanDTOList(procurementPlanDTOList);
 
@@ -233,4 +236,45 @@ public class PlanServiceImpl implements PlanService {
         return procurementPlanDTO;
     }
 
+    @Override
+    public String resisterEstimate(EstimateDTO estimateDTO) {
+        String matertialCode=estimateDTO.getMaterialDTO().getMaterialCode();
+        String temCode = "ESTI"+matertialCode.substring(4)+"-";
+        String lastEstimateCode=estimateRepository.findLastIdOfMaterial(temCode);
+        String newSequence = "001";
+        if (lastEstimateCode != null) {
+            String lastSequence = lastEstimateCode.substring(9);
+            // 4. 일련번호를 숫자로 변환하고 1 증가시킴
+            int nextSequence = Integer.parseInt(lastSequence) + 1;
+            // 5. 새로운 일련번호를 3자리 형식으로 포맷 (예: 001, 002, ...)
+            newSequence = String.format("%03d", nextSequence);
+        }
+        // 6. 최종 코드를 생성
+        String estimateCode=temCode + newSequence;
+        estimateDTO.setEstimateCode(estimateCode);
+        estimateDTO.setEstimateFile(estimateCode);
+        estimateRepository.save(estimateMapper.toEntity(estimateDTO));
+        return estimateCode;
+    }
+
+    @Override
+    public String resisterContract(ContractDTO contractDTO) {
+        String purchaserCode=contractDTO.getPurchaserDTO().getPurchaserCode();
+        String temCode = "CONT"+purchaserCode+"-";
+        String lastPurchaserCode=contractRepository.findLastIdOfPurchaser(temCode);
+        String newSequence = "001";
+        if (lastPurchaserCode != null) {
+            String lastSequence = lastPurchaserCode.substring(Math.max(0, lastPurchaserCode.length() - 3));
+            // 4. 일련번호를 숫자로 변환하고 1 증가시킴
+            int nextSequence = Integer.parseInt(lastSequence) + 1;
+            // 5. 새로운 일련번호를 3자리 형식으로 포맷 (예: 001, 002, ...)
+            newSequence = String.format("%03d", nextSequence);
+        }
+        // 6. 최종 코드를 생성
+        String contractCode=temCode + newSequence;
+        contractDTO.setContractCode(contractCode);
+        contractDTO.setContractFile(contractCode);
+        contractRepository.save(contractMapper.toEntity(contractDTO));
+        return contractCode;
+    }
 }

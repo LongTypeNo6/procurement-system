@@ -41,4 +41,10 @@ public interface PlanService {
 
     //조달계획 상세보기
     ProcurementPlanDTO getProcurementPlan(String procurementPlanCode);
+
+    //견적추가
+    String resisterEstimate(EstimateDTO estimateDTO);
+
+    //계약추가
+    String resisterContract(ContractDTO contractDTO);
 }

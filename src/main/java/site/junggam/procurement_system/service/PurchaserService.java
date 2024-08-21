@@ -22,4 +22,6 @@ public interface PurchaserService {
 
     //거래처 검색결과
     List<PurchaserDTO> getPurchaserSearch(String keyword);
+
+
 }

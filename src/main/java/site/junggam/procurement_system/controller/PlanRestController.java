@@ -84,4 +84,21 @@ public class PlanRestController {
     public ResponseEntity<ProcurementPlanDTO> getProcurementPlan(@PathVariable("procurementPlanCode") String procurementPlanCode) {
         return new ResponseEntity<>(planService.getProcurementPlan(procurementPlanCode), HttpStatus.OK);
     }
+
+    @PostMapping(value = "/registerEstimate")
+    public ResponseEntity<String> resisterEstimate(@RequestBody EstimateDTO estimateDTO){
+        log.info("견적 레스트컨트롤러 집입");
+        log.info("견적 받은 값"+estimateDTO);
+        String estimateCode=planService.resisterEstimate(estimateDTO);
+        log.info("견적 처리 완료!!!");
+        return new ResponseEntity<>(estimateCode, HttpStatus.OK);
+    }
+    @PostMapping(value = "/registerContract")
+    public ResponseEntity<String> resisterContract(@RequestBody ContractDTO contractDTO){
+        log.info("견적 레스트컨트롤러 집입");
+        log.info("견적 받은 값"+contractDTO);
+        String contractCode=planService.resisterContract(contractDTO);
+        log.info("견적 처리 완료!!!");
+        return new ResponseEntity<>(contractCode, HttpStatus.OK);
+    }
 }

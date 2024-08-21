@@ -242,9 +242,9 @@
                             <hr>
                             <div class="row mb-3">
                                 <div class="col-sm-10">
-                                    <a href="조달계획리스트.html"><button type="button" class="btn btn-primary">계약정보저장</button></a>
-                                    <a href="조달계획리스트.html"><button type="button" class="btn btn-primary">계약정보저장 및 조달진행</button></a>
-                                    <a href="조달계획리스트.html"><button type="button" class="btn btn-primary">리스트</button></a>
+                                    <button type="button" class="btn btn-primary">계약정보저장</button>
+                                    <button type="button" class="btn btn-primary">계약정보저장 및 조달진행</button>
+                                    <a href="/plan/procurementPlanList"><button type="button" class="btn btn-primary">리스트</button></a>
                                 </div>
                             </div>
                             <!-- 제품 혹은 유닛 검색 모달창-->
@@ -372,7 +372,6 @@
                 }
                 $("#estimateFileList").html(fileTable);
             }
-
             // 계약서 파일 리스트 표시
             function displayContractFileList() {
                 let fileTable = "";
@@ -386,20 +385,17 @@
                 }
                 $("#contractFileList").html(fileTable);
             }
-
             // 이벤트 위임을 사용하여 동적으로 생성된 버튼에 이벤트 핸들러를 바인딩
             $(document).on("click", ".delete-estimate-file-btn", function() {
                 let index = $(this).data("estimateindex");
                 console.log("삭제할 견적 파일 인덱스: ", index);
                 removeEstimateFile(index);
             });
-
             $(document).on("click", ".delete-contract-file-btn", function() {
                 let index = $(this).data("contractindex");
                 console.log("삭제할 계약 파일 인덱스: ", index);
                 removeContractFile(index);
             });
-
             function removeEstimateFile(index) {
                 estimateFileList.splice(index, 1);  // 배열에서 파일 제거
                 displayEstimateFileList();  // 테이블 업데이트
@@ -409,7 +405,6 @@
                 contractFileList.splice(index, 1);  // 배열에서 파일 제거
                 displayContractFileList();  // 테이블 업데이트
             }
-
             //모달창관련기능
             // 모달을 제어하는 인스턴스를 생성합니다.
             var purchaserModal = new bootstrap.Modal(document.getElementById('purchaserSelect'));
@@ -471,9 +466,147 @@
                     console.log("선택된 값이 없습니다.");
                 }
             });
+
+            //저장기능
+            function estimateSave() {
+                var estimateDTO = {
+                    purchaserCode: $("#purchaserCode").val(),
+                    purchaserName: $("#purchaserName").val(),
+                    materialDTO: { materialCode: $("#materialCode").val() },
+                    contractCode: $("#contractCode").val()
+                };
+                $.ajax({
+                    url: '/plan/registerEstimate',
+                    type: "POST",
+                    data: JSON.stringify(estimateDTO),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "text",
+                    success: function(result) {
+                        console.log("데이터 저장 성공: ", result);
+                        alert("저장했습니다.");
+                        estimateFileSave(result);  // 파일 업로드 함수 호출
+                    },
+                    error: function(error) {
+                        console.log("데이터 저장 실패: ", error);
+                        alert("데이터 저장에 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            }
+            function estimateFileSave(foreignCode) {
+                var formData = new FormData();
+                var fileInput = $('#estimateFile')[0].files;
+
+                if (fileInput.length > 0) {
+                    for (let i = 0; i < fileInput.length; i++) {
+                        formData.append("files", fileInput[i]);
+                    }
+                    $.ajax({
+                        url: '/files/upload/' + foreignCode + '/estimate',
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function(result) {
+                            console.log("파일 업로드 성공: ", result);
+                            window.location.href = "/plan/procurementPlanList";  // 업로드 후 페이지 리다이렉트
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log("파일 업로드 실패: ", textStatus);
+                            alert("파일 업로드에 실패했습니다. 다시 시도해주세요.");
+                        }
+                    });
+                } else {
+                    // 파일이 없는 경우에도 페이지 리다이렉트
+                    window.location.href = "/plan/procurementPlanList";
+                }
+            }
+            function contractSave() {
+                var contractDTO = {
+                    purchaserCode: $("#purchaserCode").val(),
+                    purchaserName: $("#purchaserName").val(),
+                    materialDTO: { materialCode: $("#materialCode").val() },
+                    contractLeadTime: $("#contractLeadTime").val(),
+                    contractMemo: $("#contractMemo").val(),
+                    contractCode: $("#contractCode").val()
+                };
+                $.ajax({
+                    url: '/plan/registerContract',
+                    type: "POST",
+                    data: JSON.stringify(contractDTO),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "text",
+                    success: function(result) {
+                        console.log("계약 정보 저장 성공: ", result);
+                        alert("계약 정보를 저장했습니다.");
+                        contractFileSave(result);  // 계약서 파일 업로드 함수 호출
+                    },
+                    error: function(error) {
+                        console.log("계약 정보 저장 실패: ", error);
+                        alert("계약 정보 저장에 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            }
+            function contractFileSave(foreignCode) {
+                var formData = new FormData();
+                var fileInput = $('#contractFile')[0].files;
+                if (fileInput.length > 0) {
+                    for (let i = 0; i < fileInput.length; i++) {
+                        formData.append("files", fileInput[i]);
+                    }
+                    $.ajax({
+                        url: '/files/upload/' + foreignCode + '/contract',
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function(result) {
+                            console.log("계약서 파일 업로드 성공: ", result);
+                            window.location.href = "/plan/procurementPlanList";  // 업로드 후 페이지 리다이렉트
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log("계약서 파일 업로드 실패: ", textStatus);
+                            alert("계약서 파일 업로드에 실패했습니다. 다시 시도해주세요.");
+                        }
+                    });
+                } else {
+                    // 파일이 없는 경우에도 페이지 리다이렉트
+                    window.location.href = "/plan/procurementPlanList";
+                }
+            }
+            function procurementPlanSave() {
+                var procurementPlanDTO = {
+                    productionPlanCode: $("#productionPlanCode").val(),
+                    procurementPlanCode: $("#procurementPlanCode").val(),
+                    procurementPlanRegDate: $("#procurementPlanRegDate").val(),
+                    productionPlanDeadLine: $("#productionPlanDeadLine").val(),
+                    procurementPlanDeadLine: $("#procurementPlanDeadLine").val(),
+                    materialCode: $("#materialCode").val(),
+                    materialName: $("#materialName").val(),
+                    availableQuantity: $("#availableQuantity").val(),
+                    procurementPlanQuantity: $("#procurementPlanQuantity").val(),
+                    purchaserCode: $("#purchaserCode").val()
+                };
+                $.ajax({
+                    url: '/plan/registerProcurementPlan',
+                    type: "POST",
+                    data: JSON.stringify(procurementPlanDTO),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "text",
+                    success: function(result) {
+                        console.log("조달계획 저장 성공: ", result);
+                        alert("조달계획을 저장했습니다.");
+                        window.location.href = "/plan/procurementPlanList";  // 저장 후 리스트로 리다이렉트
+                    },
+                    error: function(error) {
+                        console.log("조달계획 저장 실패: ", error);
+                        alert("조달계획 저장에 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            }
         });
     </script>
-
     <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
     <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
 </body>
