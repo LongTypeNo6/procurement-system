@@ -41,7 +41,10 @@
                                     </div>
                                     <label for="inputNumber" class="col-sm-2 col-form-label">사업자등록증</label>
                                     <div class="col-sm-4">
-                                        <a id="viewFileBtn" target="_blank"><button type="button" class="btn btn-primary btn-sm">파일보기</button></a>
+                                        <a class="input-group mb" id="viewFileBtn" target="_blank">
+                                            <button type="button" class="input-group-text">파일보기</button>
+                                            <input type="text" class="form-control" id="fileName" disabled>
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -159,6 +162,10 @@
                 $("#purchaserMemo").val(dto.purchaserMemo);
                 $("#viewFileBtn").prop("href","/files/foreignCode/view/"+purchaserCode);
             })
+            $.getJSON("/files/list/" + purchaserCode, function(file) {
+                $("#fileName").val(file[0].fileName);
+            })
+
 
             //수정하기버튼
             $("#modifyPurchaser").on("click", function () {
