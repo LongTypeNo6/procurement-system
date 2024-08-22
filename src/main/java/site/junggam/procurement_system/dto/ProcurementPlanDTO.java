@@ -8,6 +8,8 @@ import site.junggam.procurement_system.entity.ContractStatus;
 import site.junggam.procurement_system.entity.ProcurementPlanStatus;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -39,5 +41,10 @@ public class ProcurementPlanDTO {
 
     private int availableQuantity;
     private LocalDateTime productionPlanDeadLine;
+
+    @Builder.Default
+    private String estimateCode=null;
+    @Builder.Default
+    private String contractCode=null;
 
 }

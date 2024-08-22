@@ -23,8 +23,8 @@ public class Estimate {
     @JoinColumn(name = "purchaserCode")
     private Purchaser purchaser=null;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "materialCode")
+    @OneToOne
+    @JoinColumn(name = "material_code")
     private Material material;
 
     @Builder.Default

@@ -238,19 +238,9 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public String resisterEstimate(EstimateDTO estimateDTO) {
+        log.info("견적 저장 서비스 연결됨"+estimateDTO);
         String matertialCode=estimateDTO.getMaterialDTO().getMaterialCode();
-        String temCode = "ESTI"+matertialCode.substring(4)+"-";
-        String lastEstimateCode=estimateRepository.findLastIdOfMaterial(temCode);
-        String newSequence = "001";
-        if (lastEstimateCode != null) {
-            String lastSequence = lastEstimateCode.substring(9);
-            // 4. 일련번호를 숫자로 변환하고 1 증가시킴
-            int nextSequence = Integer.parseInt(lastSequence) + 1;
-            // 5. 새로운 일련번호를 3자리 형식으로 포맷 (예: 001, 002, ...)
-            newSequence = String.format("%03d", nextSequence);
-        }
-        // 6. 최종 코드를 생성
-        String estimateCode=temCode + newSequence;
+        String estimateCode = "ESTI-"+matertialCode.substring(3);
         estimateDTO.setEstimateCode(estimateCode);
         estimateDTO.setEstimateFile(estimateCode);
         estimateRepository.save(estimateMapper.toEntity(estimateDTO));

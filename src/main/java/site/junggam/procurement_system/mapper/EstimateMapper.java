@@ -14,15 +14,13 @@ public interface EstimateMapper {
     EstimateMapper INSTANCE = Mappers.getMapper(EstimateMapper.class);
 
     @Mapping(source = "material", target = "materialDTO")
-    @Mapping(source = "contract.contractCode", target = "contractCode")
+    @Mapping(source = "contract.contractCode", target = "contractCode" )
     @Mapping(source = "purchaser.purchaserCode", target = "purchaserCode")
     @Mapping(source = "purchaser.purchaserName", target = "purchaserName")
     EstimateDTO toDTO(Estimate estimate);
 
     List<EstimateDTO> toDTOs(List<Estimate> estimates);
 
-    @Mapping(source = "contractCode", target = "contract.contractCode")
-    @Mapping(source = "purchaserCode", target = "purchaser.purchaserCode")
     @Mapping(source = "materialDTO", target = "material")
     Estimate toEntity(EstimateDTO estimateDTO);
 }

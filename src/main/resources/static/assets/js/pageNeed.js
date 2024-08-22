@@ -100,3 +100,9 @@ function getFirstTwoWords(input) {
     // 단어가 2개 미만일 경우 그대로 반환합니다.
     return input;
 }
+//값이 널인지 아닌지
+function checkNull(inputElement) {
+    var value = inputElement.value.trim(); // 입력 값에서 앞뒤 공백을 제거합니다.
+    var result = value === "" ? null : value;
+    return result;
+}

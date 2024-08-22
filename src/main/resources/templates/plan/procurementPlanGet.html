@@ -242,7 +242,7 @@
                             <hr>
                             <div class="row mb-3">
                                 <div class="col-sm-10">
-                                    <button type="button" class="btn btn-primary">계약정보저장</button>
+                                    <button type="button" class="btn btn-primary" id="estimateSaveBtn">견적정보저장</button>
                                     <button type="button" class="btn btn-primary">계약정보저장 및 조달진행</button>
                                     <a href="/plan/procurementPlanList"><button type="button" class="btn btn-primary">리스트</button></a>
                                 </div>
@@ -306,10 +306,15 @@
     <script th:inline="javascript">
         $(document).ready(function (e) {
             var procurementPlanCode = [[${procurementPlanCode}]];
+            var estimateCode;
+            var contractCode;
             var estimateFileList = [];
             var contractFileList = [];
+            var newEstimateFileList = [];
+            var newContractFileList = [];
 
-            $.getJSON("/plan/procurementPlanGet/" + procurementPlanCode, function(dto) {
+            // 조달 계획 데이터를 불러오는 부분
+            $.getJSON("/plan/procurementPlanGet/" + procurementPlanCode, function (dto) {
                 $("#productionPlanCode").val(dto.productionPlanCode);
                 $("#procurementPlanCode").val(dto.procurementPlanCode);
                 $("#procurementPlanRegDate").val(formatDate(dto.procurementPlanRegDate));
@@ -319,133 +324,208 @@
                 $("#materialName").val(dto.materialName);
                 $("#availableQuantity").val(dto.availableQuantity);
                 $("#procurementPlanQuantity").val(dto.procurementPlanQuantity);
-                if(dto.procurementPlanStatus === "ESTABLISHED") {
+
+                if (dto.procurementPlanStatus === "ESTABLISHED") {
                     $("#procurementPlanQuantity").prop("disabled", false);
                     $("#procurementPlanDeadLine").prop("disabled", false);
                 }
+
                 setContract(dto.contractStatus);
+                estimateCode = dto.estimateCode;
+                contractCode = dto.contractCode;
+
+                // 기존 파일 리스트 불러오기
+                $.getJSON("/files/list/" + estimateCode, function (fileList) {
+                    estimateFileList = fileList;
+                    displayEstimateFileList();
+                });
+
+                $.getJSON("/files/list/" + contractCode, function (fileList) {
+                    contractFileList = fileList;
+                    displayContractFileList();
+                });
+
             });
 
+            // 파일 리스트 표시 함수
+            function displayEstimateFileList() {
+                let fileTable = "";
+
+                // 기존 파일 표시
+                estimateFileList.forEach((file, index) => {
+                    fileTable += `
+                <tr data-fileindex="${file.inum}">
+                    <th scope="row"><input class="form-check-input me-1" type="radio" name="estimate" value="${file.fileName}"></th>
+                    <td><a href="/files/view/${file.inum}" target="_blank">${file.fileName}</a></td>
+                    <td><button type="button" class="btn btn-danger btn-sm delete-estimate-file-btn" data-fileindex="${index}"><i class="bi bi-exclamation-octagon"></i></button></td>
+                </tr>`;
+                });
+
+                // 새로 추가된 파일 표시
+                newEstimateFileList.forEach((file, index) => {
+                    fileTable += `
+                <tr data-fileindex="new-${index}">
+                    <th scope="row"><input class="form-check-input me-1" type="radio" name="estimate" value="${file.name}"></th>
+                    <td><a href="${file.url}" target="_blank">${file.name}</a></td>
+                    <td><button type="button" class="btn btn-danger btn-sm delete-estimate-file-btn" data-fileindex="new-${index}"><i class="bi bi-exclamation-octagon"></i></button></td>
+                </tr>`;
+                });
+
+                $("#estimateFileList").html(fileTable);
+            }
+
+            function displayContractFileList() {
+                let fileTable = "";
+
+                // 기존 파일 표시
+                contractFileList.forEach((file, index) => {
+                    fileTable += `
+                <tr data-fileindex="${file.inum}">
+                    <th scope="row"><input class="form-check-input me-1" type="radio" name="contract" value="${file.fileName}"></th>
+                    <td><a href="/files/view/${file.inum}" target="_blank">${file.fileName}</a></td>
+                    <td><button type="button" class="btn btn-danger btn-sm delete-contract-file-btn" data-fileindex="${index}"><i class="bi bi-exclamation-octagon"></i></button></td>
+                </tr>`;
+                });
+
+                // 새로 추가된 파일 표시
+                newContractFileList.forEach((file, index) => {
+                    fileTable += `
+                <tr data-fileindex="new-${index}">
+                    <th scope="row"><input class="form-check-input me-1" type="radio" name="contract" value="${file.name}"></th>
+                    <td><a href="${file.url}" target="_blank">${file.name}</a></td>
+                    <td><button type="button" class="btn btn-danger btn-sm delete-contract-file-btn" data-fileindex="new-${index}"><i class="bi bi-exclamation-octagon"></i></button></td>
+                </tr>`;
+                });
+
+                $("#contractFileList").html(fileTable);
+            }
+
+            // 서버에 있는 기존 파일 삭제
+            function deleteFile(fileId, elementId) {
+                $.ajax({
+                    url: '/files/delete/' + fileId,
+                    type: 'DELETE',
+                    success: function(result) {
+                        console.log("파일 삭제 성공: ", result);
+                        // 삭제된 파일을 리스트에서 제거
+                        if (elementId === "estimateFileList") {
+                            estimateFileList = estimateFileList.filter(file => file.inum !== fileId);
+                            displayEstimateFileList();
+                        } else if (elementId === "contractFileList") {
+                            contractFileList = contractFileList.filter(file => file.inum !== fileId);
+                            displayContractFileList();
+                        }
+                    },
+                    error: function(error) {
+                        console.log("파일 삭제 실패: ", error);
+                        alert("파일 삭제에 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            }
+
+            // 파일 삭제 클릭 이벤트 처리
+            $(document).on("click", ".delete-estimate-file-btn", function() {
+                let index = $(this).data("fileindex").toString();  // index를 문자열로 변환
+                if (index.startsWith("new-")) {
+                    removeEstimateFile(parseInt(index.split("-")[1]));
+                } else {
+                    deleteFile(estimateFileList[parseInt(index)].inum, "estimateFileList");
+                }
+            });
+
+            $(document).on("click", ".delete-contract-file-btn", function() {
+                let index = $(this).data("fileindex").toString();  // index를 문자열로 변환
+                if (index.startsWith("new-")) {
+                    removeContractFile(parseInt(index.split("-")[1]));
+                } else {
+                    deleteFile(contractFileList[parseInt(index)].inum, "contractFileList");
+                }
+            });
+
+
+            // 새로 추가된 파일 삭제 (화면에서만 삭제)
+            function removeEstimateFile(index) {
+                newEstimateFileList.splice(index, 1);
+                displayEstimateFileList();
+            }
+
+            function removeContractFile(index) {
+                newContractFileList.splice(index, 1);
+                displayContractFileList();
+            }
+
+            // 파일 추가 시 리스트에 반영하는 함수
+            function prependNewFiles(files, isEstimate = true) {
+                const fileList = Array.from(files).map((file, index) => ({
+                    name: file.name,
+                    url: URL.createObjectURL(file),
+                    index: index
+                }));
+
+                if (isEstimate) {
+                    newEstimateFileList.push(...fileList);
+                    displayEstimateFileList();
+                } else {
+                    newContractFileList.push(...fileList);
+                    displayContractFileList();
+                }
+            }
+
+            // 계약 상태 설정 함수
             function setContract(contractStatus) {
                 if (contractStatus === "PENDING") {
-                    console.log("미계약상태임");
                     $("#contractStatus").text("계약정보 : 미계약");
-                    // 견적서 파일 처리
+
                     $("#estimateFile").on("change", function () {
-                        let files = $(this)[0].files;
-                        for (var i = 0; i < files.length; i++) {
-                            estimateFileList.push({
-                                name: files[i].name,
-                                url: URL.createObjectURL(files[i]) // 로컬 파일 URL 생성
-                            });
-                        }
-                        displayEstimateFileList();
+                        prependNewFiles($(this)[0].files, true);
                     });
-                    // 계약서 파일 처리
+
                     $("#contractFile").on("change", function () {
-                        let files = $(this)[0].files;
-                        for (var i = 0; i < files.length; i++) {
-                            contractFileList.push({
-                                name: files[i].name,
-                                url: URL.createObjectURL(files[i]) // 로컬 파일 URL 생성
-                            });
-                        }
-                        displayContractFileList();
+                        prependNewFiles($(this)[0].files, false);
                     });
                 } else if (contractStatus === "NEGOTIATION") {
-                    console.log("계약협상중인상태임");
+                    console.log("계약협상중인 상태임");
                 } else if (contractStatus === "CONFIRMED") {
                     console.log("계약상태임");
                 }
             }
 
-            // 견적서 파일 리스트 표시
-            function displayEstimateFileList() {
-                let fileTable = "";
-                for (var i = 0; i < estimateFileList.length; i++) {
-                    fileTable += `
-                    <tr>
-                        <th scope="row"><input class="form-check-input me-1" type="radio" name="estimate" value="${estimateFileList[i].name}"></th>
-                        <td><a href="${estimateFileList[i].url}" target="_blank">${estimateFileList[i].name}</a></td>
-                        <td><button type="button" class="btn btn-danger btn-sm delete-estimate-file-btn" data-estimateindex="${i}"><i class="bi bi-exclamation-octagon"></i></button></td>
-                    </tr>`;
-                }
-                $("#estimateFileList").html(fileTable);
-            }
-            // 계약서 파일 리스트 표시
-            function displayContractFileList() {
-                let fileTable = "";
-                for (var i = 0; i < contractFileList.length; i++) {
-                    fileTable += `
-                    <tr>
-                        <th scope="row"><input class="form-check-input me-1" type="radio" name="contract" value="${contractFileList[i].name}"></th>
-                        <td><a href="${contractFileList[i].url}" target="_blank">${contractFileList[i].name}</a></td>
-                        <td><button type="button" class="btn btn-danger btn-sm delete-contract-file-btn" data-contractindex="${i}"><i class="bi bi-exclamation-octagon"></i></button></td>
-                    </tr>`;
-                }
-                $("#contractFileList").html(fileTable);
-            }
-            // 이벤트 위임을 사용하여 동적으로 생성된 버튼에 이벤트 핸들러를 바인딩
-            $(document).on("click", ".delete-estimate-file-btn", function() {
-                let index = $(this).data("estimateindex");
-                console.log("삭제할 견적 파일 인덱스: ", index);
-                removeEstimateFile(index);
-            });
-            $(document).on("click", ".delete-contract-file-btn", function() {
-                let index = $(this).data("contractindex");
-                console.log("삭제할 계약 파일 인덱스: ", index);
-                removeContractFile(index);
-            });
-            function removeEstimateFile(index) {
-                estimateFileList.splice(index, 1);  // 배열에서 파일 제거
-                displayEstimateFileList();  // 테이블 업데이트
-            }
-
-            function removeContractFile(index) {
-                contractFileList.splice(index, 1);  // 배열에서 파일 제거
-                displayContractFileList();  // 테이블 업데이트
-            }
             //모달창관련기능
-            // 모달을 제어하는 인스턴스를 생성합니다.
             var purchaserModal = new bootstrap.Modal(document.getElementById('purchaserSelect'));
             $("#purchaserSelectBtn").on("click", function () {
                 console.log("검색버튼 클릭됨")
                 var selectedCode = null;
                 $("#purchaserSearch").on("input", function () {
                     var keyword = $("#purchaserSearch").val();
-                    $.getJSON("/purchasercontent/listSearching?keyword=" + keyword, function(data) {
-                        console.log("검색기능 잘 되나?"+data)
+                    $.getJSON("/purchasercontent/listSearching?keyword=" + keyword, function (data) {
                         let str = "";
-                        $.each(data, function(idx, dto) {
+                        $.each(data, function (idx, dto) {
                             str += '<li class="list-group-item">';
-                            str += '<div class="row"><div class="col-lg-1"><input class="form-check-input me-1" type="radio" name="gridRadios" value="'+dto.purchaserCode+'" data-purchaser-name="'+dto.purchaserName+'" aria-label="..."></div>';
-                            str += '<div class="col-lg-5">'+dto.purchaserName+'</div><div class="col-lg-5">'+dto.purchaserCode+'</div></div>';
+                            str += '<div class="row"><div class="col-lg-1"><input class="form-check-input me-1" type="radio" name="gridRadios" value="' + dto.purchaserCode + '" data-purchaser-name="' + dto.purchaserName + '" aria-label="..."></div>';
+                            str += '<div class="col-lg-5">' + dto.purchaserName + '</div><div class="col-lg-5">' + dto.purchaserCode + '</div></div>';
                             str += '</li>';
                         });
                         $("#purchaserSearchList").html(str);
                         if (selectedCode) {
                             $("input[name='gridRadios'][value='" + selectedCode + "']").prop("checked", true);
                         }
-                        $("input[name='gridRadios']").change(function() {
+                        $("input[name='gridRadios']").change(function () {
                             var selectedName = $(this).data('purchaserName');
                             selectedCode = $(this).val();
                             $("#selectedPurchaserFooter").text("선택 : " + selectedName);
-                            $("#selectedPurchaserFooter").attr("data-purchaser-code",selectedCode);
+                            $("#selectedPurchaserFooter").attr("data-purchaser-code", selectedCode);
                         });
-                    }).fail(function(jqxhr, textStatus, error) {
+                    }).fail(function (jqxhr, textStatus, error) {
                         var err = textStatus + ", " + error;
                         console.log("자재 정보 요청 실패: " + err);
                     });
                 })
             })
             $("#searchPurchaserSubmit").on("click", function () {
-                // 풋터에 저장된 선택된 자재명과 자재코드 가져오기
                 var selectedName = $("#selectedPurchaserFooter").text().replace("선택 : ", "");
                 var selectedCode = $("#selectedPurchaserFooter").attr("data-purchaser-code");
                 if (selectedCode && selectedName) {
-                    console.log("선택한 값은 Code:", selectedCode, "Name:", selectedName);
-                    $.getJSON("/purchasercontent/" + selectedCode, function(dto) {
-                        console.log("조달계획 잘 불러오나?"+dto)
+                    $.getJSON("/purchasercontent/" + selectedCode, function (dto) {
                         $("#purchaserCode").val(dto.purchaserCode);
                         $("#purchaserName").val(dto.purchaserName);
                         $("#purchaserAddress").val(dto.purchaserAddress);
@@ -467,13 +547,15 @@
                 }
             });
 
-            //저장기능
+            // 저장 기능
+            $("#estimateSaveBtn").on("click", function () {
+                estimateSave();
+            })
+
             function estimateSave() {
                 var estimateDTO = {
-                    purchaserCode: $("#purchaserCode").val(),
-                    purchaserName: $("#purchaserName").val(),
-                    materialDTO: { materialCode: $("#materialCode").val() },
-                    contractCode: $("#contractCode").val()
+                    estimateMemo: $("#estimateMemo").val(),
+                    materialDTO: {materialCode: $("#materialCode").val()},
                 };
                 $.ajax({
                     url: '/plan/registerEstimate',
@@ -481,17 +563,18 @@
                     data: JSON.stringify(estimateDTO),
                     contentType: "application/json; charset=utf-8",
                     dataType: "text",
-                    success: function(result) {
+                    success: function (result) {
                         console.log("데이터 저장 성공: ", result);
                         alert("저장했습니다.");
-                        estimateFileSave(result);  // 파일 업로드 함수 호출
+                        estimateFileSave(result);
                     },
-                    error: function(error) {
+                    error: function (error) {
                         console.log("데이터 저장 실패: ", error);
                         alert("데이터 저장에 실패했습니다. 다시 시도해주세요.");
                     }
                 });
             }
+
             function estimateFileSave(foreignCode) {
                 var formData = new FormData();
                 var fileInput = $('#estimateFile')[0].files;
@@ -507,25 +590,25 @@
                         data: formData,
                         type: 'POST',
                         dataType: 'json',
-                        success: function(result) {
+                        success: function (result) {
                             console.log("파일 업로드 성공: ", result);
-                            window.location.href = "/plan/procurementPlanList";  // 업로드 후 페이지 리다이렉트
+                            window.location.href = "/plan/procurementPlanList";
                         },
-                        error: function(jqXHR, textStatus, errorThrown) {
+                        error: function (jqXHR, textStatus, errorThrown) {
                             console.log("파일 업로드 실패: ", textStatus);
                             alert("파일 업로드에 실패했습니다. 다시 시도해주세요.");
                         }
                     });
                 } else {
-                    // 파일이 없는 경우에도 페이지 리다이렉트
                     window.location.href = "/plan/procurementPlanList";
                 }
             }
+
             function contractSave() {
                 var contractDTO = {
                     purchaserCode: $("#purchaserCode").val(),
                     purchaserName: $("#purchaserName").val(),
-                    materialDTO: { materialCode: $("#materialCode").val() },
+                    materialDTO: {materialCode: $("#materialCode").val()},
                     contractLeadTime: $("#contractLeadTime").val(),
                     contractMemo: $("#contractMemo").val(),
                     contractCode: $("#contractCode").val()
@@ -536,17 +619,18 @@
                     data: JSON.stringify(contractDTO),
                     contentType: "application/json; charset=utf-8",
                     dataType: "text",
-                    success: function(result) {
+                    success: function (result) {
                         console.log("계약 정보 저장 성공: ", result);
                         alert("계약 정보를 저장했습니다.");
-                        contractFileSave(result);  // 계약서 파일 업로드 함수 호출
+                        contractFileSave(result);
                     },
-                    error: function(error) {
+                    error: function (error) {
                         console.log("계약 정보 저장 실패: ", error);
                         alert("계약 정보 저장에 실패했습니다. 다시 시도해주세요.");
                     }
                 });
             }
+
             function contractFileSave(foreignCode) {
                 var formData = new FormData();
                 var fileInput = $('#contractFile')[0].files;
@@ -561,20 +645,20 @@
                         data: formData,
                         type: 'POST',
                         dataType: 'json',
-                        success: function(result) {
+                        success: function (result) {
                             console.log("계약서 파일 업로드 성공: ", result);
-                            window.location.href = "/plan/procurementPlanList";  // 업로드 후 페이지 리다이렉트
+                            window.location.href = "/plan/procurementPlanList";
                         },
-                        error: function(jqXHR, textStatus, errorThrown) {
+                        error: function (jqXHR, textStatus, errorThrown) {
                             console.log("계약서 파일 업로드 실패: ", textStatus);
                             alert("계약서 파일 업로드에 실패했습니다. 다시 시도해주세요.");
                         }
                     });
                 } else {
-                    // 파일이 없는 경우에도 페이지 리다이렉트
                     window.location.href = "/plan/procurementPlanList";
                 }
             }
+
             function procurementPlanSave() {
                 var procurementPlanDTO = {
                     productionPlanCode: $("#productionPlanCode").val(),
@@ -594,12 +678,12 @@
                     data: JSON.stringify(procurementPlanDTO),
                     contentType: "application/json; charset=utf-8",
                     dataType: "text",
-                    success: function(result) {
+                    success: function (result) {
                         console.log("조달계획 저장 성공: ", result);
                         alert("조달계획을 저장했습니다.");
-                        window.location.href = "/plan/procurementPlanList";  // 저장 후 리스트로 리다이렉트
+                        window.location.href = "/plan/procurementPlanList";
                     },
-                    error: function(error) {
+                    error: function (error) {
                         console.log("조달계획 저장 실패: ", error);
                         alert("조달계획 저장에 실패했습니다. 다시 시도해주세요.");
                     }
@@ -607,6 +691,7 @@
             }
         });
     </script>
+
     <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
     <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
 </body>

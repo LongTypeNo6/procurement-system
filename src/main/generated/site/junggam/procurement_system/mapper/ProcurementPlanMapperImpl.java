@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import site.junggam.procurement_system.dto.ProcurementPlanDTO;
 import site.junggam.procurement_system.entity.Contract;
 import site.junggam.procurement_system.entity.ContractStatus;
+import site.junggam.procurement_system.entity.Estimate;
 import site.junggam.procurement_system.entity.Inventory;
 import site.junggam.procurement_system.entity.Material;
 import site.junggam.procurement_system.entity.ProcurementPlan;
@@ -15,7 +16,7 @@ import site.junggam.procurement_system.entity.ProductionPlan;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-21T22:59:32+0900",
+    date = "2024-08-22T09:41:08+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -29,6 +30,8 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
 
         ProcurementPlanDTO.ProcurementPlanDTOBuilder procurementPlanDTO = ProcurementPlanDTO.builder();
 
+        procurementPlanDTO.contractCode( procurementPlanMaterialContractContractCode( procurementPlan ) );
+        procurementPlanDTO.estimateCode( procurementPlanMaterialEstimateEstimateCode( procurementPlan ) );
         procurementPlanDTO.materialName( procurementPlanMaterialMaterialName( procurementPlan ) );
         procurementPlanDTO.materialCode( procurementPlanMaterialMaterialCode( procurementPlan ) );
         procurementPlanDTO.contractStatus( procurementPlanMaterialContractContractStatus( procurementPlan ) );
@@ -75,6 +78,44 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
         procurementPlan.procurementPlanStatus( procurementPlanDTO.getProcurementPlanStatus() );
 
         return procurementPlan.build();
+    }
+
+    private String procurementPlanMaterialContractContractCode(ProcurementPlan procurementPlan) {
+        if ( procurementPlan == null ) {
+            return null;
+        }
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
+            return null;
+        }
+        Contract contract = material.getContract();
+        if ( contract == null ) {
+            return null;
+        }
+        String contractCode = contract.getContractCode();
+        if ( contractCode == null ) {
+            return null;
+        }
+        return contractCode;
+    }
+
+    private String procurementPlanMaterialEstimateEstimateCode(ProcurementPlan procurementPlan) {
+        if ( procurementPlan == null ) {
+            return null;
+        }
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
+            return null;
+        }
+        Estimate estimate = material.getEstimate();
+        if ( estimate == null ) {
+            return null;
+        }
+        String estimateCode = estimate.getEstimateCode();
+        if ( estimateCode == null ) {
+            return null;
+        }
+        return estimateCode;
     }
 
     private String procurementPlanMaterialMaterialName(ProcurementPlan procurementPlan) {

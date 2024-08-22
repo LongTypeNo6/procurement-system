@@ -33,7 +33,8 @@ public class AllFilesServiceImpl implements AllFilesService {
     private String uploadDir;
 
     private String setUploadDir(String subDirectory) {
-        String folderPath = subDirectory.replace("//", File.separator);
+//        String folderPath = subDirectory.replace("//", File.separator);
+        String folderPath = subDirectory.replace(" ", File.separator);
         File uploadPathFolder = new File(uploadDir, folderPath);
         if (!uploadPathFolder.exists()) {
             uploadPathFolder.mkdirs();

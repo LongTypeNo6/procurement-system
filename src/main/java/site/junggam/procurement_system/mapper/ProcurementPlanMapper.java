@@ -12,6 +12,8 @@ import java.util.List;
 public interface ProcurementPlanMapper {
     ProcurementPlanMapper INSTANCE = Mappers.getMapper(ProcurementPlanMapper.class);
 
+    @Mapping(source = "material.contract.contractCode", target = "contractCode")
+    @Mapping(source = "material.estimate.estimateCode", target = "estimateCode")
     @Mapping(source = "material.materialName", target = "materialName")
     @Mapping(source = "material.materialCode", target = "materialCode")
     @Mapping(source = "material.contract.contractStatus", target = "contractStatus")

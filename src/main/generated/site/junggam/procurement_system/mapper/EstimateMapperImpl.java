@@ -11,7 +11,7 @@ import site.junggam.procurement_system.entity.Purchaser;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-22T02:49:53+0900",
+    date = "2024-08-22T09:37:01+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -31,6 +31,7 @@ public class EstimateMapperImpl implements EstimateMapper {
         estimateDTO.purchaserName( estimatePurchaserPurchaserName( estimate ) );
         estimateDTO.estimateCode( estimate.getEstimateCode() );
         estimateDTO.estimateFile( estimate.getEstimateFile() );
+        estimateDTO.estimateMemo( estimate.getEstimateMemo() );
         estimateDTO.estimateStatus( estimate.getEstimateStatus() );
 
         return estimateDTO.build();
@@ -58,11 +59,10 @@ public class EstimateMapperImpl implements EstimateMapper {
 
         Estimate.EstimateBuilder estimate = Estimate.builder();
 
-        estimate.contract( estimateDTOToContract( estimateDTO ) );
-        estimate.purchaser( estimateDTOToPurchaser( estimateDTO ) );
         estimate.material( estimateDTO.getMaterialDTO() );
         estimate.estimateCode( estimateDTO.getEstimateCode() );
         estimate.estimateFile( estimateDTO.getEstimateFile() );
+        estimate.estimateMemo( estimateDTO.getEstimateMemo() );
         estimate.estimateStatus( estimateDTO.getEstimateStatus() );
 
         return estimate.build();
@@ -111,29 +111,5 @@ public class EstimateMapperImpl implements EstimateMapper {
             return null;
         }
         return purchaserName;
-    }
-
-    protected Contract estimateDTOToContract(EstimateDTO estimateDTO) {
-        if ( estimateDTO == null ) {
-            return null;
-        }
-
-        Contract.ContractBuilder contract = Contract.builder();
-
-        contract.contractCode( estimateDTO.getContractCode() );
-
-        return contract.build();
-    }
-
-    protected Purchaser estimateDTOToPurchaser(EstimateDTO estimateDTO) {
-        if ( estimateDTO == null ) {
-            return null;
-        }
-
-        Purchaser.PurchaserBuilder purchaser = Purchaser.builder();
-
-        purchaser.purchaserCode( estimateDTO.getPurchaserCode() );
-
-        return purchaser.build();
     }
 }
