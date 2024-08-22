@@ -17,6 +17,7 @@ public class Contract {
     private String contractFile;
     private Double contractPrice;
     private Integer contractLeadTime;
+    private String contractMemo;
 
     @OneToOne
     @JoinColumn(name = "material_code")

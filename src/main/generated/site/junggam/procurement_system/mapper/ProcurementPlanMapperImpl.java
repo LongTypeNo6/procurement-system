@@ -16,7 +16,7 @@ import site.junggam.procurement_system.entity.ProductionPlan;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-22T09:41:08+0900",
+    date = "2024-08-22T11:04:28+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -30,6 +30,12 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
 
         ProcurementPlanDTO.ProcurementPlanDTOBuilder procurementPlanDTO = ProcurementPlanDTO.builder();
 
+        Integer contractLeadTime = procurementPlanMaterialContractContractLeadTime( procurementPlan );
+        if ( contractLeadTime != null ) {
+            procurementPlanDTO.contractLeadTime( String.valueOf( contractLeadTime ) );
+        }
+        procurementPlanDTO.contractMemo( procurementPlanMaterialContractContractMemo( procurementPlan ) );
+        procurementPlanDTO.estimateMemo( procurementPlanMaterialEstimateEstimateMemo( procurementPlan ) );
         procurementPlanDTO.contractCode( procurementPlanMaterialContractContractCode( procurementPlan ) );
         procurementPlanDTO.estimateCode( procurementPlanMaterialEstimateEstimateCode( procurementPlan ) );
         procurementPlanDTO.materialName( procurementPlanMaterialMaterialName( procurementPlan ) );
@@ -78,6 +84,63 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
         procurementPlan.procurementPlanStatus( procurementPlanDTO.getProcurementPlanStatus() );
 
         return procurementPlan.build();
+    }
+
+    private Integer procurementPlanMaterialContractContractLeadTime(ProcurementPlan procurementPlan) {
+        if ( procurementPlan == null ) {
+            return null;
+        }
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
+            return null;
+        }
+        Contract contract = material.getContract();
+        if ( contract == null ) {
+            return null;
+        }
+        Integer contractLeadTime = contract.getContractLeadTime();
+        if ( contractLeadTime == null ) {
+            return null;
+        }
+        return contractLeadTime;
+    }
+
+    private String procurementPlanMaterialContractContractMemo(ProcurementPlan procurementPlan) {
+        if ( procurementPlan == null ) {
+            return null;
+        }
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
+            return null;
+        }
+        Contract contract = material.getContract();
+        if ( contract == null ) {
+            return null;
+        }
+        String contractMemo = contract.getContractMemo();
+        if ( contractMemo == null ) {
+            return null;
+        }
+        return contractMemo;
+    }
+
+    private String procurementPlanMaterialEstimateEstimateMemo(ProcurementPlan procurementPlan) {
+        if ( procurementPlan == null ) {
+            return null;
+        }
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
+            return null;
+        }
+        Estimate estimate = material.getEstimate();
+        if ( estimate == null ) {
+            return null;
+        }
+        String estimateMemo = estimate.getEstimateMemo();
+        if ( estimateMemo == null ) {
+            return null;
+        }
+        return estimateMemo;
     }
 
     private String procurementPlanMaterialContractContractCode(ProcurementPlan procurementPlan) {

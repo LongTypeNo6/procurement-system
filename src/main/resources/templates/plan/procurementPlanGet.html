@@ -324,6 +324,9 @@
                 $("#materialName").val(dto.materialName);
                 $("#availableQuantity").val(dto.availableQuantity);
                 $("#procurementPlanQuantity").val(dto.procurementPlanQuantity);
+                $("#contractMemo").val(dto.contractMemo);
+                $("#contractLeadTime").val(dto.contractLeadTime);
+                $("#estimateMemo").val(dto.estimateMemo);
 
                 if (dto.procurementPlanStatus === "ESTABLISHED") {
                     $("#procurementPlanQuantity").prop("disabled", false);

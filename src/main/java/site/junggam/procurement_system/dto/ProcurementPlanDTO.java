@@ -45,6 +45,11 @@ public class ProcurementPlanDTO {
     @Builder.Default
     private String estimateCode=null;
     @Builder.Default
+    private String estimateMemo=null;
+    @Builder.Default
     private String contractCode=null;
-
+    @Builder.Default
+    private String contractMemo=null;
+    @Builder.Default
+    private String contractLeadTime=null;
 }
