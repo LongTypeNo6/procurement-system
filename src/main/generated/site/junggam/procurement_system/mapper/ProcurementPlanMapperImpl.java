@@ -16,7 +16,7 @@ import site.junggam.procurement_system.entity.ProductionPlan;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-22T11:04:28+0900",
+    date = "2024-08-22T11:53:44+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -30,9 +30,13 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
 
         ProcurementPlanDTO.ProcurementPlanDTOBuilder procurementPlanDTO = ProcurementPlanDTO.builder();
 
+        Double contractPrice = procurementPlanMaterialContractContractPrice( procurementPlan );
+        if ( contractPrice != null ) {
+            procurementPlanDTO.contractPrice( contractPrice );
+        }
         Integer contractLeadTime = procurementPlanMaterialContractContractLeadTime( procurementPlan );
         if ( contractLeadTime != null ) {
-            procurementPlanDTO.contractLeadTime( String.valueOf( contractLeadTime ) );
+            procurementPlanDTO.contractLeadTime( contractLeadTime );
         }
         procurementPlanDTO.contractMemo( procurementPlanMaterialContractContractMemo( procurementPlan ) );
         procurementPlanDTO.estimateMemo( procurementPlanMaterialEstimateEstimateMemo( procurementPlan ) );
@@ -84,6 +88,25 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
         procurementPlan.procurementPlanStatus( procurementPlanDTO.getProcurementPlanStatus() );
 
         return procurementPlan.build();
+    }
+
+    private Double procurementPlanMaterialContractContractPrice(ProcurementPlan procurementPlan) {
+        if ( procurementPlan == null ) {
+            return null;
+        }
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
+            return null;
+        }
+        Contract contract = material.getContract();
+        if ( contract == null ) {
+            return null;
+        }
+        Double contractPrice = contract.getContractPrice();
+        if ( contractPrice == null ) {
+            return null;
+        }
+        return contractPrice;
     }
 
     private Integer procurementPlanMaterialContractContractLeadTime(ProcurementPlan procurementPlan) {

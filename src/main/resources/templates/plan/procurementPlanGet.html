@@ -91,8 +91,8 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title" id="contractStatus">
-                                계약정보 :
+                            <h5 class="card-title">
+                                견적상황
                             </h5>
                             <div class="row mb-3">
                                 <label for="estimateFile" class="col-sm-2 col-form-label">견적서</label>
@@ -112,13 +112,25 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="row mb-3">
+                            <div class="row mb-4">
                                 <label for="inputPassword" class="col-sm-2 col-form-label">견적비고</label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control" style="height: 100px" id="estimateMemo"></textarea>
                                 </div>
                             </div>
-                            <hr>
+                            <div class="row mb-1">
+                                <div class="col-sm-10">
+                                    <button type="button" class="btn btn-primary" id="estimateSaveBtn">견적정보저장</button>
+                                    <a href="/plan/procurementPlanList"><button type="button" class="btn btn-primary">리스트</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title" id="contractStatus">
+                                계약정보 :
+                            </h5>
                             <div class="row mb-3">
                                 <label for="inputNumber" class="col-sm-2 col-form-label">계약서</label>
                                 <div class="col-sm-10">
@@ -135,6 +147,12 @@
                                         <tbody id="contractFileList">
                                         </tbody>
                                     </table>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">단가</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" id="contractPrice">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -207,7 +225,6 @@
                                     <input type="text" class="form-control" id="purchaserEmail" disabled>
                                 </div>
                             </div>
-                            <hr>
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">담당자</label>
                                 <div class="col-sm-10">
@@ -215,34 +232,31 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="inputNumber" class="col-sm-2 col-form-label">전화번호</label>
+                                <label for="inputNumber" class="col-sm-2 col-form-label">담당자전화번호</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="purchaserManagerTel" disabled>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="inputNumber" class="col-sm-2 col-form-label">팩스</label>
+                                <label for="inputNumber" class="col-sm-2 col-form-label">담당자팩스</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="purchaserManagerFax" disabled>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="inputNumber" class="col-sm-2 col-form-label">이메일</label>
+                                <label for="inputNumber" class="col-sm-2 col-form-label">담당자이메일</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="purchaserManagerEmail" disabled>
                                 </div>
                             </div>
-                            <hr>
-                            <div class="row mb-3">
-                                <label for="inputPassword" class="col-sm-2 col-form-label">비고</label>
+                            <div class="row mb-4">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">거래처 비고</label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control" style="height: 100px" id="purchaserMemo" disabled></textarea>
                                 </div>
                             </div>
-                            <hr>
-                            <div class="row mb-3">
+                            <div class="row mb-1">
                                 <div class="col-sm-10">
-                                    <button type="button" class="btn btn-primary" id="estimateSaveBtn">견적정보저장</button>
                                     <button type="button" class="btn btn-primary">계약정보저장 및 조달진행</button>
                                     <a href="/plan/procurementPlanList"><button type="button" class="btn btn-primary">리스트</button></a>
                                 </div>
@@ -325,6 +339,7 @@
                 $("#availableQuantity").val(dto.availableQuantity);
                 $("#procurementPlanQuantity").val(dto.procurementPlanQuantity);
                 $("#contractMemo").val(dto.contractMemo);
+                $("#contractPrice").val(dto.contractPrice);
                 $("#contractLeadTime").val(dto.contractLeadTime);
                 $("#estimateMemo").val(dto.estimateMemo);
 

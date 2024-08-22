@@ -51,5 +51,7 @@ public class ProcurementPlanDTO {
     @Builder.Default
     private String contractMemo=null;
     @Builder.Default
-    private String contractLeadTime=null;
+    private int contractLeadTime=0;
+    @Builder.Default
+    private double contractPrice=0.0;
 }
