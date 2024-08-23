@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import site.junggam.procurement_system.dto.ProductDTO;
 import site.junggam.procurement_system.dto.UnitDTO;
 import site.junggam.procurement_system.dto.UnitMaterialDTO;
 import site.junggam.procurement_system.entity.*;
@@ -12,6 +11,7 @@ import site.junggam.procurement_system.repository.MaterialRepository;
 import site.junggam.procurement_system.repository.ProductRepository;
 import site.junggam.procurement_system.repository.UnitRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -39,42 +39,52 @@ public class UnitServiceImpl implements UnitService {
                 .collect(Collectors.toSet());
         unit.setUnitMaterials(unitMaterials);
         Unit saveUnit = unitRepository.save(unit);
-        return saveUnit.getUnitCode();
 
-//        String newUnitCode = generateNextUnitCode();
-//        unitDTO.setUnitCode(newUnitCode);
-//        Unit unit = convertToEntity(unitDTO);
-//
-//        Unit saveUnit = unitRepository.save(unit);
-//        //return saveUnit.getUnitCode();
-//        //return unitDTO;
+        return saveUnit.getUnitCode();
     }
 
     @Override
     public void updateUnit(String unitCode, UnitDTO unitDTO, List<String> materialCodes) {
-//        if (unitRepository.existsById(unitDTO.getUnitCode())) {
-//            Unit unit = convertToEntity(unitDTO);
-//            unitRepository.save(unit);
-//        }
 
         Unit existingUnit = unitRepository.findById(unitCode).orElse(null);
         if (existingUnit != null) {
-            Unit unit = convertToEntity(unitDTO);
-            existingUnit.setUnitName(unit.getUnitName());
-            existingUnit.setUnitStand(unit.getUnitStand());
-            existingUnit.setUnitTexture(unit.getUnitTexture());
-            existingUnit.setUnitDrawFile(unit.getUnitDrawFile());
-            existingUnit.setUnitEtcFile(unit.getUnitEtcFile());
-            existingUnit.setUnitRegDate(unit.getUnitRegDate());
-            existingUnit.setUnitModDate(unit.getUnitModDate());
+            //Unit unit = convertToEntity(unitDTO);
+            existingUnit.setUnitName(unitDTO.getUnitName());
+            existingUnit.setUnitStand(unitDTO.getUnitStand());
+            existingUnit.setUnitTexture(unitDTO.getUnitTexture());
+            existingUnit.setUnitDrawFile(unitDTO.getUnitDrawFile());
+            existingUnit.setUnitEtcFile(unitDTO.getUnitEtcFile());
+            //existingUnit.setUnitRegDate(unitDTO.getUnitRegDate());
+            existingUnit.setUnitModDate(LocalDateTime.now());
 
-            Set<UnitMaterial> unitMaterials = materialCodes.stream()
+            // 기존의 UnitMaterial을 삭제하고 새로운 UnitMaterial을 추가
+            Set<UnitMaterial> newUnitMaterials = materialCodes.stream()
                     .map(materialCode -> {
                         Material material = materialRepository.findById(materialCode).orElse(null);
                         return new UnitMaterial(new UnitMaterialId(unitCode, materialCode), existingUnit, material);
                     })
                     .collect(Collectors.toSet());
-            existingUnit.setUnitMaterials(unitMaterials);
+
+            // 기존의 UnitMaterials와 새로 설정한 UnitMaterials를 비교하여 삭제할 항목과 추가할 항목을 설정
+            Set<UnitMaterial> currentUnitMaterials = existingUnit.getUnitMaterials();
+
+            // 삭제할 항목 (현재에는 있지만 새로 설정한 목록에는 없는 항목)
+            Set<UnitMaterial> toBeRemoved = currentUnitMaterials.stream()
+                    .filter(unitMaterial -> !newUnitMaterials.contains(unitMaterial))
+                    .collect(Collectors.toSet());
+
+            // 추가할 항목 (현재에는 없지만 새로 설정한 목록에는 있는 항목)
+            Set<UnitMaterial> toBeAdded = newUnitMaterials.stream()
+                    .filter(unitMaterial -> !currentUnitMaterials.contains(unitMaterial))
+                    .collect(Collectors.toSet());
+
+            // 삭제
+            existingUnit.getUnitMaterials().removeAll(toBeRemoved);
+
+            // 추가
+            existingUnit.getUnitMaterials().addAll(toBeAdded);
+
+            // 저장
             unitRepository.save(existingUnit);
         }
     }

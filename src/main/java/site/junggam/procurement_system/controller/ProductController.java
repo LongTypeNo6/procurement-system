@@ -37,21 +37,15 @@ public class ProductController {
     private final MaterialRepository materialRepository;
 
 
-    // 테스트 부분..
+    // 제품 등록 페이지 테스트 메서드..
     @RequestMapping("/addproducttest")
     public void addproducttest() {
-
-    }
-
-    @RequestMapping("/testList")
-    public void testList() {
 
     }
 
 
 
     ////////// (제품 컨트롤러 부분) /////////////////////////////////////////////////////////////////////
-
     // 제품 등록 페이지 폼
     @GetMapping("/productRegister")
     public void productRegister(Model model) {
@@ -169,26 +163,36 @@ public class ProductController {
     public String productModifyPro(@RequestParam("product_code") String productCode,
                                    //@ModelAttribute("productDTO") ProductDTO productDTO,
                                    @ModelAttribute("product") Product product,
-                                     @RequestParam("unitCodes") List<String> unitCodes,
-                                     @RequestParam("product_name") String productName,
-                                     @RequestParam("product_price") Double productPrice,
-                                     @RequestParam("product_stand") String productStand,
-                                     @RequestParam("product_texture") String productTexture,
-                                     @RequestParam("product_draw_file") MultipartFile productDrawFile,
-                                     @RequestParam("product_etc_file") MultipartFile productEtcFile,
-                                     RedirectAttributes redirectAttributes) {
-//    public String productModifyPro(@PathVariable String productCode, @ModelAttribute("productDTO") ProductDTO productDTO,
-//         @RequestParam("unitCodes") List<String> unitCodes) {
-        //productService.updateProduct(productCode, productDTO, unitCodes);
+                                   @RequestParam("unitCodes") List<String> unitCodes,
+                                   @RequestParam("product_name") String productName,
+                                   @RequestParam("product_price") Double productPrice,
+                                   @RequestParam("product_stand") String productStand,
+                                   @RequestParam("product_texture") String productTexture,
+                                   @RequestParam("product_draw_file") MultipartFile productDrawFile,
+                                   @RequestParam("product_etc_file") MultipartFile productEtcFile,
+                                   RedirectAttributes redirectAttributes) {
 
         log.info("제품 수정 : "+productCode);
+
+        // 제품의 현재 상태를 데이터베이스에서 조회
+        Optional<ProductDTO> existingProduct = productService.getProduct(productCode);
 
         // 현재 날짜와 시간을 등록일 및 수정일로 설정
         LocalDateTime now = LocalDateTime.now();
 
         // 파일 저장 처리
-        String drawFilePath = saveFile(productDrawFile);
-        String etcFilePath = saveFile(productEtcFile);
+//        String drawFilePath = saveFile(productDrawFile);
+//        String etcFilePath = saveFile(productEtcFile);
+        String drawFilePath = existingProduct.get().getProductDrawFile();
+        String etcFilePath = existingProduct.get().getProductEtcFile();
+
+        // 파일 저장 처리
+        if (productDrawFile != null && !productDrawFile.isEmpty()) {
+            drawFilePath = saveFile(productDrawFile); // 새 파일 저장
+        }
+        if (productEtcFile != null && !productEtcFile.isEmpty()) {
+            etcFilePath = saveFile(productEtcFile); // 새 파일 저장
+        }
 
         // DTO 객체 생성 및 값 설정
         ProductDTO productDTO = ProductDTO.builder()
@@ -198,7 +202,7 @@ public class ProductController {
                 .productTexture(productTexture)
                 .productDrawFile(drawFilePath)
                 .productEtcFile(etcFilePath)
-                //.productRegDate(now)
+                .productRegDate(existingProduct.get().getProductRegDate())
                 .productModDate(now)
                 .build();
 
@@ -221,14 +225,6 @@ public class ProductController {
     @GetMapping("/getProduct/{productCode}")
     public String getProduct(@PathVariable("productCode") String productCode, Model model) {
         log.info("제품 조회 : " + productCode);
-
-//        Optional<ProductDTO> product = productService.getProduct(productCode);
-//        if (product.isPresent()) {
-//            model.addAttribute("product", product.get());
-//            //return "redirect:/product/getProduct"; // View name (JSP or Thymeleaf template)
-//        } else {
-//            //return "error/404"; // Handle not found
-//        }
 
         model.addAttribute("product", productService.getProduct(productCode));
         //return "/product/productDetail"; // 제품 상세보기 페이지 (view.html)
@@ -314,37 +310,14 @@ public class ProductController {
 
 
     ////////// ((제품+유닛) 컨트롤러 부분) ///////////////////////////////////////////////////////////////
+    //필요시 별도 메소드 구현..
     // (제품+유닛) 등록 메서드
-    @GetMapping("/productUnitRegister")
-    public void productUnitRegister(Model model) {
-        model.addAttribute("productUnit", new ProductUnitDTO());
-    }
     // (제품+유닛) 등록 처리 메서드
-    @PostMapping("/productUnitRegisterPro")
-    public String productUnitRegisterPro(@ModelAttribute ProductUnitDTO productUnitDTO,
-                                         RedirectAttributes redirectAttributes) {
-        log.info("(제품+유닛) 등록 ..");
-
-        productUnitService.insertProductUnit(productUnitDTO);
-
-        // 제품 목록 페이지로 리다이렉트
-        return "redirect:/product/getListProduct";
-    }
-
     // (제품+유닛) 수정 메서드
-
-
     // (제품+유닛) 삭제 메서드
-
-
     // (제품+유닛) 조회 메서드
-
-
     // (제품+유닛) 목록 조회 메서드
-
-
     // (제품+유닛) 검색 메서드
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -403,14 +376,6 @@ public class ProductController {
     // 유닛 수정 페이지 폼1
     @GetMapping("/unitModify/{unitCode}")
     public String unitModify(@PathVariable("unitCode") String unitCode, Model model) {
-//        Optional<UnitDTO> unit = unitService.getUnit(unitCode);
-//        if (unit.isPresent()) {
-//            model.addAttribute("unit", unit.get());
-//            //return "redirect:/product/unitModify"; // View name (JSP or Thymeleaf template)
-//        } else {
-//            //return "error/404"; // Handle not found
-//        }
-
         return "redirect:/product/unitEdit?unitCode=" + unitCode;
     }
 
@@ -463,12 +428,25 @@ public class ProductController {
 
         log.info("유닛 수정 : "+unitCode);
 
+        // 유닛의 현재 상태를 데이터베이스에서 조회
+        Optional<UnitDTO> existingUnit = unitService.getUnit(unitCode);
+
         // 현재 날짜와 시간을 등록일 및 수정일로 설정
         LocalDateTime now = LocalDateTime.now();
 
         // 파일 저장 처리
-        String drawFilePath = saveFile(unitDrawFile);
-        String etcFilePath = saveFile(unitEtcFile);
+//        String drawFilePath = saveFile(unitDrawFile);
+//        String etcFilePath = saveFile(unitEtcFile);
+        String drawFilePath = existingUnit.get().getUnitDrawFile();
+        String etcFilePath = existingUnit.get().getUnitEtcFile();
+
+        // 파일 저장 처리
+        if (unitDrawFile != null && !unitDrawFile.isEmpty()) {
+            drawFilePath = saveFile(unitDrawFile); // 새 파일 저장
+        }
+        if (unitEtcFile != null && !unitEtcFile.isEmpty()) {
+            etcFilePath = saveFile(unitEtcFile); // 새 파일 저장
+        }
 
         // DTO 객체 생성 및 값 설정
         UnitDTO unitDTO = UnitDTO.builder()
@@ -478,7 +456,7 @@ public class ProductController {
                 .unitTexture(unitTexture)
                 .unitDrawFile(drawFilePath)
                 .unitEtcFile(etcFilePath)
-                .unitRegDate(now)
+                .unitRegDate(existingUnit.get().getUnitRegDate())
                 .unitModDate(now)
                 .build();
 
@@ -503,14 +481,6 @@ public class ProductController {
     @GetMapping("/getUnit/{unitCode}")
     public String getUnit(@PathVariable("unitCode") String unitCode, Model model) {
         log.info("유닛 조회 : " + unitCode);
-
-//        Optional<UnitDTO> unit = unitService.getUnit(unitCode);
-//        if (unit.isPresent()) {
-//            model.addAttribute("unit", unit.get());
-//            //return "redirect:/product/getUnit"; // View name (JSP or Thymeleaf template)
-//        } else {
-//            //return "error/404"; // Handle not found
-//        }
 
         model.addAttribute("unit", unitService.getUnit(unitCode));
         //return "/product/unitDetail"; // 유닛 상세보기 페이지 (view.html)
@@ -577,6 +547,7 @@ public class ProductController {
 
 
     ////////// ((유닛+자재) 컨트롤러 부분) ///////////////////////////////////////////////////////////////
+    //필요시 별도 메소드 구현..
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -636,10 +607,6 @@ public class ProductController {
     // 자재 수정 폼1 메서드
     @GetMapping("/materialModify/{materialCode}")
     public String materialModify(@PathVariable("materialCode") String materialCode, Model model) {
-//        MaterialDTO materialDTO = materialService.getMaterial(materialCode)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid material code"));
-//        model.addAttribute("materialDTO", materialDTO);
-
         return "redirect:/product/materialEdit?materialCode=" + materialCode;
     }
 
@@ -729,14 +696,6 @@ public class ProductController {
     @GetMapping("/getMaterial/{materialCode}")
     public String getMaterial(@PathVariable("materialCode") String materialCode, Model model) {
         log.info("자재 조회 : " + materialCode);
-
-//        Optional<MaterialDTO> material = materialService.getMaterial(materialCode);
-//        if (material.isPresent()) {
-//            model.addAttribute("material", material.get());
-//            //return "redirect:/product/getMaterial"; // View name (JSP or Thymeleaf template)
-//        } else {
-//            //return "error/404"; // Handle not found
-//        }
 
         return "redirect:/product/materialDetail?materialCode=" + materialCode;
     }

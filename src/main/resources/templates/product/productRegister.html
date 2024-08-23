@@ -51,55 +51,49 @@
                             </div>
 
                             <div class="row mb-3">
-                                <label for="inputText" class="col-sm-2 col-form-label">품목명</label>
+                                <label for="product_name" class="col-sm-2 col-form-label">품목명</label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="product_name" class="form-control" value="">
+                                    <input type="text" id="product_name" name="product_name" class="form-control" value="">
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="inputText" class="col-sm-2 col-form-label">단가</label>
+                                <label for="product_price" class="col-sm-2 col-form-label">단가</label>
                                 <div class="col-sm-10">
-                                    <input type="number" name="product_price" class="form-control" value="">
+                                    <input type="number" id="product_price" name="product_price" class="form-control" value="">
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="inputText" class="col-sm-2 col-form-label">규격</label>
+                                <label for="product_stand" class="col-sm-2 col-form-label">규격</label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="product_stand" class="form-control" value="">
+                                    <input type="text" id="product_stand" name="product_stand" class="form-control" value="">
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="inputText" class="col-sm-2 col-form-label">재질</label>
+                                <label for="product_texture" class="col-sm-2 col-form-label">재질</label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="product_texture" class="form-control" value="">
+                                    <input type="text" id="product_texture" name="product_texture" class="form-control" value="">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <label for="inputNumber" class="col-sm-2 col-form-label">도면</label>
+                                <label for="product_draw_file" class="col-sm-2 col-form-label">도면</label>
                                 <div class="col-sm-10">
-                                    <input class="form-control" type="file" id="formFile" name="product_draw_file">
+                                    <input class="form-control" type="file" id="product_draw_file" name="product_draw_file">
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="inputNumber" class="col-sm-2 col-form-label">참고문서</label>
+                                <label for="product_etc_file" class="col-sm-2 col-form-label">참고문서</label>
                                 <div class="col-sm-10">
-                                    <input class="form-control" type="file" id="formFile" name="product_etc_file">
+                                    <input class="form-control" type="file" id="product_etc_file" name="product_etc_file">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">
                                     유닛리스트
-                                    <!-- <a href="유닛검색창.html"> -->
-                                    <button type="button" onclick="alert('유닛찾기 기능 구현예정..');" class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#modalDialogScrollable">유닛찾기</button>
-                                    <!-- </a> -->
+                                    <button type="button" onclick="/*alert('유닛찾기 기능 구현예정..');*/" class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#modalDialogScrollable">유닛찾기</button>
                                 </label>
                                 <div class="col-sm-10">
-<!--                                    <label for="unitCodes">Units:</label>-->
-<!--                                    <select name="unitCodes" id="unitCodes" multiple>-->
-<!--                                        <option th:each="unit : ${units}" th:value="${unit.unitCode}" th:text="${unit.unitName}"></option>-->
-<!--                                    </select>-->
                                     <table class="table table-hover">
                                         <thead>
                                         <tr>
@@ -178,7 +172,6 @@
                                 </div>
                             </div>
 
-
                         </form><!-- End General Form Elements -->
 
                     </div>
@@ -188,6 +181,148 @@
 
         </div> <!--End row-->
     </section>
+
+
+
+
+    <!-- Modal Dialog Scrollable -->
+    <style>
+        .modal {
+          --bs-modal-width: 60%;
+        }
+    </style>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalDialogScrollable" hidden>
+        Modal Dialog Scrollable
+    </button>
+    <div class="modal fade" id="modalDialogScrollable" tabindex="-1">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">리스트</h5>
+                    <!-- <h5 class="modal-title">Modal Dialog Scrollable</h5> -->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- <div class="modal-body">
+                  Non omnis incidunt qui sed occaecati magni asperiores est mollitia. Soluta at et reprehenderit. Placeat autem numquam et fuga numquam. Tempora in facere consequatur sit dolor ipsum. Consequatur nemo amet incidunt est facilis. Dolorem neque recusandae quo sit molestias sint dignissimos.
+                  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                  This content should appear at the bottom after you scroll.
+                </div> -->
+
+                <div class="modal-body">
+                    <section class="section">
+                        <div class="row">
+                            <div class="col-lg-12" style="width: 99.9%;">
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">자재리스트</h5>
+                                        <div class="row mb-3">
+                                            <div class="col-sm-12">
+                                                <div class="input-group mb-3">
+
+                                                    <input type="text" class="form-control" id="itemCodeInput" placeholder="코드 또는 자재명 검색">
+                                                    <button class="input-group-text" id="confirmSelectionBtn">검색</button>
+                                                </div>
+
+                                                <!-- 여기에 제품(유닛) 선택창 구성할 내용 시작.. -->
+                                                <div id="faqsOne-1" class="accordion-collapse " data-bs-parent="#faq-group-1">
+                                                    <div class="row" style="margin:0; padding:0;">
+                                                        <div class="col-lg-12" style="text-align: center; padding: 8px; border: 1px solid #ddd; border-top-left-radius:6px;border-top-right-radius:6px; background-color: #f8f8f8;"><b>유닛</b></div>
+                                                        <div class="col-lg-12" style="border: 1px solid #ddd; border-top: none ; height:155px; overflow-y: auto; margin:0; padding:10px;">
+                                                            <ul style="list-style: none; margin: 0px; padding: 0px;">
+                                                                <li style="margin: 0px; padding: 3px;"><input type="checkbox" name="makename"> 선풍기 상부 (유닛)</li>
+                                                                <li style="margin: 0px; padding: 3px;"><input type="checkbox" name="makename"> 선풍기 하부 (유닛)</li>
+<!--                                                                <li style="margin: 0px; padding: 3px;"><input type="checkbox" name="makename"> 유성3색볼펜 (제품)</li>-->
+                                                                <li>&nbsp;</li>
+                                                                <li>찾으시는 유닛, 제품이 없으십니까? <a href="유닛등록처리.html">유닛등록바로가기</a> <span style="color: #777;">,</span> <a href="제품등록처리.html">제품등록바로가기</a></li>
+                                                            </ul>
+                                                        </div>
+                                                        <div>※ 유닛을 체크하면 아래 자재목록에 출력됩니다.</div>
+                                                    </div>
+                                                </div>
+                                                <!-- 여기에 제품(유닛) 선택창 구성할 내용 끝. -->
+
+                                            </div>
+                                        </div>
+
+                                        <!-- Table with hoverable rows -->
+                                        <table class="table table-hover" style="margin-top:30px;">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">자재명</th>
+                                                <th scope="col">규격</th>
+                                                <th scope="col">재질</th>
+                                                <th scope="col">자재코드</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <th scope="row"><input type="checkbox"></th>
+                                                <td>펜대</td>
+                                                <td>8mm*150mm</td>
+                                                <td>플라스틱</td>
+                                                <td>123-001</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row"><input type="checkbox"></th>
+                                                <td>펜촉</td>
+                                                <td>두께 2mm</td>
+                                                <td>금속</td>
+                                                <td>123-002</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row"><input type="checkbox"></th>
+                                                <td>버튼</td>
+                                                <td>길이 35mm</td>
+                                                <td>금속(구리)</td>
+                                                <td>123-003</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row"><input type="checkbox"></th>
+                                                <td>스프링</td>
+                                                <td>길이 20mm</td>
+                                                <td>금속</td>
+                                                <td>123-004</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="5">찾으시는 자재가 없으십니까? <a href="자재등록처리.html">자재등록바로가기</a></td>
+                                            </tr>
+
+
+                                            </tbody>
+                                        </table>
+                                        <!-- End Table with hoverable rows -->
+
+                                        <div style="margin-bottom: 7px; margin-bottom: 10px;">※ '확인' 버튼 클릭시 체크된 자재만 등록폼에 자동셋팅 됩니다.</div>
+
+                                        <br>
+                                        <a href="제품등록처리.html"><button type="button" class="btn btn-primary"> 확인 </button></a>
+
+                                        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+                                        <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </section>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" hidden>Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal Dialog Scrollable-->
+
+
 
 </main>
 <!-- End #main -->

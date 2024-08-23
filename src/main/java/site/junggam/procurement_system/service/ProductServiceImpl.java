@@ -2,7 +2,6 @@ package site.junggam.procurement_system.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.junggam.procurement_system.dto.ProductDTO;
@@ -15,7 +14,7 @@ import site.junggam.procurement_system.repository.ProductRepository;
 import site.junggam.procurement_system.repository.ProductUnitRepository;
 import site.junggam.procurement_system.repository.UnitRepository;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -45,62 +44,57 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toSet());
         product.setProductUnits(productUnits);
         Product saveProduct = productRepository.save(product);
-        return saveProduct.getProductCode();
 
-//        String newProductCode = generateNextProductCode();
-//        productDTO.setProductCode(newProductCode);
-//        Product product = convertToEntity(productDTO);
-//        Product saveProduct = productRepository.save(product);
-//        return saveProduct.getProductCode();
+        return saveProduct.getProductCode();
     }
 
     @Override
     public void updateProduct(String productCode, ProductDTO productDTO, List<String> unitCodes) {
 
-//        Product product = productRepository.findById(productDTO.getProductCode()).orElseThrow();
-//
-//        // 엔티티 정보 업데이트
-//        product.setProductName(productDTO.getProductName());
-//        // 나머지 필드 업데이트
-//
-//        // 기존 유닛 처리
-//        List<ProductUnit> existingUnits = new ArrayList<>(product.getProductUnits());
-//        for (ProductUnit unit : existingUnits) {
-//            if (!productDTO.getProductUnits().contains(unit)) {
-//                product.removeProductUnit(unit);
-//            }
-//        }
-//        for (ProductUnitDTO unitDTO : productDTO.getProductUnits()) {
-//            ProductUnit unit = new ProductUnit();
-//            unit.setUnitCode(unitDTO.getUnitCode());
-//            product.addProductUnit(unit);
-//        }
-//
-//        productRepository.save(product);
-
         Product existingProduct = productRepository.findById(productCode).orElse(null);
         if (existingProduct != null) {
-            Product product = convertToEntity(productDTO);
-            existingProduct.setProductName(product.getProductName());
-            existingProduct.setProductPrice(product.getProductPrice());
-            existingProduct.setProductStand(product.getProductStand());
-            existingProduct.setProductTexture(product.getProductTexture());
-            existingProduct.setProductDrawFile(product.getProductDrawFile());
-            existingProduct.setProductEtcFile(product.getProductEtcFile());
-            existingProduct.setProductRegDate(product.getProductRegDate());
-            existingProduct.setProductModDate(product.getProductModDate());
+            //Product product = convertToEntity(productDTO);
+            existingProduct.setProductName(productDTO.getProductName());
+            existingProduct.setProductPrice(productDTO.getProductPrice());
+            existingProduct.setProductStand(productDTO.getProductStand());
+            existingProduct.setProductTexture(productDTO.getProductTexture());
+            existingProduct.setProductDrawFile(productDTO.getProductDrawFile());
+            existingProduct.setProductEtcFile(productDTO.getProductEtcFile());
+            //existingProduct.setProductRegDate(productDTO.getProductRegDate());
+            existingProduct.setProductModDate(LocalDateTime.now());
 
-            Set<ProductUnit> productUnits = unitCodes.stream()
+            // 기존의 Product을 삭제하고 새로운 ProductUnit을 추가
+            Set<ProductUnit> newProductUnits = unitCodes.stream()
                     .map(unitCode -> {
                         Unit unit = unitRepository.findById(unitCode).orElse(null);
                         return new ProductUnit(new ProductUnitId(productCode, unitCode), existingProduct, unit);
                     })
                     .collect(Collectors.toSet());
-            existingProduct.setProductUnits(productUnits);
+
+            // 기존의 ProductUnits와 새로 설정한 ProductUnits를 비교하여 삭제할 항목과 추가할 항목을 설정
+            Set<ProductUnit> currentProductUnits = existingProduct.getProductUnits();
+
+            // 삭제할 항목 (현재에는 있지만 새로 설정한 목록에는 없는 항목)
+            Set<ProductUnit> toBeRemoved = currentProductUnits.stream()
+                    .filter(productUnit -> !newProductUnits.contains(productUnit))
+                    .collect(Collectors.toSet());
+
+            // 추가할 항목 (현재에는 없지만 새로 설정한 목록에는 있는 항목)
+            Set<ProductUnit> toBeAdded = newProductUnits.stream()
+                    .filter(productUnit -> !currentProductUnits.contains(productUnit))
+                    .collect(Collectors.toSet());
+
+            // 삭제
+            existingProduct.getProductUnits().removeAll(toBeRemoved);
+
+            // 추가
+            existingProduct.getProductUnits().addAll(toBeAdded);
+
+            // 저장
             productRepository.save(existingProduct);
         }
-
     }
+
 
     @Override
     public void deleteProduct(String productCode) {
