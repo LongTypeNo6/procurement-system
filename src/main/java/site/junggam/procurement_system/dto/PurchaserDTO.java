@@ -26,6 +26,7 @@ public class PurchaserDTO {
     private String purchaserManagerTel ;
     private String purchaserManagerEmail ;
     private String purchaserManagerFax ;
+    private String purchaserMemo;
 
     @Builder.Default
     private List<ContractDTO> contractDTOList = new ArrayList<>();

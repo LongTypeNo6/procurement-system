@@ -88,7 +88,7 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label for="inputNumber" class="col-sm-2 col-form-label">생산수량</label>
+                                    <label for="productionPlanQuantity" class="col-sm-2 col-form-label">생산수량</label>
                                     <div class="col-sm-10">
                                         <input type="number" class="form-control" id="productionPlanQuantity">
                                     </div>
@@ -175,11 +175,12 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div>&nbsp&nbsp원하시는 <span class="division">제품</span>이 없으십니까?&nbsp&nbsp<a href="#" target="_blank"><span class="division">제품</span>등록하기</a></div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <span id="selectedDivisionFooter">선택 : </span>
+                                                <span id="selectedDivisionFooter"></span>
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                                                 <button type="button" class="btn btn-primary" id="searchDivisionSubmit">확인</button>
                                             </div>
@@ -263,8 +264,8 @@
                             str = "";
                             $.each(data, function(idx, dto) {
                                 str += '<li class="list-group-item">';
-                                str += '<input class="form-check-input me-1" type="radio" name="gridRadios" value="'+dto.productCode+'" data-division-name="'+dto.productName+'" aria-label="...">';
-                                str += ' '+dto.productName;
+                                str += '<div class="row"><div class="col-lg-1"><input class="form-check-input me-1" type="radio" name="gridRadios" value="'+dto.productCode+'" data-division-name="'+dto.productName+'" aria-label="..."></div>';
+                                str += '<div class="col-lg-5">'+dto.productName+'</div><div class="col-lg-6">'+dto.productCode+'</div></div>';
                                 str += '</li>';
                             });
                             $("#divisionSearchList").html(str);
@@ -272,8 +273,8 @@
                             str = "";
                             $.each(data, function(idx, dto) {
                                 str += '<li class="list-group-item">';
-                                str += '<input class="form-check-input me-1" type="radio" name="gridRadios" value="'+dto.unitCode+'" data-division-name="'+dto.unitName+'" aria-label="...">';
-                                str += ' '+dto.unitName;
+                                str += '<div class="row"><div class="col-lg-1"><input class="form-check-input me-1" type="radio" name="gridRadios" value="'+dto.unitCode+'" data-division-name="'+dto.unitName+'" aria-label="..."></div>';
+                                str += '<div class="col-lg-5">'+dto.unitName+'</div><div class="col-lg-6">'+dto.unitCode+'</div></div>';
                                 str += '</li>';
                             });
                             $("#divisionSearchList").html(str);
@@ -320,7 +321,7 @@
                                 productIdx+=1;
                                 str += '<tr>';
                                 str += '<th scope="row">'+productIdx+'</th>';
-                                str += '<td id="materialName'+productIdx+'">'+dto.materialName+'</td>';
+                                str += '<td id="materialName'+productIdx+'" data-material-code="'+dto.materialCode+'">'+dto.materialName+'</td>';
                                 str += '<td id="bomQuantity'+productIdx+'">'+(productDto.productBomQuantity*dto.unitBomQuantity)+'</td>';
                                 str += '<td id="procurementPlanQuantity'+productIdx+'"></td>';
                                 str += '<td>'+productDto.productBomProcess+' | '+dto.unitBomProcess+'</td>';
@@ -336,7 +337,7 @@
                             unitIdx+=1;
                             str += '<tr>';
                             str += '<th scope="row">'+unitIdx+'</th>';
-                            str += '<td id="materialName'+unitIdx+'">'+dto.materialName+'</td>';
+                            str += '<td id="materialName'+unitIdx+'" data-material-code="'+dto.materialCode+'">'+dto.materialName+'</td>';
                             str += '<td id="bomQuantity'+unitIdx+'">'+dto.unitBomQuantity+'</td>';
                             str += '<td id="procurementPlanQuantity'+unitIdx+'"></td>';
                             str += '<td>'+dto.unitBomProcess+'</td>';
@@ -389,7 +390,6 @@
                 var ProductionPlanDTO = {};
                 if(previousDivision==="product"){
                     ProductionPlanDTO = {
-                        productionPlanRegDate: parseDate($('#productionPlanRegDate').val()),
                         productionPlanDate: parseDate($('#productionPlanDate').val()),
                         productionPlanDeadLine: parseDate($('#productionPlanDeadLine').val()),
                         productionPlanQuantity: $('#productionPlanQuantity').val(),
@@ -398,7 +398,6 @@
                     };
                 }else if(previousDivision==="unit") {
                     ProductionPlanDTO = {
-                        productionPlanRegDate: parseDate($('#productionPlanRegDate').val()),
                         productionPlanDate: parseDate($('#productionPlanDate').val()),
                         productionPlanDeadLine: parseDate($('#productionPlanDeadLine').val()),
                         productionPlanQuantity: $('#productionPlanQuantity').val(),
@@ -409,21 +408,21 @@
                 // 조달 계획 리스트 데이터 수집
                 $('#bomList tr').each(function(index, element) {
                     var procurementPlanDTO = {
+                        materialCode: $(element).find('#materialName' + (index + 1)).data('materialCode'),
                         materialName: $(element).find('#materialName' + (index + 1)).text(),
-                        bomQuantity: $(element).find('#bomQuantity' + (index + 1)).text(),
                         procurementPlanQuantity: $(element).find('#procurementPlanQuantity' + (index + 1)).text(),
                         procurementPlanDeadLine: parseDate($(element).find('#procurementPlanDeadLine' + (index + 1)).val())
                     };
                     ProductionPlanDTO.procurementPlanDTOList.push(procurementPlanDTO);
                 });
-
+                console.log("보내는 DTO값",ProductionPlanDTO)
                 // AJAX 요청으로 서버로 전송
                 $.ajax({
                     url: '/plan/registerProductionPlan', // 서버의 엔드포인트 URL
                     type: "POST",
                     data: JSON.stringify(ProductionPlanDTO),
                     contentType: "application/json; charset=utf-8",
-                    dataType: "json",
+                    dataType: "text",
                     success: function (result) {
                         console.log("생산 계획 저장 성공: ", result);
                         self.location.reload();

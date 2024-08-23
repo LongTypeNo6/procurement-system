@@ -17,6 +17,7 @@ public class Contract {
     private String contractFile;
     private Double contractPrice;
     private Integer contractLeadTime;
+    private String contractMemo;
 
     @OneToOne
     @JoinColumn(name = "material_code")
@@ -25,4 +26,10 @@ public class Contract {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "purchaserCode")
     private Purchaser purchaser;
+
+    public void changeContractPrice(Double newPrice) {this.contractPrice=newPrice;}
+
+    public void changeContractLeadTime(Integer newLeadTime) {this.contractLeadTime=newLeadTime;}
+
+    public void changeContractMemo(String newMemo) {this.contractMemo=newMemo;}
 }

@@ -25,15 +25,694 @@
                 </ol>
             </nav>
         </div><!-- End Page Title -->
-
         <section class="section dashboard">
             <div class="row">
                 <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">조달계획</h5>
+                            <!-- General Form Elements -->
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">생산코드</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="productionPlanCode" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">조달코드</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="procurementPlanCode" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">등록일</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" id="procurementPlanRegDate" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">전체조달마감일</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" id="productionPlanDeadLine" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">조달마감일</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" id="procurementPlanDeadLine" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">자재코드</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="materialCode" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">자재명</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="materialName" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">현가용재고</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" id="availableQuantity" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">조달수량</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" id="procurementPlanQuantity" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                견적상황
+                            </h5>
+                            <div class="row mb-3">
+                                <label for="estimateFile" class="col-sm-2 col-form-label">견적서</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="file" id="estimateFile" multiple>
+                                    <br>
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">파일명</th>
+                                            <th scope="col">삭제</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="estimateFileList">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">견적비고</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" style="height: 100px" id="estimateMemo"></textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col-sm-10">
+                                    <button type="button" class="btn btn-primary" id="estimateSaveBtn">견적정보저장</button>
+                                    <a href="/plan/procurementPlanList"><button type="button" class="btn btn-primary">리스트</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title" id="contractStatus">
+                                계약정보 :
+                            </h5>
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">계약서</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="file" id="contractFile" multiple>
+                                    <br>
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">파일명</th>
+                                            <th scope="col">삭제</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="contractFileList">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">단가</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" id="contractPrice">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">리드타임 (L / T)</label>
+                                <div class="col-sm-10">
+                                    <input type="number" class="form-control" id="contractLeadTime">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">계약비고</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" style="height: 100px" id="contractMemo"></textarea>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">사업자등록자번호</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group mb">
+                                        <input type="text" class="form-control" id="purchaserCode" required>
+                                        <button type="button" class="input-group-text" id="purchaserSelectBtn" data-bs-toggle="modal" data-bs-target="#purchaserSelect">검색</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">상호명</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="purchaserName" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">대표자</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="purchaserPresident" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">주소</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="purchaserAddress" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">업태</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="purchaserType" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">종목</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="purchaserCategory" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">전화번호</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="purchaserTel" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">팩스</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="purchaserFax" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">이메일</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="purchaserEmail" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">담당자</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="purchaserManager" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">담당자전화번호</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="purchaserManagerTel" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">담당자팩스</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="purchaserManagerFax" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">담당자이메일</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="purchaserManagerEmail" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">거래처 비고</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" style="height: 100px" id="purchaserMemo" disabled></textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col-sm-10">
+                                    <button type="button" class="btn btn-primary" id="contractAndProcurementPlanSaveBtn">계약정보저장 및 조달진행</button>
+                                    <a href="/plan/procurementPlanList"><button type="button" class="btn btn-primary">리스트</button></a>
+                                </div>
+                            </div>
+                            <!-- 제품 혹은 유닛 검색 모달창-->
+                            <!-- Modal Dialog Scrollable -->
+                            <div class="modal fade" id="purchaserSelect" tabindex="-1">
+                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">검색</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title" id="purchaserListName">거래처리스트</h5>
+                                                            <div class="row mb-3">
+                                                                <div class="col-sm-12">
+                                                                    <div class="input-group mb">
+                                                                        <input type="text" class="form-control" id="purchaserSearch" placeholder="사업자등록번호 또는 거래처명 입력">
+                                                                        <button type="button" class="input-group-text">검색</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row mb-3">
+                                                                <div class="col-sm-12" >
+                                                                    <!-- List group With Checkboxes and radios -->
+                                                                    <div class="form-control">
+                                                                        <ul class="list-group" style="height:200px; overflow-y: auto;">
+                                                                            <span id="purchaserSearchList" class="list-group-flush"></span>
+                                                                        </ul><!-- End List Checkboxes and radios -->
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div>&nbsp&nbsp원하시는 거래처가 없으십니까?&nbsp&nbsp<a href="/purchaser/purchaserRegister" target="_blank">거래처등록하기</a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <span id="selectedPurchaserFooter"></span>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                            <button type="button" class="btn btn-primary" id="searchPurchaserSubmit">확인</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- 제품 혹은 유닛 검색 모달창 끝-->
+                        </div>
+                    </div>
+                </div>
                 <!--여기에 카드랑 내용 넣어주시면 됩니다-->
             </div> <!--End row-->
         </section>
     </main>
     <!-- End #main -->
+    <script th:inline="javascript">
+        $(document).ready(function (e) {
+            var procurementPlanCode = [[${procurementPlanCode}]];
+            var estimateCode;
+            var contractCode;
+            var estimateFileList = [];
+            var contractFileList = [];
+            var newEstimateFileList = [];
+            var newContractFileList = [];
+
+            // 조달 계획 데이터를 불러오는 부분
+            $.getJSON("/plan/procurementPlanGet/" + procurementPlanCode, function (dto) {
+                $("#productionPlanCode").val(dto.productionPlanCode);
+                $("#procurementPlanCode").val(dto.procurementPlanCode);
+                $("#procurementPlanRegDate").val(formatDate(dto.procurementPlanRegDate));
+                $("#productionPlanDeadLine").val(formatDate(dto.productionPlanDeadLine));
+                $("#procurementPlanDeadLine").val(formatDate(dto.procurementPlanDeadLine));
+                $("#materialCode").val(dto.materialCode);
+                $("#materialName").val(dto.materialName);
+                $("#availableQuantity").val(dto.availableQuantity);
+                $("#procurementPlanQuantity").val(dto.procurementPlanQuantity);
+                $("#contractMemo").val(dto.contractMemo);
+                $("#contractPrice").val(dto.contractPrice);
+                $("#contractLeadTime").val(dto.contractLeadTime);
+                $("#estimateMemo").val(dto.estimateMemo);
+
+                if (dto.procurementPlanStatus === "ESTABLISHED") {
+                    $("#procurementPlanQuantity").prop("disabled", false);
+                    $("#procurementPlanDeadLine").prop("disabled", false);
+                }
+
+                estimateCode = dto.estimateCode;
+                contractCode = dto.contractCode;
+                setContract(dto.materialContractStatus);
+
+                // 기존 파일 리스트 불러오기
+                $.getJSON("/files/list/" + estimateCode, function (fileList) {
+                    estimateFileList = fileList;
+                    displayEstimateFileList();
+                });
+
+                $.getJSON("/files/list/" + contractCode, function (fileList) {
+                    contractFileList = fileList;
+                    displayContractFileList();
+                });
+
+            });
+
+            // 파일 리스트 표시 함수
+            function displayEstimateFileList() {
+                let fileTable = "";
+
+                // 기존 파일 표시
+                estimateFileList.forEach((file, index) => {
+                    fileTable += `
+                <tr data-fileindex="${file.inum}">
+                    <th scope="row"><input class="form-check-input me-1" type="radio" name="estimate" value="${file.fileName}"></th>
+                    <td><a href="/files/view/${file.inum}" target="_blank">${file.fileName}</a></td>
+                    <td><button type="button" class="btn btn-danger btn-sm delete-estimate-file-btn" data-fileindex="${index}"><i class="bi bi-exclamation-octagon"></i></button></td>
+                </tr>`;
+                });
+
+                // 새로 추가된 파일 표시
+                newEstimateFileList.forEach((file, index) => {
+                    fileTable += `
+                <tr data-fileindex="new-${index}">
+                    <th scope="row"><input class="form-check-input me-1" type="radio" name="estimate" value="${file.name}"></th>
+                    <td><a href="${file.url}" target="_blank">${file.name}</a></td>
+                    <td><button type="button" class="btn btn-danger btn-sm delete-estimate-file-btn" data-fileindex="new-${index}"><i class="bi bi-exclamation-octagon"></i></button></td>
+                </tr>`;
+                });
+
+                $("#estimateFileList").html(fileTable);
+            }
+
+            function displayContractFileList() {
+                let fileTable = "";
+
+                // 기존 파일 표시
+                contractFileList.forEach((file, index) => {
+                    fileTable += `
+                <tr data-fileindex="${file.inum}">
+                    <th scope="row"><input class="form-check-input me-1" type="radio" name="contract" value="${file.fileName}"></th>
+                    <td><a href="/files/view/${file.inum}" target="_blank">${file.fileName}</a></td>
+                    <td><button type="button" class="btn btn-danger btn-sm delete-contract-file-btn" data-fileindex="${index}"><i class="bi bi-exclamation-octagon"></i></button></td>
+                </tr>`;
+                });
+
+                // 새로 추가된 파일 표시
+                newContractFileList.forEach((file, index) => {
+                    fileTable += `
+                <tr data-fileindex="new-${index}">
+                    <th scope="row"><input class="form-check-input me-1" type="radio" name="contract" value="${file.name}"></th>
+                    <td><a href="${file.url}" target="_blank">${file.name}</a></td>
+                    <td><button type="button" class="btn btn-danger btn-sm delete-contract-file-btn" data-fileindex="new-${index}"><i class="bi bi-exclamation-octagon"></i></button></td>
+                </tr>`;
+                });
+
+                $("#contractFileList").html(fileTable);
+            }
+
+            // 서버에 있는 기존 파일 삭제
+            function deleteFile(fileId, elementId) {
+                $.ajax({
+                    url: '/files/delete/' + fileId,
+                    type: 'DELETE',
+                    success: function(result) {
+                        console.log("파일 삭제 성공: ", result);
+                        // 삭제된 파일을 리스트에서 제거
+                        if (elementId === "estimateFileList") {
+                            estimateFileList = estimateFileList.filter(file => file.inum !== fileId);
+                            displayEstimateFileList();
+                        } else if (elementId === "contractFileList") {
+                            contractFileList = contractFileList.filter(file => file.inum !== fileId);
+                            displayContractFileList();
+                        }
+                    },
+                    error: function(error) {
+                        console.log("파일 삭제 실패: ", error);
+                        alert("파일 삭제에 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            }
+
+            // 파일 삭제 클릭 이벤트 처리
+            $(document).on("click", ".delete-estimate-file-btn", function() {
+                let index = $(this).data("fileindex").toString();  // index를 문자열로 변환
+                if (index.startsWith("new-")) {
+                    removeEstimateFile(parseInt(index.split("-")[1]));
+                } else {
+                    deleteFile(estimateFileList[parseInt(index)].inum, "estimateFileList");
+                }
+            });
+
+            $(document).on("click", ".delete-contract-file-btn", function() {
+                let index = $(this).data("fileindex").toString();  // index를 문자열로 변환
+                if (index.startsWith("new-")) {
+                    removeContractFile(parseInt(index.split("-")[1]));
+                } else {
+                    deleteFile(contractFileList[parseInt(index)].inum, "contractFileList");
+                }
+            });
+
+
+            // 새로 추가된 파일 삭제 (화면에서만 삭제)
+            function removeEstimateFile(index) {
+                newEstimateFileList.splice(index, 1);
+                displayEstimateFileList();
+            }
+
+            function removeContractFile(index) {
+                newContractFileList.splice(index, 1);
+                displayContractFileList();
+            }
+
+            // 파일 추가 시 리스트에 반영하는 함수
+            function prependNewFiles(files, isEstimate = true) {
+                const fileList = Array.from(files).map((file, index) => ({
+                    name: file.name,
+                    url: URL.createObjectURL(file),
+                    index: index
+                }));
+
+                if (isEstimate) {
+                    newEstimateFileList.push(...fileList);
+                    displayEstimateFileList();
+                } else {
+                    newContractFileList.push(...fileList);
+                    displayContractFileList();
+                }
+            }
+
+            // 계약 상태 설정 함수
+            function setContract(contractStatus) {
+                if (contractStatus === "PENDING") {
+                    $("#contractStatus").text("계약정보 : 미계약");
+
+                    $("#estimateFile").on("change", function () {
+                        prependNewFiles($(this)[0].files, true);
+                    });
+
+                    $("#contractFile").on("change", function () {
+                        prependNewFiles($(this)[0].files, false);
+                    });
+                } else if (contractStatus === "CONFIRMED") {
+                    console.log("계약상태임");
+                }
+            }
+
+            //모달창관련기능
+            var purchaserModal = new bootstrap.Modal(document.getElementById('purchaserSelect'));
+            $("#purchaserSelectBtn").on("click", function () {
+                console.log("검색버튼 클릭됨")
+                var selectedCode = null;
+                $("#purchaserSearch").on("input", function () {
+                    var keyword = $("#purchaserSearch").val();
+                    $.getJSON("/purchasercontent/listSearching?keyword=" + keyword, function (data) {
+                        let str = "";
+                        $.each(data, function (idx, dto) {
+                            str += '<li class="list-group-item">';
+                            str += '<div class="row"><div class="col-lg-1"><input class="form-check-input me-1" type="radio" name="gridRadios" value="' + dto.purchaserCode + '" data-purchaser-name="' + dto.purchaserName + '" aria-label="..."></div>';
+                            str += '<div class="col-lg-5">' + dto.purchaserName + '</div><div class="col-lg-5">' + dto.purchaserCode + '</div></div>';
+                            str += '</li>';
+                        });
+                        $("#purchaserSearchList").html(str);
+                        if (selectedCode) {
+                            $("input[name='gridRadios'][value='" + selectedCode + "']").prop("checked", true);
+                        }
+                        $("input[name='gridRadios']").change(function () {
+                            var selectedName = $(this).data('purchaserName');
+                            selectedCode = $(this).val();
+                            $("#selectedPurchaserFooter").text("선택 : " + selectedName);
+                            $("#selectedPurchaserFooter").attr("data-purchaser-code", selectedCode);
+                        });
+                    }).fail(function (jqxhr, textStatus, error) {
+                        var err = textStatus + ", " + error;
+                        console.log("자재 정보 요청 실패: " + err);
+                    });
+                })
+            })
+            $("#searchPurchaserSubmit").on("click", function () {
+                var selectedName = $("#selectedPurchaserFooter").text().replace("선택 : ", "");
+                var selectedCode = $("#selectedPurchaserFooter").attr("data-purchaser-code");
+                if (selectedCode && selectedName) {
+                    $.getJSON("/purchasercontent/" + selectedCode, function (dto) {
+                        $("#purchaserCode").val(dto.purchaserCode);
+                        $("#purchaserName").val(dto.purchaserName);
+                        $("#purchaserAddress").val(dto.purchaserAddress);
+                        $("#purchaserFax").val(dto.purchaserFax);
+                        $("#purchaserEmail").val(dto.purchaserEmail);
+                        $("#purchaserType").val(dto.purchaserType);
+                        $("#purchaserTel").val(dto.purchaserTel);
+                        $("#purchaserCategory").val(dto.purchaserCategory);
+                        $("#purchaserPresident").val(dto.purchaserPresident);
+                        $("#purchaserManager").val(dto.purchaserManager);
+                        $("#purchaserManagerTel").val(dto.purchaserManagerTel);
+                        $("#purchaserManagerEmail").val(dto.purchaserManagerEmail);
+                        $("#purchaserManagerFax").val(dto.purchaserManagerFax);
+                        $("#purchaserMemo").val(dto.purchaserMemo);
+                    })
+                    purchaserModal.hide();
+                } else {
+                    console.log("선택된 값이 없습니다.");
+                }
+            });
+
+            // 저장 기능
+            $("#estimateSaveBtn").on("click", function () {
+                estimateSave();
+            })
+            $("#contractAndProcurementPlanSaveBtn").on("click", function () {
+                console.log("조달계획, 계약 저장")
+                console.log("zhem"+contractCode)
+                contractSave();
+                procurementPlanSave();
+
+            })
+            function estimateSave() {
+                var estimateDTO = {
+                    estimateMemo: $("#estimateMemo").val(),
+                    materialDTO: {materialCode: $("#materialCode").val()},
+                };
+                $.ajax({
+                    url: '/plan/registerEstimate',
+                    type: "POST",
+                    data: JSON.stringify(estimateDTO),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "text",
+                    success: function (result) {
+                        console.log("데이터 저장 성공: ", result);
+                        alert("저장했습니다.");
+                        estimateFileSave(result);
+                    },
+                    error: function (error) {
+                        console.log("데이터 저장 실패: ", error);
+                        alert("데이터 저장에 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            }
+
+            function estimateFileSave(foreignCode) {
+                var formData = new FormData();
+                var fileInput = $('#estimateFile')[0].files;
+
+                if (fileInput.length > 0) {
+                    for (let i = 0; i < fileInput.length; i++) {
+                        formData.append("files", fileInput[i]);
+                    }
+                    $.ajax({
+                        url: '/files/upload/' + foreignCode + '/estimate',
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function (result) {
+                            console.log("파일 업로드 성공: ", result);
+                            window.location.href = "/plan/procurementPlanList";
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("파일 업로드 실패: ", textStatus);
+                            alert("파일 업로드에 실패했습니다. 다시 시도해주세요.");
+                        }
+                    });
+                } else {
+                    window.location.href = "/plan/procurementPlanList";
+                }
+            }
+
+            function contractSave() {
+                var contractDTO = {
+                    purchaserDTO: { purchaserCode: $("#purchaserCode").val() },
+                    materialDTO: { materialCode: $("#materialCode").val() },
+                    contractLeadTime: $("#contractLeadTime").val(),
+                    contractPrice: $("#contractPrice").val(),
+                    contractMemo: $("#contractMemo").val()
+                };
+                $.ajax({
+                    url: '/plan/registerContract',
+                    type: "POST",
+                    data: JSON.stringify(contractDTO),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "text",
+                    success: function (result) {
+                        console.log("계약 정보 저장 성공: ", result);
+                        alert("계약 정보를 저장했습니다.");
+                        contractFileSave(result);
+                    },
+                    error: function (error) {
+                        console.log("계약 정보 저장 실패: ", error);
+                        alert("계약 정보 저장에 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            }
+
+            function contractFileSave(foreignCode) {
+                var formData = new FormData();
+                var fileInput = $('#contractFile')[0].files;
+                if (fileInput.length > 0) {
+                    for (let i = 0; i < fileInput.length; i++) {
+                        formData.append("files", fileInput[i]);
+                    }
+                    $.ajax({
+                        url: '/files/upload/' + foreignCode + '/contract',
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function (result) {
+                            console.log("계약서 파일 업로드 성공: ", result);
+                            window.location.href = "/plan/procurementPlanList";
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("계약서 파일 업로드 실패: ", textStatus);
+                            alert("계약서 파일 업로드에 실패했습니다. 다시 시도해주세요.");
+                        }
+                    });
+                } else {
+                    window.location.href = "/plan/procurementPlanList";
+                }
+            }
+
+            function procurementPlanSave() {
+                var procurementPlanDTO = {
+                    productionPlanCode: $("#productionPlanCode").val(),
+                    procurementPlanCode: $("#procurementPlanCode").val(),
+                    procurementPlanRegDate: parseDate($("#procurementPlanRegDate").val()),
+                    productionPlanDeadLine: parseDate($("#productionPlanDeadLine").val()),
+                    procurementPlanDeadLine: parseDate($("#procurementPlanDeadLine").val()),
+                    materialCode: $("#materialCode").val(),
+                    materialName: $("#materialName").val(),
+                    availableQuantity: $("#availableQuantity").val(),
+                    procurementPlanQuantity: $("#procurementPlanQuantity").val(),
+                    purchaserCode: $("#purchaserCode").val()
+                };
+                $.ajax({
+                    url: '/plan/procurementPlan/'+procurementPlanCode,
+                    type: "PATCH",
+                    data: JSON.stringify(procurementPlanDTO),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "text",
+                    success: function (result) {
+                        console.log("조달계획 저장 성공: ", result);
+                        alert("조달계획을 저장했습니다.");
+                        window.location.href = "/plan/procurementPlanList";
+                    },
+                    error: function (error) {
+                        console.log("조달계획 저장 실패: ", error);
+                        alert("조달계획 저장에 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            }
+        });
+    </script>
+
     <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
     <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
 </body>

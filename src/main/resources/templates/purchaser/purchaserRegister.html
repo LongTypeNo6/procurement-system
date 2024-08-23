@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Title</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <th:block th:replace="~{/fragments/headFragment}"></th:block>
+</head>
+<body>
+    <th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
+    <!-- ======= main ======= -->
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>거래처등록</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">메인</a></li>
+                    <li class="breadcrumb-item">발주계획</li>
+                    <li class="breadcrumb-item active">거래처</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+        <section class="section dashboard">
+            <div class="row">
+                <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">거래처정보</h5>
+                            <form>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">사업자등록자번호</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" id="purchaserCode" >
+                                    </div>
+                                    <label for="inputNumber" class="col-sm-2 col-form-label">사업자등록증</label>
+                                    <div class="col-sm-4">
+                                        <input class="form-control" type="file" id="formFile">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">상호명</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserName" >
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">대표자</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserPresident" >
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">주소</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserAddress" >
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">업태</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserType" >
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">종목</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserCategory" >
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputNumber" class="col-sm-2 col-form-label">전화번호</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserTel" >
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputNumber" class="col-sm-2 col-form-label">팩스</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserFax" >
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputNumber" class="col-sm-2 col-form-label">이메일</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserEmail" >
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label">담당자</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserManager" >
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputNumber" class="col-sm-2 col-form-label">전화번호</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserManagerTel" >
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputNumber" class="col-sm-2 col-form-label">팩스</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserManagerFax" >
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="inputNumber" class="col-sm-2 col-form-label">이메일</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="purchaserManagerEmail" >
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mb-3">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">비고</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" style="height: 100px" id="purchaserMemo" ></textarea>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-10">
+                                        <button type="button" class="btn btn-primary" id="savePurchaser">저장</button>
+                                        <button type="button" class="btn btn-primary">리스트</button>
+                                    </div>
+                                </div>
+                            </form><!-- End General Form Elements -->
+                        </div>
+                    </div>
+                </div>
+                <!--여기에 카드랑 내용 넣어주시면 됩니다-->
+            </div> <!--End row-->
+        </section>
+    </main>
+    <!-- End #main -->
+    <script th:inline="javascript">
+        $(document).ready(function (e) {
+            var purchaserCode;
+            $("#savePurchaser").on("click", function () {
+                // 먼저 다른 데이터를 서버로 전송
+                var purchaserDTO = {
+                    purchaserCode: $('#purchaserCode').val(),
+                    purchaserName: $('#purchaserName').val(),
+                    purchaserAddress: $('#purchaserAddress').val(),
+                    purchaserFax: $('#purchaserFax').val(),
+                    purchaserEmail: $('#purchaserEmail').val(),
+                    purchaserType: $('#purchaserType').val(),
+                    purchaserTel: $('#purchaserTel').val(),
+                    purchaserCategory: $('#purchaserCategory').val(),
+                    purchaserPresident: $('#purchaserPresident').val(),
+                    purchaserManager: $('#purchaserManager').val(),
+                    purchaserManagerTel: $('#purchaserManagerTel').val(),
+                    purchaserManagerEmail: $('#purchaserManagerEmail').val(),
+                    purchaserManagerFax: $('#purchaserManagerFax').val(),
+                    purchaserMemo: $('#purchaserMemo').val()
+                };
+                purchaserCode = $('#purchaserCode').val();
+                $.ajax({
+                    url: '/purchasercontent/register',
+                    type: "POST",
+                    data: JSON.stringify(purchaserDTO),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "text",
+                    success: function (result) {
+                        console.log("데이터 저장 성공: ", result);
+                        alert("저장했습니다.");
+                        uploadFile(purchaserCode);  // 파일 업로드 함수 호출
+                    },
+                    error: function (error) {
+                        console.log("데이터 저장 실패: ", error);
+                        alert("데이터 저장에 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            });
+
+            function uploadFile(purchaserCode) {
+                var formData = new FormData();
+                var fileInput = $('#formFile')[0].files[0];
+                if (fileInput) {
+                    formData.append("file", fileInput);
+                    $.ajax({
+                        url: '/files/uploadOne/' + purchaserCode + '/' + purchaserCode,  // 파일 업로드 경로
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function (result) {
+                            console.log("파일 업로드 성공: ", result);
+                            window.location.href = "/purchaser/purchaserList";  // 업로드 후 페이지 리다이렉트
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("파일 업로드 실패: ", textStatus);
+                            alert("파일 업로드에 실패했습니다. 다시 시도해주세요.");
+                        }
+                    });
+                } else {
+                    // 파일이 없는 경우에도 페이지 리다이렉트
+                    window.location.href = "/purchaser/purchaserList";
+                }
+            }
+        });
+    </script>
+    <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
+</body>
+</html>

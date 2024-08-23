@@ -37,6 +37,60 @@
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">조달계획리스트</h5>
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <b>보기 | 발주날짜 : 전체 | 납기일 : 전체 </b>
+                                            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                            <b>검색 | 전체 : -</b>
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                                         data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <div class="row mb-3">
+                                                <label for="inputPassword" class="col-sm-1 col-form-label">조달마감일</label>
+                                                <div class="col-sm-2">
+                                                    <input type="date" class="form-control">
+                                                </div>
+                                                ~
+                                                <div class="col-sm-2">
+                                                    <input type="date" class="form-control">
+                                                </div>
+                                                <label for="inputPassword" class="col-sm-1 col-form-label">생산일</label>
+                                                <div class="col-sm-2">
+                                                    <input type="date" class="form-control">
+                                                </div>
+                                                ~
+                                                <div class="col-sm-2">
+                                                    <input type="date" class="form-control">
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row mb-3">
+                                                <label for="inputPassword" class="col-sm-1 col-form-label">검색</label>
+                                                <div class="col-sm-2">
+                                                    <select class="form-select" aria-label="Default select example">
+                                                        <option selected>전체</option>
+                                                        <option value="1">품목명</option>
+                                                        <option value="2">품목코드</option>
+                                                        <option value="2">거래처명</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" id="itemCodeInput">
+                                                        <button class="input-group-text" id="confirmSelectionBtn">검색</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
@@ -45,83 +99,11 @@
                                     <th scope="col">계약여부</th>
                                     <th scope="col">자재명</th>
                                     <th scope="col">수량</th>
-                                    <th scope="col">생산계획등록일</th>
                                     <th scope="col">조달마감일</th>
+                                    <th scope="col">생산계획등록일</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>수립</td>
-                                    <td>미계약</td>
-                                    <td><a href="조달계획등록처리미계약.html">펜대</a></td>
-                                    <td>50</td>
-                                    <td>2024-07-23</td>
-                                    <td>2024-08-02</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>수립</td>
-                                    <td>계약협상</td>
-                                    <td><a href="조달계획등록처리계약협상.html">펜촉</a></td>
-                                    <td>150</td>
-                                    <td>2024-07-23</td>
-                                    <td>2024-07-31</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>수립</td>
-                                    <td>계약</td>
-                                    <td><a href="조달계획등록처리계약.html">버튼</a></td>
-                                    <td>150</td>
-                                    <td>2024-07-23</td>
-                                    <td>2024-08-01</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td>수립</td>
-                                    <td>계약</td>
-                                    <td><a href="#">그립</a></td>
-                                    <td>50</td>
-                                    <td>2024-07-23</td>
-                                    <td>2024-08-02</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">5</th>
-                                    <td>진행</td>
-                                    <td>계약</td>
-                                    <td><a href="조달계획상세보기진행.html">스프링</a></td>
-                                    <td>250</td>
-                                    <td>2024-07-23</td>
-                                    <td>2024-08-02</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">6</th>
-                                    <td>진행</td>
-                                    <td>계약</td>
-                                    <td><a href="#">잉크카트리지K</a></td>
-                                    <td>200</td>
-                                    <td>2024-07-15</td>
-                                    <td>2024-07-29</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">7</th>
-                                    <td>진행</td>
-                                    <td>계약</td>
-                                    <td><a href="#">잉크카트리지R</a></td>
-                                    <td>200</td>
-                                    <td>2024-07-15</td>
-                                    <td>2024-07-29</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">8</th>
-                                    <td>진행</td>
-                                    <td>계약</td>
-                                    <td><a href="#">잉크카트리지B</a></td>
-                                    <td>200</td>
-                                    <td>2024-07-15</td>
-                                    <td>2024-07-29</td>
-                                </tr>
+                                <tbody id="procurementList">
                                 </tbody>
                             </table>
                             <!-- End Table with hoverable rows -->
@@ -137,13 +119,19 @@
         var totalPage = 0;
         var currentPage = 1;
         const statusMapping = {
-            "PENDING": "입고대기",
-            "COMPLETED": "입고완료"
+            "ESTABLISHED" : "수립",
+            "IN_PROGRESS" : "진행",
+            "COMPLETED": "완료"
+        };
+        const contractStatusMapping = {
+            "PENDING" : "미계약",
+            "NEGOTIATION" : "계약협상",
+            "CONFIRMED": "계약"
         };
         $(document).ready(function (e) {
             console.log("자바스크립트작동")
-            function getInventoryContent(page) {
-                return $.getJSON(`/inventorycontent/inventoryList?page=${page}&size=10`, function(data) {
+            function getProcurementContent(page) {
+                return $.getJSON(`/plan/procurementPlanList?page=${page}&size=10`, function(data) {
                     console.log("요청", data);
                     // 첫 번째 요청에서 totalPage 값 설정
                     if (totalPage === 0) {
@@ -152,23 +140,22 @@
                     var str = "";
                     $.each(data.dtoList, function(idx, dto) {
                         str += '<tr>';
-                        str += '<th scope="row">'+((page - 1) * data.size + idx + 1)+'</th>';
-                        str += '<td><a href="#">'+dto.materialName+'</a></td>';
-                        str += '<td>'+dto.materialSafeQuantity+'</td>';
-                        str += '<td>'+dto.materialQuantity+'</td>';
-                        str += '<td>'+dto.releaseDesireSumQuantity+'</td>';
-                        str += '<td>'+dto.availableQuantity+'</td>';
-                        str += '<td>'+dto.warehousingPendingQuantity+'</td>';
-                        str += '<td>'+dto.contractAvgPrice+'</td>';
-                        str += '<td>'+dto.totalPrice+'</td>';
+                        str += '<th scope="row">'+ ((page - 1) * data.size + idx + 1) +'</th>';
+                        str += '<td>'+statusMapping[dto.procurementPlanStatus]+'</td>';
+                        str += '<td>'+contractStatusMapping[dto.materialContractStatus]+'</td>';
+                        str += '<td><a href="/plan/procurementPlanGet?procurementPlanCode='+dto.procurementPlanCode+'">'+dto.materialName+'</a></td>';
+                        str += '<td>'+dto.procurementPlanQuantity+'</td>';
+                        str += '<td>'+formatDate(dto.procurementPlanDeadLine)+'</td>';
+                        str += '<td>'+formatDate(dto.procurementPlanRegDate)+'</td>';
                         str += '</tr>';
                     });
-                    $("#inventoryList").append(str); // 데이터를 덮어쓰지 않고 추가
+                    $("#procurementList").append(str); // 데이터를 덮어쓰지 않고 추가
 
                 });
             }
-            getInventoryContent(1);
-            setupInfiniteScroll(getInventoryContent);
+
+            getProcurementContent(1);
+            setupInfiniteScroll(getProcurementContent);
         })
     </script>
 

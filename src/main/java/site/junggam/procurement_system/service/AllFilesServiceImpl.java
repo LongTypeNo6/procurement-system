@@ -33,7 +33,8 @@ public class AllFilesServiceImpl implements AllFilesService {
     private String uploadDir;
 
     private String setUploadDir(String subDirectory) {
-        String folderPath = subDirectory.replace("//", File.separator);
+//        String folderPath = subDirectory.replace("//", File.separator);
+        String folderPath = subDirectory.replace(" ", File.separator);
         File uploadPathFolder = new File(uploadDir, folderPath);
         if (!uploadPathFolder.exists()) {
             uploadPathFolder.mkdirs();
@@ -122,5 +123,44 @@ public class AllFilesServiceImpl implements AllFilesService {
             uploadPathFolder.mkdirs();
         }
         return uploadPathFolder.getAbsolutePath();  // 절대 경로 반환
+    }
+
+    @Override
+    public AllFilesDTO uploadFile(MultipartFile uploadFile, String foreignCode, String subDirectory) {
+        String originalName = uploadFile.getOriginalFilename();
+        String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
+
+        String folderPath = setUploadDir(subDirectory);
+
+        // 파일명 앞에 타임스탬프 추가
+        fileName = addTimestampToFileName(fileName);
+
+        String saveName = folderPath + File.separator + fileName;  // 절대 경로 사용
+        Path savePath = Paths.get(saveName);
+
+        try {
+            // 원본 파일 저장
+            uploadFile.transferTo(savePath);
+
+            // 파일 정보 DB 저장
+            AllFilesDTO allFilesDTO = AllFilesDTO.builder()
+                    .fileName(fileName)
+                    .path(folderPath)  // 절대 경로 사용
+                    .fileSize(uploadFile.getSize())
+                    .fileType(uploadFile.getContentType())
+                    .foreignCode(foreignCode) // 외부 코드 설정
+                    .build();
+
+            Long inum = this.saveFile(allFilesDTO);
+
+            // DTO에 inum 값 설정
+            allFilesDTO.setInum(inum);
+
+            return allFilesDTO;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("파일 업로드 실패", e);
+        }
     }
 }

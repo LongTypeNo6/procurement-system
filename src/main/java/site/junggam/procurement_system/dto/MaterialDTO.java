@@ -1,9 +1,12 @@
 package site.junggam.procurement_system.dto;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import site.junggam.procurement_system.entity.MaterialContractStatus;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,4 +31,8 @@ public class MaterialDTO {
 
     @Builder.Default
     private List<ProcurementPlanDTO> procurementPlanDTOList = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private MaterialContractStatus materialContractStatus=MaterialContractStatus.PENDING;
 }

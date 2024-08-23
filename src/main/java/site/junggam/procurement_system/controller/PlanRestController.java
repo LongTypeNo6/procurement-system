@@ -6,7 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.junggam.procurement_system.dto.*;
+import site.junggam.procurement_system.entity.ProcurementPlan;
 import site.junggam.procurement_system.entity.Product;
+import site.junggam.procurement_system.entity.ProductionPlan;
+import site.junggam.procurement_system.entity.Warehousing;
 import site.junggam.procurement_system.service.MaterialService;
 import site.junggam.procurement_system.service.PlanService;
 
@@ -59,4 +62,60 @@ public class PlanRestController {
         log.info("생산계획처리 완료!!!");
         return new ResponseEntity<>("생산계획등록", HttpStatus.OK);
     }
+
+    @GetMapping(value = "/productionPlanList", produces = "application/json")
+    public ResponseEntity<PageResultDTO<ProductionPlanDTO, ProductionPlan>> getProductionPlanList(PageRequestDTO pageRequestDTO) {
+        PageResultDTO<ProductionPlanDTO, ProductionPlan> productionPlanDTOList = planService.getProductionPlanList(pageRequestDTO);
+        return new ResponseEntity<>(productionPlanDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/productionPlanGet/{productionPlanCode}")
+    public ResponseEntity<ProductionPlanDTO> getProductionPlan(@PathVariable("productionPlanCode") String productionPlanCode) {
+        return new ResponseEntity<>(planService.getProductionPlan(productionPlanCode), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/procurementPlanList", produces = "application/json")
+    public ResponseEntity<PageResultDTO<ProcurementPlanDTO, ProcurementPlan>> getProcurementList(PageRequestDTO pageRequestDTO) {
+        PageResultDTO<ProcurementPlanDTO, ProcurementPlan> procurementPlanDTOList = planService.getProcurementPlanList(pageRequestDTO);
+        return new ResponseEntity<>(procurementPlanDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/procurementPlanGet/{procurementPlanCode}")
+    public ResponseEntity<ProcurementPlanDTO> getProcurementPlan(@PathVariable("procurementPlanCode") String procurementPlanCode) {
+        return new ResponseEntity<>(planService.getProcurementPlan(procurementPlanCode), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/registerEstimate")
+    public ResponseEntity<String> resisterEstimate(@RequestBody EstimateDTO estimateDTO){
+        log.info("견적 레스트컨트롤러 집입");
+        log.info("견적 받은 값"+estimateDTO);
+        String estimateCode=planService.resisterEstimate(estimateDTO);
+        log.info("견적 처리 완료!!!");
+        return new ResponseEntity<>(estimateCode, HttpStatus.OK);
+    }
+    @PostMapping(value = "/registerContract")
+    public ResponseEntity<String> resisterContract(@RequestBody ContractDTO contractDTO){
+        log.info("견적 레스트컨트롤러 집입");
+        log.info("견적 받은 값"+contractDTO);
+        String contractCode=planService.resisterContract(contractDTO);
+        log.info("견적 처리 완료!!!");
+        return new ResponseEntity<>(contractCode, HttpStatus.OK);
+    }
+
+    @PatchMapping("/contract/{contractCode}")
+    public ResponseEntity<String> contractModify(@RequestBody ContractDTO contractDTO){
+        log.info("검수수정 레스트컨트롤러 집입");
+        log.info(contractDTO);
+        String contractCode=planService.modifyContract(contractDTO);
+        return new ResponseEntity<>(contractCode, HttpStatus.OK);
+    }
+
+    @PatchMapping("/procurementPlan/{procurementPlanCode}")
+    public ResponseEntity<String> procurementPlanModify(@RequestBody ProcurementPlanDTO procurementPlanDTO){
+        log.info("검수수정 레스트컨트롤러 집입");
+        log.info(procurementPlanDTO);
+        String procurementPlanCode=planService.modifyProcurementPlan(procurementPlanDTO);
+        return new ResponseEntity<>(procurementPlanCode, HttpStatus.OK);
+    }
+
 }

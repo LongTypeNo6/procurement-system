@@ -1,5 +1,7 @@
 package site.junggam.procurement_system.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import site.junggam.procurement_system.dto.PurchaserDTO;
@@ -7,7 +9,7 @@ import site.junggam.procurement_system.entity.Purchaser;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-22T11:31:13+0900",
+    date = "2024-08-22T13:10:20+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -34,8 +36,23 @@ public class PurchaserMapperImpl implements PurchaserMapper {
         purchaserDTO.purchaserManagerTel( purchaser.getPurchaserManagerTel() );
         purchaserDTO.purchaserManagerEmail( purchaser.getPurchaserManagerEmail() );
         purchaserDTO.purchaserManagerFax( purchaser.getPurchaserManagerFax() );
+        purchaserDTO.purchaserMemo( purchaser.getPurchaserMemo() );
 
         return purchaserDTO.build();
+    }
+
+    @Override
+    public List<PurchaserDTO> toDtos(List<Purchaser> purchasers) {
+        if ( purchasers == null ) {
+            return null;
+        }
+
+        List<PurchaserDTO> list = new ArrayList<PurchaserDTO>( purchasers.size() );
+        for ( Purchaser purchaser : purchasers ) {
+            list.add( toDto( purchaser ) );
+        }
+
+        return list;
     }
 
     @Override
@@ -59,6 +76,7 @@ public class PurchaserMapperImpl implements PurchaserMapper {
         purchaser.purchaserManagerTel( purchaserDTO.getPurchaserManagerTel() );
         purchaser.purchaserManagerEmail( purchaserDTO.getPurchaserManagerEmail() );
         purchaser.purchaserManagerFax( purchaserDTO.getPurchaserManagerFax() );
+        purchaser.purchaserMemo( purchaserDTO.getPurchaserMemo() );
 
         return purchaser.build();
     }

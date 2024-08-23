@@ -10,11 +10,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString(exclude = {"material","purchaseOrder","productionPlan"})
 @Getter
+@Setter
 @Table(name="tbl_procurement_plan")
 public class ProcurementPlan {
     @Id
     private String procurementPlanCode;
-    private LocalDateTime procurementPlantRegDate;
+    @Builder.Default
+    private LocalDateTime procurementPlanRegDate = LocalDateTime.now();
     private LocalDateTime procurementPlanDeadLine;
     private Integer procurementPlanQuantity;
 
@@ -28,5 +30,16 @@ public class ProcurementPlan {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productionPlanCode")
     private ProductionPlan productionPlan;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private ProcurementPlanStatus procurementPlanStatus=ProcurementPlanStatus.ESTABLISHED;
+
+    public void changeProcurementPlanStatus(ProcurementPlanStatus newStatus) {this.procurementPlanStatus=newStatus;}
+
+    public void changeProcurementPlanQuantity(int newQuantity) {this.procurementPlanQuantity=newQuantity;}
+
+    public void changeProcurementPlanDeadLine(LocalDateTime newDeadLine) {this.procurementPlanDeadLine=newDeadLine;}
+
 
 }

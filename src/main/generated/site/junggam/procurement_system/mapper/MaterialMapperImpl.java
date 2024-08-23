@@ -9,7 +9,7 @@ import site.junggam.procurement_system.entity.Material;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-22T11:31:13+0900",
+    date = "2024-08-22T13:10:20+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -32,6 +32,7 @@ public class MaterialMapperImpl implements MaterialMapper {
         materialDTO.materialRegDate( material.getMaterialRegDate() );
         materialDTO.materialModDate( material.getMaterialModDate() );
         materialDTO.materialSafeQuantity( material.getMaterialSafeQuantity() );
+        materialDTO.materialContractStatus( material.getMaterialContractStatus() );
 
         return materialDTO.build();
     }
@@ -67,6 +68,7 @@ public class MaterialMapperImpl implements MaterialMapper {
         material.materialRegDate( materialDTO.getMaterialRegDate() );
         material.materialModDate( materialDTO.getMaterialModDate() );
         material.materialSafeQuantity( materialDTO.getMaterialSafeQuantity() );
+        material.materialContractStatus( materialDTO.getMaterialContractStatus() );
 
         return material.build();
     }

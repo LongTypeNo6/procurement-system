@@ -17,7 +17,9 @@ public class ProductionPlan {
 
     @Id
     private String productionPlanCode;
-    private LocalDateTime productionPlanRegDate;
+
+    @Builder.Default
+    private LocalDateTime productionPlanRegDate=LocalDateTime.now();
     private LocalDateTime productionPlanDate;
     private LocalDateTime productionPlanDeadLine;
     private Integer productionPlanQuantity;

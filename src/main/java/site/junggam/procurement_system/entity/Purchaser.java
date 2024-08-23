@@ -28,4 +28,5 @@ public class Purchaser {
     private String purchaserManagerTel ;
     private String purchaserManagerEmail ;
     private String purchaserManagerFax ;
+    private String purchaserMemo;
 }

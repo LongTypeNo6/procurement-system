@@ -50,6 +50,21 @@ public class AllFilesController {
         }
     }
 
+    @PostMapping("/uploadOne/{foreignCode}/{subDirectory}")
+    public ResponseEntity<?> uploadFile(
+            @RequestParam("file") MultipartFile file,
+            @PathVariable("foreignCode") String foreignCode,
+            @PathVariable("subDirectory") String subDirectory) {
+        try {
+            // 파일 업로드 처리
+            AllFilesDTO uploadedFile = allFilesService.uploadFile(file, foreignCode, subDirectory);
+            return new ResponseEntity<>(uploadedFile, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            log.error("파일 업로드 중 오류 발생: {}", e.getMessage());
+            return new ResponseEntity<>("파일 업로드 실패: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/list/{foreignCode}")
     public ResponseEntity<List<AllFilesDTO>> getFilesByForeignCode(@PathVariable("foreignCode") String foreignCode) {
         log.info("파일목록을 위한 코드는"+foreignCode);
@@ -132,6 +147,37 @@ public class AllFilesController {
                 .body(resource);
     }
 
+    @GetMapping("/foreignCode/view/{foreignCode}")
+    public ResponseEntity<?> viewFile(@PathVariable("foreignCode") String foreignCode) throws IOException {
+        // 파일 정보를 DB에서 조회
+        AllFiles file = allFilesRepository.findOneByForeignCode(foreignCode);
+        // 실제 파일 경로
+        Path filePath = Paths.get(file.getPath(), file.getFileName());
+        Resource resource = new FileSystemResource(filePath.toFile());
+        if (!resource.exists()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        // 파일 타입을 설정 (Content-Type)
+        String contentType = file.getFileType();
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+        // 텍스트 파일일 경우 내용을 UTF-8로 읽어 응답으로 반환
+        if (contentType.equals("text/plain")) {
+            String fileContent = Files.readString(filePath, StandardCharsets.UTF_8);
+            // HTTP 헤더 설정 (파일을 브라우저에서 UTF-8로 열도록)
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_TYPE, "text/plain; charset=UTF-8");
+            return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
+        }
+        // 텍스트 파일이 아닌 경우, 브라우저에서 파일을 열 수 있도록 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + URLEncoder.encode(file.getFileName(), StandardCharsets.UTF_8.toString()).replace("+", "%20") + "\"");
+        headers.add(HttpHeaders.CONTENT_TYPE, contentType);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(resource);
+    }
 
 
 

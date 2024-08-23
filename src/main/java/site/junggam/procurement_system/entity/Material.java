@@ -12,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString(exclude = {"contract", "inventory"})
+@ToString(exclude = {"contract", "inventory", "estimate"})
 @Table(name = "tbl_material")
 public class Material {
 
@@ -31,5 +31,12 @@ public class Material {
     private Contract contract;
 
     @OneToOne(mappedBy = "material", fetch = FetchType.LAZY)
+    private Estimate estimate;
+
+    @OneToOne(mappedBy = "material", fetch = FetchType.LAZY)
     private Inventory inventory;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private MaterialContractStatus materialContractStatus=MaterialContractStatus.PENDING;
 }

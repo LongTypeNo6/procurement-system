@@ -4,8 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import site.junggam.procurement_system.entity.ContractStatus;
+import site.junggam.procurement_system.entity.MaterialContractStatus;
+import site.junggam.procurement_system.entity.ProcurementPlanStatus;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -13,7 +18,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ProcurementPlanDTO {
     private String procurementPlanCode;
-    private LocalDateTime procurementPlantRegDate;
+
+    @Builder.Default
+    private LocalDateTime procurementPlanRegDate = LocalDateTime.now();
+
     private LocalDateTime procurementPlanDeadLine;
     private Integer procurementPlanQuantity;
 
@@ -22,5 +30,29 @@ public class ProcurementPlanDTO {
 
     private String productionPlanCode;
 
+    @Builder.Default
+    private String bomProcess=null;
+    @Builder.Default
+    private int bomQuantity=0;
 
+    @Builder.Default
+    private ProcurementPlanStatus procurementPlanStatus=ProcurementPlanStatus.ESTABLISHED;
+
+    private MaterialContractStatus materialContractStatus;
+
+    private int availableQuantity;
+    private LocalDateTime productionPlanDeadLine;
+
+    @Builder.Default
+    private String estimateCode=null;
+    @Builder.Default
+    private String estimateMemo=null;
+    @Builder.Default
+    private String contractCode=null;
+    @Builder.Default
+    private String contractMemo=null;
+    @Builder.Default
+    private int contractLeadTime=0;
+    @Builder.Default
+    private double contractPrice=0.0;
 }
