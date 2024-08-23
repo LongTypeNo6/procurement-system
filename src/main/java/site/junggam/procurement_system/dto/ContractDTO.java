@@ -14,6 +14,7 @@ public class ContractDTO {
 
     private String contractCode;
     private String contractFile;
+    private String contractMemo;
     private Double contractPrice;
     private Integer contractLeadTime;
 
@@ -21,6 +22,4 @@ public class ContractDTO {
     private MaterialDTO materialDTO;
     private PurchaserDTO purchaserDTO;
 
-    @Builder.Default
-    private ContractStatus contractStatus = ContractStatus.PENDING;
 }

@@ -257,7 +257,7 @@
                             </div>
                             <div class="row mb-1">
                                 <div class="col-sm-10">
-                                    <button type="button" class="btn btn-primary">계약정보저장 및 조달진행</button>
+                                    <button type="button" class="btn btn-primary" id="contractAndProcurementPlanSaveBtn">계약정보저장 및 조달진행</button>
                                     <a href="/plan/procurementPlanList"><button type="button" class="btn btn-primary">리스트</button></a>
                                 </div>
                             </div>
@@ -348,9 +348,9 @@
                     $("#procurementPlanDeadLine").prop("disabled", false);
                 }
 
-                setContract(dto.contractStatus);
                 estimateCode = dto.estimateCode;
                 contractCode = dto.contractCode;
+                setContract(dto.materialContractStatus);
 
                 // 기존 파일 리스트 불러오기
                 $.getJSON("/files/list/" + estimateCode, function (fileList) {
@@ -501,8 +501,6 @@
                     $("#contractFile").on("change", function () {
                         prependNewFiles($(this)[0].files, false);
                     });
-                } else if (contractStatus === "NEGOTIATION") {
-                    console.log("계약협상중인 상태임");
                 } else if (contractStatus === "CONFIRMED") {
                     console.log("계약상태임");
                 }
@@ -569,7 +567,13 @@
             $("#estimateSaveBtn").on("click", function () {
                 estimateSave();
             })
+            $("#contractAndProcurementPlanSaveBtn").on("click", function () {
+                console.log("조달계획, 계약 저장")
+                console.log("zhem"+contractCode)
+                contractSave();
+                procurementPlanSave();
 
+            })
             function estimateSave() {
                 var estimateDTO = {
                     estimateMemo: $("#estimateMemo").val(),
@@ -624,12 +628,11 @@
 
             function contractSave() {
                 var contractDTO = {
-                    purchaserCode: $("#purchaserCode").val(),
-                    purchaserName: $("#purchaserName").val(),
-                    materialDTO: {materialCode: $("#materialCode").val()},
+                    purchaserDTO: { purchaserCode: $("#purchaserCode").val() },
+                    materialDTO: { materialCode: $("#materialCode").val() },
                     contractLeadTime: $("#contractLeadTime").val(),
-                    contractMemo: $("#contractMemo").val(),
-                    contractCode: $("#contractCode").val()
+                    contractPrice: $("#contractPrice").val(),
+                    contractMemo: $("#contractMemo").val()
                 };
                 $.ajax({
                     url: '/plan/registerContract',
@@ -681,9 +684,9 @@
                 var procurementPlanDTO = {
                     productionPlanCode: $("#productionPlanCode").val(),
                     procurementPlanCode: $("#procurementPlanCode").val(),
-                    procurementPlanRegDate: $("#procurementPlanRegDate").val(),
-                    productionPlanDeadLine: $("#productionPlanDeadLine").val(),
-                    procurementPlanDeadLine: $("#procurementPlanDeadLine").val(),
+                    procurementPlanRegDate: parseDate($("#procurementPlanRegDate").val()),
+                    productionPlanDeadLine: parseDate($("#productionPlanDeadLine").val()),
+                    procurementPlanDeadLine: parseDate($("#procurementPlanDeadLine").val()),
                     materialCode: $("#materialCode").val(),
                     materialName: $("#materialName").val(),
                     availableQuantity: $("#availableQuantity").val(),
@@ -691,8 +694,8 @@
                     purchaserCode: $("#purchaserCode").val()
                 };
                 $.ajax({
-                    url: '/plan/registerProcurementPlan',
-                    type: "POST",
+                    url: '/plan/procurementPlan/'+procurementPlanCode,
+                    type: "PATCH",
                     data: JSON.stringify(procurementPlanDTO),
                     contentType: "application/json; charset=utf-8",
                     dataType: "text",

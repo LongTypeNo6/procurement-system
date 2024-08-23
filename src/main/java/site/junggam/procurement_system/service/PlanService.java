@@ -45,6 +45,13 @@ public interface PlanService {
     //견적추가
     String resisterEstimate(EstimateDTO estimateDTO);
 
-    //계약추가
+    //계약추가(디티오로)
     String resisterContract(ContractDTO contractDTO);
+
+    //계약수정
+    String modifyContract(ContractDTO contractDTO);
+
+    //조달계획수정
+    String modifyProcurementPlan(ProcurementPlanDTO procurementPlanDTO);
+
 }

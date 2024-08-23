@@ -101,4 +101,21 @@ public class PlanRestController {
         log.info("견적 처리 완료!!!");
         return new ResponseEntity<>(contractCode, HttpStatus.OK);
     }
+
+    @PatchMapping("/contract/{contractCode}")
+    public ResponseEntity<String> contractModify(@RequestBody ContractDTO contractDTO){
+        log.info("검수수정 레스트컨트롤러 집입");
+        log.info(contractDTO);
+        String contractCode=planService.modifyContract(contractDTO);
+        return new ResponseEntity<>(contractCode, HttpStatus.OK);
+    }
+
+    @PatchMapping("/procurementPlan/{procurementPlanCode}")
+    public ResponseEntity<String> procurementPlanModify(@RequestBody ProcurementPlanDTO procurementPlanDTO){
+        log.info("검수수정 레스트컨트롤러 집입");
+        log.info(procurementPlanDTO);
+        String procurementPlanCode=planService.modifyProcurementPlan(procurementPlanDTO);
+        return new ResponseEntity<>(procurementPlanCode, HttpStatus.OK);
+    }
+
 }

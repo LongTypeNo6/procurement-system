@@ -35,4 +35,8 @@ public class Material {
 
     @OneToOne(mappedBy = "material", fetch = FetchType.LAZY)
     private Inventory inventory;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private MaterialContractStatus materialContractStatus=MaterialContractStatus.PENDING;
 }

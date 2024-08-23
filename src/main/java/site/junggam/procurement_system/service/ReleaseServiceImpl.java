@@ -27,7 +27,6 @@ public class ReleaseServiceImpl implements ReleaseService {
     @Override
     public ReleaseDTO getReleaseRequest(String releaseCode) {
         log.info("출고요청상세보기");
-
         Optional<Release> release = releaseRepository.findById(releaseCode);
         if (release.isPresent()) {
             ReleaseDTO releaseDTO = releaseMapper.toDTO(release.get());

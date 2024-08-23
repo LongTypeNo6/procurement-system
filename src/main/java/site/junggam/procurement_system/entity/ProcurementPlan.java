@@ -35,4 +35,11 @@ public class ProcurementPlan {
     @Builder.Default
     private ProcurementPlanStatus procurementPlanStatus=ProcurementPlanStatus.ESTABLISHED;
 
+    public void changeProcurementPlanStatus(ProcurementPlanStatus newStatus) {this.procurementPlanStatus=newStatus;}
+
+    public void changeProcurementPlanQuantity(int newQuantity) {this.procurementPlanQuantity=newQuantity;}
+
+    public void changeProcurementPlanDeadLine(LocalDateTime newDeadLine) {this.procurementPlanDeadLine=newDeadLine;}
+
+
 }

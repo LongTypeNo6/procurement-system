@@ -27,7 +27,9 @@ public class Contract {
     @JoinColumn(name = "purchaserCode")
     private Purchaser purchaser;
 
-    @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private ContractStatus contractStatus=ContractStatus.PENDING;
+    public void changeContractPrice(Double newPrice) {this.contractPrice=newPrice;}
+
+    public void changeContractLeadTime(Integer newLeadTime) {this.contractLeadTime=newLeadTime;}
+
+    public void changeContractMemo(String newMemo) {this.contractMemo=newMemo;}
 }

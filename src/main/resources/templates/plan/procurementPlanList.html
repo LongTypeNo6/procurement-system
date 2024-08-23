@@ -142,7 +142,7 @@
                         str += '<tr>';
                         str += '<th scope="row">'+ ((page - 1) * data.size + idx + 1) +'</th>';
                         str += '<td>'+statusMapping[dto.procurementPlanStatus]+'</td>';
-                        str += '<td>'+contractStatusMapping[dto.contractStatus]+'</td>';
+                        str += '<td>'+contractStatusMapping[dto.materialContractStatus]+'</td>';
                         str += '<td><a href="/plan/procurementPlanGet?procurementPlanCode='+dto.procurementPlanCode+'">'+dto.materialName+'</a></td>';
                         str += '<td>'+dto.procurementPlanQuantity+'</td>';
                         str += '<td>'+formatDate(dto.procurementPlanDeadLine)+'</td>';

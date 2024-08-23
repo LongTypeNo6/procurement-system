@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -41,6 +42,7 @@ public class PlanServiceImpl implements PlanService {
     private final EstimateMapper estimateMapper;
     private final ContractRepository contractRepository;
     private final ContractMapper contractMapper;
+    private final PurchaseOrderRepository purchaseOrderRepository;
 
     @Override
     public List<ProductDTO> getProductListSearching(String keyword) {
@@ -249,8 +251,9 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public String resisterContract(ContractDTO contractDTO) {
+        log.info("견적 서비스에서 받은값"+contractDTO);
         String purchaserCode=contractDTO.getPurchaserDTO().getPurchaserCode();
-        String temCode = "CONT"+purchaserCode+"-";
+        String temCode = "CONT-"+purchaserCode+"-";
         String lastPurchaserCode=contractRepository.findLastIdOfPurchaser(temCode);
         String newSequence = "001";
         if (lastPurchaserCode != null) {
@@ -262,9 +265,47 @@ public class PlanServiceImpl implements PlanService {
         }
         // 6. 최종 코드를 생성
         String contractCode=temCode + newSequence;
+        log.info("코드가 뭔데 도대체"+contractCode);
         contractDTO.setContractCode(contractCode);
         contractDTO.setContractFile(contractCode);
         contractRepository.save(contractMapper.toEntity(contractDTO));
         return contractCode;
+    }
+
+    @Override
+    public String modifyContract(ContractDTO contractDTO) {
+        String contractCode=contractDTO.getContractCode();
+        Optional<Contract> result
+                =contractRepository.findById(contractCode);
+        if (result.isPresent()) {
+            Contract contract = result.get();
+            contract.changeContractMemo(contractDTO.getContractMemo());
+            contract.changeContractPrice(contractDTO.getContractPrice());
+            contract.changeContractLeadTime(contract.getContractLeadTime());
+            contractRepository.save(contract);
+        }
+        return contractCode;
+    }
+
+    @Override
+    public String modifyProcurementPlan(ProcurementPlanDTO procurementPlanDTO) {
+        String procurementPlanCode=procurementPlanDTO.getProcurementPlanCode();
+        Optional<ProcurementPlan> result
+                =procurementPlanRepository.findById(procurementPlanCode);
+        if (result.isPresent()) {
+            ProcurementPlan procurementPlan = result.get();
+            procurementPlan.changeProcurementPlanStatus(ProcurementPlanStatus.IN_PROGRESS);
+            procurementPlan.changeProcurementPlanQuantity(procurementPlanDTO.getProcurementPlanQuantity());
+            procurementPlan.changeProcurementPlanDeadLine(procurementPlanDTO.getProcurementPlanDeadLine());
+            procurementPlanRepository.save(procurementPlan);
+            //발주서생성
+            purchaseOrderRepository.save(PurchaseOrder.builder()
+                            .purchaseOrderCode("PURC"+procurementPlanCode.substring(4))
+                            .procurementPlan(procurementPlan)
+                            .purchaseOrderStatus(PurchaseOrderStatus.PENDING)
+                    .build()
+            );
+        }
+        return procurementPlanCode;
     }
 }
