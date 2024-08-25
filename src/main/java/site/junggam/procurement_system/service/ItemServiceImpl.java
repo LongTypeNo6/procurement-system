@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import site.junggam.procurement_system.dto.MaterialDTO;
+import site.junggam.procurement_system.dto.UnitBomDTO;
 import site.junggam.procurement_system.dto.UnitDTO;
 import site.junggam.procurement_system.entity.Material;
 import site.junggam.procurement_system.entity.Purchaser;
@@ -14,6 +15,7 @@ import site.junggam.procurement_system.repository.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -82,6 +84,11 @@ public class ItemServiceImpl implements ItemService {
         unitDTO.setUnitDrawFile(unitCode);
         unitDTO.setUnitEtcFile(unitCode);
         unitRepository.save(unitMapper.toEntity(unitDTO));
+        List<UnitBomDTO> uitBomDTOList=unitDTO.getUnitBomDTOList();
+        uitBomDTOList.forEach(unitBomDTO -> {
+            unitBomDTO.setUnitCode(unitCode);
+            unitBomRepository.save(unitBomMapper.toEntity(unitBomDTO));
+        });
         return unitCode;
     }
 
