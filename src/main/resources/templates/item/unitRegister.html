@@ -19,13 +19,13 @@
 <!-- ======= main ======= -->
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>자재 등록</h1>
+        <h1>유닛 등록</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">메인</a></li>
                 <li class="breadcrumb-item">발주계획</li>
                 <li class="breadcrumb-item">제품</li>
-                <li class="breadcrumb-item active">자재등록</li>
+                <li class="breadcrumb-item active">유닛등록</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -35,47 +35,41 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">
-                            자재등록
+                            유닛등록
                         </h5>
                         <div class="row mb-3">
-                            <label for="materialName" class="col-sm-2 col-form-label">자재명</label>
+                            <label for="unitName" class="col-sm-2 col-form-label">유닛명</label>
                             <div class="col-sm-10">
-                                <input type="text" name="material_name" id="materialName" class="form-control">
+                                <input type="text" name="unit_name" id="unitName" class="form-control">
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="materialSafeQuantity" class="col-sm-2 col-form-label">안전재고</label>
+                            <label for="unitStand" class="col-sm-2 col-form-label">규격</label>
                             <div class="col-sm-10">
-                                <input type="number" name="material_safe_quantity" id="materialSafeQuantity" class="form-control">
+                                <input type="text" name="unit_stand" id="unitStand" class="form-control">
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="materialStand" class="col-sm-2 col-form-label">규격</label>
+                            <label for="unitTexture" class="col-sm-2 col-form-label">재질</label>
                             <div class="col-sm-10">
-                                <input type="text" name="material_stand" id="materialStand" class="form-control">
+                                <input type="text" name="unit_texture" id="unitTexture" class="form-control">
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="materialTexture" class="col-sm-2 col-form-label">재질</label>
+                            <label for="unitDrawFile" class="col-sm-2 col-form-label">도면</label>
                             <div class="col-sm-10">
-                                <input type="text" name="material_texture" id="materialTexture" class="form-control">
+                                <input class="form-control" type="file" name="unit_draw_file" id="unitDrawFile">
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="materialDrawFile" class="col-sm-2 col-form-label">도면</label>
+                            <label for="unitEtcFile" class="col-sm-2 col-form-label">참고문서</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="file" name="material_draw_file" id="materialDrawFile">
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="materialEtcFile" class="col-sm-2 col-form-label">참고문서</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="file" name="material_etc_file" id="materialEtcFile">
+                                <input class="form-control" type="file" name="unit_etc_file" id="unitEtcFile">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-sm-10">
-                                <button type="button" class="btn btn-primary" id="saveMaterial">저장</button>
+                                <button type="button" class="btn btn-primary" id="saveUnit">저장</button>
                             </div>
                         </div>
                     </div>
@@ -87,25 +81,24 @@
 <!-- End #main -->
 <script th:inline="javascript">
     $(document).ready(function (e) {
-        var materialCode;
-        $("#saveMaterial").on("click", function () {
+        var unitCode;
+        $("#saveUnit").on("click", function () {
             // 먼저 다른 데이터를 서버로 전송
-            var purchaserDTO = {
-                materialName: $('#materialName').val(),
-                materialStand: $('#materialStand').val(),
-                materialTexture: $('#materialTexture').val(),
-                materialSafeQuantity: $('#materialSafeQuantity').val(),
+            var unitDTO = {
+                unitName: $('#unitName').val(),
+                unitStand: $('#unitStand').val(),
+                unitTexture: $('#unitTexture').val(),
             };
             $.ajax({
-                url: '/itemcontent/material',
+                url: '/itemcontent/unit',
                 type: "POST",
-                data: JSON.stringify(purchaserDTO),
+                data: JSON.stringify(unitDTO),
                 contentType: "application/json; charset=utf-8",
                 dataType: "text",
                 success: function (result) {
                     console.log("자재코드는?? ", result);
                     alert("저장했습니다.");
-                    uploadMaterialDrawFile(result);  // 파일 업로드 함수 호출
+                    uploadUnitDrawFile(result);  // 파일 업로드 함수 호출
                 },
                 error: function (error) {
                     console.log("데이터 저장 실패: ", error);
@@ -114,14 +107,14 @@
             });
         });
 
-        function uploadMaterialDrawFile(materialCode) {
-            console.log("함수 안에서 자재코드는?? ", materialCode);
+        function uploadUnitDrawFile(unitCode) {
+            console.log("함수 안에서 자재코드는?? ", unitCode);
             var formData = new FormData();
-            var fileInput = $('#materialDrawFile')[0].files[0];
+            var fileInput = $('#unitDrawFile')[0].files[0];
             if (fileInput) {
                 formData.append("file", fileInput);
                 $.ajax({
-                    url: '/files/uploadOne/' + materialCode+"D" + '/' + "item material "+materialCode,  // 파일 업로드 경로
+                    url: '/files/uploadOne/' + unitCode+"D" + '/' + "item unit "+unitCode,  // 파일 업로드 경로
                     processData: false,
                     contentType: false,
                     data: formData,
@@ -129,7 +122,7 @@
                     dataType: 'json',
                     success: function (result) {
                         console.log("파일 업로드 성공: ", result);
-                        uploadMaterialEtcFile(materialCode);
+                        uploadUnitEtcFile(unitCode);
                         // window.location.href = "/product/getListProduct";  // 업로드 후 페이지 리다이렉트
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -138,19 +131,19 @@
                     }
                 });
             } else {
-                uploadMaterialEtcFile(materialCode);
+                uploadUnitEtcFile(unitCode);
                 // 파일이 없는 경우에도 페이지 리다이렉트
                 // window.location.href = "/product/getListProduct";
             }
         }
-        function uploadMaterialEtcFile(materialCode) {
-            console.log("함수 안에서 자재코드는?? ", materialCode);
+        function uploadUnitEtcFile(unitCode) {
+            console.log("함수 안에서 자재코드는?? ", unitCode);
             var formData = new FormData();
-            var fileInput = $('#materialEtcFile')[0].files[0];
+            var fileInput = $('#unitEtcFile')[0].files[0];
             if (fileInput) {
                 formData.append("file", fileInput);
                 $.ajax({
-                    url: '/files/uploadOne/' + materialCode+"E" + '/'+"item material "+materialCode,  // 파일 업로드 경로
+                    url: '/files/uploadOne/' + unitCode+"E" + '/'+"item unit "+unitCode,  // 파일 업로드 경로
                     processData: false,
                     contentType: false,
                     data: formData,

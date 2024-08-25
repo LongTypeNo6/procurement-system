@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import site.junggam.procurement_system.dto.MaterialDTO;
+import site.junggam.procurement_system.dto.UnitDTO;
 import site.junggam.procurement_system.entity.Material;
 import site.junggam.procurement_system.entity.Purchaser;
+import site.junggam.procurement_system.entity.Unit;
 import site.junggam.procurement_system.mapper.*;
 import site.junggam.procurement_system.repository.*;
 
@@ -70,6 +72,23 @@ public class ItemServiceImpl implements ItemService {
         log.info("자재상세보기");
         Optional<Material> result = materialRepository.findById(materialCode);
         return result.map(materialMapper::toDTO).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public String unitResister(UnitDTO unitDTO) {
+        String unitCode= generateCode("BU");
+        unitDTO.setUnitCode(unitCode);
+        unitDTO.setUnitDrawFile(unitCode);
+        unitDTO.setUnitEtcFile(unitCode);
+        unitRepository.save(unitMapper.toEntity(unitDTO));
+        return unitCode;
+    }
+
+    @Override
+    public UnitDTO unitGet(String unitCode) {
+        Optional<Unit> result = unitRepository.findById(unitCode);
+        return result.map(unitMapper::toDTO).orElse(null);
     }
 
 

@@ -90,7 +90,7 @@
         var materialCode;
         $("#saveMaterial").on("click", function () {
             // 먼저 다른 데이터를 서버로 전송
-            var purchaserDTO = {
+            var materialDTO = {
                 materialName: $('#materialName').val(),
                 materialStand: $('#materialStand').val(),
                 materialTexture: $('#materialTexture').val(),
@@ -99,7 +99,7 @@
             $.ajax({
                 url: '/itemcontent/material',
                 type: "POST",
-                data: JSON.stringify(purchaserDTO),
+                data: JSON.stringify(materialDTO),
                 contentType: "application/json; charset=utf-8",
                 dataType: "text",
                 success: function (result) {

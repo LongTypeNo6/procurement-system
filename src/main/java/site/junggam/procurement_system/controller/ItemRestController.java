@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import site.junggam.procurement_system.dto.MaterialDTO;
 import site.junggam.procurement_system.dto.PurchaserDTO;
+import site.junggam.procurement_system.dto.UnitDTO;
 import site.junggam.procurement_system.service.ItemService;
 
 @Log4j2
@@ -29,5 +30,18 @@ public class ItemRestController {
     public ResponseEntity<MaterialDTO> materialGet(@PathVariable("materialCode") String materialCode){
         MaterialDTO materialDTO=itemService.materialGet(materialCode);
         return new ResponseEntity<>(materialDTO, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/unit")
+    public ResponseEntity<String> unitSave(@RequestBody UnitDTO unitDTO){
+        log.info("들어온 정보"+unitDTO);
+        String unitCode=itemService.unitResister(unitDTO);
+        return new ResponseEntity<>(unitCode, HttpStatus.OK);
+    }
+
+    @GetMapping("/unit/{unitCode}")
+    public ResponseEntity<UnitDTO> unitGet(@PathVariable("unitCode") String unitCode){
+        UnitDTO unitDTO=itemService.unitGet(unitCode);
+        return new ResponseEntity<>(unitDTO, HttpStatus.OK);
     }
 }
