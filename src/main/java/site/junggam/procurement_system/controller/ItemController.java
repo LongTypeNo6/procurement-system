@@ -33,6 +33,11 @@ public class ItemController {
         model.addAttribute("materialCode",materialCode);
     }
 
+    //유닛리스트
+    @RequestMapping("/unitList")
+    public void unitList() {
+    }
+
     //유닛등록하기
     @RequestMapping("/unitRegister")
     public void unitRegister(){
@@ -44,12 +49,17 @@ public class ItemController {
         model.addAttribute("unitCode",unitCode);
     }
 
-    //유닛등록하기
+    //제품리스트
+    @RequestMapping("/productList")
+    public void productList() {
+    }
+
+    //제품등록하기
     @RequestMapping("/productRegister")
     public void productRegister(){
     }
 
-    //유닛상세보기
+    //제품상세보기
     @GetMapping("/productGet")
     public void productGet(@RequestParam("productCode") String productCode, Model model){
         model.addAttribute("productCode",productCode);
