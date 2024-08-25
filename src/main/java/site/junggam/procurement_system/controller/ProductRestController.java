@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import site.junggam.procurement_system.dto.MaterialDTO;
 import site.junggam.procurement_system.dto.ProductDTO;
+import site.junggam.procurement_system.dto.PurchaserDTO;
 import site.junggam.procurement_system.dto.TemMaterialDTO;
 import site.junggam.procurement_system.entity.Product;
 import site.junggam.procurement_system.service.MaterialService;
@@ -19,10 +20,11 @@ import java.util.List;
 @Log4j2
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/product")
+@RequestMapping("/productcontent")
 public class ProductRestController {
-    private final ProductService productService;
 
+    private final ProductService productService;
+    private final MaterialService materialService;
 
     @PostMapping("/productRegisterProApi")
     public ResponseEntity<String> registerProduct(@RequestBody @Validated ProductDTO productDTO, List<String> unitCodes) { //@Valid
@@ -38,8 +40,13 @@ public class ProductRestController {
         }
     }
 
+    @PostMapping("material/register")
+    public ResponseEntity<String> materialRegister(@RequestBody MaterialDTO materialDTO) {
+        log.info("응답받은 데이터"+materialDTO);
+        materialService.insertMaterial(materialDTO);
+        return new ResponseEntity<>("거래처등록완료", HttpStatus.OK);
 
-
+    }
 
 
 }

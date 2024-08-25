@@ -179,10 +179,6 @@ public class AllFilesController {
                 .body(resource);
     }
 
-
-
-
-
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteFile(@PathVariable("id") Long id) {
         allFilesService.deleteFile(id);

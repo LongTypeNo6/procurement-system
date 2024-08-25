@@ -15,4 +15,9 @@ public interface UnitRepository extends JpaRepository<Unit, String> {
     //출고검색용
     @Query("SELECT u FROM Unit u WHERE u.unitName LIKE %:keyword% OR u.unitCode LIKE %:keyword%")
     List<Unit> findByIdAndName(@Param("keyword") String keyword);
+
+    //가장 최신 자재 코드 찾는 거
+    //SELECT max(unit_code) FROM tbl_unit;
+    @Query("SELECT max(u.unitCode) FROM Unit u")
+    String findMaxUnitCode();
 }

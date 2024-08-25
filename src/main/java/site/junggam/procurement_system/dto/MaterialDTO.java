@@ -23,8 +23,10 @@ public class MaterialDTO {
     private String materialTexture;
     private String materialDrawFile;
     private String materialEtcFile;
-    private LocalDateTime materialRegDate;
-    private LocalDateTime materialModDate;
+    @Builder.Default
+    private LocalDateTime materialRegDate=LocalDateTime.now();
+    @Builder.Default
+    private LocalDateTime materialModDate=LocalDateTime.now();
     private Integer materialSafeQuantity;
 
     private InventoryDTO inventoryDTO;

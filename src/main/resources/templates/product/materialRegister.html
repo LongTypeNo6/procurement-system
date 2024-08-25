@@ -29,88 +29,152 @@
             </ol>
         </nav>
     </div><!-- End Page Title -->
-
     <section class="section dashboard">
         <div class="row">
-            <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
-            <!--여기에 카드랑 내용 넣어주시면 됩니다..-->
-
             <div class="col-lg-12">
-
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">
                             자재등록
                         </h5>
-
-                        <!-- General Form Elements -->
                         <form name="materialForm" method="post" action="/product/materialRegisterPro" enctype="multipart/form-data">
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label">자재코드</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" placeholder="BM-00001 과 같은 형식으로 자동생성됨" disabled>
-                                </div>
-                            </div>
-
-
                             <div class="row mb-3">
                                 <label for="inputText" class="col-sm-2 col-form-label">자재명</label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="material_name" class="form-control">
+                                    <input type="text" name="material_name" id="materialName" class="form-control">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputText" class="col-sm-2 col-form-label">안전재고</label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="material_safe_quantity" class="form-control">
+                                    <input type="number" name="material_safe_quantity" id="materialSafeQuantity" class="form-control">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputText" class="col-sm-2 col-form-label">규격</label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="material_stand" class="form-control">
+                                    <input type="text" name="material_stand" id="materialStand" class="form-control">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputText" class="col-sm-2 col-form-label">재질</label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="material_texture" class="form-control">
+                                    <input type="text" name="material_texture" id="materialTexture" class="form-control">
                                 </div>
                             </div>
-
                             <div class="row mb-3">
                                 <label for="inputNumber" class="col-sm-2 col-form-label">도면</label>
                                 <div class="col-sm-10">
-                                    <input class="form-control" type="file" name="material_draw_file" id="formFile">
+                                    <input class="form-control" type="file" name="material_draw_file" id="materialDrawFile">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputNumber" class="col-sm-2 col-form-label">참고문서</label>
                                 <div class="col-sm-10">
-                                    <input class="form-control" type="file" name="material_etc_file" id="formFile">
+                                    <input class="form-control" type="file" name="material_etc_file" id="materialEtcFile">
                                 </div>
                             </div>
-
-
-
                             <div class="row mb-3">
                                 <div class="col-sm-10">
-                                    <button type="submit" class="btn btn-primary">저장</button>
+                                    <button type="button" class="btn btn-primary" id="saveMaterial">저장</button>
                                 </div>
                             </div>
-
                         </form><!-- End General Form Elements -->
-
                     </div>
-
                 </div>
-
+            </div>
         </div> <!--End row-->
     </section>
-
 </main>
 <!-- End #main -->
+<script th:inline="javascript">
+    $(document).ready(function (e) {
+        var materialCode;
+        $("#saveMaterial").on("click", function () {
+            // 먼저 다른 데이터를 서버로 전송
+            var purchaserDTO = {
+                materialName: $('#materialName').val(),
+                materialStand: $('#materialStand').val(),
+                materialTexture: $('#materialTexture').val(),
+                materialSafeQuantity: $('#materialSafeQuantity').val(),
+            };
+            $.ajax({
+                url: '/item/material',
+                type: "POST",
+                data: JSON.stringify(purchaserDTO),
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (result) {
+                    console.log("자재코드는?? ", result);
+                    alert("저장했습니다.");
+                    uploadMaterialDrawFile(result);  // 파일 업로드 함수 호출
+                },
+                error: function (error) {
+                    console.log("데이터 저장 실패: ", error);
+                    alert("데이터 저장에 실패했습니다. 다시 시도해주세요.");
+                }
+            });
+        });
 
+        function uploadMaterialDrawFile(materialCode) {
+            console.log("함수 안에서 자재코드는?? ", materialCode);
+            var formData = new FormData();
+            var fileInput = $('#materialDrawFile')[0].files[0];
+            if (fileInput) {
+                formData.append("file", fileInput);
+                $.ajax({
+                    url: '/files/uploadOne/' + materialCode + '/' + "item material "+materialCode,  // 파일 업로드 경로
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (result) {
+                        console.log("파일 업로드 성공: ", result);
+                        uploadMaterialEtcFile(materialCode);
+                        // window.location.href = "/product/getListProduct";  // 업로드 후 페이지 리다이렉트
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log("파일 업로드 실패: ", textStatus);
+                        alert("파일 업로드에 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            } else {
+                uploadMaterialEtcFile(materialCode);
+                // 파일이 없는 경우에도 페이지 리다이렉트
+                // window.location.href = "/product/getListProduct";
+            }
+        }
+
+        function uploadMaterialEtcFile(materialCode) {
+            console.log("함수 안에서 자재코드는?? ", materialCode);
+            var formData = new FormData();
+            var fileInput = $('#materialEtcFile')[0].files[0];
+            if (fileInput) {
+                formData.append("file", fileInput);
+                $.ajax({
+                    url: '/files/uploadOne/' + materialCode + '/'+"item material "+materialCode,  // 파일 업로드 경로
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (result) {
+                        console.log("파일 업로드 성공: ", result);
+                        window.location.href = "/product/getListProduct";  // 업로드 후 페이지 리다이렉트
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log("파일 업로드 실패: ", textStatus);
+                        alert("파일 업로드에 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            } else {
+                //파일이 없는 경우에도 페이지 리다이렉트
+                window.location.href = "/product/getListProduct";
+            }
+        }
+    });
+</script>
 <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
 <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
 
