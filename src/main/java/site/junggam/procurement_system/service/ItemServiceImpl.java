@@ -5,11 +5,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import site.junggam.procurement_system.dto.MaterialDTO;
+import site.junggam.procurement_system.entity.Material;
+import site.junggam.procurement_system.entity.Purchaser;
 import site.junggam.procurement_system.mapper.*;
 import site.junggam.procurement_system.repository.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 @Log4j2
@@ -27,6 +30,7 @@ public class ItemServiceImpl implements ItemService {
     private final UnitBomRepository unitBomRepository;
     private final UnitBomMapper unitBomMapper;
 
+    //코드 만들어내는 메소드
     private String generateCode(String itemCode) {
         String lastCode=null;
         if(itemCode.equals("BM")){
@@ -55,7 +59,18 @@ public class ItemServiceImpl implements ItemService {
     public String materialResister(MaterialDTO materialDTO) {
         String materialCode= generateCode("BM");
         materialDTO.setMaterialCode(materialCode);
+        materialDTO.setMaterialDrawFile(materialCode);
+        materialDTO.setMaterialEtcFile(materialCode);
         materialRepository.save(materialMapper.toEntity(materialDTO));
         return materialCode;
     }
+
+    @Override
+    public MaterialDTO materialGet(String materialCode) {
+        log.info("자재상세보기");
+        Optional<Material> result = materialRepository.findById(materialCode);
+        return result.map(materialMapper::toDTO).orElse(null);
+    }
+
+
 }

@@ -183,7 +183,7 @@
                 if (fileInput) {
                     formData.append("file", fileInput);
                     $.ajax({
-                        url: '/files/uploadOne/' + purchaserCode + '/' + purchaserCode,  // 파일 업로드 경로
+                        url: '/files/uploadOne/' + purchaserCode + '/' + "purchaser "+purchaserCode,  // 파일 업로드 경로
                         processData: false,
                         contentType: false,
                         data: formData,
