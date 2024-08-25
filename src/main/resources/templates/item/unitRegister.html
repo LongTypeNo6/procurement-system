@@ -68,10 +68,93 @@
                             </div>
                         </div>
                         <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">
+                                BOM
+                            </label>
+                            <div class="col-sm-10">
+                                <div class="input-group mb">
+                                    <input type="text" class="form-control" id="materialCode" required>
+                                    <button type="button" class="input-group-text" id="materialSelectionBtn" data-bs-toggle="modal" data-bs-target="#materialSelection">검색</button>
+                                </div>
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">자재명</th>
+                                        <th scope="col">수량(개)</th>
+                                        <th scope="col">투입공정</th>
+                                        <th scope="col">조달마감일자</th>
+                                        <th scope="col">삭제</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="bomList">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
                             <div class="col-sm-10">
                                 <button type="button" class="btn btn-primary" id="saveUnit">저장</button>
                             </div>
                         </div>
+                        <!-- Modal Dialog Scrollable -->
+                        <div class="modal fade" id="materialSelection" tabindex="-1">
+                            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">검색</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title" id="materialListName">제품리스트</h5>
+                                                        <div class="row mb-3">
+                                                            <div class="col-sm-12">
+                                                                <div class="input-group mb">
+                                                                    <input type="text" class="form-control" id="materialSearch" placeholder="코드 또는 이름 입력">
+                                                                    <button type="button" class="input-group-text">검색</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <br>
+                                                        <div class="row mb-3">
+                                                            <div class="col-sm-12" >
+                                                                <!-- List group With Checkboxes and radios -->
+                                                                <div class="form-control">
+                                                                    <ul class="list-group" style="height:200px; overflow-y: auto;">
+                                                                        <span id="materialSearchList" class="list-group-flush"></span>
+                                                                    </ul><!-- End List Checkboxes and radios -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        선택한 항목
+                                                        <div class="row mb-3">
+                                                            <div class="col-sm-12" >
+                                                                <!-- List group With Checkboxes and radios -->
+                                                                <div class="form-control">
+                                                                    <ul class="list-group" style="height:200px; overflow-y: auto;">
+                                                                        <span id="materialSelectedList" class="list-group-flush"></span>
+                                                                    </ul><!-- End List Checkboxes and radios -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>&nbsp&nbsp원하시는 <span class="material">제품</span>이 없으십니까?&nbsp&nbsp<a href="#" target="_blank"><span class="material">제품</span>등록하기</a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <span id="selectedDivisionFooter"></span>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                        <button type="button" class="btn btn-primary" id="searchDivisionSubmit">확인</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- 제품 혹은 유닛 검색 모달창 끝-->
                     </div>
                 </div>
             </div>
@@ -81,7 +164,118 @@
 <!-- End #main -->
 <script th:inline="javascript">
     $(document).ready(function (e) {
-        var unitCode;
+        let selectedMaterials = [];
+
+        $("#materialSelectionBtn").on("click", function () {
+            console.log("검색버튼 클릭됨");
+            var selectedCode = null;
+            $("#materialSearch").on("input", function () {
+                var keyword = $("#materialSearch").val();
+                console.log("검색 키워드: " + keyword);
+                $.getJSON("/plan/materialListSearching?keyword=" + keyword, function(data) {
+                    console.log("검색기능 잘 되나?"+data);
+                    let str = "";
+                    $.each(data, function(idx, dto) {
+                        const isChecked = selectedMaterials.some(material => material.code === dto.materialCode);
+                        str += '<li class="list-group-item">';
+                        str += '<div class="row">';
+                        str += '<div class="col-lg-1"><input class="form-check-input me-1 material-checkbox" type="checkbox" value="'+dto.materialCode+'" data-material-name="'+dto.materialName+'" data-material-stand="'+dto.materialStand+'" data-material-texture="'+dto.materialTexture+'" ' + (isChecked ? 'checked' : '') + '></div>';
+                        str += '<div class="col-lg-2">'+dto.materialName+'</div>';
+                        str += '<div class="col-lg-4">'+dto.materialStand+'</div>';
+                        str += '<div class="col-lg-3">'+dto.materialTexture+'</div>';
+                        str += '<div class="col-lg-2">'+dto.materialCode+'</div>';
+                        str += '</div>';
+                        str += '</li>';
+                    });
+                    $("#materialSearchList").html(str);
+
+                    // Add change event listener for dynamically added checkboxes
+                    $(".material-checkbox").change(function() {
+                        let materialCode = $(this).val();
+                        let materialName = $(this).data('materialName');
+                        let materialStand = $(this).data('materialStand');
+                        let materialTexture = $(this).data('materialTexture');
+
+                        if ($(this).is(':checked')) {
+                            if (!selectedMaterials.some(material => material.code === materialCode)) {
+                                selectedMaterials.push({
+                                    code: materialCode,
+                                    name: materialName,
+                                    stand: materialStand,
+                                    texture: materialTexture
+                                });
+                            }
+                        } else {
+                            selectedMaterials = selectedMaterials.filter(material => material.code !== materialCode);
+                        }
+                        updateSelectedList();
+                    });
+                }).fail(function(jqxhr, textStatus, error) {
+                    var err = textStatus + ", " + error;
+                    console.log("자재 정보 요청 실패: " + err);
+                });
+            });
+        });
+
+        function updateSelectedList() {
+            let str = "";
+            $.each(selectedMaterials, function(idx, material) {
+                str += '<li class="list-group-item">';
+                str += '<div class="row">';
+                str += '<div class="col-lg-1"><button type="button" class="btn btn-danger btn-sm delete-btn" data-material-code="'+material.code+'">삭제</button></div>';
+                str += '<div class="col-lg-2">'+material.name+'</div>';
+                str += '<div class="col-lg-4">'+material.stand+'</div>';
+                str += '<div class="col-lg-3">'+material.texture+'</div>';
+                str += '<div class="col-lg-2">'+material.code+'</div>';
+                str += '</div>';
+                str += '</li>';
+            });
+            $("#materialSelectedList").html(str);
+
+            // Add event listener to delete buttons
+            $(".delete-btn").click(function() {
+                const materialCode = $(this).data('material-code');
+                selectedMaterials = selectedMaterials.filter(material => material.code !== materialCode);
+                updateSelectedList(); // Update the list after deletion
+                updateBOMList(); // Update BOM list after deletion
+                // Also, uncheck the corresponding checkbox in the search list if it's visible
+                $("input.material-checkbox[value='" + materialCode + "']").prop('checked', false);
+            });
+        }
+
+        $("#searchDivisionSubmit").on("click", function () {
+            updateBOMList(); // Update BOM list when the submit button is clicked
+            $("#materialSelection").modal('hide');
+        });
+
+        function updateBOMList() {
+            let str = "";
+            $.each(selectedMaterials, function(idx, material) {
+                str += '<tr>';
+                str += '<td>' + (idx+1) + '</td>';
+                str += '<td>' + material.name + '</td>';
+                str += '<td><input type="number" class="form-control" value="1" min="1"></td>'; // Default quantity is 1
+                str += '<td><input type="text" class="form-control" placeholder="투입공정"></td>'; // Process input
+                str += '<td><input type="date" class="form-control"></td>'; // Deadline input
+                str += '<td><button type="button" class="btn btn-danger btn-sm delete-bom-btn" data-material-code="'+material.code+'">삭제</button></td>';
+                str += '</tr>';
+            });
+            $("#bomList").html(str);
+
+            // Add event listener to BOM delete buttons
+            $(".delete-bom-btn").click(function() {
+                const materialCode = $(this).data('material-code');
+                selectedMaterials = selectedMaterials.filter(material => material.code !== materialCode);
+                updateSelectedList(); // Update the selected list after deletion
+                updateBOMList(); // Update BOM list after deletion
+            });
+        }
+
+
+
+        //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+        //이하까지는 잘 문서 저장용으로 잘 작동 됨
         $("#saveUnit").on("click", function () {
             // 먼저 다른 데이터를 서버로 전송
             var unitDTO = {
