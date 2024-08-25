@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -20,7 +22,14 @@ public class ProductDTO {
     private String productTexture;
     private String productDrawFile;
     private String productEtcFile ;
-    private LocalDateTime productRegDate;
-    private LocalDateTime productModDate;
+
+    @Builder.Default
+    private LocalDateTime productRegDate = LocalDateTime.now() ;
+
+    @Builder.Default
+    private LocalDateTime productModDate = LocalDateTime.now() ;
     private Set<ProductUnitDTO> productUnits;
+
+    @Builder.Default
+    private List<ProductBomDTO> productBomDTOList = new ArrayList<>();
 }

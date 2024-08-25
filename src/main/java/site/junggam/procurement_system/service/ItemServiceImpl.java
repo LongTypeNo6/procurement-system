@@ -4,10 +4,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import site.junggam.procurement_system.dto.MaterialDTO;
-import site.junggam.procurement_system.dto.UnitBomDTO;
-import site.junggam.procurement_system.dto.UnitDTO;
+import site.junggam.procurement_system.dto.*;
 import site.junggam.procurement_system.entity.Material;
+import site.junggam.procurement_system.entity.Product;
 import site.junggam.procurement_system.entity.Purchaser;
 import site.junggam.procurement_system.entity.Unit;
 import site.junggam.procurement_system.mapper.*;
@@ -81,8 +80,8 @@ public class ItemServiceImpl implements ItemService {
     public String unitResister(UnitDTO unitDTO) {
         String unitCode= generateCode("BU");
         unitDTO.setUnitCode(unitCode);
-        unitDTO.setUnitDrawFile(unitCode);
-        unitDTO.setUnitEtcFile(unitCode);
+        unitDTO.setUnitDrawFile(unitCode+"D");
+        unitDTO.setUnitEtcFile(unitCode+"E");
         unitRepository.save(unitMapper.toEntity(unitDTO));
         List<UnitBomDTO> uitBomDTOList=unitDTO.getUnitBomDTOList();
         uitBomDTOList.forEach(unitBomDTO -> {
@@ -98,6 +97,30 @@ public class ItemServiceImpl implements ItemService {
         UnitDTO unitDTO=result.map(unitMapper::toDTO).orElse(null);
         unitDTO.setUnitBomDTOList(unitBomMapper.toDTOs(unitBomRepository.findByunit(Unit.builder().unitCode(unitCode).build())));
         return unitDTO;
+    }
+
+    @Override
+    @Transactional
+    public String productResister(ProductDTO productDTO) {
+        String productCode= generateCode("BP");
+        productDTO.setProductCode(productCode);
+        productDTO.setProductDrawFile(productCode+"D");
+        productDTO.setProductEtcFile(productCode+"E");
+        productRepository.save(productMapper.toEntity(productDTO));
+        List<ProductBomDTO> productBomDTOList=productDTO.getProductBomDTOList();
+        productBomDTOList.forEach(productBomDTO -> {
+            productBomDTO.setProductCode(productCode);
+            productBomRepository.save(productBomMapper.toEntity(productBomDTO));
+        });
+        return productCode;
+    }
+
+    @Override
+    public ProductDTO productGet(String productCode) {
+        Optional<Product> result = productRepository.findById(productCode);
+        ProductDTO productDTO=result.map(productMapper::toDTO).orElse(null);
+        productDTO.setProductBomDTOList(productBomMapper.toDTOs(productBomRepository.findByProduct(Product.builder().productCode(productCode).build())));
+        return productDTO;
     }
 
 }

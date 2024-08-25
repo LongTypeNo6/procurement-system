@@ -27,7 +27,7 @@ public class ItemController {
     public void materialRegister(){
     }
 
-    //생산계획상세보기
+    //자재상세보기
     @GetMapping("/materialGet")
     public void materialGet(@RequestParam("materialCode") String materialCode, Model model){
         model.addAttribute("materialCode",materialCode);
@@ -42,6 +42,17 @@ public class ItemController {
     @GetMapping("/unitGet")
     public void unitGet(@RequestParam("unitCode") String unitCode, Model model){
         model.addAttribute("unitCode",unitCode);
+    }
+
+    //유닛등록하기
+    @RequestMapping("/productRegister")
+    public void productRegister(){
+    }
+
+    //유닛상세보기
+    @GetMapping("/productGet")
+    public void productGet(@RequestParam("productCode") String productCode, Model model){
+        model.addAttribute("productCode",productCode);
     }
 
 }

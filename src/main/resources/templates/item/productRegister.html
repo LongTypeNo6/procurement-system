@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>자재 등록</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <th:block th:replace="~{/fragments/headFragment}"></th:block>
+</head>
+
+<body>
+
+<th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
+<th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
+
+<!-- ======= main ======= -->
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>제품 등록</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">메인</a></li>
+                <li class="breadcrumb-item">발주계획</li>
+                <li class="breadcrumb-item">제품</li>
+                <li class="breadcrumb-item active">제품등록</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            제품등록
+                        </h5>
+                        <div class="row mb-3">
+                            <label for="productName" class="col-sm-2 col-form-label">제품명</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="product_name" id="productName" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="productStand" class="col-sm-2 col-form-label">규격</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="product_stand" id="productStand" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="productTexture" class="col-sm-2 col-form-label">재질</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="product_texture" id="productTexture" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="productDrawFile" class="col-sm-2 col-form-label">도면</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="file" name="product_draw_file" id="productDrawFile">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="productEtcFile" class="col-sm-2 col-form-label">참고문서</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="file" name="product_etc_file" id="productEtcFile">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">
+                                BOM
+                            </label>
+                            <div class="col-sm-10">
+                                <div class="input-group mb">
+                                    <input type="text" class="form-control" id="unitCode" required>
+                                    <button type="button" class="input-group-text" id="unitSelectionBtn" data-bs-toggle="modal" data-bs-target="#unitSelection">검색</button>
+                                </div>
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">자재명</th>
+                                        <th scope="col">규격/재질</th>
+                                        <th scope="col">수량(개)</th>
+                                        <th scope="col">투입공정</th>
+                                        <th scope="col">삭제</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="bomList">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-10">
+                                <button type="button" class="btn btn-primary" id="saveProduct">저장</button>
+                            </div>
+                        </div>
+                        <!-- Modal Dialog Scrollable -->
+                        <div class="modal fade" id="unitSelection" tabindex="-1">
+                            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">검색</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title" id="unitListName">유닛리스트</h5>
+                                                        <div class="row mb-3">
+                                                            <div class="col-sm-12">
+                                                                <div class="input-group mb">
+                                                                    <input type="text" class="form-control" id="unitSearch" placeholder="코드 또는 이름 입력">
+                                                                    <button type="button" class="input-group-text">검색</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <br>
+                                                        <div class="row mb-3">
+                                                            <div class="col-sm-12" >
+                                                                <!-- List group With Checkboxes and radios -->
+                                                                <div class="form-control">
+                                                                    <ul class="list-group" style="height:200px; overflow-y: auto;">
+                                                                        <span id="unitSearchList" class="list-group-flush"></span>
+                                                                    </ul><!-- End List Checkboxes and radios -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        선택한 항목
+                                                        <div class="row mb-3">
+                                                            <div class="col-sm-12" >
+                                                                <!-- List group With Checkboxes and radios -->
+                                                                <div class="form-control">
+                                                                    <ul class="list-group" style="height:200px; overflow-y: auto;">
+                                                                        <span id="unitSelectedList" class="list-group-flush"></span>
+                                                                    </ul><!-- End List Checkboxes and radios -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>&nbsp&nbsp원하시는 <span class="unit">제품</span>이 없으십니까?&nbsp&nbsp<a href="#" target="_blank"><span class="unit">제품</span>등록하기</a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <span id="selectedDivisionFooter"></span>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                        <button type="button" class="btn btn-primary" id="searchDivisionSubmit">확인</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- 제품 혹은 유닛 검색 모달창 끝-->
+                    </div>
+                </div>
+            </div>
+        </div> <!--End row-->
+    </section>
+</main>
+<!-- End #main -->
+<script th:inline="javascript">
+    $(document).ready(function (e) {
+        let selectedUnits = [];
+
+        $("#unitSelectionBtn").on("click", function () {
+            console.log("검색버튼 클릭됨");
+            var selectedCode = null;
+            $("#unitSearch").on("input", function () {
+                var keyword = $("#unitSearch").val();
+                console.log("검색 키워드: " + keyword);
+                $.getJSON("/plan/unitListSearching?keyword=" + keyword, function(data) {
+                    console.log("검색기능 잘 되나?"+data);
+                    let str = "";
+                    $.each(data, function(idx, dto) {
+                        const isChecked = selectedUnits.some(unit => unit.code === dto.unitCode);
+                        str += '<li class="list-group-item">';
+                        str += '<div class="row">';
+                        str += '<div class="col-lg-1"><input class="form-check-input me-1 unit-checkbox" type="checkbox" value="'+dto.unitCode+'" data-unit-name="'+dto.unitName+'" data-unit-stand="'+dto.unitStand+'" data-unit-texture="'+dto.unitTexture+'" ' + (isChecked ? 'checked' : '') + '></div>';
+                        str += '<div class="col-lg-2">'+dto.unitName+'</div>';
+                        str += '<div class="col-lg-4">'+dto.unitStand+'</div>';
+                        str += '<div class="col-lg-3">'+dto.unitTexture+'</div>';
+                        str += '<div class="col-lg-2">'+dto.unitCode+'</div>';
+                        str += '</div>';
+                        str += '</li>';
+                    });
+                    $("#unitSearchList").html(str);
+
+                    // Add change event listener for dynamically added checkboxes
+                    $(".unit-checkbox").change(function() {
+                        let unitCode = $(this).val();
+                        let unitName = $(this).data('unitName');
+                        let unitStand = $(this).data('unitStand');
+                        let unitTexture = $(this).data('unitTexture');
+
+                        if ($(this).is(':checked')) {
+                            if (!selectedUnits.some(unit => unit.code === unitCode)) {
+                                selectedUnits.push({
+                                    code: unitCode,
+                                    name: unitName,
+                                    stand: unitStand,
+                                    texture: unitTexture
+                                });
+                            }
+                        } else {
+                            selectedUnits = selectedUnits.filter(unit => unit.code !== unitCode);
+                        }
+                        updateSelectedList();
+                    });
+                }).fail(function(jqxhr, textStatus, error) {
+                    var err = textStatus + ", " + error;
+                    console.log("자재 정보 요청 실패: " + err);
+                });
+            });
+        });
+
+        function updateSelectedList() {
+            let str = "";
+            $.each(selectedUnits, function(idx, unit) {
+                str += '<li class="list-group-item">';
+                str += '<div class="row">';
+                str += '<div class="col-lg-1"><button type="button" class="btn btn-danger btn-sm delete-btn" data-unit-code="'+unit.code+'">삭제</button></div>';
+                str += '<div class="col-lg-2">'+unit.name+'</div>';
+                str += '<div class="col-lg-4">'+unit.stand+'</div>';
+                str += '<div class="col-lg-3">'+unit.texture+'</div>';
+                str += '<div class="col-lg-2">'+unit.code+'</div>';
+                str += '</div>';
+                str += '</li>';
+            });
+            $("#unitSelectedList").html(str);
+
+            // Add event listener to delete buttons
+            $(".delete-btn").click(function() {
+                const unitCode = $(this).data('unit-code');
+                selectedUnits = selectedUnits.filter(unit => unit.code !== unitCode);
+                updateSelectedList(); // Update the list after deletion
+                updateBOMList(); // Update BOM list after deletion
+                // Also, uncheck the corresponding checkbox in the search list if it's visible
+                $("input.unit-checkbox[value='" + unitCode + "']").prop('checked', false);
+            });
+        }
+
+        $("#searchDivisionSubmit").on("click", function () {
+            updateBOMList(); // Update BOM list when the submit button is clicked
+            $("#unitSelection").modal('hide');
+        });
+
+        function updateBOMList() {
+            let str = "";
+            $.each(selectedUnits, function(idx, unit) {
+                str += '<tr>';
+                str += '<td>' + (idx+1) + '</td>';
+                str += '<td id="unitName'+idx+'" data-unit-code="'+unit.code+'">' + unit.name + '</td>';
+                str += '<td>' + unit.stand+' / '+unit.texture+ '</td>';
+                str += '<td><input type="number" class="form-control" value="1" min="1" id="productBomQuantity'+idx+'"></td>'; // Default quantity is 1
+                str += '<td><input type="text" class="form-control" placeholder="투입공정" id="productBomProcess'+idx+'"></td>'; // Process input
+                str += '<td><button type="button" class="btn btn-danger btn-sm delete-bom-btn" data-unit-code="'+unit.code+'">삭제</button></td>';
+                str += '</tr>';
+            });
+            $("#bomList").html(str);
+
+            // Add event listener to BOM delete buttons
+            $(".delete-bom-btn").click(function() {
+                const unitCode = $(this).data('unit-code');
+                selectedUnits = selectedUnits.filter(unit => unit.code !== unitCode);
+                updateSelectedList(); // Update the selected list after deletion
+                updateBOMList(); // Update BOM list after deletion
+            });
+        }
+
+
+        //이하까지는 잘 문서 저장용으로 잘 작동 됨
+        $("#saveProduct").on("click", function () {
+            // 먼저 다른 데이터를 서버로 전송
+            var productDTO = {
+                productName: $('#productName').val(),
+                productStand: $('#productStand').val(),
+                productTexture: $('#productTexture').val(),
+                productBomDTOList: []
+            };
+            $('#bomList tr').each(function(index, element) {
+                var productBomDTO = {
+                    unitCode: $(element).find('#unitName' + (index)).data('unitCode'),
+                    unitName: $(element).find('#unitName' + (index)).text(),
+                    productBomQuantity: $(element).find('#productBomQuantity' + (index)).val(),
+                    productBomProcess: $(element).find('#productBomProcess' + (index)).val()
+                };
+                productDTO.productBomDTOList.push(productBomDTO);
+            });
+            console.log("보낼데이터는 !!!!  +   ",productDTO);
+            $.ajax({
+                url: '/itemcontent/product',
+                type: "POST",
+                data: JSON.stringify(productDTO),
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (result) {
+                    console.log("자재코드는?? ", result);
+                    alert("저장했습니다.");
+                    uploadProductDrawFile(result);  // 파일 업로드 함수 호출
+                },
+                error: function (error) {
+                    console.log("데이터 저장 실패: ", error);
+                    alert("데이터 저장에 실패했습니다. 다시 시도해주세요.");
+                }
+            });
+        });
+
+        function uploadProductDrawFile(productCode) {
+            console.log("함수 안에서 자재코드는?? ", productCode);
+            var formData = new FormData();
+            var fileInput = $('#productDrawFile')[0].files[0];
+            if (fileInput) {
+                formData.append("file", fileInput);
+                $.ajax({
+                    url: '/files/uploadOne/' + productCode+"D" + '/' + "item product "+productCode,  // 파일 업로드 경로
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (result) {
+                        console.log("파일 업로드 성공: ", result);
+                        uploadProductEtcFile(productCode);
+                        // window.location.href = "/product/getListProduct";  // 업로드 후 페이지 리다이렉트
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log("파일 업로드 실패: ", textStatus);
+                        alert("파일 업로드에 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            } else {
+                uploadProductEtcFile(productCode);
+                // 파일이 없는 경우에도 페이지 리다이렉트
+                // window.location.href = "/product/getListProduct";
+            }
+        }
+        function uploadProductEtcFile(productCode) {
+            console.log("함수 안에서 자재코드는?? ", productCode);
+            var formData = new FormData();
+            var fileInput = $('#productEtcFile')[0].files[0];
+            if (fileInput) {
+                formData.append("file", fileInput);
+                $.ajax({
+                    url: '/files/uploadOne/' + productCode+"E" + '/'+"item product "+productCode,  // 파일 업로드 경로
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (result) {
+                        console.log("파일 업로드 성공: ", result);
+                        window.location.href = "/product/getListProduct";  // 업로드 후 페이지 리다이렉트
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log("파일 업로드 실패: ", textStatus);
+                        alert("파일 업로드에 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            } else {
+                //파일이 없는 경우에도 페이지 리다이렉트
+                window.location.href = "/product/getListProduct";
+            }
+        }
+    });
+</script>
+<th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
+<th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
+
+</body>
+</html>

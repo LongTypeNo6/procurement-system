@@ -1,6 +1,7 @@
 package site.junggam.procurement_system.service;
 
 import site.junggam.procurement_system.dto.MaterialDTO;
+import site.junggam.procurement_system.dto.ProductDTO;
 import site.junggam.procurement_system.dto.UnitDTO;
 
 public interface ItemService {
@@ -16,5 +17,11 @@ public interface ItemService {
 
     //유닛상세보기
     UnitDTO unitGet(String unitCode);
+
+    //제품등록하기
+    String productResister(ProductDTO productDTO);
+
+    //제품상세보기
+    ProductDTO productGet(String productCode);
 
 }

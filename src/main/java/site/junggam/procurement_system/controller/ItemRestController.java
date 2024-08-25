@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import site.junggam.procurement_system.dto.MaterialDTO;
+import site.junggam.procurement_system.dto.ProductDTO;
 import site.junggam.procurement_system.dto.PurchaserDTO;
 import site.junggam.procurement_system.dto.UnitDTO;
 import site.junggam.procurement_system.service.ItemService;
@@ -43,5 +44,18 @@ public class ItemRestController {
     public ResponseEntity<UnitDTO> unitGet(@PathVariable("unitCode") String unitCode){
         UnitDTO unitDTO=itemService.unitGet(unitCode);
         return new ResponseEntity<>(unitDTO, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/product")
+    public ResponseEntity<String> productSave(@RequestBody ProductDTO productDTO){
+        log.info("들어온 정보"+productDTO);
+        String productCode=itemService.productResister(productDTO);
+        return new ResponseEntity<>(productCode, HttpStatus.OK);
+    }
+
+    @GetMapping("/product/{productCode}")
+    public ResponseEntity<ProductDTO> productGet(@PathVariable("productCode") String productCode){
+        ProductDTO productDTO=itemService.productGet(productCode);
+        return new ResponseEntity<>(productDTO, HttpStatus.OK);
     }
 }
