@@ -81,9 +81,9 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">자재명</th>
+                                        <th scope="col">규격/재질</th>
                                         <th scope="col">수량(개)</th>
                                         <th scope="col">투입공정</th>
-                                        <th scope="col">조달마감일자</th>
                                         <th scope="col">삭제</th>
                                     </tr>
                                     </thead>
@@ -254,9 +254,9 @@
                 str += '<tr>';
                 str += '<td>' + (idx+1) + '</td>';
                 str += '<td>' + material.name + '</td>';
+                str += '<td>' + material.stand+' / '+material.texture+ '</td>';
                 str += '<td><input type="number" class="form-control" value="1" min="1"></td>'; // Default quantity is 1
                 str += '<td><input type="text" class="form-control" placeholder="투입공정"></td>'; // Process input
-                str += '<td><input type="date" class="form-control"></td>'; // Deadline input
                 str += '<td><button type="button" class="btn btn-danger btn-sm delete-bom-btn" data-material-code="'+material.code+'">삭제</button></td>';
                 str += '</tr>';
             });
@@ -270,11 +270,6 @@
                 updateBOMList(); // Update BOM list after deletion
             });
         }
-
-
-
-        //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-
         //이하까지는 잘 문서 저장용으로 잘 작동 됨
         $("#saveUnit").on("click", function () {
             // 먼저 다른 데이터를 서버로 전송
