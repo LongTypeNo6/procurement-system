@@ -6,10 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import site.junggam.procurement_system.dto.MaterialDTO;
-import site.junggam.procurement_system.dto.ProductDTO;
-import site.junggam.procurement_system.dto.PurchaserDTO;
-import site.junggam.procurement_system.dto.UnitDTO;
+import site.junggam.procurement_system.dto.*;
+import site.junggam.procurement_system.entity.Material;
+import site.junggam.procurement_system.entity.Product;
+import site.junggam.procurement_system.entity.Purchaser;
+import site.junggam.procurement_system.entity.Unit;
 import site.junggam.procurement_system.service.ItemService;
 
 @Log4j2
@@ -33,6 +34,12 @@ public class ItemRestController {
         return new ResponseEntity<>(materialDTO, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/materialList", produces = "application/json")
+    public ResponseEntity<PageResultDTO<MaterialDTO, Material>> materialList(PageRequestDTO pageRequestDTO) {
+        PageResultDTO<MaterialDTO, Material> materialDTOList = itemService.materialList(pageRequestDTO);
+        return new ResponseEntity<>(materialDTOList, HttpStatus.OK);
+    }
+
     @PostMapping(value = "/unit")
     public ResponseEntity<String> unitSave(@RequestBody UnitDTO unitDTO){
         log.info("들어온 정보"+unitDTO);
@@ -46,6 +53,12 @@ public class ItemRestController {
         return new ResponseEntity<>(unitDTO, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/unitList", produces = "application/json")
+    public ResponseEntity<PageResultDTO<UnitDTO, Unit>> unitList(PageRequestDTO pageRequestDTO) {
+        PageResultDTO<UnitDTO, Unit> unitDTOList = itemService.unitList(pageRequestDTO);
+        return new ResponseEntity<>(unitDTOList, HttpStatus.OK);
+    }
+
     @PostMapping(value = "/product")
     public ResponseEntity<String> productSave(@RequestBody ProductDTO productDTO){
         log.info("들어온 정보"+productDTO);
@@ -57,5 +70,11 @@ public class ItemRestController {
     public ResponseEntity<ProductDTO> productGet(@PathVariable("productCode") String productCode){
         ProductDTO productDTO=itemService.productGet(productCode);
         return new ResponseEntity<>(productDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/productList", produces = "application/json")
+    public ResponseEntity<PageResultDTO<ProductDTO, Product>> productList(PageRequestDTO pageRequestDTO) {
+        PageResultDTO<ProductDTO, Product> productDTOList = itemService.productList(pageRequestDTO);
+        return new ResponseEntity<>(productDTOList, HttpStatus.OK);
     }
 }

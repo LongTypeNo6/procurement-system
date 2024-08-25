@@ -3,6 +3,9 @@ package site.junggam.procurement_system.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import site.junggam.procurement_system.dto.*;
 import site.junggam.procurement_system.entity.Material;
@@ -16,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Service
 @Log4j2
@@ -76,6 +80,22 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public PageResultDTO<MaterialDTO, Material> materialList(PageRequestDTO pageRequestDTO) {
+        try {
+            Pageable pageable = pageRequestDTO.getPageable(Sort.by("materialCode").descending()); //나주에 바꿀것
+            Page<Material> result = materialRepository.findAll(pageable);
+            Function<Material, MaterialDTO> fn = (material -> {
+                MaterialDTO dto = materialMapper.toDTO(material);
+                return dto;
+            });
+            return new PageResultDTO<>(result, fn);
+        } catch (Exception e) {
+            log.error("에러메세지", e);
+            throw e; // or handle the exception appropriately
+        }
+    }
+
+    @Override
     @Transactional
     public String unitResister(UnitDTO unitDTO) {
         String unitCode= generateCode("BU");
@@ -100,6 +120,22 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public PageResultDTO<UnitDTO, Unit> unitList(PageRequestDTO pageRequestDTO) {
+        try {
+            Pageable pageable = pageRequestDTO.getPageable(Sort.by("unitCode").descending()); //나주에 바꿀것
+            Page<Unit> result = unitRepository.findAll(pageable);
+            Function<Unit, UnitDTO> fn = (unit -> {
+                UnitDTO dto = unitMapper.toDTO(unit);
+                return dto;
+            });
+            return new PageResultDTO<>(result, fn);
+        } catch (Exception e) {
+            log.error("에러메세지", e);
+            throw e; // or handle the exception appropriately
+        }
+    }
+
+    @Override
     @Transactional
     public String productResister(ProductDTO productDTO) {
         String productCode= generateCode("BP");
@@ -121,6 +157,22 @@ public class ItemServiceImpl implements ItemService {
         ProductDTO productDTO=result.map(productMapper::toDTO).orElse(null);
         productDTO.setProductBomDTOList(productBomMapper.toDTOs(productBomRepository.findByProduct(Product.builder().productCode(productCode).build())));
         return productDTO;
+    }
+
+    @Override
+    public PageResultDTO<ProductDTO, Product> productList(PageRequestDTO pageRequestDTO) {
+        try {
+            Pageable pageable = pageRequestDTO.getPageable(Sort.by("productCode").descending()); //나주에 바꿀것
+            Page<Product> result = productRepository.findAll(pageable);
+            Function<Product, ProductDTO> fn = (product -> {
+                ProductDTO dto = productMapper.toDTO(product);
+                return dto;
+            });
+            return new PageResultDTO<>(result, fn);
+        } catch (Exception e) {
+            log.error("에러메세지", e);
+            throw e; // or handle the exception appropriately
+        }
     }
 
 }
