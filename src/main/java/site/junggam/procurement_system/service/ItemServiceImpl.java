@@ -95,7 +95,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public UnitDTO unitGet(String unitCode) {
         Optional<Unit> result = unitRepository.findById(unitCode);
-        return result.map(unitMapper::toDTO).orElse(null);
+        UnitDTO unitDTO=result.map(unitMapper::toDTO).orElse(null);
+        unitDTO.setUnitBomDTOList(unitBomMapper.toDTOs(unitBomRepository.findByunit(Unit.builder().unitCode(unitCode).build())));
+        return unitDTO;
     }
 
 }

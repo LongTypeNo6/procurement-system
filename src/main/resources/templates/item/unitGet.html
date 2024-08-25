@@ -40,31 +40,37 @@
                         <div class="row mb-3">
                             <label for="unitName" class="col-sm-2 col-form-label">유닛명</label>
                             <div class="col-sm-10">
-                                <input type="text" name="unit_name" id="unitName" class="form-control">
+                                <input type="text" name="unit_name" id="unitName" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="unitStand" class="col-sm-2 col-form-label">규격</label>
                             <div class="col-sm-10">
-                                <input type="text" name="unit_stand" id="unitStand" class="form-control">
+                                <input type="text" name="unit_stand" id="unitStand" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="unitTexture" class="col-sm-2 col-form-label">재질</label>
                             <div class="col-sm-10">
-                                <input type="text" name="unit_texture" id="unitTexture" class="form-control">
+                                <input type="text" name="unit_texture" id="unitTexture" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="unitDrawFile" class="col-sm-2 col-form-label">도면</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="file" name="unit_draw_file" id="unitDrawFile">
+                                <a class="input-group mb" id="viewFileBtnD" target="_blank">
+                                    <button type="button" class="input-group-text">파일보기</button>
+                                    <input type="text" class="form-control" id="unitDrawFile" disabled>
+                                </a>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="unitEtcFile" class="col-sm-2 col-form-label">참고문서</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="file" name="unit_etc_file" id="unitEtcFile">
+                                <a class="input-group mb" id="viewFileBtnE" target="_blank">
+                                    <button type="button" class="input-group-text">파일보기</button>
+                                    <input type="text" class="form-control" id="unitEtcFile" disabled>
+                                </a>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -72,10 +78,6 @@
                                 BOM
                             </label>
                             <div class="col-sm-10">
-                                <div class="input-group mb">
-                                    <input type="text" class="form-control" id="materialCode" required>
-                                    <button type="button" class="input-group-text" id="materialSelectionBtn" data-bs-toggle="modal" data-bs-target="#materialSelection">검색</button>
-                                </div>
                                 <table class="table table-hover">
                                     <thead>
                                     <tr>
@@ -84,7 +86,6 @@
                                         <th scope="col">규격/재질</th>
                                         <th scope="col">수량(개)</th>
                                         <th scope="col">투입공정</th>
-                                        <th scope="col">삭제</th>
                                     </tr>
                                     </thead>
                                     <tbody id="bomList">
@@ -164,8 +165,36 @@
 <!-- End #main -->
 <script th:inline="javascript">
     $(document).ready(function (e) {
-        let selectedMaterials = [];
+        var unitCode = [[${unitCode}]];
+        $.getJSON("/itemcontent/unit/" + unitCode, function(dto) {
 
+            $("#unitCode").val(dto.unitCode);
+            $('#unitName').val(dto.unitName);
+            $('#unitStand').val(dto.unitStand);
+            $('#unitTexture').val(dto.unitTexture);
+            let str = "";
+            $.each(dto.unitBomDTOList, function (idx, unitBom) {
+                str += '<tr>';
+                str += '<td>' + (idx+1) + '</td>';
+                str += '<td id="materialName'+idx+'" data-material-code="'+unitBom.materialCode+'">' + unitBom.materialName + '</td>';
+                str += '<td>' + unitBom.materialStand+' / '+unitBom.materialTexture+ '</td>';
+                str += '<td><input type="number" class="form-control" value="'+unitBom.unitBomQuantity+'" min="1" id="unitBomQuantity'+idx+'" disabled></td>'; // Default quantity is 1
+                str += '<td><input type="text" class="form-control" value="'+unitBom.unitBomProcess+'" id="unitBomProcess'+idx+'" disabled></td>'; // Process input
+                str += '</tr>';
+            });
+            $("#bomList").html(str);
+        })
+        $.getJSON("/files/list/" + unitCode+"D", function(file) {
+            $("#viewFileBtnD").prop("href","/files/foreignCode/view/"+unitCode+"D");
+            $("#unitDrawFile").val(file[0].fileName);
+        })
+        $.getJSON("/files/list/" + unitCode+"E", function(file) {
+            $("#viewFileBtnE").prop("href","/files/foreignCode/view/"+unitCode+"E");
+            $("#unitEtcFile").val(file[0].fileName);
+        })
+
+
+        let selectedMaterials = [];
         $("#materialSelectionBtn").on("click", function () {
             console.log("검색버튼 클릭됨");
             var selectedCode = null;

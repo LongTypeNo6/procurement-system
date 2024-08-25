@@ -17,6 +17,8 @@ public interface UnitBomMapper {
     @Mapping(source = "unit.unitCode", target = "unitCode")
     @Mapping(source = "material.materialName", target = "materialName")
     @Mapping(source = "material.materialCode", target = "materialCode")
+    @Mapping(source = "material.materialStand", target = "materialStand")
+    @Mapping(source = "material.materialTexture", target = "materialTexture")
     UnitBomDTO toDTO(UnitBom unitBom);
 
     List<UnitBomDTO> toDTOs(List<UnitBom> unitBoms);

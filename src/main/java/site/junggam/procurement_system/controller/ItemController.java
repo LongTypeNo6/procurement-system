@@ -30,14 +30,18 @@ public class ItemController {
     //생산계획상세보기
     @GetMapping("/materialGet")
     public void materialGet(@RequestParam("materialCode") String materialCode, Model model){
-        log.info("발주서 상세보기 컨트롤러");
-        log.info("발주코드는 "+materialCode);
         model.addAttribute("materialCode",materialCode);
     }
 
     //유닛등록하기
     @RequestMapping("/unitRegister")
     public void unitRegister(){
+    }
+
+    //유닛상세보기
+    @GetMapping("/unitGet")
+    public void unitGet(@RequestParam("unitCode") String unitCode, Model model){
+        model.addAttribute("unitCode",unitCode);
     }
 
 }

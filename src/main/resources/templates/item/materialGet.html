@@ -96,7 +96,6 @@
     $(document).ready(function (e) {
         var materialCode = [[${materialCode}]];
         $.getJSON("/itemcontent/material/" + materialCode, function(dto) {
-            console.log("조달계획 잘 불러오나?"+dto)
             $("#materialCode").val(dto.materialCode);
             $('#materialName').val(dto.materialName);
             $('#materialStand').val(dto.materialStand);
