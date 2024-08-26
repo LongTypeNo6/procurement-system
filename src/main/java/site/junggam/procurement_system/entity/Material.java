@@ -39,4 +39,6 @@ public class Material {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private MaterialContractStatus materialContractStatus=MaterialContractStatus.PENDING;
+
+    public void changeContractStatus(MaterialContractStatus newStatus) {this.materialContractStatus=newStatus;}
 }

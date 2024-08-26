@@ -269,6 +269,9 @@ public class PlanServiceImpl implements PlanService {
         contractDTO.setContractCode(contractCode);
         contractDTO.setContractFile(contractCode);
         contractRepository.save(contractMapper.toEntity(contractDTO));
+        Material material = materialRepository.findById(contractDTO.getMaterialDTO().getMaterialCode()).get();
+        material.changeContractStatus(MaterialContractStatus.CONFIRMED);
+        materialRepository.save(material);
         return contractCode;
     }
 
