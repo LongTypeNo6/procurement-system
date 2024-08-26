@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>자재 등록</title>
+    <title>제품 상세보기</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -19,7 +19,7 @@
 <!-- ======= main ======= -->
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>유닛 등록</h1>
+        <h1>제품 상세보기</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">메인</a></li>
@@ -41,6 +41,12 @@
                             <label for="productName" class="col-sm-2 col-form-label">제품명</label>
                             <div class="col-sm-10">
                                 <input type="text" name="product_name" id="productName" class="form-control" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="productPrice" class="col-sm-2 col-form-label">단가</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="product_stand" id="productPrice" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -172,6 +178,7 @@
             $("#productCode").val(dto.productCode);
             $('#productName').val(dto.productName);
             $('#productStand').val(dto.productStand);
+            $('#productPrice').val(dto.productPrice);
             $('#productTexture').val(dto.productTexture);
             let str = "";
             $.each(dto.productBomDTOList, function (idx, productBom) {
@@ -308,6 +315,7 @@
             var productDTO = {
                 productName: $('#productName').val(),
                 productStand: $('#productStand').val(),
+                productPrice: $('#productPrice').val(),
                 productTexture: $('#productTexture').val(),
                 productBomDTOList: []
             };
@@ -383,7 +391,7 @@
                     dataType: 'json',
                     success: function (result) {
                         console.log("파일 업로드 성공: ", result);
-                        window.location.href = "/product/getListProduct";  // 업로드 후 페이지 리다이렉트
+                        window.location.href = "/item/productList";  // 업로드 후 페이지 리다이렉트
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log("파일 업로드 실패: ", textStatus);
@@ -392,7 +400,7 @@
                 });
             } else {
                 //파일이 없는 경우에도 페이지 리다이렉트
-                window.location.href = "/product/getListProduct";
+                window.location.href = "/item/productList";
             }
         }
     });

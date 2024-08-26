@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>자재 등록</title>
+    <title>제품 등록</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -41,6 +41,12 @@
                             <label for="productName" class="col-sm-2 col-form-label">제품명</label>
                             <div class="col-sm-10">
                                 <input type="text" name="product_name" id="productName" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="productPrice" class="col-sm-2 col-form-label">단가</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="product_stand" id="productPrice" class="form-control">
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -222,7 +228,7 @@
             $.each(selectedUnits, function(idx, unit) {
                 str += '<li class="list-group-item">';
                 str += '<div class="row">';
-                str += '<div class="col-lg-1"><button type="button" class="btn btn-danger btn-sm delete-btn" data-unit-code="'+unit.code+'">삭제</button></div>';
+                str += '<div class="col-lg-1"><button type="button" class="btn btn-danger btn-sm delete-btn" data-unit-code="'+unit.code+'">x</button></div>';
                 str += '<div class="col-lg-2">'+unit.name+'</div>';
                 str += '<div class="col-lg-4">'+unit.stand+'</div>';
                 str += '<div class="col-lg-3">'+unit.texture+'</div>';
@@ -277,6 +283,7 @@
             // 먼저 다른 데이터를 서버로 전송
             var productDTO = {
                 productName: $('#productName').val(),
+                productPrice: $('#productPrice').val(),
                 productStand: $('#productStand').val(),
                 productTexture: $('#productTexture').val(),
                 productBomDTOList: []
@@ -353,7 +360,7 @@
                     dataType: 'json',
                     success: function (result) {
                         console.log("파일 업로드 성공: ", result);
-                        window.location.href = "/product/getListProduct";  // 업로드 후 페이지 리다이렉트
+                        window.location.href = "/item/productList";  // 업로드 후 페이지 리다이렉트
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log("파일 업로드 실패: ", textStatus);
@@ -362,7 +369,7 @@
                 });
             } else {
                 //파일이 없는 경우에도 페이지 리다이렉트
-                window.location.href = "/product/getListProduct";
+                window.location.href = "/item/productList";
             }
         }
     });

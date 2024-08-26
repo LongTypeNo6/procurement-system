@@ -152,7 +152,7 @@ public class PlanServiceImpl implements PlanService {
     @Override
     public PageResultDTO<ProductionPlanDTO, ProductionPlan> getProductionPlanList(PageRequestDTO pageRequestDTO) {
         try {
-            Pageable pageable = pageRequestDTO.getPageable(Sort.by("productionPlanCode").descending()); //나주에 바꿀것
+            Pageable pageable = pageRequestDTO.getPageable(Sort.by("productionPlanRegDate").descending()); //나주에 바꿀것
             Page<ProductionPlan> result = productionPlanRepository.findAll(pageable);
             Function<ProductionPlan, ProductionPlanDTO> fn = (productionPlan -> {
                 ProductionPlanDTO dto = productionPlanMapper.toDTO(productionPlan);
@@ -218,7 +218,7 @@ public class PlanServiceImpl implements PlanService {
     @Override
     public PageResultDTO<ProcurementPlanDTO, ProcurementPlan> getProcurementPlanList(PageRequestDTO pageRequestDTO) {
         try {
-            Pageable pageable = pageRequestDTO.getPageable(Sort.by("procurementPlanCode").descending()); //나주에 바꿀것
+            Pageable pageable = pageRequestDTO.getPageable(Sort.by("procurementPlanRegDate").descending()); //나주에 바꿀것
             Page<ProcurementPlan> result = procurementPlanRepository.findAll(pageable);
             Function<ProcurementPlan, ProcurementPlanDTO> fn = (procurementPlan -> {
                 ProcurementPlanDTO dto = procurementPlanMapper.toDTO(procurementPlan);

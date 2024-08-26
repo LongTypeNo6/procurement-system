@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>자재 등록</title>
+    <title>유닛 등록</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -222,7 +222,7 @@
             $.each(selectedMaterials, function(idx, material) {
                 str += '<li class="list-group-item">';
                 str += '<div class="row">';
-                str += '<div class="col-lg-1"><button type="button" class="btn btn-danger btn-sm delete-btn" data-material-code="'+material.code+'">삭제</button></div>';
+                str += '<div class="col-lg-1"><button type="button" class="btn btn-danger btn-sm delete-btn" data-material-code="'+material.code+'">x</button></div>';
                 str += '<div class="col-lg-2">'+material.name+'</div>';
                 str += '<div class="col-lg-4">'+material.stand+'</div>';
                 str += '<div class="col-lg-3">'+material.texture+'</div>';
@@ -353,7 +353,7 @@
                     dataType: 'json',
                     success: function (result) {
                         console.log("파일 업로드 성공: ", result);
-                        window.location.href = "/product/getListProduct";  // 업로드 후 페이지 리다이렉트
+                        window.location.href = "/item/unitList";  // 업로드 후 페이지 리다이렉트
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log("파일 업로드 실패: ", textStatus);
@@ -362,7 +362,7 @@
                 });
             } else {
                 //파일이 없는 경우에도 페이지 리다이렉트
-                window.location.href = "/product/getListProduct";
+                window.location.href = "/item/unitList";
             }
         }
     });

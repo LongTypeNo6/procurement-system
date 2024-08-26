@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Title</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <th:block th:replace="~{/fragments/headFragment}"></th:block>
+</head>
+<body>
+    <th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
+    <!-- ======= main ======= -->
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>메인</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">메인</a></li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section dashboard">
+            <div class="row">
+                <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
+
+                <!-- Left side columns -->
+                <div class="col-lg-8">
+                    <div class="row">
+
+                        <!-- Sales Card -->
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="card info-card sales-card">
+
+                                <div class="filter">
+                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                        <li class="dropdown-header text-start">
+                                            <h6>필터</h6>
+                                        </li>
+
+                                        <li><a class="dropdown-item" href="#">오늘</a></li>
+                                        <li><a class="dropdown-item" href="#">이번달</a></li>
+                                        <li><a class="dropdown-item" href="#">올해</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="card-body">
+                                    <h5 class="card-title">발주량 <span>| 오늘</span></h5>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-box-seam"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6>145</h6>
+                                            <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div><!-- End Sales Card -->
+
+                        <!-- Revenue Card -->
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="card info-card revenue-card">
+
+                                <div class="filter">
+                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                        <li class="dropdown-header text-start">
+                                            <h6>필터</h6>
+                                        </li>
+
+                                        <li><a class="dropdown-item" href="#">오늘</a></li>
+                                        <li><a class="dropdown-item" href="#">이번달</a></li>
+                                        <li><a class="dropdown-item" href="#">올해</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="card-body">
+                                    <h5 class="card-title">발주총액 <span>| 이번달</span></h5>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-cart3"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6>326<!--4,506--> 만원</h6>
+                                            <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div><!-- End Revenue Card -->
+
+                        <!-- Customers Card -->
+                        <div class="col-xxl-4 col-xl-12">
+
+                            <div class="card info-card customers-card">
+
+                                <div class="filter">
+                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                        <li class="dropdown-header text-start">
+                                            <h6>필터</h6>
+                                        </li>
+
+                                        <li><a class="dropdown-item" href="#">오늘</a></li>
+                                        <li><a class="dropdown-item" href="#">이번달</a></li>
+                                        <li><a class="dropdown-item" href="#">올해</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="card-body">
+                                    <h5 class="card-title">재고총액<span> | 이번달</span></h5>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-cash-coin"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6>2,655<!--8,969--> 만원</h6>
+                                            <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div><!-- End Customers Card -->
+
+                        <!-- Reports -->
+                        <div class="col-12">
+                            <div class="card">
+
+                                <div class="filter">
+                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                        <li class="dropdown-header text-start">
+                                            <h6>Filter</h6>
+                                        </li>
+
+                                        <li><a class="dropdown-item" href="#">Today</a></li>
+                                        <li><a class="dropdown-item" href="#">This Month</a></li>
+                                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="card-body">
+                                    <h5 class="card-title">통계 <span> | 이번달</span></h5>
+
+                                    <!-- Line Chart -->
+                                    <div id="reportsChart"></div>
+
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", () => {
+                                            new ApexCharts(document.querySelector("#reportsChart"), {
+                                                series: [{
+                                                    name: '발주량',
+                                                    data: [31, 40, 28, 51, 42, 82, 56],
+                                                }, {
+                                                    name: '발주총액',
+                                                    data: [11, 32, 45, 32, 34, 52, 41]
+                                                }, {
+                                                    name: '재고총액',
+                                                    data: [15, 11, 32, 18, 9, 24, 11]
+                                                }],
+                                                chart: {
+                                                    height: 350,
+                                                    type: 'area',
+                                                    toolbar: {
+                                                        show: false
+                                                    },
+                                                },
+                                                markers: {
+                                                    size: 4
+                                                },
+                                                colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                                                fill: {
+                                                    type: "gradient",
+                                                    gradient: {
+                                                        shadeIntensity: 1,
+                                                        opacityFrom: 0.3,
+                                                        opacityTo: 0.4,
+                                                        stops: [0, 90, 100]
+                                                    }
+                                                },
+                                                dataLabels: {
+                                                    enabled: false
+                                                },
+                                                stroke: {
+                                                    curve: 'smooth',
+                                                    width: 2
+                                                },
+                                                xaxis: {
+                                                    type: 'datetime',
+                                                    categories: ["2024-01-01T00:00:00.000Z", "2024-02-01T01:30:00.000Z", "2024-03-01T02:30:00.000Z", "2024-04-01T03:30:00.000Z", "2024-05-01T04:30:00.000Z", "2024-06-01T05:30:00.000Z", "2024-07-01T06:30:00.000Z"]
+                                                },
+                                                tooltip: {
+                                                    x: {
+                                                        format: 'yy/MM'
+                                                    },
+                                                }
+                                            }).render();
+                                        });
+                                    </script>
+                                    <!-- End Line Chart -->
+
+                                </div>
+
+                            </div>
+                        </div><!-- End Reports -->
+
+                        <!-- Recent Sales -->
+                        <div class="col-12">
+                            <div class="card recent-sales overflow-auto">
+
+                                <div class="filter">
+                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                        <li class="dropdown-header text-start">
+                                            <h6>Filter</h6>
+                                        </li>
+
+                                        <li><a class="dropdown-item" href="#">오늘</a></li>
+                                        <li><a class="dropdown-item" href="#">저번주말</a></li>
+                                        <li><a class="dropdown-item" href="#">저번달말</a></li>
+                                    </ul>
+                                </div>
+
+                                <div class="card-body">
+                                    <h5 class="card-title">재고금액현황리스트 TOP5 <span>| 오늘</span></h5>
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">자재명</th>
+                                            <th scope="col">품목코드</th>
+                                            <th scope="col">거래처</th>
+                                            <th scope="col">재고수량</th>
+                                            <th scope="col">평균단가</th>
+                                            <th scope="col">재고금액</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        <tr>
+                                            <th scope="col">1</th>
+                                            <td>펜대</th>
+                                            <td>2100001</th>
+                                            <td>A상사</th>
+                                            <td>300</th>
+                                            <td>1000</th>
+                                            <td>300000</th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">2</th>
+                                            <td>스프링</th>
+                                            <td>2100002</th>
+                                            <td>B상사</th>
+                                            <td>200</th>
+                                            <td>300</th>
+                                            <td>60000</th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">3</th>
+                                            <td>잉크카트리지B</th>
+                                            <td>2100005</th>
+                                            <td>C상사</th>
+                                            <td>400</th>
+                                            <td>150</th>
+                                            <td>60000</th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">4</th>
+                                            <td>잉크카트리지K</th>
+                                            <td>2100004</th>
+                                            <td>C상사</th>
+                                            <td>500</th>
+                                            <td>100</th>
+                                            <td>50000</th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">5</th>
+                                            <td>펜촉</th>
+                                            <td>2100003</th>
+                                            <td>A상사</th>
+                                            <td>200</th>
+                                            <td>200</th>
+                                            <td>40000</th>
+                                        </tr>
+
+
+
+                                        </tbody>
+                                    </table>
+                                    <!-- End Table with hoverable rows -->
+
+                                </div>
+
+                            </div>
+                        </div><!-- End Recent Sales -->
+
+
+
+                    </div>
+                </div><!-- End Left side columns -->
+
+                <!-- Right side columns -->
+                <div class="col-lg-4">
+
+                    <!-- Recent Activity -->
+                    <div class="card">
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                </li>
+
+                                <li><a class="dropdown-item" href="#">Today</a></li>
+                                <li><a class="dropdown-item" href="#">This Month</a></li>
+                                <li><a class="dropdown-item" href="#">This Year</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="card-title">검수일정 <span>| 이번달</span></h5>
+
+                            <div class="activity">
+
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label">14:00</div>
+                                    <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                                    <div class="activity-content">
+                                        A상사(펜대) | 서울특별시 구로구 | 김지현사원
+                                    </div>
+                                </div><!-- End activity item-->
+
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label">7/29(월)</div>
+                                    <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
+                                    <div class="activity-content">
+                                        B상사(스프링) | 경기도 수원시 | 정성일 사원
+                                    </div>
+                                </div><!-- End activity item-->
+
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label">7/29(월)</div>
+                                    <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
+                                    <div class="activity-content">
+                                        C상사(펜촉) | 경기도 화성시 | 정성일 사원
+                                    </div>
+                                </div><!-- End activity item-->
+
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label">8/1(목)</div>
+                                    <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
+                                    <div class="activity-content">
+                                        D상사(잉크) | 경기도 화성시 | 김지현 사원
+                                    </div>
+                                </div><!-- End activity item-->
+
+
+
+                            </div>
+
+                        </div>
+                    </div><!-- End Recent Activity -->
+
+
+
+                    <!-- Website Traffic -->
+                    <div class="card">
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                </li>
+
+                                <li><a class="dropdown-item" href="#">Today</a></li>
+                                <li><a class="dropdown-item" href="#">This Month</a></li>
+                                <li><a class="dropdown-item" href="#">This Year</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="card-body pb-0">
+                            <h5 class="card-title">재고금액현황리스트 TOP5 <span>| 오늘</span></h5>
+
+                            <p>
+                                <!-- Donut Chart -->
+                            <div id="donutChart"></div>
+
+                            <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                    new ApexCharts(document.querySelector("#donutChart"), {
+                                        series: [300000,60000,60000,50000,40000,52500],
+                                        chart: {
+                                            height: 350,
+                                            type: 'donut',
+                                            toolbar: {
+                                                show: true
+                                            }
+                                        },
+                                        labels: ['펜대','스프링', '잉크카트리지B', '잉크카트리지K', '펜촉','기타'],
+                                    }).render();
+                                });
+                            </script>
+                            <!-- End Donut Chart --></p>
+
+                        </div>
+                    </div><!-- End Website Traffic -->
+
+                    <!-- News & Updates Traffic -->
+                    <div class="card">
+                        <div class="filter">
+                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <li class="dropdown-header text-start">
+                                    <h6>Filter</h6>
+                                </li>
+
+                                <li><a class="dropdown-item" href="#">Today</a></li>
+                                <li><a class="dropdown-item" href="#">This Month</a></li>
+                                <li><a class="dropdown-item" href="#">This Year</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="card-body pb-0">
+                            <h5 class="card-title">공지사항 <span>| 최신</span></h5>
+
+                            <div class="news">
+                                <div class="post-item clearfix">
+                                    <img src="../assets/img/news-1.jpg" alt="">
+                                    <h4><a href="#">	※ 여름휴가공지 ※</a></h4>
+                                    <p>(주) 정감을 아껴주시고 찾아주시는 고객님들께 알려드립니다....</p>
+                                </div>
+
+                                <div class="post-item clearfix">
+                                    <img src="../assets/img/news-2.jpg" alt="">
+                                    <h4><a href="#">	2024 상반기 승진 안내</a></h4>
+                                    <p>24년도 승진자 명단 안내드립니다. 축하드립니다...</p>
+                                </div>
+
+                                <div class="post-item clearfix">
+                                    <img src="../assets/img/news-3.jpg" alt="">
+                                    <h4><a href="#">	생산부서 생산 요청 완료</a></h4>
+                                    <p>긴급건 완료 리스트 첨부드립니다...</p>
+                                </div>
+
+                                <div class="post-item clearfix">
+                                    <img src="../assets/img/news-4.jpg" alt="">
+                                    <h4><a href="#">PSKD-45o0 구매 발주 시작</a></h4>
+                                    <p>계약 담당사원 업무 분배 및 계약일 안내...</p>
+                                </div>
+
+                                <div class="post-item clearfix">
+                                    <img src="../assets/img/news-5.jpg" alt="">
+                                    <h4><a href="#">	시스템 업데이트 완료 안내</a></h4>
+                                    <p>시스템 업데이트 완료 안내. 문의사항은 ...</p>
+                                </div>
+
+                            </div><!-- End sidebar recent posts-->
+
+                        </div>
+                    </div><!-- End News & Updates -->
+
+                </div><!-- End Right side columns -->
+                <!--여기에 카드랑 내용 넣어주시면 됩니다-->
+            </div> <!--End row-->
+        </section>
+    </main>
+    <!-- End #main -->
+    <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
+</body>
+</html>
