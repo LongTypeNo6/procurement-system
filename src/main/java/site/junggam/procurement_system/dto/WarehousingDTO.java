@@ -26,4 +26,6 @@ public class WarehousingDTO {
 
     @Builder.Default
     private List<WarehousingHistoryDTO> warehousingHistoryDTOS = new ArrayList<>();
+
+
 }

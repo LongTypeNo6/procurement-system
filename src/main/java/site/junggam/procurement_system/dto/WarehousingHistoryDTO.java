@@ -27,5 +27,8 @@ public class WarehousingHistoryDTO {
 
     @Builder.Default
     private WarehousingHistoryStatus warehousingHistoryStatus = WarehousingHistoryStatus.PENDING;
+
+    @Builder.Default
+    private String materialCode = null;
 }
 
