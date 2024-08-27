@@ -650,8 +650,9 @@
             }
 
             function contractSave() {
+                let purchaserCode=$("#purchaserCode").val();
                 var contractDTO = {
-                    purchaserDTO: { purchaserCode: $("#purchaserCode").val() },
+                    purchaserDTO: { purchaserCode: purchaserCode },
                     materialDTO: { materialCode: $("#materialCode").val() },
                     contractLeadTime: $("#contractLeadTime").val(),
                     contractPrice: $("#contractPrice").val(),
@@ -666,7 +667,7 @@
                     success: function (result) {
                         console.log("계약 정보 저장 성공: ", result);
                         alert("계약 정보를 저장했습니다.");
-                        contractFileSave(result);
+                        contractFileSave(result, purchaserCode+" contract");
                     },
                     error: function (error) {
                         console.log("계약 정보 저장 실패: ", error);
@@ -675,7 +676,7 @@
                 });
             }
 
-            function contractFileSave(foreignCode) {
+            function contractFileSave(foreignCode,subDir) {
                 var formData = new FormData();
                 var fileInput = $('#contractFile')[0].files;
                 if (fileInput.length > 0) {
@@ -683,7 +684,7 @@
                         formData.append("files", fileInput[i]);
                     }
                     $.ajax({
-                        url: '/files/upload/' + foreignCode + '/contract',
+                        url: '/files/upload/' + foreignCode + '/' +subDir,
                         processData: false,
                         contentType: false,
                         data: formData,
