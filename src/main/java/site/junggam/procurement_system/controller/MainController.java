@@ -21,7 +21,7 @@ public class MainController {
 
     @RequestMapping("/main")
     public String main(){
-        return "main/main";
+        return "/main/main";
     }
 
 }
