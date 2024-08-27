@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @Table(name="tbl_inventory_history")
 public class InventoryHistory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long inventoryHistoryCode;
@@ -20,14 +21,10 @@ public class InventoryHistory {
     @JoinColumn(name = "materialCode")
     private Inventory inventory;
 
-    @Builder.Default
-    private LocalDateTime transactionDate=LocalDateTime.now();
-    @Builder.Default
-    private int quantityChange=0; // 재고의 증감량
-    @Builder.Default
-    private int finalQuantity=0;  // 이 트랜잭션 이후의 최종 재고 수량
+    private LocalDateTime transactionDate;
+    private int quantityChange; // 재고의 증감량
+    private int finalQuantity;  // 이 트랜잭션 이후의 최종 재고 수량
     @Enumerated(EnumType.STRING)
     private InventoryHistoryStatus transactionType; // 트랜잭션 유형 (예: 입고, 출고)
-    @Builder.Default
-    private String transactionReference=null; // 관련 트랜잭션 ID (예: WarehousingHistory 또는 Release의 ID)
+    private String transactionReference; // 관련 트랜잭션 ID (예: WarehousingHistory 또는 Release의 ID)
 }

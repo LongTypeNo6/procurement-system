@@ -42,11 +42,6 @@ public class WarehousingServiceImpl implements WarehousingService {
         if (result.isPresent()) {
             WarehousingDTO warehousingDTO=warehousingMapper.toDTO(result.get());
             warehousingDTO.setWarehousingHistoryDTOS(getWarehousingHistory(warehousingId));
-
-            //재고 내역 추가해함
-
-
-
             return warehousingDTO;
         }
         return null;
@@ -55,7 +50,7 @@ public class WarehousingServiceImpl implements WarehousingService {
     @Override
     public String saveWarehousingHistory(WarehousingHistoryDTO warehousingHistoryDTO) {
 
-        //히스토리 정보 저장
+        //입고히스토리 정보 저장
         log.info("들어온 DTO값"+warehousingHistoryDTO);
         String warehousingCode=warehousingHistoryDTO.getWarehousingCode();
         int historyNum;
@@ -64,6 +59,10 @@ public class WarehousingServiceImpl implements WarehousingService {
         warehousingHistoryDTO.setWarehousingHistoryCode(warehousingHistoryCode);
 
         warehousingHistoryRepository.save(warehousingHistoryMapper.toEntity(warehousingHistoryDTO));
+        
+        //인벤토리히스토리 저장
+        
+        //인벤토리 변경
 
         //여기는 입고 정보를 저장
         Warehousing warehousing=warehousingRepository.findById(warehousingCode).get();
