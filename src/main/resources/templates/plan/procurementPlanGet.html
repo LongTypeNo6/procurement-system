@@ -89,7 +89,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card">
+                    <div class="card" id="estimateCard">
                         <div class="card-body">
                             <h5 class="card-title">
                                 견적상황
@@ -134,14 +134,15 @@
                             <div class="row mb-3">
                                 <label for="inputNumber" class="col-sm-2 col-form-label">계약서</label>
                                 <div class="col-sm-10">
+                                    <span id="addContractFileInput">
                                     <input class="form-control" type="file" id="contractFile" multiple>
-                                    <br>
+                                    <br></span>
                                     <table class="table table-hover">
                                         <thead>
                                         <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">파일명</th>
-                                            <th scope="col">삭제</th>
+                                            <th scope="col" class="del-contractFile">삭제</th>
                                         </tr>
                                         </thead>
                                         <tbody id="contractFileList">
@@ -346,23 +347,36 @@
                 if (dto.procurementPlanStatus === "ESTABLISHED") {
                     $("#procurementPlanQuantity").prop("disabled", false);
                     $("#procurementPlanDeadLine").prop("disabled", false);
+                }else{
+                    $("#contractAndProcurementPlanSaveBtn").prop("hidden", true);
                 }
 
                 estimateCode = dto.estimateCode;
                 contractCode = dto.contractCode;
                 setContract(dto.materialContractStatus);
 
-                // 기존 파일 리스트 불러오기
-                $.getJSON("/files/list/" + estimateCode, function (fileList) {
-                    estimateFileList = fileList;
-                    displayEstimateFileList();
-                });
-
-                $.getJSON("/files/list/" + contractCode, function (fileList) {
-                    contractFileList = fileList;
-                    displayContractFileList();
-                });
-
+                if(dto.materialContractStatus==="CONFIRMED"){
+                    $("#estimateCard").prop("hidden", true);
+                    $("#addContractFileInput").prop("hidden", true);
+                    $.getJSON("/files/list/" + contractCode, function (fileList) {
+                        contractFileList = fileList;
+                        displayContractFileList();
+                        $(".del-contractFile").text('')
+                    });
+                    $("#contractLeadTime").prop("disabled", true);
+                    $("#contractPrice").prop("disabled", true);
+                    $("#contractMemo").prop("disabled", true);
+                    $("#purchaserCode").val(dto.purchaserCode)
+                    $("#purchaserCode").prop("disabled", true);
+                    $("#purchaserSelectBtn").prop("hidden", true);
+                    setPurchaser(dto.purchaserCode)
+                    $("#contractAndProcurementPlanSaveBtn").text("조달진행")
+                }else{
+                    $.getJSON("/files/list/" + estimateCode, function (fileList) {
+                        estimateFileList = fileList;
+                        displayEstimateFileList();
+                    });
+                }
             });
 
             // 파일 리스트 표시 함수
@@ -401,7 +415,7 @@
                 <tr data-fileindex="${file.inum}">
                     <th scope="row"><input class="form-check-input me-1" type="radio" name="contract" value="${file.fileName}"></th>
                     <td><a href="/files/view/${file.inum}" target="_blank">${file.fileName}</a></td>
-                    <td><button type="button" class="btn btn-danger btn-sm delete-contract-file-btn" data-fileindex="${index}"><i class="bi bi-exclamation-octagon"></i></button></td>
+                    <td class="del-contractFile"><button type="button" class="btn btn-danger btn-sm delete-contract-file-btn" data-fileindex="${index}"><i class="bi bi-exclamation-octagon"></i></button></td>
                 </tr>`;
                 });
 
@@ -411,7 +425,7 @@
                 <tr data-fileindex="new-${index}">
                     <th scope="row"><input class="form-check-input me-1" type="radio" name="contract" value="${file.name}"></th>
                     <td><a href="${file.url}" target="_blank">${file.name}</a></td>
-                    <td><button type="button" class="btn btn-danger btn-sm delete-contract-file-btn" data-fileindex="new-${index}"><i class="bi bi-exclamation-octagon"></i></button></td>
+                    <td class="del-contractFile"><button type="button" class="btn btn-danger btn-sm delete-contract-file-btn" data-fileindex="new-${index}"><i class="bi bi-exclamation-octagon"></i></button></td>
                 </tr>`;
                 });
 
@@ -541,39 +555,48 @@
                 var selectedName = $("#selectedPurchaserFooter").text().replace("선택 : ", "");
                 var selectedCode = $("#selectedPurchaserFooter").attr("data-purchaser-code");
                 if (selectedCode && selectedName) {
-                    $.getJSON("/purchasercontent/" + selectedCode, function (dto) {
-                        $("#purchaserCode").val(dto.purchaserCode);
-                        $("#purchaserName").val(dto.purchaserName);
-                        $("#purchaserAddress").val(dto.purchaserAddress);
-                        $("#purchaserFax").val(dto.purchaserFax);
-                        $("#purchaserEmail").val(dto.purchaserEmail);
-                        $("#purchaserType").val(dto.purchaserType);
-                        $("#purchaserTel").val(dto.purchaserTel);
-                        $("#purchaserCategory").val(dto.purchaserCategory);
-                        $("#purchaserPresident").val(dto.purchaserPresident);
-                        $("#purchaserManager").val(dto.purchaserManager);
-                        $("#purchaserManagerTel").val(dto.purchaserManagerTel);
-                        $("#purchaserManagerEmail").val(dto.purchaserManagerEmail);
-                        $("#purchaserManagerFax").val(dto.purchaserManagerFax);
-                        $("#purchaserMemo").val(dto.purchaserMemo);
-                    })
+                    setPurchaser(selectedCode)
                     purchaserModal.hide();
                 } else {
                     console.log("선택된 값이 없습니다.");
                 }
             });
 
+            function setPurchaser(selectedCode){
+                $.getJSON("/purchasercontent/" + selectedCode, function (dto) {
+                    $("#purchaserCode").val(dto.purchaserCode);
+                    $("#purchaserName").val(dto.purchaserName);
+                    $("#purchaserAddress").val(dto.purchaserAddress);
+                    $("#purchaserFax").val(dto.purchaserFax);
+                    $("#purchaserEmail").val(dto.purchaserEmail);
+                    $("#purchaserType").val(dto.purchaserType);
+                    $("#purchaserTel").val(dto.purchaserTel);
+                    $("#purchaserCategory").val(dto.purchaserCategory);
+                    $("#purchaserPresident").val(dto.purchaserPresident);
+                    $("#purchaserManager").val(dto.purchaserManager);
+                    $("#purchaserManagerTel").val(dto.purchaserManagerTel);
+                    $("#purchaserManagerEmail").val(dto.purchaserManagerEmail);
+                    $("#purchaserManagerFax").val(dto.purchaserManagerFax);
+                    $("#purchaserMemo").val(dto.purchaserMemo);
+                })
+            }
+
             // 저장 기능
             $("#estimateSaveBtn").on("click", function () {
                 estimateSave();
             })
             $("#contractAndProcurementPlanSaveBtn").on("click", function () {
-                console.log("조달계획, 계약 저장")
-                console.log("zhem"+contractCode)
-                contractSave();
-                procurementPlanSave();
-
+                if($("#contractAndProcurementPlanSaveBtn").text()==="조달진행"){
+                    procurementPlanSave();
+                }else{
+                    console.log("조달계획, 계약 저장")
+                    console.log("zhem"+contractCode)
+                    contractSave();
+                    procurementPlanSave();
+                }
             })
+
+
             function estimateSave() {
                 var estimateDTO = {
                     estimateMemo: $("#estimateMemo").val(),

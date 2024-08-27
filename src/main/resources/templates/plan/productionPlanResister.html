@@ -425,7 +425,8 @@
                     dataType: "text",
                     success: function (result) {
                         console.log("생산 계획 저장 성공: ", result);
-                        self.location.reload();
+                        // self.location.reload();
+                        window.location.href = "/plan/productionPlanList";
                     },
                     error: function (error) {
                         console.log("생산 계획 저장 실패: ", error);

@@ -164,7 +164,7 @@
                         str += '<td>' + (dto.procurementPlanQuantity * dto.contractPrice) + '</td>';
                         str += '<td>' + escapeHtml(dto.purchaserName) + '</td>';
                         str += '<td>' + inspectionPlanCount + '</td>';
-                        str += '<td>' + formatDate(dto.purchaseOrderDate) + '</td>';
+                        str += '<td>' + (formatDate(dto.purchaseOrderDate)==="1970-01-01"?"-":formatDate(dto.purchaseOrderDate)) + '</td>';
                         str += '<td>' + formatDate(dto.procurementPlanDeadLine) + '</td>';
                         str += '</tr>';
                     });
