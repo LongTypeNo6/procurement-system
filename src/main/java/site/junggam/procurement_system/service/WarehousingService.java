@@ -13,7 +13,7 @@ public interface WarehousingService {
     //입고상세보기
     WarehousingDTO getWarehousing(String warehousingId);
 
-    //입고처리(=입고내역추가+입고상태변경)
+    //입고처리(=입고내역추가+입고상태변경+재고내역추가)
     String saveWarehousingHistory(WarehousingHistoryDTO warehousingHistoryDTO);
 
     //입고내역보기(히스토리)

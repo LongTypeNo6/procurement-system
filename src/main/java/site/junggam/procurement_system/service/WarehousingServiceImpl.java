@@ -42,6 +42,11 @@ public class WarehousingServiceImpl implements WarehousingService {
         if (result.isPresent()) {
             WarehousingDTO warehousingDTO=warehousingMapper.toDTO(result.get());
             warehousingDTO.setWarehousingHistoryDTOS(getWarehousingHistory(warehousingId));
+
+            //재고 내역 추가해함
+
+
+
             return warehousingDTO;
         }
         return null;

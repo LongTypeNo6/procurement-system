@@ -33,7 +33,7 @@ public class Material {
     @OneToOne(mappedBy = "material", fetch = FetchType.LAZY)
     private Estimate estimate;
 
-    @OneToOne(mappedBy = "material", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "material", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Inventory inventory;
 
     @Enumerated(EnumType.STRING)

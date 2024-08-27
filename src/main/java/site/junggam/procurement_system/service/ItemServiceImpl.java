@@ -8,10 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import site.junggam.procurement_system.dto.*;
-import site.junggam.procurement_system.entity.Material;
-import site.junggam.procurement_system.entity.Product;
-import site.junggam.procurement_system.entity.Purchaser;
-import site.junggam.procurement_system.entity.Unit;
+import site.junggam.procurement_system.entity.*;
 import site.junggam.procurement_system.mapper.*;
 import site.junggam.procurement_system.repository.*;
 
@@ -36,6 +33,7 @@ public class ItemServiceImpl implements ItemService {
     private final ProductBomMapper productBomMapper;
     private final UnitBomRepository unitBomRepository;
     private final UnitBomMapper unitBomMapper;
+    private final InventoryRepository inventoryRepository;
 
     //코드 만들어내는 메소드
     private String generateCode(String itemCode) {
@@ -68,7 +66,8 @@ public class ItemServiceImpl implements ItemService {
         materialDTO.setMaterialCode(materialCode);
         materialDTO.setMaterialDrawFile(materialCode);
         materialDTO.setMaterialEtcFile(materialCode);
-        materialRepository.save(materialMapper.toEntity(materialDTO));
+        Material material = materialMapper.toEntity(materialDTO);
+        inventoryRepository.save(Inventory.builder().material(materialRepository.save(material)).build());
         return materialCode;
     }
 
