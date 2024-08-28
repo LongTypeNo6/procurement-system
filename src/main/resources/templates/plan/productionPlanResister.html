@@ -8,11 +8,11 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
 
-    <th:block th:replace="~{/fragments/headFragment}"></th:block>
+    <th:block th:replace="~{fragments/headFragment}"></th:block>
 </head>
 <body>
-    <th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
-    <th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
+    <th:block th:replace="~{fragments/bodyFragment::header}"></th:block>
+    <th:block th:replace="~{fragments/bodyFragment::sidebar}"></th:block>
     <!-- ======= main ======= -->
     <main id="main" class="main">
         <div class="pagetitle">
@@ -425,7 +425,8 @@
                     dataType: "text",
                     success: function (result) {
                         console.log("생산 계획 저장 성공: ", result);
-                        self.location.reload();
+                        // self.location.reload();
+                        window.location.href = "/plan/productionPlanList";
                     },
                     error: function (error) {
                         console.log("생산 계획 저장 실패: ", error);
@@ -434,7 +435,7 @@
             });
         });
     </script>
-    <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
-    <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
+    <th:block th:replace="~{fragments/bodyFragment::footer}"></th:block>
+    <th:block th:replace="~{fragments/bodyFragment::js}"></th:block>
 </body>
 </html>

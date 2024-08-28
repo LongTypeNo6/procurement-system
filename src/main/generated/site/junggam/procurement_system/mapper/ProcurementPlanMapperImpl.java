@@ -13,10 +13,11 @@ import site.junggam.procurement_system.entity.Material;
 import site.junggam.procurement_system.entity.MaterialContractStatus;
 import site.junggam.procurement_system.entity.ProcurementPlan;
 import site.junggam.procurement_system.entity.ProductionPlan;
+import site.junggam.procurement_system.entity.Purchaser;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-27T17:06:26+0900",
+    date = "2024-08-27T18:54:06+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -30,6 +31,7 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
 
         ProcurementPlanDTO.ProcurementPlanDTOBuilder procurementPlanDTO = ProcurementPlanDTO.builder();
 
+        procurementPlanDTO.purchaserCode( procurementPlanMaterialContractPurchaserPurchaserCode( procurementPlan ) );
         Double contractPrice = procurementPlanMaterialContractContractPrice( procurementPlan );
         if ( contractPrice != null ) {
             procurementPlanDTO.contractPrice( contractPrice );
@@ -88,6 +90,29 @@ public class ProcurementPlanMapperImpl implements ProcurementPlanMapper {
         procurementPlan.procurementPlanStatus( procurementPlanDTO.getProcurementPlanStatus() );
 
         return procurementPlan.build();
+    }
+
+    private String procurementPlanMaterialContractPurchaserPurchaserCode(ProcurementPlan procurementPlan) {
+        if ( procurementPlan == null ) {
+            return null;
+        }
+        Material material = procurementPlan.getMaterial();
+        if ( material == null ) {
+            return null;
+        }
+        Contract contract = material.getContract();
+        if ( contract == null ) {
+            return null;
+        }
+        Purchaser purchaser = contract.getPurchaser();
+        if ( purchaser == null ) {
+            return null;
+        }
+        String purchaserCode = purchaser.getPurchaserCode();
+        if ( purchaserCode == null ) {
+            return null;
+        }
+        return purchaserCode;
     }
 
     private Double procurementPlanMaterialContractContractPrice(ProcurementPlan procurementPlan) {

@@ -55,4 +55,6 @@ public class ProcurementPlanDTO {
     private int contractLeadTime=0;
     @Builder.Default
     private double contractPrice=0.0;
+    @Builder.Default
+    private String purchaserCode=null;
 }

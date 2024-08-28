@@ -27,17 +27,42 @@ public class ItemController {
     public void materialRegister(){
     }
 
-    //생산계획상세보기
+    //자재상세보기
     @GetMapping("/materialGet")
     public void materialGet(@RequestParam("materialCode") String materialCode, Model model){
-        log.info("발주서 상세보기 컨트롤러");
-        log.info("발주코드는 "+materialCode);
         model.addAttribute("materialCode",materialCode);
+    }
+
+    //유닛리스트
+    @RequestMapping("/unitList")
+    public void unitList() {
     }
 
     //유닛등록하기
     @RequestMapping("/unitRegister")
     public void unitRegister(){
+    }
+
+    //유닛상세보기
+    @GetMapping("/unitGet")
+    public void unitGet(@RequestParam("unitCode") String unitCode, Model model){
+        model.addAttribute("unitCode",unitCode);
+    }
+
+    //제품리스트
+    @RequestMapping("/productList")
+    public void productList() {
+    }
+
+    //제품등록하기
+    @RequestMapping("/productRegister")
+    public void productRegister(){
+    }
+
+    //제품상세보기
+    @GetMapping("/productGet")
+    public void productGet(@RequestParam("productCode") String productCode, Model model){
+        model.addAttribute("productCode",productCode);
     }
 
 }

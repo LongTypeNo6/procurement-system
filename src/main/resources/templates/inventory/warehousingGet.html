@@ -6,11 +6,11 @@
     <title>Title</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
-    <th:block th:replace="~{/fragments/headFragment}"></th:block>
+    <th:block th:replace="~{fragments/headFragment}"></th:block>
 </head>
 <body>
-<th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
-<th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
+<th:block th:replace="~{fragments/bodyFragment::header}"></th:block>
+<th:block th:replace="~{fragments/bodyFragment::sidebar}"></th:block>
 <!-- ======= main ======= -->
 <main id="main" class="main">
     <div class="pagetitle">
@@ -133,6 +133,7 @@
         var warehousingSpecFileId = null;
         var shipmentFile = null;
         var specFile = null;
+        var materialCode =null;
 
         console.log("입고코드는", warehousingCode);
 
@@ -163,7 +164,7 @@
             purchaseOrderContent += '<td>' + dto.purchaseOrderDTO.procurementPlanQuantity + '개</td>';
             purchaseOrderContent += '<td>' + (dto.purchaseOrderDTO.procurementPlanQuantity * dto.purchaseOrderDTO.contractPrice) + '원</td>';
             $("#purchaseOrderContent").append(purchaseOrderContent);
-
+            materialCode=dto.purchaseOrderDTO.materialCode;
             var warehousingHistory = "";
             const historyStatusMapping = {
                 "PENDING": "-",
@@ -268,7 +269,8 @@
                 warehousingResultMemo: $('#warehousingResultMemo').val(),
                 warehousingHistoryStatus: type,
                 warehousingShipmentSpec: warehousingShipmentSpecFileId,
-                warehousingSpec: warehousingSpecFileId
+                warehousingSpec: warehousingSpecFileId,
+                materialCode: materialCode
             };
             $.ajax({
                 url: '/inventorycontent/warehousing/history/' + warehousingCode,
@@ -312,7 +314,7 @@
     });
 </script>
 
-<th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
-<th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
+<th:block th:replace="~{fragments/bodyFragment::footer}"></th:block>
+<th:block th:replace="~{fragments/bodyFragment::js}"></th:block>
 </body>
 </html>

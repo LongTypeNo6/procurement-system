@@ -19,6 +19,8 @@ public class ProductBomDTO {
     private String productCode;
     private String unitName;
     private String unitCode;
+    private String unitStand;
+    private String unitTexture;
     private int productBomQuantity;
     private String productBomProcess;
 

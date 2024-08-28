@@ -11,7 +11,7 @@ import site.junggam.procurement_system.entity.Unit;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-27T17:06:26+0900",
+    date = "2024-08-27T18:54:05+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -29,6 +29,8 @@ public class ProductBomMapperImpl implements ProductBomMapper {
         productBomDTO.productCode( productBomProductProductCode( productBom ) );
         productBomDTO.unitName( productBomUnitUnitName( productBom ) );
         productBomDTO.unitCode( productBomUnitUnitCode( productBom ) );
+        productBomDTO.unitStand( productBomUnitUnitStand( productBom ) );
+        productBomDTO.unitTexture( productBomUnitUnitTexture( productBom ) );
         productBomDTO.id( productBom.getId() );
         productBomDTO.productBomQuantity( productBom.getProductBomQuantity() );
         productBomDTO.productBomProcess( productBom.getProductBomProcess() );
@@ -125,6 +127,36 @@ public class ProductBomMapperImpl implements ProductBomMapper {
             return null;
         }
         return unitCode;
+    }
+
+    private String productBomUnitUnitStand(ProductBom productBom) {
+        if ( productBom == null ) {
+            return null;
+        }
+        Unit unit = productBom.getUnit();
+        if ( unit == null ) {
+            return null;
+        }
+        String unitStand = unit.getUnitStand();
+        if ( unitStand == null ) {
+            return null;
+        }
+        return unitStand;
+    }
+
+    private String productBomUnitUnitTexture(ProductBom productBom) {
+        if ( productBom == null ) {
+            return null;
+        }
+        Unit unit = productBom.getUnit();
+        if ( unit == null ) {
+            return null;
+        }
+        String unitTexture = unit.getUnitTexture();
+        if ( unitTexture == null ) {
+            return null;
+        }
+        return unitTexture;
     }
 
     protected Product productBomDTOToProduct(ProductBomDTO productBomDTO) {

@@ -34,7 +34,8 @@ public class PlanController {
 
     //조달계획리스트
     @RequestMapping("/procurementPlanList")
-    public void procurementPlanList() {
+    public String procurementPlanList() {
+        return "/plan/procurementPlanList";
     }
 
     //조달계획상세보기

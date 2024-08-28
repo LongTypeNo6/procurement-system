@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>유닛 등록</title>
+    <title>제품 상세보기</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -19,7 +19,7 @@
 <!-- ======= main ======= -->
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>유닛 등록</h1>
+        <h1>제품 상세보기</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">메인</a></li>
@@ -35,36 +35,48 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">
-                            유닛등록
+                            제품상세보기
                         </h5>
                         <div class="row mb-3">
-                            <label for="unitName" class="col-sm-2 col-form-label">유닛명</label>
+                            <label for="productName" class="col-sm-2 col-form-label">제품명</label>
                             <div class="col-sm-10">
-                                <input type="text" name="unit_name" id="unitName" class="form-control">
+                                <input type="text" name="product_name" id="productName" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="unitStand" class="col-sm-2 col-form-label">규격</label>
+                            <label for="productPrice" class="col-sm-2 col-form-label">단가</label>
                             <div class="col-sm-10">
-                                <input type="text" name="unit_stand" id="unitStand" class="form-control">
+                                <input type="text" name="product_stand" id="productPrice" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="unitTexture" class="col-sm-2 col-form-label">재질</label>
+                            <label for="productStand" class="col-sm-2 col-form-label">규격</label>
                             <div class="col-sm-10">
-                                <input type="text" name="unit_texture" id="unitTexture" class="form-control">
+                                <input type="text" name="product_stand" id="productStand" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="unitDrawFile" class="col-sm-2 col-form-label">도면</label>
+                            <label for="productTexture" class="col-sm-2 col-form-label">재질</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="file" name="unit_draw_file" id="unitDrawFile">
+                                <input type="text" name="product_texture" id="productTexture" class="form-control" disabled>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="unitEtcFile" class="col-sm-2 col-form-label">참고문서</label>
+                            <label for="productDrawFile" class="col-sm-2 col-form-label">도면</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="file" name="unit_etc_file" id="unitEtcFile">
+                                <a class="input-group mb" id="viewFileBtnD" target="_blank">
+                                    <button type="button" class="input-group-text">파일보기</button>
+                                    <input type="text" class="form-control" id="productDrawFile" disabled>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="productEtcFile" class="col-sm-2 col-form-label">참고문서</label>
+                            <div class="col-sm-10">
+                                <a class="input-group mb" id="viewFileBtnE" target="_blank">
+                                    <button type="button" class="input-group-text">파일보기</button>
+                                    <input type="text" class="form-control" id="productEtcFile" disabled>
+                                </a>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -72,10 +84,6 @@
                                 BOM
                             </label>
                             <div class="col-sm-10">
-                                <div class="input-group mb">
-                                    <input type="text" class="form-control" id="materialCode" required>
-                                    <button type="button" class="input-group-text" id="materialSelectionBtn" data-bs-toggle="modal" data-bs-target="#materialSelection">검색</button>
-                                </div>
                                 <table class="table table-hover">
                                     <thead>
                                     <tr>
@@ -84,7 +92,6 @@
                                         <th scope="col">규격/재질</th>
                                         <th scope="col">수량(개)</th>
                                         <th scope="col">투입공정</th>
-                                        <th scope="col">삭제</th>
                                     </tr>
                                     </thead>
                                     <tbody id="bomList">
@@ -94,11 +101,12 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-sm-10">
-                                <button type="button" class="btn btn-primary" id="saveUnit">저장</button>
+                                <a href="/item/productList"><button type="button" class="btn btn-primary" >리스트</button></a>
+                                <button type="button" class="btn btn-primary" id="saveProduct" hidden>수정</button>
                             </div>
                         </div>
                         <!-- Modal Dialog Scrollable -->
-                        <div class="modal fade" id="materialSelection" tabindex="-1">
+                        <div class="modal fade" id="unitSelection" tabindex="-1">
                             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -110,11 +118,11 @@
                                             <div class="col-lg-12">
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <h5 class="card-title" id="materialListName">제품리스트</h5>
+                                                        <h5 class="card-title" id="unitListName">제품리스트</h5>
                                                         <div class="row mb-3">
                                                             <div class="col-sm-12">
                                                                 <div class="input-group mb">
-                                                                    <input type="text" class="form-control" id="materialSearch" placeholder="코드 또는 이름 입력">
+                                                                    <input type="text" class="form-control" id="unitSearch" placeholder="코드 또는 이름 입력">
                                                                     <button type="button" class="input-group-text">검색</button>
                                                                 </div>
                                                             </div>
@@ -125,7 +133,7 @@
                                                                 <!-- List group With Checkboxes and radios -->
                                                                 <div class="form-control">
                                                                     <ul class="list-group" style="height:200px; overflow-y: auto;">
-                                                                        <span id="materialSearchList" class="list-group-flush"></span>
+                                                                        <span id="unitSearchList" class="list-group-flush"></span>
                                                                     </ul><!-- End List Checkboxes and radios -->
                                                                 </div>
                                                             </div>
@@ -136,14 +144,14 @@
                                                                 <!-- List group With Checkboxes and radios -->
                                                                 <div class="form-control">
                                                                     <ul class="list-group" style="height:200px; overflow-y: auto;">
-                                                                        <span id="materialSelectedList" class="list-group-flush"></span>
+                                                                        <span id="unitSelectedList" class="list-group-flush"></span>
                                                                     </ul><!-- End List Checkboxes and radios -->
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div>&nbsp&nbsp원하시는 <span class="material">제품</span>이 없으십니까?&nbsp&nbsp<a href="#" target="_blank"><span class="material">제품</span>등록하기</a></div>
+                                                <div>&nbsp&nbsp원하시는 <span class="unit">제품</span>이 없으십니까?&nbsp&nbsp<a href="#" target="_blank"><span class="unit">제품</span>등록하기</a></div>
                                             </div>
                                         </div>
                                     </div>
@@ -164,49 +172,78 @@
 <!-- End #main -->
 <script th:inline="javascript">
     $(document).ready(function (e) {
-        let selectedMaterials = [];
+        var productCode = [[${productCode}]];
+        $.getJSON("/itemcontent/product/" + productCode, function(dto) {
 
-        $("#materialSelectionBtn").on("click", function () {
+            $("#productCode").val(dto.productCode);
+            $('#productName').val(dto.productName);
+            $('#productStand').val(dto.productStand);
+            $('#productPrice').val(dto.productPrice);
+            $('#productTexture').val(dto.productTexture);
+            let str = "";
+            $.each(dto.productBomDTOList, function (idx, productBom) {
+                str += '<tr>';
+                str += '<td>' + (idx+1) + '</td>';
+                str += '<td id="unitName'+idx+'" data-unit-code="'+productBom.unitCode+'">' + productBom.unitName + '</td>';
+                str += '<td>' + productBom.unitStand+' / '+productBom.unitTexture+ '</td>';
+                str += '<td><input type="number" class="form-control" value="'+productBom.productBomQuantity+'" min="1" id="productBomQuantity'+idx+'" disabled></td>'; // Default quantity is 1
+                str += '<td><input type="text" class="form-control" value="'+productBom.productBomProcess+'" id="productBomProcess'+idx+'" disabled></td>'; // Process input
+                str += '</tr>';
+            });
+            $("#bomList").html(str);
+        })
+        $.getJSON("/files/list/" + productCode+"D", function(file) {
+            $("#viewFileBtnD").prop("href","/files/foreignCode/view/"+productCode+"D");
+            $("#productDrawFile").val(file[0].fileName);
+        })
+        $.getJSON("/files/list/" + productCode+"E", function(file) {
+            $("#viewFileBtnE").prop("href","/files/foreignCode/view/"+productCode+"E");
+            $("#productEtcFile").val(file[0].fileName);
+        })
+
+
+        let selectedUnits = [];
+        $("#unitSelectionBtn").on("click", function () {
             console.log("검색버튼 클릭됨");
             var selectedCode = null;
-            $("#materialSearch").on("input", function () {
-                var keyword = $("#materialSearch").val();
+            $("#unitSearch").on("input", function () {
+                var keyword = $("#unitSearch").val();
                 console.log("검색 키워드: " + keyword);
-                $.getJSON("/plan/materialListSearching?keyword=" + keyword, function(data) {
+                $.getJSON("/plan/unitListSearching?keyword=" + keyword, function(data) {
                     console.log("검색기능 잘 되나?"+data);
                     let str = "";
                     $.each(data, function(idx, dto) {
-                        const isChecked = selectedMaterials.some(material => material.code === dto.materialCode);
+                        const isChecked = selectedUnits.some(unit => unit.code === dto.unitCode);
                         str += '<li class="list-group-item">';
                         str += '<div class="row">';
-                        str += '<div class="col-lg-1"><input class="form-check-input me-1 material-checkbox" type="checkbox" value="'+dto.materialCode+'" data-material-name="'+dto.materialName+'" data-material-stand="'+dto.materialStand+'" data-material-texture="'+dto.materialTexture+'" ' + (isChecked ? 'checked' : '') + '></div>';
-                        str += '<div class="col-lg-2">'+dto.materialName+'</div>';
-                        str += '<div class="col-lg-4">'+dto.materialStand+'</div>';
-                        str += '<div class="col-lg-3">'+dto.materialTexture+'</div>';
-                        str += '<div class="col-lg-2">'+dto.materialCode+'</div>';
+                        str += '<div class="col-lg-1"><input class="form-check-input me-1 unit-checkbox" type="checkbox" value="'+dto.unitCode+'" data-unit-name="'+dto.unitName+'" data-unit-stand="'+dto.unitStand+'" data-unit-texture="'+dto.unitTexture+'" ' + (isChecked ? 'checked' : '') + '></div>';
+                        str += '<div class="col-lg-2">'+dto.unitName+'</div>';
+                        str += '<div class="col-lg-4">'+dto.unitStand+'</div>';
+                        str += '<div class="col-lg-3">'+dto.unitTexture+'</div>';
+                        str += '<div class="col-lg-2">'+dto.unitCode+'</div>';
                         str += '</div>';
                         str += '</li>';
                     });
-                    $("#materialSearchList").html(str);
+                    $("#unitSearchList").html(str);
 
                     // Add change event listener for dynamically added checkboxes
-                    $(".material-checkbox").change(function() {
-                        let materialCode = $(this).val();
-                        let materialName = $(this).data('materialName');
-                        let materialStand = $(this).data('materialStand');
-                        let materialTexture = $(this).data('materialTexture');
+                    $(".unit-checkbox").change(function() {
+                        let unitCode = $(this).val();
+                        let unitName = $(this).data('unitName');
+                        let unitStand = $(this).data('unitStand');
+                        let unitTexture = $(this).data('unitTexture');
 
                         if ($(this).is(':checked')) {
-                            if (!selectedMaterials.some(material => material.code === materialCode)) {
-                                selectedMaterials.push({
-                                    code: materialCode,
-                                    name: materialName,
-                                    stand: materialStand,
-                                    texture: materialTexture
+                            if (!selectedUnits.some(unit => unit.code === unitCode)) {
+                                selectedUnits.push({
+                                    code: unitCode,
+                                    name: unitName,
+                                    stand: unitStand,
+                                    texture: unitTexture
                                 });
                             }
                         } else {
-                            selectedMaterials = selectedMaterials.filter(material => material.code !== materialCode);
+                            selectedUnits = selectedUnits.filter(unit => unit.code !== unitCode);
                         }
                         updateSelectedList();
                     });
@@ -219,53 +256,53 @@
 
         function updateSelectedList() {
             let str = "";
-            $.each(selectedMaterials, function(idx, material) {
+            $.each(selectedUnits, function(idx, unit) {
                 str += '<li class="list-group-item">';
                 str += '<div class="row">';
-                str += '<div class="col-lg-1"><button type="button" class="btn btn-danger btn-sm delete-btn" data-material-code="'+material.code+'">x</button></div>';
-                str += '<div class="col-lg-2">'+material.name+'</div>';
-                str += '<div class="col-lg-4">'+material.stand+'</div>';
-                str += '<div class="col-lg-3">'+material.texture+'</div>';
-                str += '<div class="col-lg-2">'+material.code+'</div>';
+                str += '<div class="col-lg-1"><button type="button" class="btn btn-danger btn-sm delete-btn" data-unit-code="'+unit.code+'">삭제</button></div>';
+                str += '<div class="col-lg-2">'+unit.name+'</div>';
+                str += '<div class="col-lg-4">'+unit.stand+'</div>';
+                str += '<div class="col-lg-3">'+unit.texture+'</div>';
+                str += '<div class="col-lg-2">'+unit.code+'</div>';
                 str += '</div>';
                 str += '</li>';
             });
-            $("#materialSelectedList").html(str);
+            $("#unitSelectedList").html(str);
 
             // Add event listener to delete buttons
             $(".delete-btn").click(function() {
-                const materialCode = $(this).data('material-code');
-                selectedMaterials = selectedMaterials.filter(material => material.code !== materialCode);
+                const unitCode = $(this).data('unit-code');
+                selectedUnits = selectedUnits.filter(unit => unit.code !== unitCode);
                 updateSelectedList(); // Update the list after deletion
                 updateBOMList(); // Update BOM list after deletion
                 // Also, uncheck the corresponding checkbox in the search list if it's visible
-                $("input.material-checkbox[value='" + materialCode + "']").prop('checked', false);
+                $("input.unit-checkbox[value='" + unitCode + "']").prop('checked', false);
             });
         }
 
         $("#searchDivisionSubmit").on("click", function () {
             updateBOMList(); // Update BOM list when the submit button is clicked
-            $("#materialSelection").modal('hide');
+            $("#unitSelection").modal('hide');
         });
 
         function updateBOMList() {
             let str = "";
-            $.each(selectedMaterials, function(idx, material) {
+            $.each(selectedUnits, function(idx, unit) {
                 str += '<tr>';
                 str += '<td>' + (idx+1) + '</td>';
-                str += '<td id="materialName'+idx+'" data-material-code="'+material.code+'">' + material.name + '</td>';
-                str += '<td>' + material.stand+' / '+material.texture+ '</td>';
-                str += '<td><input type="number" class="form-control" value="1" min="1" id="unitBomQuantity'+idx+'"></td>'; // Default quantity is 1
-                str += '<td><input type="text" class="form-control" placeholder="투입공정" id="unitBomProcess'+idx+'"></td>'; // Process input
-                str += '<td><button type="button" class="btn btn-danger btn-sm delete-bom-btn" data-material-code="'+material.code+'">삭제</button></td>';
+                str += '<td id="unitName'+idx+'" data-unit-code="'+unit.code+'">' + unit.name + '</td>';
+                str += '<td>' + unit.stand+' / '+unit.texture+ '</td>';
+                str += '<td><input type="number" class="form-control" value="1" min="1" id="productBomQuantity'+idx+'"></td>'; // Default quantity is 1
+                str += '<td><input type="text" class="form-control" placeholder="투입공정" id="productBomProcess'+idx+'"></td>'; // Process input
+                str += '<td><button type="button" class="btn btn-danger btn-sm delete-bom-btn" data-unit-code="'+unit.code+'">삭제</button></td>';
                 str += '</tr>';
             });
             $("#bomList").html(str);
 
             // Add event listener to BOM delete buttons
             $(".delete-bom-btn").click(function() {
-                const materialCode = $(this).data('material-code');
-                selectedMaterials = selectedMaterials.filter(material => material.code !== materialCode);
+                const unitCode = $(this).data('unit-code');
+                selectedUnits = selectedUnits.filter(unit => unit.code !== unitCode);
                 updateSelectedList(); // Update the selected list after deletion
                 updateBOMList(); // Update BOM list after deletion
             });
@@ -273,34 +310,35 @@
 
 
         //이하까지는 잘 문서 저장용으로 잘 작동 됨
-        $("#saveUnit").on("click", function () {
+        $("#saveProduct").on("click", function () {
             // 먼저 다른 데이터를 서버로 전송
-            var unitDTO = {
-                unitName: $('#unitName').val(),
-                unitStand: $('#unitStand').val(),
-                unitTexture: $('#unitTexture').val(),
-                unitBomDTOList: []
+            var productDTO = {
+                productName: $('#productName').val(),
+                productStand: $('#productStand').val(),
+                productPrice: $('#productPrice').val(),
+                productTexture: $('#productTexture').val(),
+                productBomDTOList: []
             };
             $('#bomList tr').each(function(index, element) {
-                var unitBomDTO = {
-                    materialCode: $(element).find('#materialName' + (index)).data('materialCode'),
-                    materialName: $(element).find('#materialName' + (index)).text(),
-                    unitBomQuantity: $(element).find('#unitBomQuantity' + (index)).val(),
-                    unitBomProcess: $(element).find('#unitBomProcess' + (index)).val()
+                var productBomDTO = {
+                    unitCode: $(element).find('#unitName' + (index)).data('unitCode'),
+                    unitName: $(element).find('#unitName' + (index)).text(),
+                    productBomQuantity: $(element).find('#productBomQuantity' + (index)).val(),
+                    productBomProcess: $(element).find('#productBomProcess' + (index)).val()
                 };
-                unitDTO.unitBomDTOList.push(unitBomDTO);
+                productDTO.productBomDTOList.push(productBomDTO);
             });
-            console.log("보낼데이터는 !!!!  +   ",unitDTO);
+            console.log("보낼데이터는 !!!!  +   ",productDTO);
             $.ajax({
-                url: '/itemcontent/unit',
+                url: '/itemcontent/product',
                 type: "POST",
-                data: JSON.stringify(unitDTO),
+                data: JSON.stringify(productDTO),
                 contentType: "application/json; charset=utf-8",
                 dataType: "text",
                 success: function (result) {
                     console.log("자재코드는?? ", result);
                     alert("저장했습니다.");
-                    uploadUnitDrawFile(result);  // 파일 업로드 함수 호출
+                    uploadProductDrawFile(result);  // 파일 업로드 함수 호출
                 },
                 error: function (error) {
                     console.log("데이터 저장 실패: ", error);
@@ -309,14 +347,14 @@
             });
         });
 
-        function uploadUnitDrawFile(unitCode) {
-            console.log("함수 안에서 자재코드는?? ", unitCode);
+        function uploadProductDrawFile(productCode) {
+            console.log("함수 안에서 자재코드는?? ", productCode);
             var formData = new FormData();
-            var fileInput = $('#unitDrawFile')[0].files[0];
+            var fileInput = $('#productDrawFile')[0].files[0];
             if (fileInput) {
                 formData.append("file", fileInput);
                 $.ajax({
-                    url: '/files/uploadOne/' + unitCode+"D" + '/' + "item unit "+unitCode,  // 파일 업로드 경로
+                    url: '/files/uploadOne/' + productCode+"D" + '/' + "item product "+productCode,  // 파일 업로드 경로
                     processData: false,
                     contentType: false,
                     data: formData,
@@ -324,7 +362,7 @@
                     dataType: 'json',
                     success: function (result) {
                         console.log("파일 업로드 성공: ", result);
-                        uploadUnitEtcFile(unitCode);
+                        uploadProductEtcFile(productCode);
                         // window.location.href = "/product/getListProduct";  // 업로드 후 페이지 리다이렉트
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -333,19 +371,19 @@
                     }
                 });
             } else {
-                uploadUnitEtcFile(unitCode);
+                uploadProductEtcFile(productCode);
                 // 파일이 없는 경우에도 페이지 리다이렉트
                 // window.location.href = "/product/getListProduct";
             }
         }
-        function uploadUnitEtcFile(unitCode) {
-            console.log("함수 안에서 자재코드는?? ", unitCode);
+        function uploadProductEtcFile(productCode) {
+            console.log("함수 안에서 자재코드는?? ", productCode);
             var formData = new FormData();
-            var fileInput = $('#unitEtcFile')[0].files[0];
+            var fileInput = $('#productEtcFile')[0].files[0];
             if (fileInput) {
                 formData.append("file", fileInput);
                 $.ajax({
-                    url: '/files/uploadOne/' + unitCode+"E" + '/'+"item unit "+unitCode,  // 파일 업로드 경로
+                    url: '/files/uploadOne/' + productCode+"E" + '/'+"item product "+productCode,  // 파일 업로드 경로
                     processData: false,
                     contentType: false,
                     data: formData,
@@ -353,7 +391,7 @@
                     dataType: 'json',
                     success: function (result) {
                         console.log("파일 업로드 성공: ", result);
-                        window.location.href = "/item/unitList";  // 업로드 후 페이지 리다이렉트
+                        window.location.href = "/item/productList";  // 업로드 후 페이지 리다이렉트
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log("파일 업로드 실패: ", textStatus);
@@ -362,7 +400,7 @@
                 });
             } else {
                 //파일이 없는 경우에도 페이지 리다이렉트
-                window.location.href = "/item/unitList";
+                window.location.href = "/item/productList";
             }
         }
     });

@@ -12,8 +12,10 @@ import java.time.LocalDateTime;
 @Getter
 @Table(name="tbl_inventory_history")
 public class InventoryHistory {
+
     @Id
-    private String inventoryHistoryCode;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long inventoryHistoryCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "materialCode")

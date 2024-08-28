@@ -10,12 +10,10 @@ import site.junggam.procurement_system.dto.PageRequestDTO;
 import site.junggam.procurement_system.dto.PageResultDTO;
 import site.junggam.procurement_system.dto.WarehousingDTO;
 import site.junggam.procurement_system.dto.WarehousingHistoryDTO;
-import site.junggam.procurement_system.entity.Warehousing;
-import site.junggam.procurement_system.entity.WarehousingHistory;
-import site.junggam.procurement_system.entity.WarehousingHistoryStatus;
-import site.junggam.procurement_system.entity.WarehousingStatus;
+import site.junggam.procurement_system.entity.*;
 import site.junggam.procurement_system.mapper.WarehousingHistoryMapper;
 import site.junggam.procurement_system.mapper.WarehousingMapper;
+import site.junggam.procurement_system.repository.InventoryRepository;
 import site.junggam.procurement_system.repository.WarehousingHistoryRepository;
 import site.junggam.procurement_system.repository.WarehousingRepository;
 
@@ -35,6 +33,7 @@ public class WarehousingServiceImpl implements WarehousingService {
 
     private final WarehousingHistoryRepository warehousingHistoryRepository;
     private final WarehousingHistoryMapper warehousingHistoryMapper;
+    private final InventoryRepository inventoryRepository;
 
     @Override
     public WarehousingDTO getWarehousing(String warehousingId) {
@@ -50,7 +49,7 @@ public class WarehousingServiceImpl implements WarehousingService {
     @Override
     public String saveWarehousingHistory(WarehousingHistoryDTO warehousingHistoryDTO) {
 
-        //히스토리 정보 저장
+        //입고히스토리 정보 저장
         log.info("들어온 DTO값"+warehousingHistoryDTO);
         String warehousingCode=warehousingHistoryDTO.getWarehousingCode();
         int historyNum;
@@ -59,6 +58,11 @@ public class WarehousingServiceImpl implements WarehousingService {
         warehousingHistoryDTO.setWarehousingHistoryCode(warehousingHistoryCode);
 
         warehousingHistoryRepository.save(warehousingHistoryMapper.toEntity(warehousingHistoryDTO));
+
+        //인벤토리 저장
+        String materialCode = warehousingHistoryDTO.getMaterialCode();
+        Inventory inventory= inventoryRepository.findById(materialCode).get();
+
 
         //여기는 입고 정보를 저장
         Warehousing warehousing=warehousingRepository.findById(warehousingCode).get();

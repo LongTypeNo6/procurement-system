@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @Log4j2
 @RequestMapping("/")
-public class SampleController {
+public class MainController {
     
     @RequestMapping("sample/logintest")
     public void logintest(){
@@ -17,9 +17,11 @@ public class SampleController {
 
     @RequestMapping("layout/basic")
     public void basic(){
+    }
 
-
-
+    @RequestMapping("/main")
+    public String main(){
+        return "/main/main";
     }
 
 }

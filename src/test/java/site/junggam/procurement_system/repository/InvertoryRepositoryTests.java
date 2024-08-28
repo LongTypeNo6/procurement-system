@@ -57,5 +57,7 @@ public class InvertoryRepositoryTests {
     public void getPrice() {
         System.out.println("총평균단가?"+inventoryRepository.getTotallContractAvgPrice());
     }
+
+
 }
 

@@ -18,6 +18,8 @@ public interface ProductBomMapper {
     @Mapping(source = "product.productCode", target = "productCode")
     @Mapping(source = "unit.unitName", target = "unitName")
     @Mapping(source = "unit.unitCode", target = "unitCode")
+    @Mapping(source = "unit.unitStand", target = "unitStand")
+    @Mapping(source = "unit.unitTexture", target = "unitTexture")
     ProductBomDTO toDTO(ProductBom productBom);
 
     List<ProductBomDTO> toDTOs(List<ProductBom> productBoms);

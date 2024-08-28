@@ -11,7 +11,7 @@ import site.junggam.procurement_system.entity.UnitBom;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-27T17:06:26+0900",
+    date = "2024-08-27T18:54:05+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -29,6 +29,8 @@ public class UnitBomMapperImpl implements UnitBomMapper {
         unitBomDTO.unitCode( unitBomUnitUnitCode( unitBom ) );
         unitBomDTO.materialName( unitBomMaterialMaterialName( unitBom ) );
         unitBomDTO.materialCode( unitBomMaterialMaterialCode( unitBom ) );
+        unitBomDTO.materialStand( unitBomMaterialMaterialStand( unitBom ) );
+        unitBomDTO.materialTexture( unitBomMaterialMaterialTexture( unitBom ) );
         unitBomDTO.id( unitBom.getId() );
         unitBomDTO.unitBomQuantity( unitBom.getUnitBomQuantity() );
         unitBomDTO.unitBomProcess( unitBom.getUnitBomProcess() );
@@ -125,6 +127,36 @@ public class UnitBomMapperImpl implements UnitBomMapper {
             return null;
         }
         return materialCode;
+    }
+
+    private String unitBomMaterialMaterialStand(UnitBom unitBom) {
+        if ( unitBom == null ) {
+            return null;
+        }
+        Material material = unitBom.getMaterial();
+        if ( material == null ) {
+            return null;
+        }
+        String materialStand = material.getMaterialStand();
+        if ( materialStand == null ) {
+            return null;
+        }
+        return materialStand;
+    }
+
+    private String unitBomMaterialMaterialTexture(UnitBom unitBom) {
+        if ( unitBom == null ) {
+            return null;
+        }
+        Material material = unitBom.getMaterial();
+        if ( material == null ) {
+            return null;
+        }
+        String materialTexture = material.getMaterialTexture();
+        if ( materialTexture == null ) {
+            return null;
+        }
+        return materialTexture;
     }
 
     protected Unit unitBomDTOToUnit(UnitBomDTO unitBomDTO) {

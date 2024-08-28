@@ -16,6 +16,8 @@ public class UnitBomDTO {
     private String unitCode;
     private String materialName;
     private String materialCode;
+    private String materialStand;
+    private String materialTexture;
     private int unitBomQuantity;
     private String unitBomProcess;
 }

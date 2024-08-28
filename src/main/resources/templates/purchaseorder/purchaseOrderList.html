@@ -8,11 +8,11 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
 
-    <th:block th:replace="~{/fragments/headFragment}"></th:block>
+    <th:block th:replace="~{fragments/headFragment}"></th:block>
 </head>
 <body>
-    <th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
-    <th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
+    <th:block th:replace="~{fragments/bodyFragment::header}"></th:block>
+    <th:block th:replace="~{fragments/bodyFragment::sidebar}"></th:block>
     <!-- ======= main ======= -->
     <main id="main" class="main">
         <div class="pagetitle">
@@ -164,7 +164,7 @@
                         str += '<td>' + (dto.procurementPlanQuantity * dto.contractPrice) + '</td>';
                         str += '<td>' + escapeHtml(dto.purchaserName) + '</td>';
                         str += '<td>' + inspectionPlanCount + '</td>';
-                        str += '<td>' + formatDate(dto.purchaseOrderDate) + '</td>';
+                        str += '<td>' + (formatDate(dto.purchaseOrderDate)==="1970-01-01"?"-":formatDate(dto.purchaseOrderDate)) + '</td>';
                         str += '<td>' + formatDate(dto.procurementPlanDeadLine) + '</td>';
                         str += '</tr>';
                     });
@@ -175,7 +175,7 @@
             setupInfiniteScroll(getPurchaseOrderContent);
         })
     </script>
-    <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
-    <th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
+    <th:block th:replace="~{fragments/bodyFragment::footer}"></th:block>
+    <th:block th:replace="~{fragments/bodyFragment::js}"></th:block>
 </body>
 </html>
