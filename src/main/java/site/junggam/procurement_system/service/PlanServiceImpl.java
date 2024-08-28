@@ -1,10 +1,13 @@
 package site.junggam.procurement_system.service;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -150,51 +153,145 @@ public class PlanServiceImpl implements PlanService {
         }
     }
 
-    //생산계획 검색 조건을 만들어주는 함수
-    private BooleanBuilder getProductionPlanSearch(PageRequestDTO pageRequestDTO) {
-        //검색 조건
-        String type=pageRequestDTO.getType();
-        //검색어
-        String keyword=pageRequestDTO.getKeyword();
-
-        //1. 페이지 처리는 여기서 생략
-        QProductionPlan qProductionPlan = QProductionPlan.productionPlan;
-        BooleanBuilder builder = new BooleanBuilder();
-        builder.and(qProductionPlan.productionPlanCode.contains("-")); //빌더가 널이면 안 되니까 의미 없는 조건 새로 만들기
-        if(type==null) {//검색어가 없을때=검색을 하지 않을때
-            return builder;
-        }else {
-            BooleanBuilder builder1 = new BooleanBuilder();
-            if(type.contains("1")) {
-                // Product가 null이 아니고 productName이 keyword를 포함하는 경우
-                builder1.or(qProductionPlan.product.isNotNull()
-                        .and(qProductionPlan.product.productName.contains(keyword)));
-                // Unit이 null이 아니고 unitName이 keyword를 포함하는 경우
-                builder1.or(qProductionPlan.unit.isNotNull()
-                        .and(qProductionPlan.unit.unitName.contains(keyword)));
-            }
-
-            if(type.contains("2")) {builder1.or(qProductionPlan.product.productCode.contains(keyword).or(qProductionPlan.unit.unitCode.contains(keyword)));}
-            if(type.contains("3")) {builder1.or(qProductionPlan.productionPlanCode.contains(keyword));}
-            return builder.and(builder1);
-        }
-    }
+    //이하 지피티 코드
+    private final JPAQueryFactory queryFactory;
 
     @Override
     public PageResultDTO<ProductionPlanDTO, ProductionPlan> getProductionPlanList(PageRequestDTO pageRequestDTO) {
         try {
-            Pageable pageable = pageRequestDTO.getPageable(Sort.by("productionPlanRegDate").descending()); //나주에 바꿀것
-            Page<ProductionPlan> result = productionPlanRepository.findAll(getProductionPlanSearch(pageRequestDTO),pageable);
-            Function<ProductionPlan, ProductionPlanDTO> fn = (productionPlan -> {
+            Pageable pageable = pageRequestDTO.getPageable(Sort.by("productionPlanRegDate").descending());
+
+
+//            try {
+//            Pageable pageable = pageRequestDTO.getPageable(Sort.by("productionPlanRegDate").descending()); //나주에 바꿀것
+//            Page<ProductionPlan> result = productionPlanRepository.findAll(getProductionPlanSearch(pageRequestDTO),pageable);
+//            Function<ProductionPlan, ProductionPlanDTO> fn = (productionPlan -> {
+//                ProductionPlanDTO dto = productionPlanMapper.toDTO(productionPlan);
+//                return dto;
+//            });
+//            return new PageResultDTO<>(result, fn);
+//        } catch (Exception e) {
+//            log.error("에러메세지", e);
+//            throw e; // or handle the exception appropriately
+//        }
+
+            // Q 클래스들 가져오기
+            QProductionPlan qProductionPlan = QProductionPlan.productionPlan;
+            QProduct qProduct = QProduct.product;
+            QUnit qUnit = QUnit.unit;
+
+            // QueryDSL의 JPAQuery 사용
+            JPAQuery<ProductionPlan> query = queryFactory.selectFrom(qProductionPlan)
+                    .leftJoin(qProductionPlan.product, qProduct)
+                    .leftJoin(qProductionPlan.unit, qUnit)
+                    .where(getProductionPlanSearch(pageRequestDTO))
+                    .orderBy(qProductionPlan.productionPlanRegDate.desc());
+
+            // 페이지 처리
+            List<ProductionPlan> results = query.offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+
+            long total = query.fetchCount();  // 총 카운트 계산
+
+            Function<ProductionPlan, ProductionPlanDTO> fn = productionPlan -> {
                 ProductionPlanDTO dto = productionPlanMapper.toDTO(productionPlan);
                 return dto;
-            });
-            return new PageResultDTO<>(result, fn);
+            };
+
+            return new PageResultDTO<>(new PageImpl<>(results, pageable, total), fn);
+
         } catch (Exception e) {
             log.error("에러메세지", e);
-            throw e; // or handle the exception appropriately
+            throw e;
         }
     }
+
+    private BooleanBuilder getProductionPlanSearch(PageRequestDTO pageRequestDTO) {
+        String type = pageRequestDTO.getType();
+        String keyword = pageRequestDTO.getKeyword();
+
+        QProductionPlan qProductionPlan = QProductionPlan.productionPlan;
+        QProduct qProduct = QProduct.product;
+        QUnit qUnit = QUnit.unit;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qProductionPlan.productionPlanCode.contains("-"));  // 기본 조건
+
+        if (type != null) {
+            BooleanBuilder builder1 = new BooleanBuilder();
+
+            if (type.contains("1")) {
+                BooleanBuilder nameSearchBuilder = new BooleanBuilder();
+                if (keyword != null) {
+                    nameSearchBuilder.or(qProduct.productName.contains(keyword));
+                    nameSearchBuilder.or(qUnit.unitName.contains(keyword));
+                }
+                builder1.and(nameSearchBuilder);
+            }
+
+            if (type.contains("2")) {
+                builder1.or(qProduct.productCode.contains(keyword));
+                builder1.or(qUnit.unitCode.contains(keyword));
+            }
+
+            if (type.contains("3")) {
+                builder1.or(qProductionPlan.productionPlanCode.contains(keyword));
+            }
+
+            builder.and(builder1);
+        }
+
+        return builder;
+    }
+
+//    //생산계획 검색 조건을 만들어주는 함수
+//    private BooleanBuilder getProductionPlanSearch(PageRequestDTO pageRequestDTO) {
+//        //검색 조건
+//        String type=pageRequestDTO.getType();
+//        //검색어
+//        String keyword=pageRequestDTO.getKeyword();
+//
+//        //1. 페이지 처리는 여기서 생략
+//        QProductionPlan qProductionPlan = QProductionPlan.productionPlan;
+//        BooleanBuilder builder = new BooleanBuilder();
+//        builder.and(qProductionPlan.productionPlanCode.contains("-")); //빌더가 널이면 안 되니까 의미 없는 조건 새로 만들기
+//        if(type==null) {//검색어가 없을때=검색을 하지 않을때
+//            return builder;
+//        }else {
+//            BooleanBuilder builder1 = new BooleanBuilder();
+//            if (type.contains("1")) {
+//                BooleanBuilder nameSearchBuilder = new BooleanBuilder();
+//                if (qProductionPlan.product != null && qProductionPlan.product.productName != null) {
+//                    nameSearchBuilder.or(qProductionPlan.product.productName.contains(keyword));
+//                }
+//                if (qProductionPlan.unit != null && qProductionPlan.unit.unitName != null) {
+//                    nameSearchBuilder.or(qProductionPlan.unit.unitName.contains(keyword));
+//                }
+//                builder1.and(nameSearchBuilder);
+//            }
+//
+//            if(type.contains("2")) {builder1.or(qProductionPlan.product.productCode.contains(keyword).or(qProductionPlan.unit.unitCode.contains(keyword)));}
+//            if(type.contains("3")) {builder1.or(qProductionPlan.productionPlanCode.contains(keyword));}
+//            return builder.and(builder1);
+//        }
+//    }
+//
+//    @Override
+//    public PageResultDTO<ProductionPlanDTO, ProductionPlan> getProductionPlanList(PageRequestDTO pageRequestDTO) {
+//        try {
+//            Pageable pageable = pageRequestDTO.getPageable(Sort.by("productionPlanRegDate").descending()); //나주에 바꿀것
+//            Page<ProductionPlan> result = productionPlanRepository.findAll(getProductionPlanSearch(pageRequestDTO),pageable);
+//            Function<ProductionPlan, ProductionPlanDTO> fn = (productionPlan -> {
+//                ProductionPlanDTO dto = productionPlanMapper.toDTO(productionPlan);
+//                return dto;
+//            });
+//            return new PageResultDTO<>(result, fn);
+//        } catch (Exception e) {
+//            log.error("에러메세지", e);
+//            throw e; // or handle the exception appropriately
+//        }
+//    }
 
 //    원래버전
 //    @Override
