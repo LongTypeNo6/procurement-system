@@ -1,5 +1,6 @@
 package site.junggam.procurement_system.service;
 
+import com.querydsl.core.BooleanBuilder;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -149,11 +150,33 @@ public class PlanServiceImpl implements PlanService {
         }
     }
 
+    //생산계획 검색 조건을 만들어주는 함수
+    private BooleanBuilder getProductionPlanSearch(PageRequestDTO pageRequestDTO) {
+        //검색 조건
+        String type=pageRequestDTO.getType();
+        //검색어
+        String keyword=pageRequestDTO.getKeyword();
+
+        //1. 페이지 처리는 여기서 생략
+        QProductionPlan qProductionPlan = QProductionPlan.productionPlan;
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qProductionPlan.productionPlanCode.contains("-")); //빌더가 널이면 안 되니까 의미 없는 조건 새로 만들기
+        if(type==null) {//검색어가 없을때=검색을 하지 않을때
+            return builder;
+        }else {
+            BooleanBuilder builder1 = new BooleanBuilder();
+            if(type.contains("1")) {builder1.or(qProductionPlan.productionPlanCode.contains(keyword));}
+            if(type.contains("2")) {builder1.or(qProductionPlan.Product.productCode.contains(keyword));}
+            if(type.contains("3")) {builder1.or(qProductionPlan.Unit.unitCode.contains(keyword));}
+            return builder.and(builder1);
+        }
+    }
+
     @Override
     public PageResultDTO<ProductionPlanDTO, ProductionPlan> getProductionPlanList(PageRequestDTO pageRequestDTO) {
         try {
             Pageable pageable = pageRequestDTO.getPageable(Sort.by("productionPlanRegDate").descending()); //나주에 바꿀것
-            Page<ProductionPlan> result = productionPlanRepository.findAll(pageable);
+            Page<ProductionPlan> result = productionPlanRepository.findAll(getProductionPlanSearch(pageRequestDTO),pageable);
             Function<ProductionPlan, ProductionPlanDTO> fn = (productionPlan -> {
                 ProductionPlanDTO dto = productionPlanMapper.toDTO(productionPlan);
                 return dto;
@@ -164,6 +187,23 @@ public class PlanServiceImpl implements PlanService {
             throw e; // or handle the exception appropriately
         }
     }
+
+//    원래버전
+//    @Override
+//    public PageResultDTO<ProductionPlanDTO, ProductionPlan> getProductionPlanList(PageRequestDTO pageRequestDTO) {
+//        try {
+//            Pageable pageable = pageRequestDTO.getPageable(Sort.by("productionPlanRegDate").descending()); //나주에 바꿀것
+//            Page<ProductionPlan> result = productionPlanRepository.findAll(pageable);
+//            Function<ProductionPlan, ProductionPlanDTO> fn = (productionPlan -> {
+//                ProductionPlanDTO dto = productionPlanMapper.toDTO(productionPlan);
+//                return dto;
+//            });
+//            return new PageResultDTO<>(result, fn);
+//        } catch (Exception e) {
+//            log.error("에러메세지", e);
+//            throw e; // or handle the exception appropriately
+//        }
+//    }
 
     @Override
     public ProductionPlanDTO getProductionPlan(String productionPlanCode) {
