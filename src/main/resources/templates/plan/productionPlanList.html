@@ -122,7 +122,7 @@
         $(document).ready(function (e) {
             console.log("자바스크립트작동")
             function getPlanContent(page) {
-                return $.getJSON(`/plan/productionPlanList?page=${page}&size=10&type=2&keyword=3`, function(data) {
+                return $.getJSON(`/plan/productionPlanList?page=${page}&size=10`, function(data) {
                     console.log("요청", data);
                     // 첫 번째 요청에서 totalPage 값 설정
                     if (totalPage === 0) {
