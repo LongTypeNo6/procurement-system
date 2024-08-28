@@ -22,7 +22,7 @@ public class QProductionPlan extends EntityPathBase<ProductionPlan> {
 
     public static final QProductionPlan productionPlan = new QProductionPlan("productionPlan");
 
-    public final QProduct Product;
+    public final QProduct product;
 
     public final StringPath productionPlanCode = createString("productionPlanCode");
 
@@ -34,7 +34,7 @@ public class QProductionPlan extends EntityPathBase<ProductionPlan> {
 
     public final DateTimePath<java.time.LocalDateTime> productionPlanRegDate = createDateTime("productionPlanRegDate", java.time.LocalDateTime.class);
 
-    public final QUnit Unit;
+    public final QUnit unit;
 
     public QProductionPlan(String variable) {
         this(ProductionPlan.class, forVariable(variable), INITS);
@@ -54,8 +54,8 @@ public class QProductionPlan extends EntityPathBase<ProductionPlan> {
 
     public QProductionPlan(Class<? extends ProductionPlan> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.Product = inits.isInitialized("Product") ? new QProduct(forProperty("Product")) : null;
-        this.Unit = inits.isInitialized("Unit") ? new QUnit(forProperty("Unit")) : null;
+        this.product = inits.isInitialized("product") ? new QProduct(forProperty("product")) : null;
+        this.unit = inits.isInitialized("unit") ? new QUnit(forProperty("unit")) : null;
     }
 
 }

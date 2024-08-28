@@ -25,14 +25,16 @@ public class ProductionPlan {
     private Integer productionPlanQuantity;
 
     @Builder.Default
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "productCode")
-    private Product Product=null;
+    private Product product=null;
 
     @Builder.Default
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UnitCode")
-    private Unit Unit=null;
+//    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "unitCode")
+    private Unit unit=null;
 
 
 }

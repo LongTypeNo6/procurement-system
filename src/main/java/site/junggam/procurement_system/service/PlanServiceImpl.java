@@ -165,9 +165,17 @@ public class PlanServiceImpl implements PlanService {
             return builder;
         }else {
             BooleanBuilder builder1 = new BooleanBuilder();
-            if(type.contains("1")) {builder1.or(qProductionPlan.productionPlanCode.contains(keyword));}
-            if(type.contains("2")) {builder1.or(qProductionPlan.Product.productCode.contains(keyword));}
-            if(type.contains("3")) {builder1.or(qProductionPlan.Unit.unitCode.contains(keyword));}
+            if(type.contains("1")) {
+                // Product가 null이 아니고 productName이 keyword를 포함하는 경우
+                builder1.or(qProductionPlan.product.isNotNull()
+                        .and(qProductionPlan.product.productName.contains(keyword)));
+                // Unit이 null이 아니고 unitName이 keyword를 포함하는 경우
+                builder1.or(qProductionPlan.unit.isNotNull()
+                        .and(qProductionPlan.unit.unitName.contains(keyword)));
+            }
+
+            if(type.contains("2")) {builder1.or(qProductionPlan.product.productCode.contains(keyword).or(qProductionPlan.unit.unitCode.contains(keyword)));}
+            if(type.contains("3")) {builder1.or(qProductionPlan.productionPlanCode.contains(keyword));}
             return builder.and(builder1);
         }
     }
