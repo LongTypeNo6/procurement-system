@@ -122,8 +122,9 @@
         $(document).ready(function (e) {
             console.log("자바스크립트작동")
 
-            function getPlanContent(page,searchType,searchKeyword) {
-                let jsonLink=`/plan/productionPlanList?page=${page}&size=10&type=${searchType}&keyword=${searchKeyword}`;
+            //CYH : 24.08.29 날짜 관련 내용 추가
+            function getPlanContent(page,searchType,searchKeyword,startDate1,endDate1,startDate2,endDate2) {
+                let jsonLink=`/plan/productionPlanList?page=${page}&size=10&type=${searchType}&keyword=${searchKeyword}&startDate1=${startDate1}&endDate1=${endDate1}&startDate2=${startDate2}&endDate2=${endDate2}`;
                 return $.getJSON(jsonLink, function(data) {
                     console.log("요청", data);
                     console.log("요청링크",jsonLink)
@@ -156,20 +157,32 @@
                     $("#productionPlanList").append(str); // 데이터를 덮어쓰지 않고 추가
                 });
             }
-            getPlanContent(1,"","");
+            getPlanContent(1,"","", "","","","");
             setupInfiniteScroll(getPlanContent);
             $("#searchListBtn").on("click", function () {
-                var searchType=$("#searchType").val()
-                var searchKeyword=$("#searchKeyword").val()
-                console.log("검색타입은",searchType,"검색키워드는",searchKeyword);
+                var searchType=$("#searchType").val();
+                var searchKeyword=$("#searchKeyword").val();
+
+                //CYH : 24.08.29 날짜 관련 내용 추가
+                var startDate1 = $("#searchProductionPlanDeadLineStart").val() ? new Date($("#searchProductionPlanDeadLineStart").val()) : null;
+                var endDate1 = $("#searchProductionPlanDeadLineEnd").val() ? new Date($("#searchProductionPlanDeadLineEnd").val()) : null;
+                var startDate2 = $("#searchProductionPlanDateStart").val() ? new Date($("#searchProductionPlanDateStart").val()) : null;
+                var endDate2 = $("#searchProductionPlanDateEnd").val() ? new Date($("#searchProductionPlanDateEnd").val()) : null;
+
+                console.log("검색타입은",searchType,"검색키워드는",searchKeyword,"검색날짜는",startDate1,endDate1,startDate2,endDate2);
                 $("#productionPlanList").empty();
                 totalPage = 0;
                 currentPage = 1;
-                console.log("토탈페이지",totalPage,"현재페이지",currentPage)
-                getPlanContent(1,searchType,searchKeyword);
+                console.log("토탈페이지",totalPage,"현재페이지",currentPage);
+                //getPlanContent(1,searchType,searchKeyword,startDate1,endDate1,startDate2,endDate2);
+
+                //CYH : 24.08.29 날짜 관련 내용 추가
+                //getPlanContent(1,searchType,searchKeyword, startDate1, endDate1, startDate2, endDate2);
+                //getPlanContent(1,searchType,searchKeyword, startDate1 ? new Date(startDate1).toISOString() : "", endDate1 ? new Date(endDate1).toISOString() : "", startDate2 ? new Date(startDate2).toISOString() : "", endDate2 ? new Date(endDate2).toISOString() : "");
+                getPlanContent(1,searchType,searchKeyword, startDate1 ? formatDate(startDate1) : "", endDate1 ? formatDate(endDate1) : "", startDate2 ? formatDate(startDate2) : "", endDate2 ? formatDate(endDate2) : "");
                 setupInfiniteScroll(getPlanContent);
-            })
-        })
+            });
+        });
     </script>
 
     <th:block th:replace="~{fragments/bodyFragment::footer}"></th:block>

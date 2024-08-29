@@ -16,6 +16,7 @@ import site.junggam.procurement_system.entity.*;
 import site.junggam.procurement_system.mapper.*;
 import site.junggam.procurement_system.repository.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -211,12 +212,31 @@ public class PlanServiceImpl implements PlanService {
         String type = pageRequestDTO.getType();
         String keyword = pageRequestDTO.getKeyword();
 
+        //CYH : 24.08.29 날짜 관련 내용 추가
+        //LocalDateTime startDate1 = pageRequestDTO.getStartDate1() != null ? pageRequestDTO.getStartDate1().atStartOfDay() : null;
+        //LocalDateTime endDate1 = pageRequestDTO.getEndDate1() != null ? pageRequestDTO.getEndDate1().atTime(23, 59, 59) : null;
+        //LocalDateTime startDate2 = pageRequestDTO.getStartDate2() != null ? pageRequestDTO.getStartDate2().atStartOfDay() : null;
+        //LocalDateTime endDate2 = pageRequestDTO.getEndDate2() != null ? pageRequestDTO.getEndDate2().atTime(23, 59, 59) : null;
+        LocalDate startDate1 = pageRequestDTO.getStartDate1();
+        LocalDate endDate1 = pageRequestDTO.getEndDate1();
+        LocalDate startDate2 = pageRequestDTO.getStartDate2();
+        LocalDate endDate2 = pageRequestDTO.getEndDate2();
+
         QProductionPlan qProductionPlan = QProductionPlan.productionPlan;
         QProduct qProduct = QProduct.product;
         QUnit qUnit = QUnit.unit;
 
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qProductionPlan.productionPlanCode.contains("-"));  // 기본 조건
+
+        //CYH : 24.08.29 날짜 관련 내용 추가
+        // 날짜 조건 추가
+        if (startDate1 != null && endDate1 != null) {
+            builder.and(qProductionPlan.productionPlanDeadLine.between(startDate1.atStartOfDay(), endDate1.plusDays(1).atStartOfDay()));
+        }
+        if (startDate2 != null && endDate2 != null) {
+            builder.and(qProductionPlan.productionPlanDate.between(startDate2.atStartOfDay(), endDate2.plusDays(1).atStartOfDay()));
+        }
 
         if (type != null) {
             BooleanBuilder builder1 = new BooleanBuilder();
