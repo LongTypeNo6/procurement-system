@@ -2,6 +2,7 @@ package site.junggam.procurement_system.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import site.junggam.procurement_system.entity.Material;
@@ -9,7 +10,7 @@ import site.junggam.procurement_system.entity.Product;
 
 import java.util.List;
 
-public interface ProductRepository extends JpaRepository<Product, String> {
+public interface ProductRepository extends JpaRepository<Product, String> , QuerydslPredicateExecutor<Product> {
 
 
     //출고검색용
