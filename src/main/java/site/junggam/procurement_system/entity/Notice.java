@@ -2,7 +2,8 @@ package site.junggam.procurement_system.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "tbl_notice_board")
@@ -11,16 +12,22 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @NoArgsConstructor
+@Getter
+@Data
 public class Notice {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer noticeNumber;
 
     private String noticeTitle;
 
     private String noticeContent;
 
-    private LocalDateTime noticeRegDate;
+    private String noticeWriter;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer noticeNumber;
+    private LocalDate noticeRegDate;
+
+    private LocalDate noticeUpdateDate;
 
 }
