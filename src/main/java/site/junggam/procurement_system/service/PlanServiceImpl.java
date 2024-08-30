@@ -380,20 +380,97 @@ public class PlanServiceImpl implements PlanService {
         return productionPlanDTO;
     }
 
+    //CYH : 24.08.29 수정
     @Override
     public PageResultDTO<ProcurementPlanDTO, ProcurementPlan> getProcurementPlanList(PageRequestDTO pageRequestDTO) {
+//        try {
+//            Pageable pageable = pageRequestDTO.getPageable(Sort.by("procurementPlanRegDate").descending()); //나주에 바꿀것
+//            Page<ProcurementPlan> result = procurementPlanRepository.findAll(pageable);
+//            Function<ProcurementPlan, ProcurementPlanDTO> fn = (procurementPlan -> {
+//                ProcurementPlanDTO dto = procurementPlanMapper.toDTO(procurementPlan);
+//                return dto;
+//            });
+//            return new PageResultDTO<>(result, fn);
+//        } catch (Exception e) {
+//            log.error("에러메세지", e);
+//            throw e; // or handle the exception appropriately
+//        }
+
         try {
-            Pageable pageable = pageRequestDTO.getPageable(Sort.by("procurementPlanRegDate").descending()); //나주에 바꿀것
-            Page<ProcurementPlan> result = procurementPlanRepository.findAll(pageable);
-            Function<ProcurementPlan, ProcurementPlanDTO> fn = (procurementPlan -> {
+            Pageable pageable = pageRequestDTO.getPageable(Sort.by("procurementPlanRegDate").descending()); //나중에 바꿀것
+
+            // Q 클래스들 가져오기
+            QProcurementPlan qProcurementPlan = QProcurementPlan.procurementPlan;
+
+            // QueryDSL의 JPAQuery 사용
+            JPAQuery<ProcurementPlan> query = queryFactory.selectFrom(qProcurementPlan)
+                    .leftJoin(qProcurementPlan.material).fetchJoin()  // 수정: fetchJoin() 추가
+                    .leftJoin(qProcurementPlan.productionPlan).fetchJoin()  // 수정: fetchJoin() 추가
+                    .where(getProcurementPlanSearch(pageRequestDTO))
+                    .orderBy(qProcurementPlan.procurementPlanCode.desc());
+
+            // 페이지 처리
+            List<ProcurementPlan> results = query.offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+
+            long total = query.fetchCount();  // 총 카운트 계산
+
+            Function<ProcurementPlan, ProcurementPlanDTO> fn = procurementPlan -> {
                 ProcurementPlanDTO dto = procurementPlanMapper.toDTO(procurementPlan);
                 return dto;
-            });
-            return new PageResultDTO<>(result, fn);
+            };
+
+            return new PageResultDTO<>(new PageImpl<>(results, pageable, total), fn);
+
         } catch (Exception e) {
             log.error("에러메세지", e);
-            throw e; // or handle the exception appropriately
+            throw e;
         }
+
+    }
+
+    //CYH : 24.08.29 추가
+    private BooleanBuilder getProcurementPlanSearch(PageRequestDTO pageRequestDTO) {
+        String type = pageRequestDTO.getType();
+        String keyword = pageRequestDTO.getKeyword();
+
+        // 날짜 관련 내용
+        LocalDate startDate1 = pageRequestDTO.getStartDate1();
+        LocalDate endDate1 = pageRequestDTO.getEndDate1();
+        LocalDate startDate2 = pageRequestDTO.getStartDate2();
+        LocalDate endDate2 = pageRequestDTO.getEndDate2();
+
+        QProcurementPlan qProcurementPlan = QProcurementPlan.procurementPlan;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qProcurementPlan.procurementPlanCode.contains("-"));  // 기본 조건
+
+        // 날짜 조건
+        if (startDate1 != null && endDate1 != null) {
+            builder.and(qProcurementPlan.procurementPlanDeadLine.between(startDate1.atStartOfDay(), endDate1.plusDays(1).atStartOfDay()));
+        }
+        if (startDate2 != null && endDate2 != null) {
+            builder.and(qProcurementPlan.procurementPlanRegDate.between(startDate2.atStartOfDay(), endDate2.plusDays(1).atStartOfDay()));
+        }
+
+        if (type != null) {
+            BooleanBuilder typeBuilder = new BooleanBuilder();
+
+            if (type.contains("1")) {
+                if (keyword != null) {
+                    typeBuilder.or(QMaterial.material.materialName.contains(keyword));
+                }
+            }
+
+            if (type.contains("2")) {
+                typeBuilder.or(QMaterial.material.materialCode.contains(keyword));
+            }
+
+            builder.and(typeBuilder);
+        }
+
+        return builder;
     }
 
     @Override

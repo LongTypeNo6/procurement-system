@@ -11,6 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Getter
+@Setter
 @Table(name="tbl_purchaser")
 public class Purchaser {
 
