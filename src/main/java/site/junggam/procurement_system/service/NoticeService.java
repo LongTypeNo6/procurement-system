@@ -2,7 +2,6 @@ package site.junggam.procurement_system.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -22,8 +21,12 @@ public class NoticeService {
         noticeRepository.save(notice);
     }
 
-    public List<Notice> list() {
-        return noticeRepository.findAll(Sort.by(Sort.Direction.DESC, "noticeNumber"));
+//    public List<Notice> list() {
+//        return noticeRepository.findAll(Sort.by(Sort.Direction.DESC, "noticeNumber"));
+//    }
+
+    public Page<Notice> list(Pageable pageable) {
+        return noticeRepository.findAll(pageable);
     }
 
     public Notice read(Integer noticeNumber) {
@@ -37,10 +40,5 @@ public class NoticeService {
     public void delete(Integer noticeNumber) {
         noticeRepository.deleteById(noticeNumber);
     }
-
-//    public Page<Notice> findAll(int page, int size) {
-//        Pageable pageable = PageRequest.of(page, size);
-//        return noticeRepository.findAll(pageable);
-//    }
 
 }
