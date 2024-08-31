@@ -162,20 +162,6 @@ public class PlanServiceImpl implements PlanService {
         try {
             Pageable pageable = pageRequestDTO.getPageable(Sort.by("productionPlanRegDate").descending());
 
-
-//            try {
-//            Pageable pageable = pageRequestDTO.getPageable(Sort.by("productionPlanRegDate").descending()); //나주에 바꿀것
-//            Page<ProductionPlan> result = productionPlanRepository.findAll(getProductionPlanSearch(pageRequestDTO),pageable);
-//            Function<ProductionPlan, ProductionPlanDTO> fn = (productionPlan -> {
-//                ProductionPlanDTO dto = productionPlanMapper.toDTO(productionPlan);
-//                return dto;
-//            });
-//            return new PageResultDTO<>(result, fn);
-//        } catch (Exception e) {
-//            log.error("에러메세지", e);
-//            throw e; // or handle the exception appropriately
-//        }
-
             // Q 클래스들 가져오기
             QProductionPlan qProductionPlan = QProductionPlan.productionPlan;
             QProduct qProduct = QProduct.product;
