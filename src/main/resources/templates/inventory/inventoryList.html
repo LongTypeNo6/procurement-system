@@ -49,16 +49,16 @@
                                             <div class="row">
                                                 <label for="inputText" class="col-sm-1 col-form-label">검색</label>
                                                 <div class="col-sm-2">
-                                                    <select class="form-select" aria-label="Default select example">
-                                                        <option selected>전체</option>
-                                                        <option value="1">품목명</option>
-                                                        <option value="2">품목코드</option>
+                                                    <select class="form-select" aria-label="Default select example" id="searchType">
+                                                        <option value="12" selected>전체</option>
+                                                        <option value="1">자재명</option>
+                                                        <option value="2">자재코드</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-9">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" id="itemCodeInput">
-                                                        <button class="input-group-text" id="confirmSelectionBtn">검색</button>
+                                                        <input type="text" class="form-control" id="searchKeyword">
+                                                        <button class="input-group-text" id="searchListBtn">검색</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -111,9 +111,10 @@
             "COMPLETED": "입고완료"
         };
         $(document).ready(function (e) {
-            console.log("자바스크립트작동")
-            function getInventoryContent(page) {
-                return $.getJSON(`/inventorycontent/inventoryList?page=${page}&size=10`, function(data) {
+            console.log("자바스크립트작동");
+            function getInventoryContent(page,searchType,searchKeyword) {
+                let jsonLink=`/inventorycontent/inventoryList?page=${page}&size=10&type=${searchType}&keyword=${searchKeyword}`;
+                return $.getJSON(jsonLink, function(data) {
                     console.log("요청", data);
                     // 첫 번째 요청에서 totalPage 값 설정
                     if (totalPage === 0) {
@@ -138,8 +139,22 @@
                 });
             }
 
-            getInventoryContent(1);
+            getInventoryContent(1,"","");
             setupInfiniteScroll(getInventoryContent);
+
+            $("#searchListBtn").on("click", function () {
+                var searchType=$("#searchType").val();
+                var searchKeyword=$("#searchKeyword").val();
+
+                console.log("검색타입은",searchType,"검색키워드는",searchKeyword);
+                $("#inventoryList").empty();
+                totalPage = 0;
+                currentPage = 1;
+                console.log("토탈페이지",totalPage,"현재페이지",currentPage);
+                getInventoryContent(1,searchType,searchKeyword);
+                setupInfiniteScroll(getInventoryContent);
+            });
+
             $.getJSON("/inventorycontent/totallMaterialQuantity", function(data) {
                 console.log("응답데이터", data);
                 $("#totallMaterialQuantity").val(data);
@@ -155,7 +170,7 @@
                 console.log("총금액 불러오기 실패: " + err);
             });
 
-        })
+        });
     </script>
 
     <!-- End #main -->

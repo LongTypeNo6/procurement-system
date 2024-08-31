@@ -129,7 +129,7 @@
             "CONFIRMED": "계약"
         };
         $(document).ready(function (e) {
-            console.log("자바스크립트작동")
+            console.log("자바스크립트작동");
             function getProcurementContent(page,searchType,searchKeyword,startDate1,endDate1,startDate2,endDate2) {
                 let jsonLink=`/plan/procurementPlanList?page=${page}&size=10&type=${searchType}&keyword=${searchKeyword}&startDate1=${startDate1}&endDate1=${endDate1}&startDate2=${startDate2}&endDate2=${endDate2}`;
                 return $.getJSON(jsonLink, function(data) {
