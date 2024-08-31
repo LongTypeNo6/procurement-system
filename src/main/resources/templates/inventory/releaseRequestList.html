@@ -54,11 +54,11 @@
                                             <div class="row mb-3">
                                                 <label for="inputText" class="col-sm-1 col-form-label">출고희망일</label>
                                                 <div class="col-sm-2">
-                                                    <input type="date" class="form-control">
+                                                    <input type="date" class="form-control" id="searchReleaseDesireDateStart">
                                                 </div>
                                                 ~
                                                 <div class="col-sm-2">
-                                                    <input type="date" class="form-control">
+                                                    <input type="date" class="form-control" id="searchReleaseDesireDateEnd">
                                                 </div>
 
                                             </div>
@@ -66,17 +66,17 @@
                                             <div class="row mb-3">
                                                 <label for="inputText" class="col-sm-1 col-form-label">검색</label>
                                                 <div class="col-sm-2">
-                                                    <select class="form-select" aria-label="Default select example">
-                                                        <option selected>전체</option>
-                                                        <option value="1">품목명</option>
-                                                        <option value="2">품목코드</option>
-                                                        <option value="2">요청처명</option>
+                                                    <select class="form-select" aria-label="Default select example" id="searchType">
+                                                        <option value="123" selected>전체</option>
+                                                        <option value="1">자재명</option>
+                                                        <option value="2">자재코드</option>
+                                                        <option value="3">요청처명</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-sm-9">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" id="itemCodeInput">
-                                                        <button class="input-group-text" id="confirmSelectionBtn">검색</button>
+                                                        <input type="text" class="form-control" id="searchKeyword">
+                                                        <button class="input-group-text" id="searchListBtn">검색</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -115,9 +115,10 @@
         var totalPage = 0;
         var currentPage = 1;
         $(document).ready(function (e) {
-            console.log("자바스크립트작동")
-            function getReleaseContent(page) {
-                return $.getJSON(`/inventorycontent/releaseList?page=${page}&size=10`, function(data) {
+            console.log("자바스크립트작동");
+            function getReleaseContent(page,searchType,searchKeyword,startDate1,endDate1) {
+                let jsonLink=`/inventorycontent/releaseList?page=${page}&size=10&type=${searchType}&keyword=${searchKeyword}&startDate1=${startDate1}&endDate1=${endDate1}`;
+                return $.getJSON(jsonLink, function(data) {
                     console.log("요청", data);
                     // 첫 번째 요청에서 totalPage 값 설정
                     if (totalPage === 0) {
@@ -141,9 +142,26 @@
                 });
             }
 
-            getReleaseContent(1);
+            getReleaseContent(1,"","", "","");
             setupInfiniteScroll(getReleaseContent);
-        })
+
+            $("#searchListBtn").on("click", function () {
+                var searchType=$("#searchType").val();
+                var searchKeyword=$("#searchKeyword").val();
+
+                // 날짜 관련 내용
+                var startDate1 = $("#searchReleaseDesireDateStart").val() ? new Date($("#searchReleaseDesireDateStart").val()) : null;
+                var endDate1 = $("#searchReleaseDesireDateEnd").val() ? new Date($("#searchReleaseDesireDateEnd").val()) : null;
+
+                console.log("검색타입은",searchType,"검색키워드는",searchKeyword,"검색날짜는",startDate1,endDate1);
+                $("#releaseList").empty();
+                totalPage = 0;
+                currentPage = 1;
+                console.log("토탈페이지",totalPage,"현재페이지",currentPage);
+                getReleaseContent(1,searchType,searchKeyword, startDate1 ? formatDate(startDate1) : "", endDate1 ? formatDate(endDate1) : "");
+                setupInfiniteScroll(getReleaseContent);
+            });
+        });
     </script>
 
     <th:block th:replace="~{fragments/bodyFragment::footer}"></th:block>

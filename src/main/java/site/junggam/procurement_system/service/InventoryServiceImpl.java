@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import site.junggam.procurement_system.dto.InventoryDTO;
 import site.junggam.procurement_system.dto.PageRequestDTO;
 import site.junggam.procurement_system.dto.PageResultDTO;
+import site.junggam.procurement_system.dto.WarehousingDTO;
 import site.junggam.procurement_system.entity.*;
+import site.junggam.procurement_system.mapper.ContractMapper;
 import site.junggam.procurement_system.mapper.InventoryMapper;
 import site.junggam.procurement_system.repository.InventoryRepository;
 
@@ -53,9 +55,6 @@ public class InventoryServiceImpl implements InventoryService {
             // Q 클래스들 가져오기
             QInventory qInventory = QInventory.inventory;
             QMaterial qMaterial = QMaterial.material;
-            QPurchaser qPurchaser = QPurchaser.purchaser;
-            QPurchaseOrder qPurchaseOrder = QPurchaseOrder.purchaseOrder;
-            QProcurementPlan qProcurementPlan = QProcurementPlan.procurementPlan;
 
             // QueryDSL의 JPAQuery 사용
             JPAQuery<Inventory> query = queryFactory.selectFrom(qInventory)
@@ -88,26 +87,11 @@ public class InventoryServiceImpl implements InventoryService {
         String type = pageRequestDTO.getType();
         String keyword = pageRequestDTO.getKeyword();
 
-        LocalDate startDate1 = pageRequestDTO.getStartDate1();
-        LocalDate endDate1 = pageRequestDTO.getEndDate1();
-        LocalDate startDate2 = pageRequestDTO.getStartDate2();
-        LocalDate endDate2 = pageRequestDTO.getEndDate2();
-
         QInventory qInventory = QInventory.inventory;
         QMaterial qMaterial = QMaterial.material;
-        QPurchaser qPurchaser = QPurchaser.purchaser;
-        QPurchaseOrder qPurchaseOrder = QPurchaseOrder.purchaseOrder;
-        QProcurementPlan qProcurementPlan = QProcurementPlan.procurementPlan;
 
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qInventory.materialCode.contains("-"));  // 기본 조건
-
-        if (startDate1 != null && endDate1 != null) {
-            builder.and(qPurchaseOrder.purchaseOrderDate.between(startDate1.atStartOfDay(), endDate1.plusDays(1).atStartOfDay()));
-        }
-        if (startDate2 != null && endDate2 != null) {
-            builder.and(qProcurementPlan.procurementPlanDeadLine.between(startDate2.atStartOfDay(), endDate2.plusDays(1).atStartOfDay()));
-        }
 
         if (type != null) {
             BooleanBuilder builder1 = new BooleanBuilder();
@@ -124,15 +108,10 @@ public class InventoryServiceImpl implements InventoryService {
                 builder1.or(qMaterial.materialCode.contains(keyword));
             }
 
-            if (type.contains("3")) {
-                builder1.or(qMaterial.materialStand.contains(keyword));
-                builder1.or(qMaterial.materialTexture.contains(keyword));
-            }
-
             builder.and(builder1);
         }
 
-        return null;
+        return builder;
     }
 
     @Override
@@ -144,4 +123,5 @@ public class InventoryServiceImpl implements InventoryService {
     public Double getTotallMaterialPrice() {
         return inventoryRepository.getTotallContractAvgPrice()*inventoryRepository.getTotallMaterialQuantity();
     }
+
 }

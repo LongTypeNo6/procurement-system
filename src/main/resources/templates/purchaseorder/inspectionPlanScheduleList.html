@@ -67,38 +67,38 @@
                                         <div class="row mb-3">
                                             <label for="inputPassword" class="col-sm-1 col-form-label"> 검수일정</label>
                                             <div class="col-sm-2">
-                                                <input type="date" class="form-control" >
+                                                <input type="date" class="form-control" id="searchInspectionPlanDateTimeStart">
                                             </div>
                                             ~
                                             <div class="col-sm-2">
-                                                <input type="date" class="form-control" >
+                                                <input type="date" class="form-control" id="searchInspectionPlanDateTimeEnd">
                                             </div>
                                             <label for="inputPassword" class="col-sm-1 col-form-label">납기일</label>
                                             <div class="col-sm-2">
-                                                <input type="date" class="form-control" >
+                                                <input type="date" class="form-control" id="searchProcurementPlanDeadLineStart">
                                             </div>
                                             ~
                                             <div class="col-sm-2">
-                                                <input type="date" class="form-control" >
+                                                <input type="date" class="form-control" id="searchProcurementPlanDeadLineEnd">
                                             </div>
                                         </div>
                                         <hr>
                                         <div class="row mb-3">
                                             <label for="inputPassword" class="col-sm-1 col-form-label">검색</label>
                                             <div class="col-sm-2">
-                                                <select class="form-select" aria-label="Default select example">
-                                                    <option selected>전체</option>
-                                                    <option value="1">품목명</option>
-                                                    <option value="2">품목코드</option>
-                                                    <option value="2">거래처명</option>
+                                                <select class="form-select" aria-label="Default select example" id="searchType">
+                                                    <option value="123" selected>전체</option>
+                                                    <option value="1">자재명</option>
+                                                    <option value="2">자재코드</option>
+                                                    <option value="3">거래처명</option>
 
                                                 </select>
                                             </div>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
 
-                                                    <input type="text" class="form-control" id="itemCodeInput">
-                                                    <button class="input-group-text" id="confirmSelectionBtn">검색</button>
+                                                    <input type="text" class="form-control" id="searchKeyword">
+                                                    <button class="input-group-text" id="searchListBtn">검색</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -145,9 +145,10 @@
             "INSPECTED": "검수완료"
         };
         $(document).ready(function (e) {
-            console.log("자바스크립트작동")
-            function getPurchaseOrderContent(page) {
-                return $.getJSON(`/purchaseordercontent/inspectionPlanScheduleList?page=${page}&size=10`, function(data) {
+            console.log("자바스크립트작동");
+            function getPurchaseOrderContent(page,searchType,searchKeyword,startDate1,endDate1,startDate2,endDate2) {
+                let jsonLink=`/purchaseordercontent/inspectionPlanScheduleList?page=${page}&size=10&type=${searchType}&keyword=${searchKeyword}&startDate1=${startDate1}&endDate1=${endDate1}&startDate2=${startDate2}&endDate2=${endDate2}`;
+                return $.getJSON(jsonLink, function(data) {
                     console.log("요청", data);
                     // 첫 번째 요청에서 totalPage 값 설정
                     if (totalPage === 0) {
@@ -175,9 +176,28 @@
                 });
             }
 
-            getPurchaseOrderContent(1);
+            getPurchaseOrderContent(1,"","", "","","","");
             setupInfiniteScroll(getPurchaseOrderContent);
-        })
+
+            $("#searchListBtn").on("click", function () {
+                var searchType=$("#searchType").val();
+                var searchKeyword=$("#searchKeyword").val();
+
+                // 날짜 관련 내용
+                var startDate1 = $("#searchInspectionPlanDateTimeStart").val() ? new Date($("#searchInspectionPlanDateTimeStart").val()) : null;
+                var endDate1 = $("#searchInspectionPlanDateTimeEnd").val() ? new Date($("#searchInspectionPlanDateTimeEnd").val()) : null;
+                var startDate2 = $("#searchProcurementPlanDeadLineStart").val() ? new Date($("#searchProcurementPlanDeadLineStart").val()) : null;
+                var endDate2 = $("#searchProcurementPlanDeadLineEnd").val() ? new Date($("#searchProcurementPlanDeadLineEnd").val()) : null;
+
+                console.log("검색타입은",searchType,"검색키워드는",searchKeyword,"검색날짜는",startDate1,endDate1,startDate2,endDate2);
+                $("#inspectionPlanSchduleList").empty();
+                totalPage = 0;
+                currentPage = 1;
+                console.log("토탈페이지",totalPage,"현재페이지",currentPage);
+                getPurchaseOrderContent(1,searchType,searchKeyword, startDate1 ? formatDate(startDate1) : "", endDate1 ? formatDate(endDate1) : "", startDate2 ? formatDate(startDate2) : "", endDate2 ? formatDate(endDate2) : "");
+                setupInfiniteScroll(getPurchaseOrderContent);
+            });
+        });
     </script>
     <th:block th:replace="~{fragments/bodyFragment::footer}"></th:block>
     <th:block th:replace="~{fragments/bodyFragment::js}"></th:block>

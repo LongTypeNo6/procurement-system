@@ -25,6 +25,8 @@ public class PageRequestDTO {
     private LocalDate endDate1; //검색 종료설정날짜1
     private LocalDate startDate2; //검색 시작설정날짜2
     private LocalDate endDate2; //검색 종료설정날짜2
+    private LocalDate startDate3; //검색 시작설정날짜3
+    private LocalDate endDate3; //검색 종료설정날짜3
 
     public PageRequestDTO(){
         this.page = 1;
