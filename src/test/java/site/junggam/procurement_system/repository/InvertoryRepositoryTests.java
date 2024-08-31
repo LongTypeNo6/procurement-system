@@ -58,6 +58,31 @@ public class InvertoryRepositoryTests {
         System.out.println("총평균단가?"+inventoryRepository.getTotallContractAvgPrice());
     }
 
+    @Test
+    @Commit
+    @Transactional
+    public void makeInvertory() {
+        // material_code에 해당하는 Material이 있는지 확인
+        for(int i=1;i<21;i++){
+            String materialCode = "BM-000";
+            if(i<10){
+                materialCode +=0;
+                materialCode +=i;
+            }else {
+                materialCode +=i;
+            }
+            // Material을 데이터베이스에서 조회
+            Material material = materialRepository.findById(materialCode)
+                    .orElseThrow(() -> new RuntimeException("없음 "));
+            // Inventory 엔티티 생성 및 저장
+            Inventory inventory = Inventory.builder()
+                    .material(material) // 존재하는 Material 사용
+                    .build();
+            inventoryRepository.save(inventory);
+        }
+
+    }
+
 
 }
 

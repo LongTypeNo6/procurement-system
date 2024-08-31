@@ -11,8 +11,10 @@ import site.junggam.procurement_system.dto.PageResultDTO;
 import site.junggam.procurement_system.dto.WarehousingDTO;
 import site.junggam.procurement_system.dto.WarehousingHistoryDTO;
 import site.junggam.procurement_system.entity.*;
+import site.junggam.procurement_system.mapper.InventoryMapper;
 import site.junggam.procurement_system.mapper.WarehousingHistoryMapper;
 import site.junggam.procurement_system.mapper.WarehousingMapper;
+import site.junggam.procurement_system.repository.InventoryHistoryRepository;
 import site.junggam.procurement_system.repository.InventoryRepository;
 import site.junggam.procurement_system.repository.WarehousingHistoryRepository;
 import site.junggam.procurement_system.repository.WarehousingRepository;
@@ -34,6 +36,9 @@ public class WarehousingServiceImpl implements WarehousingService {
     private final WarehousingHistoryRepository warehousingHistoryRepository;
     private final WarehousingHistoryMapper warehousingHistoryMapper;
     private final InventoryRepository inventoryRepository;
+    private final InventoryMapper inventoryMapper;
+    private final InventoryHistoryRepository inventoryHistoryRepository;
+
 
     @Override
     public WarehousingDTO getWarehousing(String warehousingId) {
@@ -61,8 +66,22 @@ public class WarehousingServiceImpl implements WarehousingService {
 
         //인벤토리 저장
         String materialCode = warehousingHistoryDTO.getMaterialCode();
+        LocalDateTime warehousingDateTime = warehousingHistoryDTO.getWarehousingDate();
+        int warehousingQuantity = warehousingHistoryDTO.getWarehousingQuantity();
         Inventory inventory= inventoryRepository.findById(materialCode).get();
-
+        //인벤토리 히스토리 먼저 저장하고
+        InventoryHistory inventoryHistory=InventoryHistory.builder()
+                .inventory(inventory)
+                .transactionType(InventoryHistoryStatus.WAREHOUSING)
+                .transactionReference(warehousingHistoryCode)
+                .transactionDate(warehousingDateTime)
+                .quantityChange(warehousingQuantity)
+                .finalQuantity(inventory.getMaterialQuantity()+warehousingQuantity)
+                .build();
+        int finalQauntity =inventoryHistoryRepository.save(inventoryHistory).getFinalQuantity();
+        //인벤토리 정보 변경
+        inventory.setMaterialQuantity(finalQauntity);
+        inventoryRepository.save(inventory);
 
         //여기는 입고 정보를 저장
         Warehousing warehousing=warehousingRepository.findById(warehousingCode).get();

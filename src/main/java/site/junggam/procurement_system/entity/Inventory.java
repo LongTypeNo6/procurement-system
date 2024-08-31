@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @ToString(exclude = "material")
 @Table(name="tbl_inventory")
 public class Inventory {
