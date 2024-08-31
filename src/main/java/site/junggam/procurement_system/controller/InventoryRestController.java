@@ -47,10 +47,17 @@ public class InventoryRestController {
         return new ResponseEntity<>(releaseService.getReleaseRequest(releaseCode), HttpStatus.OK);
     }
 
+    @PatchMapping(value = "/release/{releaseCode}")
+    public ResponseEntity<String> modifyReleaseCode(@RequestBody ReleaseDTO releaseDTO) {
+        log.info("응답받은 데이터는 "+releaseDTO);
+        releaseService.saveReleaseRequest(releaseDTO);
+        return new ResponseEntity<>("저장되었습니다", HttpStatus.OK);
+    }
+
     @PostMapping(value = "/release/{releaseCode}")
     public ResponseEntity<String> saveReleaseCode(@RequestBody ReleaseDTO releaseDTO) {
         log.info("응답받은 데이터는 "+releaseDTO);
-        releaseService.saveReleaseRequest(releaseDTO);
+        releaseService.saveRelease(releaseDTO);
         return new ResponseEntity<>("저장되었습니다", HttpStatus.OK);
     }
     @GetMapping(value = "/releaseList", produces = "application/json")

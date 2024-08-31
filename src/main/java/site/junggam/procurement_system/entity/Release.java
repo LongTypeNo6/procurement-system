@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString(exclude = {"procurementPlan","material"})
 @Getter
+@Setter
 @Table(name="tbl_release")
 public class Release {
     @Id

@@ -50,6 +50,8 @@ public class PlanServiceImpl implements PlanService {
     private final PurchaseOrderRepository purchaseOrderRepository;
     private final ReleaseMapper releaseMapper;
     private final ReleaseRepository releaseRepository;
+    private final InventoryRepository inventoryRepository;
+    private final InventoryHistoryRepository inventoryHistoryRepository;
 
     @Override
     public List<ProductDTO> getProductListSearching(String keyword) {
@@ -539,15 +541,22 @@ public class PlanServiceImpl implements PlanService {
                     .build()
             );
             //출고요청생성
+            String releaseCode="RELE"+procurementPlanCode.substring(4);
             Release release = Release.builder()
-                    .releaseCode("RELE"+procurementPlanCode.substring(4))
+                    .releaseCode(releaseCode)
                     .releaseRequestDept("")
                     .releaseDesireDate(procurementPlan.getProcurementPlanDeadLine().plusDays(1))
                     .releaseDesireQuantity(procurementPlan.getProcurementPlanQuantity())
-                    .releaseRequestMemo("")
+                    .releaseRequestMemo("조달계획에 따른 요청")
                     .material(procurementPlan.getMaterial())
                     .build();
             releaseRepository.save(release);
+            //인벤토리 저장
+            String materialCode = procurementPlanDTO.getMaterialCode();
+            int releaseQuantity = procurementPlan.getProcurementPlanQuantity();
+            Inventory inventory= inventoryRepository.findById(materialCode).get();
+            inventory.setReleaseDesireSumQuantity(inventory.getReleaseDesireSumQuantity()+releaseQuantity);
+            inventoryRepository.save(inventory);
         }
         return procurementPlanCode;
     }

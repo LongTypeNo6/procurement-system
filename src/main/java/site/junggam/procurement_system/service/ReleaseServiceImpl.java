@@ -13,12 +13,15 @@ import org.springframework.stereotype.Service;
 import site.junggam.procurement_system.dto.PageRequestDTO;
 import site.junggam.procurement_system.dto.PageResultDTO;
 import site.junggam.procurement_system.dto.ReleaseDTO;
-import site.junggam.procurement_system.entity.QRelease;
-import site.junggam.procurement_system.entity.Release;
+import site.junggam.procurement_system.entity.*;
+import site.junggam.procurement_system.mapper.InventoryMapper;
 import site.junggam.procurement_system.mapper.ReleaseMapper;
+import site.junggam.procurement_system.repository.InventoryHistoryRepository;
+import site.junggam.procurement_system.repository.InventoryRepository;
 import site.junggam.procurement_system.repository.ReleaseRepository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -32,6 +35,9 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     private final ReleaseRepository releaseRepository;
     private final ReleaseMapper releaseMapper;
+    private final InventoryHistoryRepository inventoryHistoryRepository;
+    private final InventoryRepository inventoryRepository;
+    private final InventoryMapper inventoryMapper;
 
 
     @Override
@@ -98,6 +104,40 @@ public class ReleaseServiceImpl implements ReleaseService {
             throw e; // or handle the exception appropriately
         }
 
+    }
+
+    @Override
+    public void saveRelease(ReleaseDTO releaseDTO) {
+        log.info("서비스까지 온 데이터 DTO"+releaseDTO);
+        String releaseCode = releaseDTO.getReleaseCode();
+        Release release=releaseRepository.findById(releaseCode).get();
+
+        //인벤토리 저장
+        String materialCode = releaseDTO.getMaterialCode();
+        LocalDateTime releaseDateTime = releaseDTO.getReleaseDate();
+        int releaseQuantity = releaseDTO.getReleaseQuantity();
+        Inventory inventory= inventoryRepository.findById(materialCode).get();
+        //인벤토리 히스토리 먼저 저장하고
+        InventoryHistory inventoryHistory=InventoryHistory.builder()
+                .inventory(inventory)
+                .transactionType(InventoryHistoryStatus.RELEASE)
+                .transactionReference(releaseCode)
+                .transactionDate(releaseDateTime)
+                .quantityChange(releaseQuantity*(-1))
+                .finalQuantity(inventory.getMaterialQuantity()+releaseQuantity*(-1))
+                .build();
+        int finalQauntity =inventoryHistoryRepository.save(inventoryHistory).getFinalQuantity();
+        //인벤토리 정보 변경
+        inventory.setMaterialQuantity(finalQauntity);
+        inventory.setReleaseDesireSumQuantity(inventory.getReleaseDesireSumQuantity()-releaseQuantity);
+        inventoryRepository.save(inventory);
+
+        //출고정보 저장
+        release.setReleaseDate(releaseDTO.getReleaseDate());
+        release.setReleaseMemo(releaseDTO.getReleaseMemo());
+        release.setReleaseQuantity(releaseDTO.getReleaseQuantity());
+        release.setReleaseStaus(ReleaseStaus.COMPLETED);
+        releaseRepository.save(release);
     }
 
 

@@ -68,6 +68,7 @@ public class WarehousingServiceImpl implements WarehousingService {
 
         warehousingHistoryRepository.save(warehousingHistoryMapper.toEntity(warehousingHistoryDTO));
 
+
         //인벤토리 저장
         String materialCode = warehousingHistoryDTO.getMaterialCode();
         LocalDateTime warehousingDateTime = warehousingHistoryDTO.getWarehousingDate();
@@ -86,6 +87,8 @@ public class WarehousingServiceImpl implements WarehousingService {
         //인벤토리 정보 변경
         inventory.setMaterialQuantity(finalQauntity);
         inventoryRepository.save(inventory);
+
+
 
         //여기는 입고 정보를 저장
         Warehousing warehousing=warehousingRepository.findById(warehousingCode).get();

@@ -17,4 +17,7 @@ public interface ReleaseService {
 
     //출고요청리스트
     PageResultDTO<ReleaseDTO, Release> getReleaseList(PageRequestDTO pageRequestDTO);
+
+    //출고하기
+    void saveRelease(ReleaseDTO releaseDTO);
 }
