@@ -2,9 +2,11 @@ package site.junggam.procurement_system.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import site.junggam.procurement_system.entity.Inventory;
+import site.junggam.procurement_system.entity.Purchaser;
 
-public interface InventoryRepository extends JpaRepository<Inventory, String> {
+public interface InventoryRepository extends JpaRepository<Inventory, String> , QuerydslPredicateExecutor<Inventory> {
 
     @Query("SELECT SUM(i.materialQuantity) FROM Inventory i")
     Integer getTotallMaterialQuantity();

@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>공지사항</title>
+    <title>공지사항 목록</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
-    <th:block th:replace="~{fragments/headFragment}"></th:block>
+    <th:block th:replace="~{/fragments/headFragment}"></th:block>
 </head>
 <body>
-<th:block th:replace="~{fragments/bodyFragment::header}"></th:block>
-<th:block th:replace="~{fragments/bodyFragment::sidebar}"></th:block>
+<th:block th:replace="~{/fragments/bodyFragment::header}"></th:block>
+<th:block th:replace="~{/fragments/bodyFragment::sidebar}"></th:block>
 <!-- ======= main ======= -->
 <main id="main" class="main">
     <div class="pagetitle">
@@ -35,17 +35,16 @@
                     <div class="card-body">
                         <b><h5 class="card-title"><strong>전체 공지사항</strong> </h5></b>
 
-
-
-                        <h7 class="text" 제목검색</h7>
-
-
-                        <input title="검색" type="text">
+                        <h7 class="text"> 제목검색</h7>
+                        <input title="검색" name="keyword" type="text">
                         &nbsp
                         <button type="button" class="btn btn-primary btn-sm">검색</button>
                         &nbsp
-                        <button type="button" class="btn btn-primary btn-sm">글쓰기</button>
+
+                        <a href="noticeregister" class="register">
+                            <button type="button" class="btn btn-primary btn-sm">글쓰기</button></a>
                         &nbsp
+
 
                         <!-- Table with hoverable rows -->
                         <table class="table table-hover">
@@ -55,38 +54,39 @@
                                 <th scope="col">작성자</th>
                                 <th scope="col">제목</th>
                                 <th scope="col">작성일</th>
+                                <th scope="col">수정일</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>관리자</td>
-                                <td><a href="/notice/noticeread">※ 여름휴가공지 ※</a></td>
-                                <td>2024-07-22</td>
+                            <tr th:each="notice : ${notice}">
+                                <td th:text="${notice.noticeNumber}"></td>
+                                <td th:text="${notice.noticeWriter}"></td>
+                                <td><a th:text="${notice.noticeTitle}"
+                                       th:href="@{/notice/noticeread(noticeNumber=${notice.noticeNumber})}"></a></td>
+                                <td th:text="${#temporals.format(notice.noticeRegDate, 'yyyy-MM-dd')}"></td>
+                                <td th:text="${#temporals.format(notice.noticeUpdateDate, 'yyyy-MM-dd')}"></td>
                             </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>관리자</td>
-                                <td>2024 상반기 승진 안내<br></td>
-                                <td>2024-07-20</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>관리자</td>
-                                <td>시스템 업데이트 완료 안내<br></td>
-                                <td>2024-07-17</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>관리자</td>
-                                <td>시스템 업데이트 일정 안내<br></td>
-                                <td>2024-07-10</td>
-                            </tr>
-
                             </tbody>
                         </table>
                         <!-- End Table with hoverable rows -->
 
+                        <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                            <a th:if="${page != nowPage}" th:href="@{/notice/noticelist(page = ${page - 1})}" th:text="${page}"></a>
+                            <strong th:if="${page == nowPage}" th:text="${page}" style="color : red"></strong>
+                        </th:block>
+
+                        <!-- Centered Pagination -->
+<!--                        <nav aria-label="Page navigation example">-->
+<!--                            <ul class="pagination justify-content-center">-->
+<!--                                <li class="page-item disabled">-->
+<!--                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Prev</a>-->
+<!--                                </li>-->
+<!--                                <li class="page-item">-->
+<!--                                    <a class="page-link" href="#">Next</a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </nav>>-->
+                        <!-- End Centered Pagination -->
                     </div>
                 </div>
 
@@ -107,7 +107,8 @@
                         <button type="button" class="btn btn-primary btn-sm">검색</button>
                         &nbsp
 
-                        <button type="button" class="btn btn-primary btn-sm">글쓰기</button>
+                        <a href="/deptnotice/deptnoticeregister" class="deptregister">
+                            <button type="button" class="btn btn-primary btn-sm">글쓰기</button></a>
                         &nbsp
 
                         <!-- Table with hoverable rows -->
@@ -118,48 +119,49 @@
                                 <th scope="col">작성자</th>
                                 <th scope="col">제목</th>
                                 <th scope="col">작성일</th>
+                                <th scope="col">수정일</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>생산부서 김길동</td>
-                                <td><a href="/deptnotice/deptnoticeread">생산부서 생산 요청 완료<br></td>
-                                <td>2024-07-20</td>
+                            <tr th:each="deptnotice : ${deptnotice}">
+                                <td th:text="${deptnotice.deptNoticeNumber}"></td>
+                                <td th:text="${deptnotice.deptNoticeWriter}"></td>
+                                <td><a th:text="${deptnotice.deptNoticeTitle}"
+                                       th:href="@{/deptnotice/deptnoticeread(deptNoticeNumber=${deptnotice.deptNoticeNumber})}"></a></td>
+                                <td th:text="${#temporals.format(deptnotice.deptNoticeRegDate, 'yyyy-MM-dd')}"></td>
+                                <td th:text="${#temporals.format(deptnotice.deptNoticeUpdateDate, 'yyyy-MM-dd')}"></td>
                             </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>구매부서 최길동</td>
-                                <td>PSKD-45o0 구매 발주 시작<br></td>
-                                <td>2024-07-15</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>자재부서 박길동</td>
-                                <td>개발자들은 intp래요<br></td>
-                                <td>2024-07-13</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>자재부서 최길동</td>
-                                <td>int p;... ...<br></td>
-                                <td>2024-07-10</td>
-                            </tr>
-
                             </tbody>
                         </table>
                         <!-- End Table with hoverable rows -->
 
+                        <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                            <a th:if="${page != nowPage}" th:href="@{/notice/noticelist(page = ${page - 1})}" th:text="${page}"></a>
+                            <strong th:if="${page == nowPage}" th:text="${page}" style="color : red"></strong>
+                        </th:block>
+
+                        <!-- Centered Pagination -->
+<!--                        <nav aria-label="Page navigation example">-->
+<!--                            <ul class="pagination justify-content-center">-->
+<!--                                <li class="page-item disabled">-->
+<!--                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Prev</a>-->
+<!--                                </li>-->
+<!--                                <li class="page-item">-->
+<!--                                    <a class="page-link" href="#">Next</a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </nav>-->
+                        <!-- End Centered Pagination -->
                     </div>
                 </div>
             </div>
-    </section>
+        </div> </section>
 </main>
-        </div> <!--End row-->
-    </section>
+</div> <!--End row-->
+</section>
 </main>
 <!-- End #main -->
-<th:block th:replace="~{fragments/bodyFragment::footer}"></th:block>
-<th:block th:replace="~{fragments/bodyFragment::js}"></th:block>
+<th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
+<th:block th:replace="~{/fragments/bodyFragment::js}"></th:block>
 </body>
 </html>

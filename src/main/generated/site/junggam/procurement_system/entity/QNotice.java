@@ -23,9 +23,13 @@ public class QNotice extends EntityPathBase<Notice> {
 
     public final NumberPath<Integer> noticeNumber = createNumber("noticeNumber", Integer.class);
 
-    public final DateTimePath<java.time.LocalDateTime> noticeRegDate = createDateTime("noticeRegDate", java.time.LocalDateTime.class);
+    public final DatePath<java.time.LocalDate> noticeRegDate = createDate("noticeRegDate", java.time.LocalDate.class);
 
     public final StringPath noticeTitle = createString("noticeTitle");
+
+    public final DatePath<java.time.LocalDate> noticeUpdateDate = createDate("noticeUpdateDate", java.time.LocalDate.class);
+
+    public final StringPath noticeWriter = createString("noticeWriter");
 
     public QNotice(String variable) {
         super(Notice.class, forVariable(variable));

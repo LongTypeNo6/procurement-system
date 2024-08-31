@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -17,8 +17,12 @@ public class NoticeDTO {
 
     private String noticeContent;
 
-    private LocalDateTime noticeRegDate;
+    private LocalDate noticeRegDate;
+
+    private LocalDate noticeUpdateDate;
 
     private Integer noticeNumber;
+
+    private String noticeWriter;
 
 }

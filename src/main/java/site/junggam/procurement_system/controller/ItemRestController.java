@@ -14,7 +14,7 @@ import site.junggam.procurement_system.entity.Unit;
 import site.junggam.procurement_system.service.ItemService;
 
 @Log4j2
-@Controller
+@RestController
 @RequestMapping("/itemcontent")
 @RequiredArgsConstructor
 public class ItemRestController {

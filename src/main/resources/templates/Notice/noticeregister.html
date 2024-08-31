@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>부서알림공지수정</title>
+    <title>공지사항 등록</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -16,12 +16,11 @@
 <!-- ======= main ======= -->
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>부서알림 공지사항</h1>
+        <h1>공지사항</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">메인</li>
                 <li class="breadcrumb-item">공지사항</li>
-                <li class="breadcrumb-item active" th:text="${deptnotice.deptNoticeTitle}"></li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -34,49 +33,29 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">부서 알림 수정</h5>
+                        <h5 class="card-title">공지사항 등록</h5>
 
                         <!-- General Form Elements -->
-                        <form th:action="@{/deptnotice/deptnoticemodify(deptNoticeNumber=${deptnotice.deptNoticeNumber})}"
-                              method="post">
-
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label">번호</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="deptNoticeNumber"
-                                           th:value="${deptnotice.deptNoticeNumber}" readonly>
-                                </div>
-                            </div>
+                        <form action="noticeregister" method="post">
 
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">작성자</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="deptNoticeWriter"
-                                           th:value="${deptnotice.deptNoticeWriter}" readonly>
+                                    <input type="text" class="form-control" name="noticeWriter">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">제목</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="deptNoticeTitle"
-                                           th:value="${deptnotice.deptNoticeTitle}">
+                                    <input type="text" class="form-control" name="noticeTitle">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">작성일</label>
                                 <div class="col-sm-10">
-                                    <input type="date" class="form-control" name="deptNoticeRegDate"
-                                           th:value="${deptnotice.deptNoticeRegDate}" readonly>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label">수정일</label>
-                                <div class="col-sm-10">
-                                    <input type="date" class="form-control" name="deptNoticeUpdateDate"
-                                           th:value="${deptnotice.deptNoticeRegDate}" id="currentDate">
+                                    <input type="date" class="form-control" name="noticeRegDate" id="currentDate">
                                 </div>
                             </div>
 
@@ -86,15 +65,14 @@
 
                                     <div class="card">
                                         <div class="card-body">
-                                            <textarea class="tinymce-editor" name="deptNoticeContent"
-                                                      th:text="${deptnotice.deptNoticeContent}"></textarea>
+                                            <textarea class="tinymce-editor" name="noticeContent" id="text1"></textarea>
                                         </div>
                                     </div>
 
                                 </div>
                             </div>
                             <div class="col-sm-10">
-                                <button type="submit" class="btn btn-primary">수정</button>
+                                <button type="submit" class="btn btn-primary">등록</button>
                             </div>
                         </form></div>
 
