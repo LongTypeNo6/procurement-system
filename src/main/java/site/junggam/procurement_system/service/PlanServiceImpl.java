@@ -48,6 +48,8 @@ public class PlanServiceImpl implements PlanService {
     private final ContractRepository contractRepository;
     private final ContractMapper contractMapper;
     private final PurchaseOrderRepository purchaseOrderRepository;
+    private final ReleaseMapper releaseMapper;
+    private final ReleaseRepository releaseRepository;
 
     @Override
     public List<ProductDTO> getProductListSearching(String keyword) {
@@ -536,6 +538,16 @@ public class PlanServiceImpl implements PlanService {
                             .purchaseOrderStatus(PurchaseOrderStatus.PENDING)
                     .build()
             );
+            //출고요청생성
+            Release release = Release.builder()
+                    .releaseCode("RELE"+procurementPlanCode.substring(4))
+                    .releaseRequestDept("")
+                    .releaseDesireDate(procurementPlan.getProcurementPlanDeadLine().plusDays(1))
+                    .releaseDesireQuantity(procurementPlan.getProcurementPlanQuantity())
+                    .releaseRequestMemo("")
+                    .material(procurementPlan.getMaterial())
+                    .build();
+            releaseRepository.save(release);
         }
         return procurementPlanCode;
     }
