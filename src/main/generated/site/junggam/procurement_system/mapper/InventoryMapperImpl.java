@@ -8,7 +8,7 @@ import site.junggam.procurement_system.entity.Material;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-31T11:58:29+0900",
+    date = "2024-09-01T01:42:04+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -30,8 +30,7 @@ public class InventoryMapperImpl implements InventoryMapper {
         }
         inventoryDTO.materialQuantity( inventory.getMaterialQuantity() );
         inventoryDTO.releaseDesireSumQuantity( inventory.getReleaseDesireSumQuantity() );
-        inventoryDTO.procurementPlanSumQuantity( inventory.getProcurementPlanSumQuantity() );
-        inventoryDTO.warehousingSumQuantity( inventory.getWarehousingSumQuantity() );
+        inventoryDTO.warehousingPendingQuantity( inventory.getWarehousingPendingQuantity() );
         inventoryDTO.contractAvgPrice( inventory.getContractAvgPrice() );
 
         return inventoryDTO.build();
@@ -49,8 +48,7 @@ public class InventoryMapperImpl implements InventoryMapper {
         inventory.materialCode( inventoryDTO.getMaterialCode() );
         inventory.materialQuantity( inventoryDTO.getMaterialQuantity() );
         inventory.releaseDesireSumQuantity( inventoryDTO.getReleaseDesireSumQuantity() );
-        inventory.procurementPlanSumQuantity( inventoryDTO.getProcurementPlanSumQuantity() );
-        inventory.warehousingSumQuantity( inventoryDTO.getWarehousingSumQuantity() );
+        inventory.warehousingPendingQuantity( inventoryDTO.getWarehousingPendingQuantity() );
         inventory.contractAvgPrice( inventoryDTO.getContractAvgPrice() );
 
         return inventory.build();

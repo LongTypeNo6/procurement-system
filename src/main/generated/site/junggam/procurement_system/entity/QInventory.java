@@ -30,11 +30,9 @@ public class QInventory extends EntityPathBase<Inventory> {
 
     public final NumberPath<Integer> materialQuantity = createNumber("materialQuantity", Integer.class);
 
-    public final NumberPath<Integer> procurementPlanSumQuantity = createNumber("procurementPlanSumQuantity", Integer.class);
-
     public final NumberPath<Integer> releaseDesireSumQuantity = createNumber("releaseDesireSumQuantity", Integer.class);
 
-    public final NumberPath<Integer> warehousingSumQuantity = createNumber("warehousingSumQuantity", Integer.class);
+    public final NumberPath<Integer> warehousingPendingQuantity = createNumber("warehousingPendingQuantity", Integer.class);
 
     public QInventory(String variable) {
         this(Inventory.class, forVariable(variable), INITS);

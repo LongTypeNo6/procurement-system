@@ -86,6 +86,7 @@ public class WarehousingServiceImpl implements WarehousingService {
         int finalQauntity =inventoryHistoryRepository.save(inventoryHistory).getFinalQuantity();
         //인벤토리 정보 변경
         inventory.setMaterialQuantity(finalQauntity);
+        inventory.setWarehousingPendingQuantity(inventory.getWarehousingPendingQuantity()-warehousingQuantity);
         inventoryRepository.save(inventory);
 
 
@@ -178,7 +179,7 @@ public class WarehousingServiceImpl implements WarehousingService {
         QProcurementPlan qProcurementPlan = QProcurementPlan.procurementPlan;
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(qWarehousing.warehousingCode.contains("-"));  // 기본 조건
+        builder.and(qWarehousing.warehousingStatus.eq(WarehousingStatus.PENDING));
 
         if (startDate1 != null && endDate1 != null) {
             builder.and(qPurchaseOrder.purchaseOrderDate.between(startDate1.atStartOfDay(), endDate1.plusDays(1).atStartOfDay()));

@@ -152,7 +152,7 @@ public class ReleaseServiceImpl implements ReleaseService {
         QRelease qRelease = QRelease.release;
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(qRelease.releaseCode.contains("-"));  // 기본 조건
+        builder.and(qRelease.releaseStaus.eq(ReleaseStaus.PENDING));  // 기본 조건
 
         if (startDate1 != null && endDate1 != null) {
             builder.and(qRelease.releaseDesireDate.between(startDate1.atStartOfDay(), endDate1.plusDays(1).atStartOfDay()));

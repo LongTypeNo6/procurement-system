@@ -17,6 +17,7 @@ import site.junggam.procurement_system.dto.PurchaseOrderDTO;
 import site.junggam.procurement_system.entity.*;
 import site.junggam.procurement_system.mapper.PurchaseOrderMapper;
 import site.junggam.procurement_system.repository.InspectionPlanRepository;
+import site.junggam.procurement_system.repository.InventoryRepository;
 import site.junggam.procurement_system.repository.PurchaseOrderRepository;
 import site.junggam.procurement_system.repository.WarehousingRepository;
 
@@ -36,6 +37,7 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
     private final PurchaseOrderMapper purchaseOrderMapper;
     private final InspectionPlanRepository inspectionPlanRepository;
     private final WarehousingRepository warehousingRepository;
+    private final InventoryRepository inventoryRepository;
 
 
     private int getInspectionPlanCount(PurchaseOrder purchaseOrder) {
@@ -194,6 +196,11 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService{
                     .purchaseOrder(purchaseOrder)
                     .warehousingStatus(WarehousingStatus.PENDING)
                     .build());
+
+            //인벤토리 입고예정수량 추가
+            Inventory inventory= inventoryRepository.findById(purchaseOrder.getProcurementPlan().getMaterial().getMaterialCode()).get();
+            inventory.setWarehousingPendingQuantity(inventory.getWarehousingPendingQuantity()+purchaseOrder.getProcurementPlan().getProcurementPlanQuantity());
+            inventoryRepository.save(inventory);
         }
 
     }
