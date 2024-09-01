@@ -18,4 +18,11 @@ public interface InventoryService {
 
     //입출고내역 보기
     PageResultDTO<InventoryHistoryDTO, InventoryHistory> getInventoryHistoryList(PageRequestDTO pageRequestDTO);
+
+    //자재별 입출고내역보기
+    PageResultDTO<InventoryHistoryDTO, InventoryHistory> getInventoryHistoryListWithMaterial(PageRequestDTO pageRequestDTO,String materialCode);
+
+    //자재넣어서 인벤토리 보기
+    InventoryDTO getInventoryHistoryWithMaterial(String materialCode);
+
 }

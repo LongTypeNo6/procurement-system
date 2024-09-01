@@ -78,6 +78,14 @@ public class InventoryRestController {
         return new ResponseEntity<>(inventoryDTOList, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/material/{materialCode}", produces = "application/json")
+    public ResponseEntity<InventoryDTO> getAllInventoryHistoryWithMaterial(@PathVariable("materialCode") String materialCode) {
+        log.info("입출고내역 가져오기 레스트 컨트롤러 진입");
+        InventoryDTO inventoryDTO = inventoryService.getInventoryHistoryWithMaterial(materialCode);
+        log.info("입출고내역 가져오기 완료");
+        return new ResponseEntity<>(inventoryDTO, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/totallMaterialQuantity", produces = "application/json")
     public ResponseEntity<Integer> getTotallMaterialQuantity(){
         return new ResponseEntity<>(inventoryService.getTotallMaterialQuantity(), HttpStatus.OK);
@@ -91,6 +99,14 @@ public class InventoryRestController {
     public ResponseEntity<PageResultDTO<InventoryHistoryDTO, InventoryHistory>> getAllInventoryHistoryList(PageRequestDTO pageRequestDTO) {
         log.info("입출고내역 가져오기 레스트 컨트롤러 진입");
         PageResultDTO<InventoryHistoryDTO, InventoryHistory> inventoryDTOList = inventoryService.getInventoryHistoryList(pageRequestDTO);
+        log.info("입출고내역 가져오기 완료");
+        return new ResponseEntity<>(inventoryDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/inventoryHistoryListWithMaterial/{materialCode}", produces = "application/json")
+    public ResponseEntity<PageResultDTO<InventoryHistoryDTO, InventoryHistory>> getAllInventoryHistoryListWithMaterial(PageRequestDTO pageRequestDTO,@PathVariable("materialCode") String materialCode) {
+        log.info("입출고내역 가져오기 레스트 컨트롤러 진입");
+        PageResultDTO<InventoryHistoryDTO, InventoryHistory> inventoryDTOList = inventoryService.getInventoryHistoryListWithMaterial(pageRequestDTO,materialCode);
         log.info("입출고내역 가져오기 완료");
         return new ResponseEntity<>(inventoryDTOList, HttpStatus.OK);
     }

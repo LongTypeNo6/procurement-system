@@ -8,7 +8,7 @@ import site.junggam.procurement_system.entity.Contract;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-08-31T11:58:29+0900",
+    date = "2024-09-01T18:38:55+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -34,6 +34,7 @@ public class ContractMapperImpl implements ContractMapper {
         contractDTO.contractMemo( contract.getContractMemo() );
         contractDTO.contractPrice( contract.getContractPrice() );
         contractDTO.contractLeadTime( contract.getContractLeadTime() );
+        contractDTO.contractDate( contract.getContractDate() );
 
         return contractDTO.build();
     }
@@ -53,6 +54,7 @@ public class ContractMapperImpl implements ContractMapper {
         contract.contractPrice( contractDTO.getContractPrice() );
         contract.contractLeadTime( contractDTO.getContractLeadTime() );
         contract.contractMemo( contractDTO.getContractMemo() );
+        contract.contractDate( contractDTO.getContractDate() );
 
         return contract.build();
     }

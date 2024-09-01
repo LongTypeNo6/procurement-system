@@ -164,6 +164,28 @@ public class InventoryServiceImpl implements InventoryService {
 
     }
 
+    @Override
+    public PageResultDTO<InventoryHistoryDTO, InventoryHistory> getInventoryHistoryListWithMaterial(PageRequestDTO pageRequestDTO, String materialCode) {
+        try {
+            Pageable pageable = pageRequestDTO.getPageable(Sort.by("inventoryHistoryCode").descending()); //나주에 바꿀것
+            Page<InventoryHistory> result = inventoryHistoryRepository.findAllByMaterialCode(materialCode,pageable);
+            Function<InventoryHistory, InventoryHistoryDTO> fn = (inventoryHistory -> {
+                InventoryHistoryDTO dto = inventoryHistoryMapper.toDto(inventoryHistory);
+                return dto;
+            });
+            return new PageResultDTO<>(result, fn);
+        } catch (Exception e) {
+            log.error("에러메세지", e);
+            throw e; // or handle the exception appropriately
+        }
+
+    }
+
+    @Override
+    public InventoryDTO getInventoryHistoryWithMaterial(String materialCode) {
+        return inventoryMapper.toDTO(inventoryRepository.findById(materialCode).get());
+    }
+
     //CYH : 24.08.30 추가
     private BooleanBuilder getInventoryHistorySearch(PageRequestDTO pageRequestDTO) {
         String type = pageRequestDTO.getType();

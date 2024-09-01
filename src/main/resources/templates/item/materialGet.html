@@ -44,9 +44,9 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="materialSafeQuantity" class="col-sm-2 col-form-label">안전재고</label>
+                            <label class="col-sm-2 col-form-label">단가</label>
                             <div class="col-sm-10">
-                                <input type="number" name="material_safe_quantity" id="materialSafeQuantity" class="form-control" disabled>
+                                <input type="number" class="form-control" id="contractAvgPrice" disabled>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -87,6 +87,45 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                재고내역보기
+                            </h5>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">현재고</label>
+                                <div class="col-sm-4">
+                                    <input type="number" class="form-control" id="materialQuantity" disabled>
+                                </div>
+                                <label class="col-sm-2 col-form-label">안전재고</label>
+                                <div class="col-sm-4">
+                                    <input type="number" name="material_safe_quantity" id="materialSafeQuantity" class="form-control" disabled>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">재고내역</label>
+                                <div class="col-sm-10">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">구분</th>
+                                            <th scope="col">변동량</th>
+                                            <th scope="col">남은재고</th>
+                                            <th scope="col">거래처/요청부서</th>
+                                            <th scope="col">날짜</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="inventoryHistoryList">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div> <!--End row-->
     </section>
@@ -101,6 +140,10 @@
             $('#materialStand').val(dto.materialStand);
             $('#materialTexture').val(dto.materialTexture);
             $('#materialSafeQuantity').val(dto.materialSafeQuantity);
+        })
+        $.getJSON("/inventorycontent/material/" + materialCode, function(dto) {
+            $('#contractAvgPrice').val(dto.contractAvgPrice);
+            $('#materialQuantity').val(dto.materialQuantity);
         })
         $.getJSON("/files/list/" + materialCode+"D", function(file) {
             $("#viewFileBtnD").prop("href","/files/foreignCode/view/"+materialCode+"D");
@@ -193,6 +236,51 @@
                 window.location.href = "/product/getListProduct";
             }
         }
+    });
+    var totalPage = 0;
+    var currentPage = 1;
+    const transactionTypeMapping = {
+        "DISPOSE" : "폐기",
+        "MISSING" : "분실",
+        "RELEASE" : "출고",
+        "RETURN": "반품",
+        "WAREHOUSING": "입고(정품)"
+    };
+    $(document).ready(function (e) {
+        console.log("자바스크립트작동")
+        function getInventoryHistoryContent(page) {
+            let jsonLink = `/inventorycontent/inventoryHistoryListWithMaterial/`+[[${materialCode}]]+`?page=${page}&size=10`;
+            return $.getJSON(jsonLink, function (data) {
+                console.log("요청", data);
+                console.log("요청링크", jsonLink)
+                if (totalPage === 0) {
+                    totalPage = data.totalPage;
+                }
+                var str = "";
+                $.each(data.dtoList, function (idx, dto) {
+                    let historyLink = ""
+                    if (dto.transactionType === "WAREHOUSING" || dto.transactionType === "RETURN") {
+                        historyLink = "/inventory/warehousingGet?warehousingCode=" + dto.transactionReference.substring(0, 19)
+                    } else if (dto.transactionType === "RELEASE") {
+                        historyLink = "/inventory/releaseGet?releaseCode=" + dto.transactionReference
+                    } else if (dto.transactionType === "DISPOSE" || dto.transactionType === "MISSING") {
+                        historyLink = "#"
+                    }
+                    str += '<tr>';
+                    str += '<th scope="row">' + ((page - 1) * data.size + idx + 1) + '</th>';
+                    str += '<td><a href="'+historyLink+'"> ' + transactionTypeMapping[dto.transactionType] + '</a></td>';
+                    str += '<td>' + (dto.quantityChange < 0 ? (dto.quantityChange * (-1)) : dto.quantityChange) + '</td>';
+                    str += '<td>' + dto.finalQuantity + '</td>';
+                    str += '<td>' + (dto.transactionCounterparty === null ? '-' : dto.transactionCounterparty) + '</td>';
+                    str += '<td>' + formatDate(dto.transactionDate) + '</td>';
+                    str += '</tr>';
+                });
+                $("#inventoryHistoryList").append(str); // 데이터를 덮어쓰지 않고 추가
+            });
+        }
+
+        getInventoryHistoryContent(1);
+        setupInfiniteScroll(getInventoryHistoryContent);
     });
 </script>
 <th:block th:replace="~{fragments/bodyFragment::footer}"></th:block>

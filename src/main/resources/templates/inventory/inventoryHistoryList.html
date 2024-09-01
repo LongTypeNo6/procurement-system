@@ -16,7 +16,7 @@
     <!-- ======= main ======= -->
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1>페이지제목</h1>
+            <h1>입출고내역</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.html">메인</a></li>
@@ -140,10 +140,19 @@
                     }
                     var str = "";
                     $.each(data.dtoList, function(idx, dto) {
+                        let historyLink=""
+                        if(dto.transactionType==="WAREHOUSING" || dto.transactionType==="RETURN"){
+                            historyLink="/inventory/warehousingGet?warehousingCode="+dto.transactionReference.substring(0,19)
+                        }else if(dto.transactionType==="RELEASE"){
+                            historyLink="/inventory/releaseGet?releaseCode="+dto.transactionReference
+                        }else if(dto.transactionType==="DISPOSE" || dto.transactionType==="MISSING"){
+                            historyLink="#"
+                        }
+
                         str += '<tr>';
                         str += '<th scope="row">' + ((page - 1) * data.size + idx + 1) + '</th>';
                         str += '<td>'+transactionTypeMapping[dto.transactionType]+'</td>';
-                        str += '<td><a href="#">'+dto.materialName+'</a></td>';
+                        str += '<td><a href="'+historyLink+'">'+dto.materialName+'</a></td>';
                         str += '<td>'+(dto.quantityChange<0?(dto.quantityChange*(-1)):dto.quantityChange)+'</td>';
                         str += '<td>'+dto.finalQuantity+'</td>';
                         str += '<td>'+(dto.transactionCounterparty===null?'-':dto.transactionCounterparty)+'</td>';

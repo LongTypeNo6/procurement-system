@@ -124,7 +124,7 @@
                     $.each(data.dtoList, function(idx, dto) {
                         str += '<tr>';
                         str += '<th scope="row">'+((page - 1) * data.size + idx + 1)+'</th>';
-                        str += '<td><a href="#">'+dto.materialName+'</a></td>';
+                        str += '<td><a href="/item/materialGet?materialCode='+dto.materialCode+'">'+dto.materialName+'</a></td>';
                         str += '<td>'+dto.materialSafeQuantity+'</td>';
                         str += '<td>'+dto.materialQuantity+'</td>';
                         str += '<td>'+dto.releaseDesireSumQuantity+'</td>';
