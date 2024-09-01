@@ -78,6 +78,15 @@ public class InventoryRestController {
         return new ResponseEntity<>(inventoryDTOList, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/inventoryListOrderByPrice", produces = "application/json")
+    public ResponseEntity<PageResultDTO<InventoryDTO, Inventory>> getAllInventoryListOrderByPrice(PageRequestDTO pageRequestDTO) {
+        log.info("창고재고리스트 가져오기 레스트 컨트롤러 진입");
+        PageResultDTO<InventoryDTO, Inventory> inventoryDTOList = inventoryService.getInventoryListOrderByPrice(pageRequestDTO);
+        log.info("창고재고리스트 가져오기 완료");
+        return new ResponseEntity<>(inventoryDTOList, HttpStatus.OK);
+    }
+
+
     @GetMapping(value = "/material/{materialCode}", produces = "application/json")
     public ResponseEntity<InventoryDTO> getAllInventoryHistoryWithMaterial(@PathVariable("materialCode") String materialCode) {
         log.info("입출고내역 가져오기 레스트 컨트롤러 진입");

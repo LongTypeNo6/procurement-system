@@ -84,6 +84,22 @@ public class InventoryServiceImpl implements InventoryService {
 
     }
 
+    @Override
+    public PageResultDTO<InventoryDTO, Inventory> getInventoryListOrderByPrice(PageRequestDTO pageRequestDTO) {
+        try {
+            Pageable pageable = pageRequestDTO.getPageable(Sort.unsorted()); //나주에 바꿀것
+            Page<Inventory> result = inventoryRepository.findAllOrderByTotalPriceDesc(pageable);
+            Function<Inventory, InventoryDTO> fn = (inventory -> {
+                InventoryDTO dto = inventoryMapper.toDTO(inventory);
+                return dto;
+            });
+            return new PageResultDTO<>(result, fn);
+        } catch (Exception e) {
+            log.error("에러메세지", e);
+            throw e;
+        }
+    }
+
     //CYH : 24.08.30 추가
     private BooleanBuilder getInventorySearch(PageRequestDTO pageRequestDTO) {
         String type = pageRequestDTO.getType();

@@ -50,4 +50,8 @@ public class InventoryController {
     public void inventoryHistoryList() {
     }
 
+    //재고금액현황
+    @RequestMapping("/inventoryPriceReport")
+    public void inventoryPriceReport() {
+    }
 }

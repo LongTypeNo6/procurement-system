@@ -10,6 +10,9 @@ public interface InventoryService {
     //창고재고 목록보기
     PageResultDTO<InventoryDTO, Inventory> getInventoryList(PageRequestDTO pageRequestDTO);
 
+    //창고재고 목록보기(금액순)
+    PageResultDTO<InventoryDTO, Inventory> getInventoryListOrderByPrice(PageRequestDTO pageRequestDTO);
+
     //창고재고 총재고량 보기
     Integer getTotallMaterialQuantity();
 

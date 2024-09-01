@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Title</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <th:block th:replace="~{fragments/headFragment}"></th:block>
+</head>
+<body>
+    <th:block th:replace="~{fragments/bodyFragment::header}"></th:block>
+    <th:block th:replace="~{fragments/bodyFragment::sidebar}"></th:block>
+    <!-- ======= main ======= -->
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>페이지제목</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">메인</a></li>
+                    <li class="breadcrumb-item">경로1</li>
+                    <li class="breadcrumb-item">경로2</li>
+                    <li class="breadcrumb-item active">페이지제목</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+        <section class="section dashboard">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">재고금액현황리스트 TOP5</h5>
+                            <div class="row mb-3">
+                                <div class="col-sm-6">
+                                    <div id="donutChart"></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">자재명</th>
+                                            <th scope="col">품목코드</th>
+                                            <th scope="col">거래처</th>
+                                            <th scope="col">재고수량</th>
+                                            <th scope="col">평균단가</th>
+                                            <th scope="col">재고금액</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        <tr>
+                                            <th scope="col">1</th>
+                                            <td>펜대</th>
+                                            <td>2100001</th>
+                                            <td>A상사</th>
+                                            <td>300</th>
+                                            <td>1000</th>
+                                            <td>300000</th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">2</th>
+                                            <td>스프링</th>
+                                            <td>2100002</th>
+                                            <td>B상사</th>
+                                            <td>200</th>
+                                            <td>300</th>
+                                            <td>60000</th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">3</th>
+                                            <td>잉크카트리지B</th>
+                                            <td>2100005</th>
+                                            <td>C상사</th>
+                                            <td>400</th>
+                                            <td>150</th>
+                                            <td>60000</th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">4</th>
+                                            <td>잉크카트리지K</th>
+                                            <td>2100004</th>
+                                            <td>C상사</th>
+                                            <td>500</th>
+                                            <td>100</th>
+                                            <td>50000</th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">5</th>
+                                            <td>펜촉</th>
+                                            <td>2100003</th>
+                                            <td>A상사</th>
+                                            <td>200</th>
+                                            <td>200</th>
+                                            <td>40000</th>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!--End row-->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">재고금액현황리스트(전체)</h5>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">총재고량</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="totallMaterialQuantity" disabled>
+                                </div>
+                                <label for="inputText" class="col-sm-2 col-form-label">금액</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="totallMaterialPrice" disabled>
+                                </div>
+                            </div>
+                            <br>
+                            <!-- Table with hoverable rows -->
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">자재명</th>
+                                    <th scope="col">품목코드</th>
+                                    <th scope="col">거래처</th>
+                                    <th scope="col">재고수량</th>
+                                    <th scope="col">평균단가</th>
+                                    <th scope="col">재고금액</th>
+                                </tr>
+                                </thead>
+                                <tbody id="inventoryListOrderByPrice">
+                                </tbody>
+                            </table>
+                            <!-- End Table with hoverable rows -->
+                        </div>
+                        <!--(페이지 내용 끝.)-->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- End #main -->
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#donutChart"), {
+                series: [300000, 60000, 60000, 50000, 40000, 52500],
+                chart: {
+                    height: 350,
+                    type: 'donut',
+                    toolbar: {
+                        show: true
+                    }
+                },
+                labels: ['펜대', '스프링', '잉크카트리지B', '잉크카트리지K', '펜촉', '기타'],
+            }).render();
+        });
+        var totalPage = 0;
+        var currentPage = 1;
+        $(document).ready(function (e) {
+            console.log("자바스크립트작동");
+            function getInventoryContent(page) {
+                let jsonLink = `/inventorycontent/inventoryListOrderByPrice?page=${page}&size=10`;
+                return $.getJSON(jsonLink, function (data) {
+                    console.log("요청", data);
+                    // 첫 번째 요청에서 totalPage 값 설정
+                    if (totalPage === 0) {
+                        totalPage = data.totalPage;
+                    }
+                    var str = "";
+                    $.each(data.dtoList, function (idx, dto) {
+                        str += '<tr>';
+                        str += '<th scope="row">' + ((page - 1) * data.size + idx + 1) + '</th>';
+                        str += '<td>'+dto.materialName+'</td>';
+                        str += '<td>'+dto.materialCode+'</td>';
+                        str += '<td>'+'보류'+'</td>';
+                        str += '<td>'+dto.materialQuantity+'</td>';
+                        str += '<td>'+dto.contractAvgPrice+'</td>';
+                        str += '<td>'+dto.totalPrice+'</td>';
+                        str += '</tr>';
+                    });
+                    $("#inventoryListOrderByPrice").append(str); // 데이터를 덮어쓰지 않고 추가
+                });
+            }
+
+            getInventoryContent(1);
+            setupInfiniteScroll(getInventoryContent);
+
+            $.getJSON("/inventorycontent/totallMaterialQuantity", function(data) {
+                console.log("응답데이터", data);
+                $("#totallMaterialQuantity").val(data);
+            }).fail(function(jqxhr, textStatus, error) {
+                var err = textStatus + ", " + error;
+                console.log("총재고량 불러오기 실패: " + err);
+            });
+            $.getJSON("/inventorycontent/totallMaterialPrice", function(data) {
+                console.log("응답데이터", data);
+                $("#totallMaterialPrice").val(data);
+            }).fail(function(jqxhr, textStatus, error) {
+                var err = textStatus + ", " + error;
+                console.log("총금액 불러오기 실패: " + err);
+            });
+        });
+    </script>
+    <th:block th:replace="~{fragments/bodyFragment::footer}"></th:block>
+    <th:block th:replace="~{fragments/bodyFragment::js}"></th:block>
+</body>
+</html>
