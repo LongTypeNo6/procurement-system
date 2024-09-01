@@ -16,13 +16,12 @@
     <!-- ======= main ======= -->
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1>페이지제목</h1>
+            <h1>재고금액현황리스트</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.html">메인</a></li>
-                    <li class="breadcrumb-item">경로1</li>
-                    <li class="breadcrumb-item">경로2</li>
-                    <li class="breadcrumb-item active">페이지제목</li>
+                    <li class="breadcrumb-item">재고관리</li>
+                    <li class="breadcrumb-item active">재고금액현황리스트</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -42,7 +41,6 @@
                                         <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">자재명</th>
-                                            <th scope="col">거래처</th>
                                             <th scope="col">재고수량</th>
                                             <th scope="col">평균단가</th>
                                             <th scope="col">재고금액</th>
@@ -80,7 +78,6 @@
                                     <th scope="col">#</th>
                                     <th scope="col">자재명</th>
                                     <th scope="col">품목코드</th>
-                                    <th scope="col">거래처</th>
                                     <th scope="col">재고수량</th>
                                     <th scope="col">평균단가</th>
                                     <th scope="col">재고금액</th>
@@ -120,7 +117,6 @@
                         str += '<th scope="row">' + ((page - 1) * data.size + idx + 1) + '</th>';
                         str += '<td>'+dto.materialName+'</td>';
                         str += '<td>'+dto.materialCode+'</td>';
-                        str += '<td>'+'보류'+'</td>';
                         str += '<td>'+formatNumberWithCommas(dto.materialQuantity)+'</td>';
                         str += '<td>'+formatNumberWithCommas(dto.contractAvgPrice)+'</td>';
                         str += '<td>'+formatNumberWithCommas(dto.totalPrice)+'</td>';
@@ -130,7 +126,6 @@
                             str5 += '<tr>'
                             str5 += '<th scope="col">'+(idx+1)+'</th>';
                             str5 += '<td id="materialName'+(idx+1)+'">'+dto.materialName+'</td>';
-                            str5 += '<td>'+'보류'+'</td>';
                             str5 += '<td>'+formatNumberWithCommas(dto.materialQuantity)+'</td>';
                             str5 += '<td>'+formatNumberWithCommas(dto.contractAvgPrice)+'</td>';
                             str5 += '<td id="totalPrice'+(idx+1)+'">'+formatNumberWithCommas(dto.totalPrice)+'</td>';
@@ -149,7 +144,7 @@
                             str6 += '<tr><td colspan="6" class="text-center">...</td></tr>'
                             str6 += '<tr>'
                             str6 += '<th scope="col">-</th>';
-                            str6 += '<td colspan="4">기타</td>';
+                            str6 += '<td colspan="3">기타</td>';
                             str6 += '<td>'+$("#totallMaterialPrice").val()+'</td>';
                             str6 += '</tr>';
                             $("#inventoryListOrderByPrice5").append(str6);
