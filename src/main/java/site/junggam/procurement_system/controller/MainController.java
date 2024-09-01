@@ -19,7 +19,7 @@ public class MainController {
     public void basic(){
     }
 
-    @RequestMapping("/main")
+    @RequestMapping("/")
     public String main(){
         return "/main/main";
     }
