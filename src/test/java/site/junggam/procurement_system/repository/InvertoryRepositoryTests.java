@@ -39,8 +39,6 @@ public class InvertoryRepositoryTests {
                     .material(material) // 존재하는 Material 사용
                     .materialQuantity((int)(Math.random()*100+1))
                     .releaseDesireSumQuantity((int)(Math.random()*100+1))
-                    .procurementPlanSumQuantity((int)(Math.random()*100+1))
-                    .warehousingSumQuantity((int)(Math.random()*100+1))
                     .contractAvgPrice(Math.random()*100+1)
                     .build();
             inventoryRepository.save(inventory);

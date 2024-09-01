@@ -119,9 +119,10 @@ public class InventoryServiceImpl implements InventoryService {
         return inventoryRepository.getTotallMaterialQuantity();
     }
 
+
     @Override
     public Double getTotallMaterialPrice() {
-        return inventoryRepository.getTotallContractAvgPrice()*inventoryRepository.getTotallMaterialQuantity();
+        return inventoryRepository.getTotallContractAvgPrice();
     }
 
 }

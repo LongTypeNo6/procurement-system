@@ -8,7 +8,7 @@ import site.junggam.procurement_system.entity.Material;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-09-01T01:42:04+0900",
+    date = "2024-09-01T15:18:34+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -28,6 +28,8 @@ public class InventoryMapperImpl implements InventoryMapper {
         if ( materialSafeQuantity != null ) {
             inventoryDTO.materialSafeQuantity( materialSafeQuantity );
         }
+        inventoryDTO.availableQuantity( inventory.getAvailableQuantity() );
+        inventoryDTO.totalPrice( inventory.getTotalPrice() );
         inventoryDTO.materialQuantity( inventory.getMaterialQuantity() );
         inventoryDTO.releaseDesireSumQuantity( inventory.getReleaseDesireSumQuantity() );
         inventoryDTO.warehousingPendingQuantity( inventory.getWarehousingPendingQuantity() );

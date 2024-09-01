@@ -503,7 +503,10 @@ public class PlanServiceImpl implements PlanService {
         contractRepository.save(contractMapper.toEntity(contractDTO));
         Material material = materialRepository.findById(contractDTO.getMaterialDTO().getMaterialCode()).get();
         material.changeContractStatus(MaterialContractStatus.CONFIRMED);
-        materialRepository.save(material);
+        materialRepository.save(material).getMaterialCode();
+        Inventory inventory = inventoryRepository.findById(contractDTO.getMaterialDTO().getMaterialCode()).get();
+        inventory.setContractAvgPrice(contractDTO.getContractPrice());
+        inventoryRepository.save(inventory);
         return contractCode;
     }
 

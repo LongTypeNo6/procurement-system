@@ -11,6 +11,6 @@ public interface InventoryRepository extends JpaRepository<Inventory, String> , 
     @Query("SELECT SUM(i.materialQuantity) FROM Inventory i")
     Integer getTotallMaterialQuantity();
 
-    @Query("SELECT AVG(i.contractAvgPrice) FROM Inventory i")
+    @Query("SELECT SUM(i.contractAvgPrice*i.materialQuantity) FROM Inventory i")
     Double getTotallContractAvgPrice();
 }

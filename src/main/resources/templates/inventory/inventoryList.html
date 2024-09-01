@@ -135,17 +135,13 @@
                         str += '</tr>';
                     });
                     $("#inventoryList").append(str); // 데이터를 덮어쓰지 않고 추가
-
                 });
             }
-
             getInventoryContent(1,"","");
             setupInfiniteScroll(getInventoryContent);
-
             $("#searchListBtn").on("click", function () {
                 var searchType=$("#searchType").val();
                 var searchKeyword=$("#searchKeyword").val();
-
                 console.log("검색타입은",searchType,"검색키워드는",searchKeyword);
                 $("#inventoryList").empty();
                 totalPage = 0;
@@ -154,7 +150,6 @@
                 getInventoryContent(1,searchType,searchKeyword);
                 setupInfiniteScroll(getInventoryContent);
             });
-
             $.getJSON("/inventorycontent/totallMaterialQuantity", function(data) {
                 console.log("응답데이터", data);
                 $("#totallMaterialQuantity").val(data);
@@ -169,7 +164,6 @@
                 var err = textStatus + ", " + error;
                 console.log("총금액 불러오기 실패: " + err);
             });
-
         });
     </script>
 

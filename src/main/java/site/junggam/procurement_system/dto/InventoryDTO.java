@@ -18,14 +18,6 @@ public class InventoryDTO {
     private int warehousingPendingQuantity; //입고 대기수량
     private double contractAvgPrice; //평균단가
 
-    // 계산 필드는 getter 메서드에서 계산하도록 변경
-    //가용재고
-    public int getAvailableQuantity() {
-        return materialQuantity - releaseDesireSumQuantity;
-    }
-
-    //각 자재별 총액
-    public double getTotalPrice() {
-        return materialQuantity * contractAvgPrice;
-    }
+    public int availableQuantity;
+    public double totalPrice;
 }

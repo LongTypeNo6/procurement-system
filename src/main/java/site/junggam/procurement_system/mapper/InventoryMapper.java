@@ -14,6 +14,8 @@ public interface InventoryMapper {
     @Mapping(source = "material.materialCode", target = "materialCode")
     @Mapping(source = "material.materialName", target = "materialName")
     @Mapping(source = "material.materialSafeQuantity", target = "materialSafeQuantity")
+    @Mapping(source = "availableQuantity", target = "availableQuantity") // 추가된 매핑
+    @Mapping(source = "totalPrice", target = "totalPrice") // 추가된 매핑
     InventoryDTO toDTO(Inventory inventory);
 
     @Mapping(source = "materialCode", target = "material.materialCode")
