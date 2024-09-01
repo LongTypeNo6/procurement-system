@@ -106,3 +106,30 @@ function checkNull(inputElement) {
     var result = value === "" ? null : value;
     return result;
 }
+//3자리마다 숫자 표시
+function formatNumberWithCommas(input) {
+    // 숫자만 처리하도록 input을 숫자로 변환
+    var number = parseFloat(input);
+
+    // 변환에 실패하거나 숫자가 아닌 값이 들어온 경우 그대로 반환
+    if (isNaN(number)) {
+        return input;
+    }
+
+    // 숫자를 3자리마다 콤마를 찍어 문자열로 변환
+    return number.toLocaleString('en-US');
+}
+
+//반대로 콤마까지 있는 숫자를 그냥 숫자로 반환
+function parseNumberFromCommas(input) {
+    // 문자열에서 콤마를 제거하고 숫자로 변환
+    var number = parseFloat(input.replace(/,/g, ''));
+
+    // 변환에 실패한 경우 NaN 반환
+    if (isNaN(number)) {
+        return null; // 또는 원하는 기본값을 반환
+    }
+
+    return number;
+}
+

@@ -19,6 +19,7 @@ import site.junggam.procurement_system.repository.InventoryHistoryRepository;
 import site.junggam.procurement_system.repository.InventoryRepository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -201,6 +202,7 @@ public class InventoryServiceImpl implements InventoryService {
     public InventoryDTO getInventoryHistoryWithMaterial(String materialCode) {
         return inventoryMapper.toDTO(inventoryRepository.findById(materialCode).get());
     }
+
 
     //CYH : 24.08.30 추가
     private BooleanBuilder getInventoryHistorySearch(PageRequestDTO pageRequestDTO) {

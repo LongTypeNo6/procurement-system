@@ -28,4 +28,5 @@ public interface InventoryService {
     //자재넣어서 인벤토리 보기
     InventoryDTO getInventoryHistoryWithMaterial(String materialCode);
 
+
 }

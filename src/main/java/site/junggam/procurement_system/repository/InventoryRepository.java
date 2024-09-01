@@ -8,6 +8,8 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import site.junggam.procurement_system.entity.Inventory;
 import site.junggam.procurement_system.entity.Purchaser;
 
+import java.util.List;
+
 public interface InventoryRepository extends JpaRepository<Inventory, String> , QuerydslPredicateExecutor<Inventory> {
 
     @Query("SELECT SUM(i.materialQuantity) FROM Inventory i")
@@ -18,5 +20,4 @@ public interface InventoryRepository extends JpaRepository<Inventory, String> , 
 
     @Query("SELECT i FROM Inventory i ORDER BY (i.materialQuantity * i.contractAvgPrice) DESC")
     Page<Inventory> findAllOrderByTotalPriceDesc(Pageable pageable);
-
 }

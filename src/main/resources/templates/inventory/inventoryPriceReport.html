@@ -42,60 +42,13 @@
                                         <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">자재명</th>
-                                            <th scope="col">품목코드</th>
                                             <th scope="col">거래처</th>
                                             <th scope="col">재고수량</th>
                                             <th scope="col">평균단가</th>
                                             <th scope="col">재고금액</th>
                                         </tr>
                                         </thead>
-
-                                        <tbody>
-                                        <tr>
-                                            <th scope="col">1</th>
-                                            <td>펜대</th>
-                                            <td>2100001</th>
-                                            <td>A상사</th>
-                                            <td>300</th>
-                                            <td>1000</th>
-                                            <td>300000</th>
-                                        </tr>
-                                        <tr>
-                                            <th scope="col">2</th>
-                                            <td>스프링</th>
-                                            <td>2100002</th>
-                                            <td>B상사</th>
-                                            <td>200</th>
-                                            <td>300</th>
-                                            <td>60000</th>
-                                        </tr>
-                                        <tr>
-                                            <th scope="col">3</th>
-                                            <td>잉크카트리지B</th>
-                                            <td>2100005</th>
-                                            <td>C상사</th>
-                                            <td>400</th>
-                                            <td>150</th>
-                                            <td>60000</th>
-                                        </tr>
-                                        <tr>
-                                            <th scope="col">4</th>
-                                            <td>잉크카트리지K</th>
-                                            <td>2100004</th>
-                                            <td>C상사</th>
-                                            <td>500</th>
-                                            <td>100</th>
-                                            <td>50000</th>
-                                        </tr>
-                                        <tr>
-                                            <th scope="col">5</th>
-                                            <td>펜촉</th>
-                                            <td>2100003</th>
-                                            <td>A상사</th>
-                                            <td>200</th>
-                                            <td>200</th>
-                                            <td>40000</th>
-                                        </tr>
+                                        <tbody id="inventoryListOrderByPrice5">
                                         </tbody>
                                     </table>
                                 </div>
@@ -146,64 +99,113 @@
     </main>
     <!-- End #main -->
     <script th:inline="javascript">
-        document.addEventListener("DOMContentLoaded", () => {
-            new ApexCharts(document.querySelector("#donutChart"), {
-                series: [300000, 60000, 60000, 50000, 40000, 52500],
-                chart: {
-                    height: 350,
-                    type: 'donut',
-                    toolbar: {
-                        show: true
-                    }
-                },
-                labels: ['펜대', '스프링', '잉크카트리지B', '잉크카트리지K', '펜촉', '기타'],
-            }).render();
-        });
         var totalPage = 0;
         var currentPage = 1;
+        var totalPrice5=0;
         $(document).ready(function (e) {
             console.log("자바스크립트작동");
+
             function getInventoryContent(page) {
                 let jsonLink = `/inventorycontent/inventoryListOrderByPrice?page=${page}&size=10`;
                 return $.getJSON(jsonLink, function (data) {
                     console.log("요청", data);
-                    // 첫 번째 요청에서 totalPage 값 설정
                     if (totalPage === 0) {
                         totalPage = data.totalPage;
                     }
                     var str = "";
+                    var str5 = "";
+
                     $.each(data.dtoList, function (idx, dto) {
                         str += '<tr>';
                         str += '<th scope="row">' + ((page - 1) * data.size + idx + 1) + '</th>';
                         str += '<td>'+dto.materialName+'</td>';
                         str += '<td>'+dto.materialCode+'</td>';
                         str += '<td>'+'보류'+'</td>';
-                        str += '<td>'+dto.materialQuantity+'</td>';
-                        str += '<td>'+dto.contractAvgPrice+'</td>';
-                        str += '<td>'+dto.totalPrice+'</td>';
+                        str += '<td>'+formatNumberWithCommas(dto.materialQuantity)+'</td>';
+                        str += '<td>'+formatNumberWithCommas(dto.contractAvgPrice)+'</td>';
+                        str += '<td>'+formatNumberWithCommas(dto.totalPrice)+'</td>';
                         str += '</tr>';
+
+                        if(page===1&&idx<5) {
+                            str5 += '<tr>'
+                            str5 += '<th scope="col">'+(idx+1)+'</th>';
+                            str5 += '<td id="materialName'+(idx+1)+'">'+dto.materialName+'</td>';
+                            str5 += '<td>'+'보류'+'</td>';
+                            str5 += '<td>'+formatNumberWithCommas(dto.materialQuantity)+'</td>';
+                            str5 += '<td>'+formatNumberWithCommas(dto.contractAvgPrice)+'</td>';
+                            str5 += '<td id="totalPrice'+(idx+1)+'">'+formatNumberWithCommas(dto.totalPrice)+'</td>';
+                            str5 += '</tr>';
+                            totalPrice5+=dto.totalPrice;
+                        }
                     });
-                    $("#inventoryListOrderByPrice").append(str); // 데이터를 덮어쓰지 않고 추가
+                    $("#inventoryListOrderByPrice").append(str);
+                    $("#inventoryListOrderByPrice5").append(str5);
+                    $.getJSON("/inventorycontent/totallMaterialPrice", function(data) {
+                        console.log("응답데이터", data);
+                        $("#totallMaterialPrice").val(formatNumberWithCommas(data));
+                        if (page === 1) {
+                            createDonutChart();
+                            let str6='';
+                            str6 += '<tr><td colspan="6" class="text-center">...</td></tr>'
+                            str6 += '<tr>'
+                            str6 += '<th scope="col">-</th>';
+                            str6 += '<td colspan="4">기타</td>';
+                            str6 += '<td>'+$("#totallMaterialPrice").val()+'</td>';
+                            str6 += '</tr>';
+                            $("#inventoryListOrderByPrice5").append(str6);
+                        }
+                    }).fail(function(jqxhr, textStatus, error) {
+                        var err = textStatus + ", " + error;
+                        console.log("총금액 불러오기 실패: " + err);
+                    });
+                    // 데이터가 로드된 후에 차트를 생성합니다.
+
                 });
+            }
+
+            function createDonutChart() {
+                const prices = [
+                    parseNumberFromCommas($("#totalPrice1").text()),
+                    parseNumberFromCommas($("#totalPrice2").text()),
+                    parseNumberFromCommas($("#totalPrice3").text()),
+                    parseNumberFromCommas($("#totalPrice4").text()),
+                    parseNumberFromCommas($("#totalPrice5").text()),
+                    (parseNumberFromCommas($("#totallMaterialPrice").val())-totalPrice5)
+                ];
+
+                const labels = [
+                    $("#materialName1").text(),
+                    $("#materialName2").text(),
+                    $("#materialName3").text(),
+                    $("#materialName4").text(),
+                    $("#materialName5").text(),
+                    '기타'
+                ];
+
+                new ApexCharts(document.querySelector("#donutChart"), {
+                    series: prices.map(price => parseFloat(price)),  // 숫자로 변환
+                    chart: {
+                        height: 350,
+                        type: 'donut',
+                        toolbar: {
+                            show: true
+                        }
+                    },
+                    labels: labels,
+                }).render();
             }
 
             getInventoryContent(1);
             setupInfiniteScroll(getInventoryContent);
 
-            $.getJSON("/inventorycontent/totallMaterialQuantity", function(data) {
+            $.getJSON("/inventorycontent/totallMaterialQuantity", function (data) {
                 console.log("응답데이터", data);
-                $("#totallMaterialQuantity").val(data);
+                $("#totallMaterialQuantity").val(formatNumberWithCommas(data));
             }).fail(function(jqxhr, textStatus, error) {
                 var err = textStatus + ", " + error;
                 console.log("총재고량 불러오기 실패: " + err);
             });
-            $.getJSON("/inventorycontent/totallMaterialPrice", function(data) {
-                console.log("응답데이터", data);
-                $("#totallMaterialPrice").val(data);
-            }).fail(function(jqxhr, textStatus, error) {
-                var err = textStatus + ", " + error;
-                console.log("총금액 불러오기 실패: " + err);
-            });
+
         });
     </script>
     <th:block th:replace="~{fragments/bodyFragment::footer}"></th:block>
