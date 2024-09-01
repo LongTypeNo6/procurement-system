@@ -45,4 +45,9 @@ public class InventoryController {
     public void inventoryList() {
     }
 
+    //입출고내역
+    @RequestMapping("/inventoryHistoryList")
+    public void inventoryHistoryList() {
+    }
+
 }

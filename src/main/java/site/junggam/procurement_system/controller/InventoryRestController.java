@@ -86,4 +86,12 @@ public class InventoryRestController {
     public ResponseEntity<Double> getTotallMaterialPrice(){
         return new ResponseEntity<>(inventoryService.getTotallMaterialPrice(), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/inventoryHistoryList", produces = "application/json")
+    public ResponseEntity<PageResultDTO<InventoryHistoryDTO, InventoryHistory>> getAllInventoryHistoryList(PageRequestDTO pageRequestDTO) {
+        log.info("입출고내역 가져오기 레스트 컨트롤러 진입");
+        PageResultDTO<InventoryHistoryDTO, InventoryHistory> inventoryDTOList = inventoryService.getInventoryHistoryList(pageRequestDTO);
+        log.info("입출고내역 가져오기 완료");
+        return new ResponseEntity<>(inventoryDTOList, HttpStatus.OK);
+    }
 }

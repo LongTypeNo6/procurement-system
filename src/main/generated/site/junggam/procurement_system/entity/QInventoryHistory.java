@@ -30,6 +30,8 @@ public class QInventoryHistory extends EntityPathBase<InventoryHistory> {
 
     public final NumberPath<Integer> quantityChange = createNumber("quantityChange", Integer.class);
 
+    public final StringPath transactionCounterparty = createString("transactionCounterparty");
+
     public final DateTimePath<java.time.LocalDateTime> transactionDate = createDateTime("transactionDate", java.time.LocalDateTime.class);
 
     public final StringPath transactionReference = createString("transactionReference");

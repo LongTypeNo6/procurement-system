@@ -1,10 +1,8 @@
 package site.junggam.procurement_system.service;
 
-import site.junggam.procurement_system.dto.InventoryDTO;
-import site.junggam.procurement_system.dto.PageRequestDTO;
-import site.junggam.procurement_system.dto.PageResultDTO;
-import site.junggam.procurement_system.dto.TemMaterialDTO;
+import site.junggam.procurement_system.dto.*;
 import site.junggam.procurement_system.entity.Inventory;
+import site.junggam.procurement_system.entity.InventoryHistory;
 import site.junggam.procurement_system.entity.TemMaterial;
 
 public interface InventoryService {
@@ -17,4 +15,7 @@ public interface InventoryService {
 
     //창고재고 총재고량 보기
     Double getTotallMaterialPrice();
+
+    //입출고내역 보기
+    PageResultDTO<InventoryHistoryDTO, InventoryHistory> getInventoryHistoryList(PageRequestDTO pageRequestDTO);
 }

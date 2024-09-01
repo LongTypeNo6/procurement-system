@@ -10,13 +10,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import site.junggam.procurement_system.dto.InventoryDTO;
-import site.junggam.procurement_system.dto.PageRequestDTO;
-import site.junggam.procurement_system.dto.PageResultDTO;
-import site.junggam.procurement_system.dto.WarehousingDTO;
+import site.junggam.procurement_system.dto.*;
 import site.junggam.procurement_system.entity.*;
 import site.junggam.procurement_system.mapper.ContractMapper;
+import site.junggam.procurement_system.mapper.InventoryHistoryMapper;
 import site.junggam.procurement_system.mapper.InventoryMapper;
+import site.junggam.procurement_system.repository.InventoryHistoryRepository;
 import site.junggam.procurement_system.repository.InventoryRepository;
 
 import java.time.LocalDate;
@@ -32,6 +31,9 @@ public class InventoryServiceImpl implements InventoryService {
 
     private final InventoryRepository inventoryRepository;
     private final InventoryMapper inventoryMapper;
+
+    private final InventoryHistoryRepository inventoryHistoryRepository;
+    private final InventoryHistoryMapper inventoryHistoryMapper;
 
     //CYH : 24.08.30 수정
     @Override
@@ -123,6 +125,76 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public Double getTotallMaterialPrice() {
         return inventoryRepository.getTotallContractAvgPrice();
+    }
+
+
+    @Override
+    public PageResultDTO<InventoryHistoryDTO, InventoryHistory> getInventoryHistoryList(PageRequestDTO pageRequestDTO) {
+        try {
+            Pageable pageable = pageRequestDTO.getPageable(Sort.by("inventoryHistoryCode").descending()); //나중에 바꿀것
+
+            // Q 클래스들 가져오기
+            QInventory qInventory = QInventory.inventory;
+            QInventoryHistory qInventoryHistory = QInventoryHistory.inventoryHistory;
+            QMaterial qMaterial = QMaterial.material;
+
+            // QueryDSL의 JPAQuery 사용
+            JPAQuery<InventoryHistory> query = queryFactory.selectFrom(qInventoryHistory)
+                    .where(getInventoryHistorySearch(pageRequestDTO))
+                    .orderBy(qInventoryHistory.inventoryHistoryCode.desc());
+
+            // 페이지 처리
+            List<InventoryHistory> results = query.offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+
+            long total = query.fetchCount();  // 총 카운트 계산
+
+            Function<InventoryHistory, InventoryHistoryDTO> fn = inventoryHistory -> {
+                InventoryHistoryDTO dto = inventoryHistoryMapper.toDto(inventoryHistory);
+                return dto;
+            };
+
+            return new PageResultDTO<>(new PageImpl<>(results, pageable, total), fn);
+
+        } catch (Exception e) {
+            log.error("에러메세지", e);
+            throw e; // or handle the exception appropriately
+        }
+
+    }
+
+    //CYH : 24.08.30 추가
+    private BooleanBuilder getInventoryHistorySearch(PageRequestDTO pageRequestDTO) {
+        String type = pageRequestDTO.getType();
+        String keyword = pageRequestDTO.getKeyword();
+
+        QInventory qInventory = QInventory.inventory;
+        QInventoryHistory qInventoryHistory = QInventoryHistory.inventoryHistory;
+        QMaterial qMaterial = QMaterial.material;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qInventoryHistory.inventoryHistoryCode.isNotNull());  // 기본 조건
+
+        if (type != null) {
+            BooleanBuilder builder1 = new BooleanBuilder();
+
+            if (type.contains("1")) {
+                BooleanBuilder nameSearchBuilder = new BooleanBuilder();
+                if (keyword != null) {
+                    nameSearchBuilder.or(qMaterial.materialName.contains(keyword));
+                }
+                builder1.and(nameSearchBuilder);
+            }
+
+            if (type.contains("2")) {
+                builder1.or(qMaterial.materialCode.contains(keyword));
+            }
+
+            builder.and(builder1);
+        }
+
+        return builder;
     }
 
 }
