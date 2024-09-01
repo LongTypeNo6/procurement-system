@@ -3,19 +3,24 @@ package site.junggam.procurement_system.mapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import site.junggam.procurement_system.dto.UnitBomDTO;
+import site.junggam.procurement_system.entity.Inventory;
 import site.junggam.procurement_system.entity.Material;
 import site.junggam.procurement_system.entity.Unit;
 import site.junggam.procurement_system.entity.UnitBom;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-09-01T18:38:54+0900",
+    date = "2024-09-02T03:35:52+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
 public class UnitBomMapperImpl implements UnitBomMapper {
+
+    @Autowired
+    private InventoryMapper inventoryMapper;
 
     @Override
     public UnitBomDTO toDTO(UnitBom unitBom) {
@@ -25,6 +30,7 @@ public class UnitBomMapperImpl implements UnitBomMapper {
 
         UnitBomDTO.UnitBomDTOBuilder unitBomDTO = UnitBomDTO.builder();
 
+        unitBomDTO.inventoryDTO( inventoryMapper.toDTO( unitBomMaterialInventory( unitBom ) ) );
         unitBomDTO.unitName( unitBomUnitUnitName( unitBom ) );
         unitBomDTO.unitCode( unitBomUnitUnitCode( unitBom ) );
         unitBomDTO.materialName( unitBomMaterialMaterialName( unitBom ) );
@@ -67,6 +73,21 @@ public class UnitBomMapperImpl implements UnitBomMapper {
         unitBom.unitBomProcess( unitBomDTO.getUnitBomProcess() );
 
         return unitBom.build();
+    }
+
+    private Inventory unitBomMaterialInventory(UnitBom unitBom) {
+        if ( unitBom == null ) {
+            return null;
+        }
+        Material material = unitBom.getMaterial();
+        if ( material == null ) {
+            return null;
+        }
+        Inventory inventory = material.getInventory();
+        if ( inventory == null ) {
+            return null;
+        }
+        return inventory;
     }
 
     private String unitBomUnitUnitName(UnitBom unitBom) {

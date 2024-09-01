@@ -16,13 +16,11 @@
     <!-- ======= main ======= -->
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1>페이지제목</h1>
+            <h1>제품생산계산기</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.html">메인</a></li>
-                    <li class="breadcrumb-item">경로1</li>
-                    <li class="breadcrumb-item">경로2</li>
-                    <li class="breadcrumb-item active">페이지제목</li>
+                    <li class="breadcrumb-item active">제품생산계산기</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -73,14 +71,14 @@
                                 </div>
                                 <label for="inputText" class="col-sm-2 col-form-label">현가용기준최댓값</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" value="200" disabled>
+                                    <input type="text" class="form-control" id="availableMaxValue" disabled>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-6"></div>
                                 <label for="inputText" class="col-sm-2 col-form-label">현재고기준최댓값</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" value="250" disabled>
+                                    <input type="text" class="form-control" id="materialMaxValue" disabled>
                                 </div>
                             </div>
                             <hr>
@@ -94,7 +92,7 @@
                                     <th scope="col">가용재고</th>
                                     <th scope="col">현재고</th>
                                     <th scope="col">입고예정수량</th>
-                                    <th scope="col">입고예정일<br>(거래처)</th>
+                                    <th scope="col">거래처</th>
 
                                 </tr>
                                 </thead>
@@ -172,47 +170,11 @@
 
             $("input[name='division']").change(function() {
                 let newDivision = $(this).val(); // 새로운 선택된 값
-                if(checkIfAnyInputHasValue()){
-                    $('#changeDivision').modal('show');
-
-                    // "바꾸기" 버튼 클릭 시
-                    $("#divisionSubmit").off("click").on("click", function () {
-                        previousDivision = newDivision; // 새로운 값을 저장
-                        $('form')[0].reset();
-                        $(".division").text(divisionMapping[newDivision]);
-                        $("#divisionListName").text(divisionMapping[newDivision]+'리스트')
-                        $("#divisionSearchList").html("");
-                        $("#bomList").html("");
-                        $("input[name='division'][value='" + newDivision + "']").prop('checked', true);
-                        $('#productionPlanRegDate').val(todayValue());
-                        $("#changeDivision").modal('hide');
-                    });
-
-                    // "아니오" 버튼 클릭 시
-                    $("#divisionNoSubmit").off("click").on("click", function () {
-                        $("input[name='division'][value='" + previousDivision + "']").prop('checked', true); // 이전 값으로 복원
-                    });
-                } else {
-                    // 내용이 없으면 그냥 바꾸기
-                    previousDivision = newDivision; // 새로운 값을 저장
-                    $(".division").text(divisionMapping[newDivision]);
-                    $("#divisionListName").text(divisionMapping[newDivision]+'리스트')
-                    $("#divisionSearchList").html("");
-                }
+                previousDivision = newDivision; // 새로운 값을 저장
+                $(".division").text(divisionMapping[newDivision]);
+                $("#divisionListName").text(divisionMapping[newDivision]+'리스트')
+                $("#divisionSearchList").html("");
             });
-            //폼안에 내용이 비엇는지 안 비었는 지 확인
-            function checkIfAnyInputHasValue() {
-                let hasValue = false;
-                // 제외하고 싶은 필드들을 선택자에 포함시키고, not() 메서드로 제외
-                $('form input, form textarea, form select').not('#productionPlanRegDate, #division1, #division2').each(function() {
-                    if ($(this).val().trim() !== '') { // 값이 비어있지 않으면
-                        hasValue = true;
-                        return false; // 값이 있는 필드를 찾았으므로 순회를 종료
-                    }
-                });
-                return hasValue;
-            }
-
             $("#divisionSelectionBtn").on("click", function () {
                 console.log("검색버튼 클릭됨")
                 var selectedCode = null;
@@ -283,12 +245,12 @@
                                 productIdx+=1;
                                 str += '<tr>';
                                 str += '<th scope="row">'+productIdx+'</th>';
-                                str += '<td>펜대</td>';
-                                str += '<td>300<br><b style="color: rgb(255, 0, 0);">(100)</b><br>(-)</td>';
-                                str += '<td>200</td>';
-                                str += '<td>400</td>';
-                                str += '<td>50</td>';
-                                str += '<td>24-08-01<br>(A상사)</td>';
+                                str += '<td>'+dto.materialName+'</td>';
+                                str += '<td><span id="procurementPlanQuantity'+productIdx+'" data-bom-quantity="'+(productDto.productBomQuantity*dto.unitBomQuantity)+'"></span><br><span id="lackAvailableQuantity'+productIdx+'"></span></b><br><span id="lackMaterialQuantity'+productIdx+'"></span></td>';
+                                str += '<td id="availableQuantity'+productIdx+'">'+dto.inventoryDTO.availableQuantity+'</td>';
+                                str += '<td id="materialQuantity'+productIdx+'">'+dto.inventoryDTO.materialQuantity+'</td>';
+                                str += '<td>'+dto.inventoryDTO.warehousingPendingQuantity+'</td>';
+                                str += '<td>'+(dto.inventoryDTO.warehousingPendingQuantity===0?'-':dto.inventoryDTO.purchaserName)+'</td>';
                                 str += '</tr>';
                             });
                         });
@@ -300,11 +262,12 @@
                             unitIdx+=1;
                             str += '<tr>';
                             str += '<th scope="row">'+unitIdx+'</th>';
-                            str += '<td id="materialName'+unitIdx+'" data-material-code="'+dto.materialCode+'">'+dto.materialName+'</td>';
-                            str += '<td id="bomQuantity'+unitIdx+'">'+dto.unitBomQuantity+'</td>';
-                            str += '<td id="procurementPlanQuantity'+unitIdx+'"></td>';
-                            str += '<td>'+dto.unitBomProcess+'</td>';
-                            str += '<td><input type="date" class="form-control" name="procurementPlanDeadLine" id="procurementPlanDeadLine'+unitIdx+'"></td>';
+                            str += '<td>'+dto.materialName+'</td>';
+                            str += '<td><span id="procurementPlanQuantity'+unitIdx+'" data-bom-quantity="'+dto.unitBomQuantity+'"></span><br><span id="lackAvailableQuantity'+unitIdx+'"></span></b><br><span id="lackMaterialQuantity'+unitIdx+'"></span></td>';
+                            str += '<td id="availableQuantity'+unitIdx+'">'+dto.inventoryDTO.availableQuantity+'</td>';
+                            str += '<td id="materialQuantity'+unitIdx+'">'+dto.inventoryDTO.materialQuantity+'</td>';
+                            str += '<td>'+dto.inventoryDTO.warehousingPendingQuantity+'</td>';
+                            str += '<td>'+(dto.inventoryDTO.warehousingPendingQuantity===0?'-':dto.inventoryDTO.purchaserName)+'</td>';
                             str += '</tr>';
                         });
                         $("#bomList").html(str);
@@ -316,6 +279,7 @@
                     } else {
                         console.log("생산날짜가 설정되어 있지 않음.");
                     }
+                    calculateQuantityMax();
                     calculateQuantity();
                 })
             });
@@ -327,12 +291,46 @@
                 const productionPlanQuantity = parseInt($("#productionPlanQuantity").val());
                 if (!isNaN(productionPlanQuantity)) {
                     $("#bomList tr").each(function(index, element) {
-                        const bomQuantity = parseInt($(element).find("[id^='bomQuantity']").text());
+                        const bomQuantity = parseInt($(element).find("[id^='procurementPlanQuantity']").data("bom-quantity"));
                         const procurementQuantity = productionPlanQuantity * bomQuantity;
+                        const availableQuantity= parseInt($(element).find("[id^='availableQuantity']").text());
+                        const materialQuantity= parseInt($(element).find("[id^='materialQuantity']").text());
+                        console.log("가용재고",availableQuantity)
+                        console.log("현재고",materialQuantity)
+                        const lackAvailableQuantity = availableQuantity-procurementQuantity>=0?'(-)':'<b style="color: rgb(255, 0, 0);">('+((availableQuantity-procurementQuantity)*(-1))+')</b>';
+                        const lackMaterialQuantity = materialQuantity-procurementQuantity>=0?'(-)':'<b style="color: rgb(255, 0, 0);">('+((materialQuantity-procurementQuantity)*(-1))+')</b>';
                         $(element).find("[id^='procurementPlanQuantity']").text(procurementQuantity);
+                        $(element).find("[id^='lackAvailableQuantity']").html(lackAvailableQuantity);
+                        $(element).find("[id^='lackMaterialQuantity']").html(lackMaterialQuantity);
                     });
                 }
             };
+            function calculateQuantityMax() {
+                let minAvailableRatio = Infinity;
+                let minMaterialRatio = Infinity;
+
+                $("#bomList tr").each(function(index, element) {
+                    const bomQuantity = parseInt($(element).find("[id^='procurementPlanQuantity']").data("bom-quantity"));
+                    const availableQuantity = parseInt($(element).find("[id^='availableQuantity']").text());
+                    const materialQuantity = parseInt($(element).find("[id^='materialQuantity']").text());
+
+                    if (bomQuantity > 0) {
+                        const availableRatio = Math.floor(availableQuantity / bomQuantity);
+                        const materialRatio = Math.floor(materialQuantity / bomQuantity);
+
+                        if (availableRatio < minAvailableRatio) {
+                            minAvailableRatio = availableRatio;
+                        }
+                        if (materialRatio < minMaterialRatio) {
+                            minMaterialRatio = materialRatio;
+                        }
+                    }
+                });
+
+                $("#productionPlanQuantity").val(minAvailableRatio === Infinity ? 0 : minAvailableRatio);
+                $("#availableMaxValue").val(minAvailableRatio === Infinity ? 0 : minAvailableRatio);
+                $("#materialMaxValue").val(minMaterialRatio === Infinity ? 0 : minMaterialRatio);
+            }
         });
     </script>
     <th:block th:replace="~{fragments/bodyFragment::footer}"></th:block>

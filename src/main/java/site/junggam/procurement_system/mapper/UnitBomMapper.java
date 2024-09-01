@@ -8,11 +8,12 @@ import site.junggam.procurement_system.entity.UnitBom;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {InventoryMapper.class})
 public interface UnitBomMapper {
 
     UnitBomMapper INSTANCE = Mappers.getMapper(UnitBomMapper.class);
 
+    @Mapping(source = "material.inventory", target = "inventoryDTO")
     @Mapping(source = "unit.unitName", target = "unitName")
     @Mapping(source = "unit.unitCode", target = "unitCode")
     @Mapping(source = "material.materialName", target = "materialName")

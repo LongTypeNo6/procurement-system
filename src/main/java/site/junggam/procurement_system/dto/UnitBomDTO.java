@@ -20,4 +20,6 @@ public class UnitBomDTO {
     private String materialTexture;
     private int unitBomQuantity;
     private String unitBomProcess;
+
+    private InventoryDTO inventoryDTO;
 }
