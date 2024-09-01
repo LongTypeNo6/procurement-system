@@ -3,12 +3,10 @@ package site.junggam.procurement_system.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import site.junggam.procurement_system.entity.Notice;
 import site.junggam.procurement_system.repository.NoticeRepository;
 
-import java.util.List;
 
 
 @Service
@@ -20,10 +18,6 @@ public class NoticeService {
     public void register(Notice notice) {
         noticeRepository.save(notice);
     }
-
-//    public List<Notice> list() {
-//        return noticeRepository.findAll(Sort.by(Sort.Direction.DESC, "noticeNumber"));
-//    }
 
     public Page<Notice> list(Pageable pageable) {
         return noticeRepository.findAll(pageable);

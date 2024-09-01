@@ -35,16 +35,9 @@
                     <div class="card-body">
                         <b><h5 class="card-title"><strong>전체 공지사항</strong> </h5></b>
 
-                        <h7 class="text"> 제목검색</h7>
-                        <input title="검색" name="keyword" type="text">
-                        &nbsp
-                        <button type="button" class="btn btn-primary btn-sm">검색</button>
-                        &nbsp
-
                         <a href="noticeregister" class="register">
-                            <button type="button" class="btn btn-primary btn-sm">글쓰기</button></a>
+                            <button type="button" class="btn btn-outline-primary btn-sm">글쓰기</button></a>
                         &nbsp
-
 
                         <!-- Table with hoverable rows -->
                         <table class="table table-hover">
@@ -70,22 +63,34 @@
                         </table>
                         <!-- End Table with hoverable rows -->
 
-                        <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
-                            <a th:if="${page != nowPage}" th:href="@{/notice/noticelist(page = ${page - 1})}" th:text="${page}"></a>
-                            <strong th:if="${page == nowPage}" th:text="${page}" style="color : red"></strong>
-                        </th:block>
+                        <!-- Notice Pagination -->
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
 
-                        <!-- Centered Pagination -->
-<!--                        <nav aria-label="Page navigation example">-->
-<!--                            <ul class="pagination justify-content-center">-->
-<!--                                <li class="page-item disabled">-->
-<!--                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Prev</a>-->
-<!--                                </li>-->
-<!--                                <li class="page-item">-->
-<!--                                    <a class="page-link" href="#">Next</a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </nav>>-->
+                                <!-- Previous Page Link -->
+                                <li class="page-item" th:classappend="${noticeNowPage > 1} ? '' : 'disabled'">
+                                    <a class="page-link"
+                                       th:href="@{|/notice/noticelist?page=${noticeNowPage-2}&size=${notice.size}&deptPage=${deptNowPage-1}|}"
+                                       aria-disabled="${noticeNowPage <= 1}">&laquo; Prev</a>
+                                </li>
+
+                                <!-- Page Numbers -->
+                                <span th:each="i : ${#numbers.sequence(noticeStartPage, noticeEndPage)}">
+                                    <li class="page-item" th:classappend="${i == noticeNowPage} ? 'active' : ''">
+                                        <a class="page-link"
+                                            th:href="@{|/notice/noticelist?page=${i-1}&size=${notice.size}&deptPage=${deptNowPage-1}|}"
+                                            th:text="${i}"></a>
+                                    </li>
+                                </span>
+
+                                <!-- Next Page Link -->
+                                <li class="page-item" th:classappend="${noticeNowPage < notice.totalPages} ? '' : 'disabled'">
+                                    <a class="page-link"
+                                       th:href="@{|/notice/noticelist?page=${noticeNowPage}&size=${notice.size}&deptPage=${deptNowPage-1}|}"
+                                       aria-disabled="${noticeNowPage >= notice.totalPages}">Next &raquo;</a>
+                                </li>
+                            </ul>
+                        </nav>
                         <!-- End Centered Pagination -->
                     </div>
                 </div>
@@ -97,18 +102,10 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <b><h5 class="card-title"><strong>부서 알림 게시판</strong> </h5></b>
-
-                        <h7 class="text"> 제목검색 </h7>
-
-
-                        <input title="검색" type="text">
-                        &nbsp
-                        <button type="button" class="btn btn-primary btn-sm">검색</button>
-                        &nbsp
+                        <b><h5 class="card-title"><strong>부서 알림 게시판</strong></h5></b>
 
                         <a href="/deptnotice/deptnoticeregister" class="deptregister">
-                            <button type="button" class="btn btn-primary btn-sm">글쓰기</button></a>
+                            <button type="button" class="btn btn-outline-primary btn-sm">글쓰기</button></a>
                         &nbsp
 
                         <!-- Table with hoverable rows -->
@@ -135,30 +132,42 @@
                         </table>
                         <!-- End Table with hoverable rows -->
 
-                        <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
-                            <a th:if="${page != nowPage}" th:href="@{/notice/noticelist(page = ${page - 1})}" th:text="${page}"></a>
-                            <strong th:if="${page == nowPage}" th:text="${page}" style="color : red"></strong>
-                        </th:block>
+                        <!-- DeptNotice Pagination -->
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
 
-                        <!-- Centered Pagination -->
-<!--                        <nav aria-label="Page navigation example">-->
-<!--                            <ul class="pagination justify-content-center">-->
-<!--                                <li class="page-item disabled">-->
-<!--                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Prev</a>-->
-<!--                                </li>-->
-<!--                                <li class="page-item">-->
-<!--                                    <a class="page-link" href="#">Next</a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </nav>-->
+                                <!-- Previous Page Link -->
+                                <li class="page-item" th:classappend="${deptNowPage > 1} ? '' : 'disabled'">
+                                    <a class="page-link"
+                                       th:href="@{|/notice/noticelist?deptPage=${deptNowPage-2}&deptSize=${deptnotice.size}&page=${noticeNowPage-1}|}"
+                                       aria-disabled="${deptNowPage <= 1}">&laquo; Prev</a>
+                                </li>
+
+                                <!-- Page Numbers -->
+                                <span th:each="i : ${#numbers.sequence(deptStartPage, deptEndPage)}">
+                                    <li class="page-item" th:classappend="${i == deptNowPage} ? 'active' : ''">
+                                         <a class="page-link"
+                                            th:href="@{|/notice/noticelist?deptPage=${i-1}&deptSize=${deptnotice.size}&page=${noticeNowPage-1}|}"
+                                            th:text="${i}"></a>
+                                    </li>
+                                 </span>
+
+                                <!-- Next Page Link -->
+                                <li class="page-item" th:classappend="${deptNowPage < deptnotice.totalPages} ? '' : 'disabled'">
+                                    <a class="page-link"
+                                       th:href="@{|/notice/noticelist?deptPage=${deptNowPage}&deptSize=${deptnotice.size}&page=${noticeNowPage-1}|}"
+                                       aria-disabled="${deptNowPage >= deptnotice.totalPages}">Next &raquo;</a>
+                                </li>
+                            </ul>
+                        </nav>
                         <!-- End Centered Pagination -->
                     </div>
                 </div>
             </div>
         </div> </section>
 </main>
-</div> <!--End row-->
-</section>
+        </div> <!--End row-->
+    </section>
 </main>
 <!-- End #main -->
 <th:block th:replace="~{/fragments/bodyFragment::footer}"></th:block>
