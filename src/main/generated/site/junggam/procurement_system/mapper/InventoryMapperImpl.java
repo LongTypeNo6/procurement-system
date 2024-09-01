@@ -3,12 +3,14 @@ package site.junggam.procurement_system.mapper;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import site.junggam.procurement_system.dto.InventoryDTO;
+import site.junggam.procurement_system.entity.Contract;
 import site.junggam.procurement_system.entity.Inventory;
 import site.junggam.procurement_system.entity.Material;
+import site.junggam.procurement_system.entity.Purchaser;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-09-01T18:38:54+0900",
+    date = "2024-09-02T00:25:37+0900",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -22,6 +24,8 @@ public class InventoryMapperImpl implements InventoryMapper {
 
         InventoryDTO.InventoryDTOBuilder inventoryDTO = InventoryDTO.builder();
 
+        inventoryDTO.purchaserCode( inventoryMaterialContractPurchaserPurchaserCode( inventory ) );
+        inventoryDTO.purchaserName( inventoryMaterialContractPurchaserPurchaserName( inventory ) );
         inventoryDTO.materialCode( inventoryMaterialMaterialCode( inventory ) );
         inventoryDTO.materialName( inventoryMaterialMaterialName( inventory ) );
         Integer materialSafeQuantity = inventoryMaterialMaterialSafeQuantity( inventory );
@@ -54,6 +58,52 @@ public class InventoryMapperImpl implements InventoryMapper {
         inventory.contractAvgPrice( inventoryDTO.getContractAvgPrice() );
 
         return inventory.build();
+    }
+
+    private String inventoryMaterialContractPurchaserPurchaserCode(Inventory inventory) {
+        if ( inventory == null ) {
+            return null;
+        }
+        Material material = inventory.getMaterial();
+        if ( material == null ) {
+            return null;
+        }
+        Contract contract = material.getContract();
+        if ( contract == null ) {
+            return null;
+        }
+        Purchaser purchaser = contract.getPurchaser();
+        if ( purchaser == null ) {
+            return null;
+        }
+        String purchaserCode = purchaser.getPurchaserCode();
+        if ( purchaserCode == null ) {
+            return null;
+        }
+        return purchaserCode;
+    }
+
+    private String inventoryMaterialContractPurchaserPurchaserName(Inventory inventory) {
+        if ( inventory == null ) {
+            return null;
+        }
+        Material material = inventory.getMaterial();
+        if ( material == null ) {
+            return null;
+        }
+        Contract contract = material.getContract();
+        if ( contract == null ) {
+            return null;
+        }
+        Purchaser purchaser = contract.getPurchaser();
+        if ( purchaser == null ) {
+            return null;
+        }
+        String purchaserName = purchaser.getPurchaserName();
+        if ( purchaserName == null ) {
+            return null;
+        }
+        return purchaserName;
     }
 
     private String inventoryMaterialMaterialCode(Inventory inventory) {

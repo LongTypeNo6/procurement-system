@@ -10,7 +10,8 @@ import site.junggam.procurement_system.entity.Inventory;
 public interface InventoryMapper {
     InventoryMapper INSTANCE = Mappers.getMapper(InventoryMapper.class);
 
-
+    @Mapping(source = "material.contract.purchaser.purchaserCode", target = "purchaserCode")
+    @Mapping(source = "material.contract.purchaser.purchaserName", target = "purchaserName")
     @Mapping(source = "material.materialCode", target = "materialCode")
     @Mapping(source = "material.materialName", target = "materialName")
     @Mapping(source = "material.materialSafeQuantity", target = "materialSafeQuantity")

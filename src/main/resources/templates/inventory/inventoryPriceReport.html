@@ -41,6 +41,7 @@
                                         <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">자재명</th>
+                                            <th scope="col">거래처</th>
                                             <th scope="col">재고수량</th>
                                             <th scope="col">평균단가</th>
                                             <th scope="col">재고금액</th>
@@ -78,6 +79,7 @@
                                     <th scope="col">#</th>
                                     <th scope="col">자재명</th>
                                     <th scope="col">품목코드</th>
+                                    <th scope="col">거래처</th>
                                     <th scope="col">재고수량</th>
                                     <th scope="col">평균단가</th>
                                     <th scope="col">재고금액</th>
@@ -117,6 +119,7 @@
                         str += '<th scope="row">' + ((page - 1) * data.size + idx + 1) + '</th>';
                         str += '<td>'+dto.materialName+'</td>';
                         str += '<td>'+dto.materialCode+'</td>';
+                        str += '<td>'+dto.purchaserName+'</td>';
                         str += '<td>'+formatNumberWithCommas(dto.materialQuantity)+'</td>';
                         str += '<td>'+formatNumberWithCommas(dto.contractAvgPrice)+'</td>';
                         str += '<td>'+formatNumberWithCommas(dto.totalPrice)+'</td>';
@@ -126,6 +129,7 @@
                             str5 += '<tr>'
                             str5 += '<th scope="col">'+(idx+1)+'</th>';
                             str5 += '<td id="materialName'+(idx+1)+'">'+dto.materialName+'</td>';
+                            str5 += '<td>'+dto.purchaserName+'</td>';
                             str5 += '<td>'+formatNumberWithCommas(dto.materialQuantity)+'</td>';
                             str5 += '<td>'+formatNumberWithCommas(dto.contractAvgPrice)+'</td>';
                             str5 += '<td id="totalPrice'+(idx+1)+'">'+formatNumberWithCommas(dto.totalPrice)+'</td>';

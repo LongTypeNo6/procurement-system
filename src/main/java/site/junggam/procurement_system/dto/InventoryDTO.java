@@ -20,4 +20,6 @@ public class InventoryDTO {
 
     public int availableQuantity;
     public double totalPrice;
+    private String purchaserCode;
+    private String purchaserName;
 }

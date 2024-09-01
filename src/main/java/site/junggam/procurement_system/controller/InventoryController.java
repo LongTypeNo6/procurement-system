@@ -54,4 +54,9 @@ public class InventoryController {
     @RequestMapping("/inventoryPriceReport")
     public void inventoryPriceReport() {
     }
+
+    //제품생산계산기
+    @RequestMapping("/productionCalculatingMachine")
+    public void productionCalculatingMachine() {
+    }
 }

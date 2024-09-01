@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Title</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <th:block th:replace="~{fragments/headFragment}"></th:block>
+</head>
+<body>
+    <th:block th:replace="~{fragments/bodyFragment::header}"></th:block>
+    <th:block th:replace="~{fragments/bodyFragment::sidebar}"></th:block>
+    <!-- ======= main ======= -->
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>페이지제목</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">메인</a></li>
+                    <li class="breadcrumb-item">경로1</li>
+                    <li class="breadcrumb-item">경로2</li>
+                    <li class="breadcrumb-item active">페이지제목</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section dashboard">
+            <div class="row">
+                <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">제품생산계산기</h5>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">생산구분</label>
+                                <div class="col-sm-10">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="division" id="division1" value="product" checked>
+                                        <label class="form-check-label" for="division1">
+                                            제품
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="division" id="division2" value="unit">
+                                        <label class="form-check-label" for="division2">
+                                            유닛
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label"><span class="division">제품</span>코드</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group mb">
+                                        <input type="text" class="form-control" id="divisionCode" placeholder="검색버튼을 눌러주세요" disabled>
+                                        <button type="button" class="input-group-text" id="divisionSelectionBtn" data-bs-toggle="modal" data-bs-target="#divisionSelection"  >검색</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label"><span class="division">제품</span>명</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="divisionName" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputText" class="col-sm-2 col-form-label">추가필요수량 (<span class="division">제품</span>)</label>
+                                <div class="col-sm-4">
+                                    <input type="number" class="form-control" id="productionPlanQuantity">
+                                </div>
+                                <label for="inputText" class="col-sm-2 col-form-label">현가용기준최댓값</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="200" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-6"></div>
+                                <label for="inputText" class="col-sm-2 col-form-label">현재고기준최댓값</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="250" disabled>
+                                </div>
+                            </div>
+                            <hr>
+                            <!-- Table with hoverable rows -->
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">자재명</th>
+                                    <th scope="col">필요수량(자재)<br>(부족한가용재고)<br>(부족한현재고)</th>
+                                    <th scope="col">가용재고</th>
+                                    <th scope="col">현재고</th>
+                                    <th scope="col">입고예정수량</th>
+                                    <th scope="col">입고예정일<br>(거래처)</th>
+
+                                </tr>
+                                </thead>
+                                <tbody id="bomList">
+                                </tbody>
+                            </table>
+                            <!-- End Table with hoverable rows -->
+                            <!-- 제품 혹은 유닛 검색 모달창-->
+                            <!-- Modal Dialog Scrollable -->
+                            <div class="modal fade" id="divisionSelection" tabindex="-1">
+                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">검색</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title" id="divisionListName">제품리스트</h5>
+                                                            <div class="row mb-3">
+                                                                <div class="col-sm-12">
+                                                                    <div class="input-group mb">
+                                                                        <input type="text" class="form-control" id="divisionSearch" placeholder="코드 또는 이름 입력">
+                                                                        <button type="button" class="input-group-text">검색</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row mb-3">
+                                                                <div class="col-sm-12" >
+                                                                    <!-- List group With Checkboxes and radios -->
+                                                                    <div class="form-control">
+                                                                        <ul class="list-group" style="height:200px; overflow-y: auto;">
+                                                                            <span id="divisionSearchList" class="list-group-flush"></span>
+                                                                        </ul><!-- End List Checkboxes and radios -->
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div>&nbsp&nbsp원하시는 <span class="division">제품</span>이 없으십니까?&nbsp&nbsp<a href="#" target="_blank"><span class="division">제품</span>등록하기</a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <span id="selectedDivisionFooter"></span>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                            <button type="button" class="btn btn-primary" id="searchDivisionSubmit">확인</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- 제품 혹은 유닛 검색 모달창 끝-->
+                        </div>
+                    </div>
+                </div>
+                <!--여기에 카드랑 내용 넣어주시면 됩니다-->
+            </div> <!--End row-->
+        </section>
+    </main>
+    <!-- End #main -->
+    <script th:inline="javascript">
+        $(document).ready(function (e) {
+            $('#productionPlanRegDate').val(todayValue());
+
+            var previousDivision = $("input[name='division']:checked").val(); // 초기 선택된 값을 저장
+            const divisionMapping = {
+                "product": "제품",
+                "unit": "유닛",
+                "제품": "product",
+                "유닛": "unit"
+            };
+
+            $("input[name='division']").change(function() {
+                let newDivision = $(this).val(); // 새로운 선택된 값
+                if(checkIfAnyInputHasValue()){
+                    $('#changeDivision').modal('show');
+
+                    // "바꾸기" 버튼 클릭 시
+                    $("#divisionSubmit").off("click").on("click", function () {
+                        previousDivision = newDivision; // 새로운 값을 저장
+                        $('form')[0].reset();
+                        $(".division").text(divisionMapping[newDivision]);
+                        $("#divisionListName").text(divisionMapping[newDivision]+'리스트')
+                        $("#divisionSearchList").html("");
+                        $("#bomList").html("");
+                        $("input[name='division'][value='" + newDivision + "']").prop('checked', true);
+                        $('#productionPlanRegDate').val(todayValue());
+                        $("#changeDivision").modal('hide');
+                    });
+
+                    // "아니오" 버튼 클릭 시
+                    $("#divisionNoSubmit").off("click").on("click", function () {
+                        $("input[name='division'][value='" + previousDivision + "']").prop('checked', true); // 이전 값으로 복원
+                    });
+                } else {
+                    // 내용이 없으면 그냥 바꾸기
+                    previousDivision = newDivision; // 새로운 값을 저장
+                    $(".division").text(divisionMapping[newDivision]);
+                    $("#divisionListName").text(divisionMapping[newDivision]+'리스트')
+                    $("#divisionSearchList").html("");
+                }
+            });
+            //폼안에 내용이 비엇는지 안 비었는 지 확인
+            function checkIfAnyInputHasValue() {
+                let hasValue = false;
+                // 제외하고 싶은 필드들을 선택자에 포함시키고, not() 메서드로 제외
+                $('form input, form textarea, form select').not('#productionPlanRegDate, #division1, #division2').each(function() {
+                    if ($(this).val().trim() !== '') { // 값이 비어있지 않으면
+                        hasValue = true;
+                        return false; // 값이 있는 필드를 찾았으므로 순회를 종료
+                    }
+                });
+                return hasValue;
+            }
+
+            $("#divisionSelectionBtn").on("click", function () {
+                console.log("검색버튼 클릭됨")
+                var selectedCode = null;
+                $("#divisionSearch").on("input", function () {
+                    var keyword = $("#divisionSearch").val();
+                    console.log("검색 키워드: " + keyword+"요청하는 주소"+previousDivision);
+                    $.getJSON("/plan/"+previousDivision+"ListSearching?keyword=" + keyword, function(data) {
+                        console.log("검색기능 잘 되나?"+data)
+                        let str;
+                        if(previousDivision==="product"){
+                            str = "";
+                            $.each(data, function(idx, dto) {
+                                str += '<li class="list-group-item">';
+                                str += '<div class="row"><div class="col-lg-1"><input class="form-check-input me-1" type="radio" name="gridRadios" value="'+dto.productCode+'" data-division-name="'+dto.productName+'" aria-label="..."></div>';
+                                str += '<div class="col-lg-5">'+dto.productName+'</div><div class="col-lg-6">'+dto.productCode+'</div></div>';
+                                str += '</li>';
+                            });
+                            $("#divisionSearchList").html(str);
+                        }else if(previousDivision==="unit"){
+                            str = "";
+                            $.each(data, function(idx, dto) {
+                                str += '<li class="list-group-item">';
+                                str += '<div class="row"><div class="col-lg-1"><input class="form-check-input me-1" type="radio" name="gridRadios" value="'+dto.unitCode+'" data-division-name="'+dto.unitName+'" aria-label="..."></div>';
+                                str += '<div class="col-lg-5">'+dto.unitName+'</div><div class="col-lg-6">'+dto.unitCode+'</div></div>';
+                                str += '</li>';
+                            });
+                            $("#divisionSearchList").html(str);
+                        }
+                        if (selectedCode) {
+                            $("input[name='gridRadios'][value='" + selectedCode + "']").prop("checked", true);
+                        }
+                        $("input[name='gridRadios']").change(function() {
+                            var selectedName = $(this).data('divisionName');
+                            selectedCode = $(this).val();
+                            $("#selectedDivisionFooter").text("선택 : " + selectedName);
+                            $("#selectedDivisionFooter").attr("data-division-code",selectedCode);
+                        });
+                    }).fail(function(jqxhr, textStatus, error) {
+                        var err = textStatus + ", " + error;
+                        console.log("자재 정보 요청 실패: " + err);
+                    });
+                })
+            })
+            $("#searchDivisionSubmit").on("click", function () {
+                // 풋터에 저장된 선택된 자재명과 자재코드 가져오기
+                var selectedName = $("#selectedDivisionFooter").text().replace("선택 : ", "");
+                var selectedCode = $("#selectedDivisionFooter").attr("data-division-code");
+                if (selectedCode && selectedName) {
+                    console.log("선택한 값은 Code:", selectedCode, "Name:", selectedName);
+                    // 선택된 값을 input 필드에 설정하는 코드 예시:
+                    $("#divisionName").val(selectedName);
+                    // 추가로 materialCode를 숨겨진 필드에 저장하거나 다른 방법으로 처리 가능
+                    $("#divisionCode").val(selectedCode); // 숨겨진 필드가 있다고 가정
+                    // 모달 창 닫기
+                    $("#divisionSelection").modal('hide');
+                } else {
+                    console.log("선택된 값이 없습니다.");
+                }
+                //아래에 Bom리스트 추가
+                $.getJSON("/plan/"+previousDivision+"BomList/" + selectedCode, function(data) {
+                    console.log("조달리스트 잘 불러오나?"+data)
+                    let str;
+                    if(previousDivision==="product"){
+                        str = "";
+                        let productIdx=0;
+                        $.each(data, function(idx, productDto) {
+                            $.each(productDto.unitBomDTOList, function(idx, dto) {
+                                productIdx+=1;
+                                str += '<tr>';
+                                str += '<th scope="row">'+productIdx+'</th>';
+                                str += '<td>펜대</td>';
+                                str += '<td>300<br><b style="color: rgb(255, 0, 0);">(100)</b><br>(-)</td>';
+                                str += '<td>200</td>';
+                                str += '<td>400</td>';
+                                str += '<td>50</td>';
+                                str += '<td>24-08-01<br>(A상사)</td>';
+                                str += '</tr>';
+                            });
+                        });
+                        $("#bomList").html(str);
+                    }else if(previousDivision==="unit") {
+                        str = "";
+                        let unitIdx=0;
+                        $.each(data, function (idx, dto) {
+                            unitIdx+=1;
+                            str += '<tr>';
+                            str += '<th scope="row">'+unitIdx+'</th>';
+                            str += '<td id="materialName'+unitIdx+'" data-material-code="'+dto.materialCode+'">'+dto.materialName+'</td>';
+                            str += '<td id="bomQuantity'+unitIdx+'">'+dto.unitBomQuantity+'</td>';
+                            str += '<td id="procurementPlanQuantity'+unitIdx+'"></td>';
+                            str += '<td>'+dto.unitBomProcess+'</td>';
+                            str += '<td><input type="date" class="form-control" name="procurementPlanDeadLine" id="procurementPlanDeadLine'+unitIdx+'"></td>';
+                            str += '</tr>';
+                        });
+                        $("#bomList").html(str);
+                    }
+                    let productionPlanDate = $("#productionPlanDate").val();
+                    if (productionPlanDate) {
+                        console.log("생산날짜가 설정되어 있음: " + productionPlanDate);
+                        setDeadLines(prevWeekday(productionPlanDate));
+                    } else {
+                        console.log("생산날짜가 설정되어 있지 않음.");
+                    }
+                    calculateQuantity();
+                })
+            });
+
+            $("#productionPlanQuantity").on("input", function () {
+                calculateQuantity();
+            });
+            function calculateQuantity() {
+                const productionPlanQuantity = parseInt($("#productionPlanQuantity").val());
+                if (!isNaN(productionPlanQuantity)) {
+                    $("#bomList tr").each(function(index, element) {
+                        const bomQuantity = parseInt($(element).find("[id^='bomQuantity']").text());
+                        const procurementQuantity = productionPlanQuantity * bomQuantity;
+                        $(element).find("[id^='procurementPlanQuantity']").text(procurementQuantity);
+                    });
+                }
+            };
+        });
+    </script>
+    <th:block th:replace="~{fragments/bodyFragment::footer}"></th:block>
+    <th:block th:replace="~{fragments/bodyFragment::js}"></th:block>
+</body>
+</html>
