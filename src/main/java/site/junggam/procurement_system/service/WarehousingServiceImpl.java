@@ -69,24 +69,36 @@ public class WarehousingServiceImpl implements WarehousingService {
         warehousingHistoryRepository.save(warehousingHistoryMapper.toEntity(warehousingHistoryDTO));
 
 
+
         //인벤토리 저장
         String materialCode = warehousingHistoryDTO.getMaterialCode();
         LocalDateTime warehousingDateTime = warehousingHistoryDTO.getWarehousingDate();
         int warehousingQuantity = warehousingHistoryDTO.getWarehousingQuantity();
         Inventory inventory= inventoryRepository.findById(materialCode).get();
-        //인벤토리 히스토리 먼저 저장하고
-        InventoryHistory inventoryHistory=InventoryHistory.builder()
-                .inventory(inventory)
-                .transactionType(InventoryHistoryStatus.WAREHOUSING)
-                .transactionReference(warehousingHistoryCode)
-                .transactionDate(warehousingDateTime)
-                .quantityChange(warehousingQuantity)
-                .finalQuantity(inventory.getMaterialQuantity()+warehousingQuantity)
-                .build();
-        int finalQauntity =inventoryHistoryRepository.save(inventoryHistory).getFinalQuantity();
-        //인벤토리 정보 변경
-        inventory.setMaterialQuantity(finalQauntity);
-        inventory.setWarehousingPendingQuantity(inventory.getWarehousingPendingQuantity()-warehousingQuantity);
+        InventoryHistory inventoryHistory;
+        if(warehousingHistoryDTO.getWarehousingHistoryStatus().equals("WAREHOUSING")){
+            inventoryHistory=InventoryHistory.builder()
+                    .inventory(inventory)
+                    .transactionType(InventoryHistoryStatus.WAREHOUSING)
+                    .transactionReference(warehousingHistoryCode)
+                    .transactionDate(warehousingDateTime)
+                    .quantityChange(warehousingQuantity)
+                    .finalQuantity(inventory.getMaterialQuantity()+warehousingQuantity)
+                    .build();
+            int finalQuantity =inventoryHistoryRepository.save(inventoryHistory).getFinalQuantity();
+            inventory.setWarehousingPendingQuantity(inventory.getWarehousingPendingQuantity()-warehousingQuantity);
+            inventory.setMaterialQuantity(finalQuantity);
+        }else {
+            inventoryHistory=InventoryHistory.builder()
+                    .inventory(inventory)
+                    .transactionType(InventoryHistoryStatus.RETURN)
+                    .transactionReference(warehousingHistoryCode)
+                    .transactionDate(warehousingDateTime)
+                    .quantityChange(warehousingQuantity)
+                    .finalQuantity(inventory.getMaterialQuantity())
+                    .build();
+            inventoryHistoryRepository.save(inventoryHistory);
+        }
         inventoryRepository.save(inventory);
 
 

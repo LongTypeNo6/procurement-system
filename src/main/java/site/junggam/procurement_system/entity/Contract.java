@@ -3,6 +3,8 @@ package site.junggam.procurement_system.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Builder
 @AllArgsConstructor
@@ -18,6 +20,9 @@ public class Contract {
     private Double contractPrice;
     private Integer contractLeadTime;
     private String contractMemo;
+
+    @Builder.Default
+    private LocalDateTime contractDate = LocalDateTime.now();
 
     @OneToOne
     @JoinColumn(name = "material_code")

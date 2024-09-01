@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import site.junggam.procurement_system.entity.ContractStatus;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -18,8 +20,14 @@ public class ContractDTO {
     private Double contractPrice;
     private Integer contractLeadTime;
 
+    @Builder.Default
+    private LocalDateTime contractDate = LocalDateTime.now();
+
+
     // DTO 클래스에 대한 필드
     private MaterialDTO materialDTO;
     private PurchaserDTO purchaserDTO;
+
+
 
 }

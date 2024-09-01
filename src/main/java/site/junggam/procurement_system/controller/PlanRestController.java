@@ -104,7 +104,6 @@ public class PlanRestController {
 
     @PatchMapping("/contract/{contractCode}")
     public ResponseEntity<String> contractModify(@RequestBody ContractDTO contractDTO){
-        log.info("검수수정 레스트컨트롤러 집입");
         log.info(contractDTO);
         String contractCode=planService.modifyContract(contractDTO);
         return new ResponseEntity<>(contractCode, HttpStatus.OK);

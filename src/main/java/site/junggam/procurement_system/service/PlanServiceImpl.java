@@ -518,6 +518,11 @@ public class PlanServiceImpl implements PlanService {
             contract.changeContractPrice(contractDTO.getContractPrice());
             contract.changeContractLeadTime(contract.getContractLeadTime());
             contractRepository.save(contract);
+
+            //인벤토리 평균단가 추가
+            Inventory inventory=inventoryRepository.findById(contract.getMaterial().getMaterialCode()).get();
+            inventory.setContractAvgPrice(contractDTO.getContractPrice());
+            inventoryRepository.save(inventory);
         }
         return contractCode;
     }
