@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>부서리스트</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <th:block th:replace="~{fragments/headFragment}"></th:block>
+</head>
+<body>
+<th:block th:replace="~{fragments/bodyFragment::header}"></th:block>
+<th:block th:replace="~{fragments/bodyFragment::sidebar}"></th:block>
+<!-- ======= main ======= -->
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>부서리스트</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">메인</a></li>
+                <li class="breadcrumb-item">자사정보</li>
+                <li class="breadcrumb-item active">부서리스트</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div class="row">
+            <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            회원상세보기
+                        </h5>
+                        <!-- General Form Elements -->
+                        <img src="../assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"><br>
+                        <form>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">사내번호</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="123456" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">회원명</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="홍길동" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">생년월일</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="1993-04-23" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">소속1</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="구매조달부" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">소속2</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="구매팀" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">직급</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="사원" disabled>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">아이디</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="hong" disabled>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">비밀번호</label>
+                                <div class="col-sm-4">
+                                    <input type="password" class="form-control" value="1234" disabled>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">핸드폰번호</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="010-5678-9876" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">이메일</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="hong@buyer.com" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">회원상태</label>
+                                <div class="col-sm-4">
+                                    <select class="form-select" aria-label="Default select example" disabled>
+                                        <option selected>재직</option>
+                                        <option value="1">휴직</option>
+                                        <option value="2">퇴사</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <a href="회원수정.html"><button type="button" class="btn btn-primary btn-sm">수정</button></a>
+                            <a href="회원목록.html"><button type="button" class="btn btn-primary btn-sm">리스트보기</button></a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--여기에 카드랑 내용 넣어주시면 됩니다-->
+
+        </div> <!--End row-->
+    </section>
+</main>
+<!-- End #main -->
+
+<th:block th:replace="~{fragments/bodyFragment::footer}"></th:block>
+<th:block th:replace="~{fragments/bodyFragment::js}"></th:block>
+</body>
+</html>

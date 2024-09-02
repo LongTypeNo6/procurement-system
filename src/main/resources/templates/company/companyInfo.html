@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>회사정보</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <th:block th:replace="~{fragments/headFragment}"></th:block>
+</head>
+<body>
+<th:block th:replace="~{fragments/bodyFragment::header}"></th:block>
+<th:block th:replace="~{fragments/bodyFragment::sidebar}"></th:block>
+<!-- ======= main ======= -->
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>회사정보</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">메인</a></li>
+                <li class="breadcrumb-item">자사정보</li>
+                <li class="breadcrumb-item active">회사정보</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div class="row">
+            <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            자사정보
+                        </h5>
+
+                        <img src="../assets/img/apple-touch-icon.png">
+
+                        <!-- General Form Elements -->
+                        <form>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">사업자등록자번호</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" value="123-56-78910" disabled>
+                                </div>
+                                <label for="inputNumber" class="col-sm-2 col-form-label">사업자등록증</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" type="file" id="formFile">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">상호명</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" value="정감" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">대표자</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" value="ooo대표" disabled>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">주소</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" value="서울특별시 중구 어쩌구" disabled>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">업태</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" value="제조업" disabled>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">종목</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" value="기자재" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">전화번호</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" value="031-1234-5679" disabled>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputNumber" class="col-sm-2 col-form-label">팩스</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" value="031-1234-5679" disabled>
+                                </div>
+                            </div><div class="row mb-3">
+                            <label for="inputNumber" class="col-sm-2 col-form-label">이메일</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" value="bbb@bbb.com" disabled>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--여기에 카드랑 내용 넣어주시면 됩니다-->
+
+        </div> <!--End row-->
+    </section>
+</main>
+<!-- End #main -->
+
+<th:block th:replace="~{fragments/bodyFragment::footer}"></th:block>
+<th:block th:replace="~{fragments/bodyFragment::js}"></th:block>
+</body>
+</html>

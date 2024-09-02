@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>회원리스트</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <th:block th:replace="~{fragments/headFragment}"></th:block>
+</head>
+<body>
+<th:block th:replace="~{fragments/bodyFragment::header}"></th:block>
+<th:block th:replace="~{fragments/bodyFragment::sidebar}"></th:block>
+<!-- ======= main ======= -->
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>회원리스트</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">메인</a></li>
+                <li class="breadcrumb-item">자사정보</li>
+                <li class="breadcrumb-item active">회원리스트</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div class="row">
+            <!--★★★★★★★★★★카드내용★★★★★★★★★★★★-->
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">회원 리스트</h5>
+                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingOne">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        <b>검색</b>
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
+                                        <div class="row mb-3">
+                                            <label for="inputPassword" class="col-sm-1 col-form-label">보기</label>
+                                            <div class="col-sm-2">
+                                                <select class="form-select" aria-label="Default select example">
+                                                    <option selected>소속</option>
+                                                    <option value="1">직급</option>
+                                                    <option value="2">회원상태</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-sm-2">
+                                                <input type="text" class="form-control" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <a href="#회원등록.html"><button type="button" class="btn btn-primary btn-sm">회원등록</button></a>
+                        <!-- Table with hoverable rows -->
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">회원번호</th>
+                                <th scope="col">회원명</th>
+                                <th scope="col">생년월일</th>
+                                <th scope="col">소속1</th>
+                                <th scope="col">소속2</th>
+                                <th scope="col">직급</th>
+                                <th scope="col">아이디</th>
+                                <th scope="col">핸드폰번호</th>
+                                <th scope="col">이메일</th>
+                                <th scope="col">회원상태</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>234464</td>
+                                <td>담당자</td>
+                                <td>1987-02-21</td>
+                                <td>구매조달부</td>
+                                <td>구매팀</td>
+                                <td>관리자</td>
+                                <td>buyer</td>
+                                <td>010-1234-5678</td>
+                                <td>buyer@buyer.com</td>
+                                <td>재직</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>123456</td>
+                                <td><a href="#회원상세보기.html">홍길동</a></td>
+                                <td>1993-04-23</td>
+                                <td>구매조달부</td>
+                                <td>구매팀</td>
+                                <td>사원</td>
+                                <td>hong</td>
+                                <td>010-5678-9876</td>
+                                <td>hong@buyer.com</td>
+                                <td>재직</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>563243</td>
+                                <td>아무개</td>
+                                <td>1992-03-11</td>
+                                <td>자재부</td>
+                                <td>자재팀</td>
+                                <td>사원</td>
+                                <td>other</td>
+                                <td>010-2222-3333</td>
+                                <td>other@buyer.com</td>
+                                <td>휴직</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td>243675</td>
+                                <td>김철수</td>
+                                <td>1995-01-17</td>
+                                <td>생산부</td>
+                                <td>생산팀</td>
+                                <td>사원</td>
+                                <td>kim</td>
+                                <td>010-4857-4223</td>
+                                <td>kim@buyer.com</td>
+                                <td>퇴사</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!-- End Table with hoverable rows -->
+
+                    </div>
+                </div>
+            </div>
+            <!--여기에 카드랑 내용 넣어주시면 됩니다-->
+
+        </div> <!--End row-->
+    </section>
+</main>
+<!-- End #main -->
+
+<th:block th:replace="~{fragments/bodyFragment::footer}"></th:block>
+<th:block th:replace="~{fragments/bodyFragment::js}"></th:block>
+</body>
+</html>
