@@ -11,8 +11,8 @@ import site.junggam.procurement_system.entity.Unit;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-09-01T18:38:54+0900",
-    comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
+    date = "2024-09-12T23:24:44+0900",
+    comments = "version: 1.5.2.Final, compiler: javac, environment: Java 17.0.12 (Amazon.com Inc.)"
 )
 @Component
 public class ProductBomMapperImpl implements ProductBomMapper {

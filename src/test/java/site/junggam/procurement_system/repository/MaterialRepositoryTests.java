@@ -16,6 +16,17 @@ public class MaterialRepositoryTests {
     private MaterialRepository materialRepository;
 
     @Test
+    public void insertMaterialTest1() {
+        Material material = Material.builder().
+                materialCode("BM-20000")
+                .materialName("새로운자재이름")
+                .materialRegDate(LocalDateTime.now())
+                .build();
+        materialRepository.save(material);
+    }
+
+
+    @Test
     public void insertMaterialTest() {
         IntStream.rangeClosed(1, 9).forEach(i -> {
             Material material = Material.builder()
